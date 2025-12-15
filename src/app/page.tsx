@@ -71,7 +71,7 @@ export default function SignIn() {
       <div className="hidden lg:block lg:w-[50%] h-full relative">
         <Image src="/log-in-images/login-image.jpg" alt="background" fill className="object-cover object-center" />
         <div className="absolute w-full h-full z-10 bg-[#15356970]/44" /> {/*Overlay*/}
-        <div className="absolute w-full inset-0 p-14 flex flex-col justify-between">
+        <div className="absolute w-full inset-0 p-14 flex flex-col justify-between z-20">
           <h1 className="text-[#1C4589] text-5xl font-bold font-poppins">TradeConnect</h1>
           <div className="flex flex-col gap-4">
             <h1 className="font-medium font-poppins text-[#FEF3EB] text-4xl">Business Directory Network</h1>
