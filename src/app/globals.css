@@ -130,3 +130,11 @@
 .fc{
   @apply flex justify-center items-center
 }
+
+.s{
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.30);
+}
+
+.gl{
+  box-shadow: 0 0 10px 3px rgba(50, 126, 249, 1)
+}

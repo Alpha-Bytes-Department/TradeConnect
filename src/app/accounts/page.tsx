@@ -80,7 +80,7 @@ export default function AccountPage() {
                         <img
                             src={companyData.logo}
                             alt={companyData.name}
-                            className="w-32 h-32 rounded-3xl object-cover shadow-2xl relative transform transition-transform duration-500 group-hover:scale-105"
+                            className="w-32 h-32 rounded-3xl object-cover s -2xl relative transform transition-transform duration-500 group-hover:scale-105"
                         />
                     </div>
 
@@ -96,22 +96,22 @@ export default function AccountPage() {
                     </div>
 
                     <div className="inline-block">
-                        <span className="px-6 py-2 bg-[#FBC8A2] text-[#153569] rounded-full text-sm font-semibold shadow-sm">
+                        <span className="px-6 py-2 bg-[#FBC8A2] text-[#153569] rounded-full text-sm font-semibold s -sm">
                             {companyData.industry}
                         </span>
                     </div>
 
                     {/* Action Buttons */}
                     <div className="flex justify-between items-center w-full md:w-[33vw] mt-8 flex-wrap">
-                        <button className="group w-40 fc px-8 py-2 bg-blue-500 text-white rounded-md font-medium shadow-md shadow-blue-500/80 hover:shadow-xl hover:shadow-blue-500/80 transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-2">
+                        <button className="group w-40 fc px-8 py-2 bg-blue-500 text-white rounded-md font-medium s -md gl hover:gl hover:gl transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-2">
                             <Mail className="w-4 h-4 group-hover:rotate-12 transition-transform" />
                             Email
                         </button>
-                        <button className="w-40 fc px-8 py-2 bg-white text-[#153569] rounded-md font-medium shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 border border-[#153569] flex items-center gap-2 group">
+                        <button className="w-40 fc px-8 py-2 bg-white text-[#153569] rounded-md font-medium s -md hover:s -lg transition-all duration-300 hover:-translate-y-0.5 border border-[#153569] flex items-center gap-2 group">
                             <Phone className="w-4 h-4 group-hover:rotate-12 transition-transform" />
                             Call
                         </button>
-                        <button className="w-40 fc px-8 py-2 bg-white text-[#153569] rounded-md font-medium shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 border border-[#153569] flex items-center gap-2 group">
+                        <button className="w-40 fc px-8 py-2 bg-white text-[#153569] rounded-md font-medium s -md hover:s -lg transition-all duration-300 hover:-translate-y-0.5 border border-[#153569] flex items-center gap-2 group">
                             <Globe className="w-4 h-4 group-hover:rotate-12 transition-transform" />
                             Website
                         </button>
@@ -121,7 +121,7 @@ export default function AccountPage() {
                 {/* Top Row: About, Contact, Activity */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                     {/* About */}
-                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-stone-200/50 hover:shadow-xl transition-all duration-300 animate-fade-in-up stagger-1">
+                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 s -lg border border-stone-200/50 hover:s -xl transition-all duration-300 animate-fade-in-up stagger-1">
                         <h2 className="text-lg font-bold mb-4 text-stone-900" style={{ fontFamily: "'Syne', sans-serif" }}>
                             About
                         </h2>
@@ -131,7 +131,7 @@ export default function AccountPage() {
                     </div>
 
                     {/* Contact Information */}
-                    <div className="bg-white rounded-2xl p-8 shadow-lg  hover:shadow-xl transition-all duration-300 animate-fade-in-up stagger-2">
+                    <div className="bg-white rounded-2xl p-8 s -lg  hover:s -xl transition-all duration-300 animate-fade-in-up stagger-2">
                         <h2 className="text-lg font-bold mb-6 text-stone-900" style={{ fontFamily: "'Syne', sans-serif" }}>
                             Contact Information
                         </h2>
@@ -158,7 +158,7 @@ export default function AccountPage() {
                     </div>
 
                     {/* Activity */}
-                    <div className="bg-white backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-stone-200/50 hover:shadow-xl transition-all duration-300 animate-fade-in-up stagger-3">
+                    <div className="bg-white backdrop-blur-sm rounded-2xl p-8 s -lg border border-stone-200/50 hover:s -xl transition-all duration-300 animate-fade-in-up stagger-3">
                         <h2 className="text-lg font-bold mb-6 text-stone-900" style={{ fontFamily: "'Syne', sans-serif" }}>
                             Activity
                         </h2>
@@ -194,7 +194,7 @@ export default function AccountPage() {
                 {/* Bottom Row: Services and Gallery */}
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
                     {/* Services */}
-                    <div className="lg:col-span-2 rounded-2xl p-8 shadow-lg border border-stone-200/50 hover:shadow-xl transition-all duration-300 animate-fade-in-up stagger-4">
+                    <div className="lg:col-span-2 rounded-2xl p-8 s -lg border border-stone-200/50 hover:s -xl transition-all duration-300 animate-fade-in-up stagger-4">
                         <h2 className="text-lg font-bold mb-6 text-stone-900" style={{ fontFamily: "'Syne', sans-serif" }}>
                             Services
                         </h2>
@@ -204,7 +204,7 @@ export default function AccountPage() {
                                     key={service.id}
                                     onClick={() => setActiveService(activeService === service.id ? null : service.id)}
                                     className={`w-full text-left px-6 py-4 rounded-xl transition-all duration-300 border-2 ${activeService === service.id
-                                            ? 'bg-blue-50 border-blue-300 shadow-md'
+                                            ? 'bg-blue-50 border-blue-300 s -md'
                                             : 'bg-stone-50 border-transparent hover:border-stone-200 hover:bg-stone-100'
                                         }`}
                                 >
@@ -222,7 +222,7 @@ export default function AccountPage() {
                     </div>
 
                     {/* Gallery */}
-                    <div className="lg:col-span-3 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in-up stagger-5">
+                    <div className="lg:col-span-3 rounded-2xl p-8 s hover:s -xl transition-all duration-300 animate-fade-in-up stagger-5">
                         <h2 className="text-lg font-bold mb-6 text-stone-900" style={{ fontFamily: "'Syne', sans-serif" }}>
                             Gallery
                         </h2>
