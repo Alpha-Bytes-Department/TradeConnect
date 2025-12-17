@@ -1,7 +1,17 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Mail, Phone, Globe, MapPin, Clock, Calendar } from 'lucide-react';
+import { useState } from "react";
+import {
+    Mail,
+    Phone,
+    Globe,
+    MapPin,
+    Clock,
+    Calendar,
+    CalendarCheckIcon,
+    Clock10Icon,
+    CalendarIcon,
+} from "lucide-react";
 
 interface Service {
     id: string;
@@ -9,10 +19,9 @@ interface Service {
 }
 
 interface Activity {
-    type: 'active' | 'update';
-    label: string;
-    value: string;
-    date?: string;
+    active: boolean;
+    activeFor: number;
+    lastUpdated: string;
 }
 
 interface ContactInfo {
@@ -29,7 +38,7 @@ interface CompanyProfile {
     about: string;
     contact: ContactInfo;
     services: Service[];
-    activities: Activity[];
+    activities: Activity;
     gallery: string[];
 }
 
@@ -38,45 +47,53 @@ export default function AccountPage() {
 
     const companyData: CompanyProfile = {
         name: "Construction Partners",
-        address: "987 Builder Road, Dubai, UAE",
-        industry: "Construction",
+        address: "989 Builder Road, Dubai, UAE",
+        industry: "Construxion",
         logo: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=400&fit=crop",
-        about: "We are a trusted construction company dedicated to delivering high-quality projects on time and within budget. From residential buildings to commercial developments, we focus on safety, durability, and customer satisfaction at every step.",
+        about:
+            "We are a trusted construction company dedicated to delivering high-quality projects on time and within budget. From residential buildings to commercial developments, we focus on safety, durability, and customer satisfaction at every step.",
         contact: {
             email: "info@constructionpartner.com",
             phone: "+971 245 54 5 545",
-            website: "constructionparner.com"
+            website: "constructionparner.com",
         },
         services: [
-            { id: '1', name: 'Commercial Construction' },
-            { id: '2', name: 'Project Management' },
-            { id: '3', name: 'Renovation' },
-            { id: '4', name: 'Infrastructure' }
+            { id: "1", name: "Commercial Construction" },
+            { id: "2", name: "Project Management" },
+            { id: "3", name: "Renovation" },
+            { id: "4", name: "Infrastructure" },
+            { id: "11", name: "Commercial Construction" },
+            { id: "21", name: "Project Management" },
+            { id: "31", name: "Renovation" },
+            { id: "41", name: "Infrastructure" },
         ],
-        activities: [
-            { type: 'active', label: 'Active for', value: '23 Months' },
-            { type: 'update', label: 'Last Updates', value: '2024-12-04', date: '11:30' }
-        ],
+        activities: {
+            active: true,
+            activeFor: 23,
+            lastUpdated: new Date().toISOString(),
+        },
         gallery: [
             "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=400&h=300&fit=crop",
             "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop",
-            "https://images.unsplash.com/photo-1590496793907-4adb7e2a0e3d?w=400&h=300&fit=crop",
             "https://images.unsplash.com/photo-1535732759880-bbd5c7265e3f?w=400&h=300&fit=crop",
             "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=400&h=300&fit=crop",
             "https://images.unsplash.com/photo-1541976590-713941681591?w=400&h=300&fit=crop",
-            "https://images.unsplash.com/photo-1560179406-9aa0e5a06b5d?w=400&h=300&fit=crop",
-            "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=400&h=300&fit=crop"
-        ]
+            "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=400&h=300&fit=crop",
+        ],
     };
 
     return (
-        <div className="w-full min-h-screen">
+        <div className="relative w-full min-h-screen">
+            <div className="fc h-[438] w-[95%] border m-auto overflow-hidden">
+                <img src='accountsBanner.png' alt='accounts' className="w-[170%] "></img>
 
-            <div className="max-w-12xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            </div>
+            
+            <div className="top-14 max-w-12xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 {/* Header Section */}
                 <div className="fc flex-col text-center mb-12 animate-fade-in-up">
                     <div className="inline-block mb-6 relative group">
-                        <div className="absolute inset-0 rounded-xl blur-2xl opacity-20 group-hover:opacity-30 transition-opacity duration-500"></div>
+                        
                         <img
                             src={companyData.logo}
                             alt={companyData.name}
@@ -84,10 +101,8 @@ export default function AccountPage() {
                         />
                     </div>
 
-                    <h1 className="text-3xl font-bold mb-4 tracking-tight" style={{ fontFamily: "'Syne', sans-serif" }}>
-                        <span className=" text-black">
-                            {companyData.name}
-                        </span>
+                    <h1 className="text-3xl font-semibold mb-4 tracking-tight">
+                        <span className=" text-black">{companyData.name}</span>
                     </h1>
 
                     <div className="flex items-center justify-center gap-2 text-gray-500 mb-4">
@@ -102,16 +117,16 @@ export default function AccountPage() {
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="flex justify-between items-center w-full md:w-[33vw] mt-8 flex-wrap">
-                        <button className="group w-40 fc px-8 py-2 bg-blue-500 text-white rounded-md font-medium s -md gl hover:gl hover:gl transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-2">
+                    <div className="flex justify-between items-center w-full md:w-[33vw] mt-8 flex-col md:flex-row">
+                        <button className="group w-full max-w-40 fc px-4 md:px-8 py-2 bg-blue-500 text-white rounded-sm font-medium gl hover:gl hover:gl transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-2 mt-4">
                             <Mail className="w-4 h-4 group-hover:rotate-12 transition-transform" />
                             Email
                         </button>
-                        <button className="w-40 fc px-8 py-2 bg-white text-[#153569] rounded-md font-medium s -md hover:s -lg transition-all duration-300 hover:-translate-y-0.5 border border-[#153569] flex items-center gap-2 group">
+                        <button className=" w-full max-w-40 fc px-4 md:px-8 py-2 bg-white text-[#153569] rounded-sm font-medium transition-all duration-300 hover:-translate-y-0.5 border border-[#153569] flex items-center gap-2 mt-4 group">
                             <Phone className="w-4 h-4 group-hover:rotate-12 transition-transform" />
                             Call
                         </button>
-                        <button className="w-40 fc px-8 py-2 bg-white text-[#153569] rounded-md font-medium s -md hover:s -lg transition-all duration-300 hover:-translate-y-0.5 border border-[#153569] flex items-center gap-2 group">
+                        <button className=" w-full max-w-40 fc px-4 md:px-8 py-2 bg-white text-[#153569] rounded-sm font-medium transition-all duration-300 hover:-translate-y-0.5 border border-[#153569] flex items-center gap-2 mt-4 group">
                             <Globe className="w-4 h-4 group-hover:rotate-12 transition-transform" />
                             Website
                         </button>
@@ -121,36 +136,51 @@ export default function AccountPage() {
                 {/* Top Row: About, Contact, Activity */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                     {/* About */}
-                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 s -lg border border-stone-200/50 hover:s -xl transition-all duration-300 animate-fade-in-up stagger-1">
-                        <h2 className="text-lg font-bold mb-4 text-stone-900" style={{ fontFamily: "'Syne', sans-serif" }}>
-                            About
-                        </h2>
+                    <div className="bg-white/80 backdrop-blur-sm rounded-md p-4 md:p-6 s -lg border border-gray-200/50 hover:s -xl transition-all duration-300 animate-fade-in-up stagger-1">
+                        <h2 className="text-lg font-semibold mb-4 text-gray-900">About</h2>
                         <p className="text-[stone-600] leading-relaxed">
                             {companyData.about}
                         </p>
                     </div>
 
                     {/* Contact Information */}
-                    <div className="bg-white rounded-2xl p-8 s -lg  hover:s -xl transition-all duration-300 animate-fade-in-up stagger-2">
-                        <h2 className="text-lg font-bold mb-6 text-stone-900" style={{ fontFamily: "'Syne', sans-serif" }}>
+                    <div className="bg-white rounded-md p-4 md:p-6 s -lg  hover:s  transition-all duration-300 animate-fade-in-up stagger-2">
+                        <h2 className="text-lg font-semibold mb-6 text-gray-900">
                             Contact Information
                         </h2>
                         <div className="space-y-4">
                             <div>
-                                <p className="text-xs font-semibold text-stone-500 uppercase tracking-wide mb-1">Email</p>
-                                <a href={`mailto:${companyData.contact.email}`} className="text-blue-600 hover:text-blue-700 font-medium transition-colors">
+                                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
+                                    Email
+                                </p>
+                                <a
+                                    href={`mailto:${companyData.contact.email}`}
+                                    className="text-[#327EF9] hover:text-blue-700 font-medium transition-colors"
+                                >
                                     {companyData.contact.email}
                                 </a>
                             </div>
                             <div>
-                                <p className="text-xs font-semibold text-stone-500 uppercase tracking-wide mb-1">Phone</p>
-                                <a href={`tel:${companyData.contact.phone}`} className="text-blue-600 hover:text-blue-700 font-medium transition-colors">
+                                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
+                                    Phone
+                                </p>
+                                <a
+                                    href={`tel:${companyData.contact.phone}`}
+                                    className="text-[#327EF9] hover:text-blue-700 font-medium transition-colors"
+                                >
                                     {companyData.contact.phone}
                                 </a>
                             </div>
                             <div>
-                                <p className="text-xs font-semibold text-stone-500 uppercase tracking-wide mb-1">Website</p>
-                                <a href={`https://${companyData.contact.website}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-700 font-medium transition-colors">
+                                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
+                                    Website
+                                </p>
+                                <a
+                                    href={`https://${companyData.contact.website}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-[#327EF9] hover:text-blue-700 font-medium transition-colors"
+                                >
                                     {companyData.contact.website}
                                 </a>
                             </div>
@@ -158,35 +188,40 @@ export default function AccountPage() {
                     </div>
 
                     {/* Activity */}
-                    <div className="bg-white backdrop-blur-sm rounded-2xl p-8 s -lg border border-stone-200/50 hover:s -xl transition-all duration-300 animate-fade-in-up stagger-3">
-                        <h2 className="text-lg font-bold mb-6 text-stone-900" style={{ fontFamily: "'Syne', sans-serif" }}>
+                    <div className="bg-white backdrop-blur-sm rounded-md p-4 md:p-6 s -lg border border-gray-200/50 hover:s -xl transition-all duration-300 animate-fade-in-up stagger-3">
+                        <h2 className="text-lg font-semibold mb-6 text-gray-900">
                             Activity
                         </h2>
                         <div className="space-y-4">
-                            {companyData.activities.map((activity, index) => (
-                                <div key={index} className="flex items-start gap-4">
-                                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${activity.type === 'active'
-                                            ? 'bg-blue-100'
-                                            : 'bg-amber-100'
-                                        }`}>
-                                        {activity.type === 'active' ? (
-                                            <Calendar className="w-5 h-5 text-blue-600" />
-                                        ) : (
-                                            <Clock className="w-5 h-5 text-amber-600" />
-                                        )}
+                            <div className="flex flex-col items-start gap-4">
+                                <div className="flex items-start flex-row">
+                                    <div className="fc h-12 w-12 rounded-sm bg-[#BFD7FD] text-[#2E73E3]">
+                                        <CalendarIcon />
                                     </div>
-                                    <div>
-                                        <p className="text-xs font-semibold text-stone-500 uppercase tracking-wide mb-1">
-                                            {activity.label}
-                                        </p>
-                                        <p className="text-blue-600 font-semibold">
-                                            {activity.value} {activity.date && (
-                                                <span className="text-stone-600 font-normal ml-1">{activity.date}</span>
-                                            )}
+                                    <div className="flex flex-col items-left justify-center ml-2">
+                                        <p className="text-sm text-gray-500">Active for</p>
+                                        <p className="text-md text-[#327EF9]">
+                                            {companyData.activities.activeFor} Months
                                         </p>
                                     </div>
                                 </div>
-                            ))}
+                                <div className="flex items-start flex-row">
+                                    <div className="fc h-12 w-12 rounded-sm bg-[#FDDAC0] text-[#884B1D]">
+                                        <Clock10Icon />
+                                    </div>
+                                    <div className="flex flex-col items-left justify-center ml-2">
+                                        <p className="text-sm text-gray-500">Last Updated</p>
+                                        <div className="flex flex-row items-left justify-center gap-6">
+                                            <p className="text-md text-[#327EF9]">
+                                                {companyData.activities.lastUpdated.slice(0, 10)}
+                                            </p>
+                                            <p className="text-md text-[#327EF9]">
+                                                {companyData.activities.lastUpdated.slice(11, 16)}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -194,25 +229,34 @@ export default function AccountPage() {
                 {/* Bottom Row: Services and Gallery */}
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
                     {/* Services */}
-                    <div className="lg:col-span-2 rounded-2xl p-8 s -lg border border-stone-200/50 hover:s -xl transition-all duration-300 animate-fade-in-up stagger-4">
-                        <h2 className="text-lg font-bold mb-6 text-stone-900" style={{ fontFamily: "'Syne', sans-serif" }}>
+                    <div className="lg:col-span-2 rounded-md p-4 md:p-6 s  border border-gray-200/50 transition-all duration-300 animate-fade-in-up stagger-4">
+                        <h2 className="text-lg font-semibold mb-6 text-gray-900">
                             Services
                         </h2>
-                        <div className="space-y-3">
+                        <div className="space-y-3 overflow-y-scroll scrollbar-hide h-88">
                             {companyData.services.map((service, index) => (
                                 <button
                                     key={service.id}
-                                    onClick={() => setActiveService(activeService === service.id ? null : service.id)}
-                                    className={`w-full text-left px-6 py-4 rounded-xl transition-all duration-300 border-2 ${activeService === service.id
-                                            ? 'bg-blue-50 border-blue-300 s -md'
-                                            : 'bg-stone-50 border-transparent hover:border-stone-200 hover:bg-stone-100'
-                                        }`}
+                                    onClick={() =>
+                                        setActiveService(
+                                            activeService === service.id ? null : service.id
+                                        )
+                                    }
+                                    className={`w-full text-left px-6 py-4 rounded-xl transition-all duration-300 border-1 bg-[#EBF2FE] border-[#A1C4FC]`}
                                 >
                                     <div className="flex items-center gap-3">
-                                        <div className={`w-2 h-2 rounded-full transition-all duration-300 ${activeService === service.id ? 'bg-blue-600 scale-125' : 'bg-stone-400'
-                                            }`}></div>
-                                        <span className={`font-medium transition-colors ${activeService === service.id ? 'text-blue-900' : 'text-stone-700'
-                                            }`}>
+                                        <div
+                                            className={`w-2 h-2 rounded-full transition-all duration-300 ${activeService === service.id
+                                                    ? "bg-blue-600 scale-125"
+                                                    : "bg-gray-400"
+                                                }`}
+                                        ></div>
+                                        <span
+                                            className={`font-medium transition-colors ${activeService === service.id
+                                                    ? "text-blue-900"
+                                                    : "text-gray-700"
+                                                }`}
+                                        >
                                             {service.name}
                                         </span>
                                     </div>
@@ -222,23 +266,15 @@ export default function AccountPage() {
                     </div>
 
                     {/* Gallery */}
-                    <div className="lg:col-span-3 rounded-2xl p-8 s hover:s -xl transition-all duration-300 animate-fade-in-up stagger-5">
-                        <h2 className="text-lg font-bold mb-6 text-stone-900" style={{ fontFamily: "'Syne', sans-serif" }}>
+                    <div className="lg:col-span-3 rounded-md p-4 md:p-6 s hover:s border transition-all duration-300 animate-fade-in-up stagger-5">
+                        <h2 className="text-lg font-semibold mb-6 text-gray-900">
                             Gallery
                         </h2>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6 overflow-y-scroll scrollbar-hide max-h-88">
+                            
                             {companyData.gallery.map((image, index) => (
-                                <div
-                                    key={index}
-                                    className="relative aspect-[4/3] rounded-xl overflow-hidden group cursor-pointer animate-scale-in"
-                                    style={{ animationDelay: `${0.1 * index}s`, opacity: 0 }}
-                                >
-                                    <img
-                                        src={image}
-                                        alt={`Gallery ${index + 1}`}
-                                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                    />
-                                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                <div key={index} className='fc col-span-1 overflow-hidden bg-black aspect-square rounded-sm'>
+                                    <img src={image} alt="image" className="w-full h-full object-cover" />
                                 </div>
                             ))}
                         </div>
