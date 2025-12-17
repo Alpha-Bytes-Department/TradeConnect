@@ -1,3 +1,4 @@
+// Fahim
 "use client"
 import Image from "next/image";
 import { Input } from "@/components/ui/input"
@@ -96,7 +97,7 @@ export default function SignIn() {
 
       {/* Form */}
       <div className="w-full lg:w-[50%] h-full flex items-center justify-center bg-white">
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-[400px]">
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-[400px] px-5 md:px-0">
           <div className="w-full flex flex-col gap-3">
             <h1 className="font-poppins font-bold text-[#0E0E0E] text-3xl">Welcome Back!</h1>
             <p className="font-poppins text-[#7A7A7A]">Sign in to access the business directory</p>
