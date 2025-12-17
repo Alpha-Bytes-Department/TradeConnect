@@ -12,6 +12,7 @@ import {
     Clock10Icon,
     CalendarIcon,
 } from "lucide-react";
+import { PiX } from "react-icons/pi";
 
 interface Service {
     id: string;
@@ -83,21 +84,22 @@ export default function AccountPage() {
     };
 
     return (
+        <div className="w-full min-h-screen md:px-[50px]">
         <div className="relative w-full min-h-screen">
-            <div className="fc h-[438] w-[95%] border m-auto overflow-hidden">
+            <div className="fc h-[50vw] md:h-[30vw] w-[100%] border m-auto overflow-hidden mask-image-linear-fade">
                 <img src='accountsBanner.png' alt='accounts' className="w-[170%] "></img>
-
+                
             </div>
             
-            <div className="top-14 max-w-12xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div className="absolute top-[25vw] max-w-12xl mx-auto pb-6 md:pb-12 px-2">
                 {/* Header Section */}
                 <div className="fc flex-col text-center mb-12 animate-fade-in-up">
-                    <div className="inline-block mb-6 relative group">
+                    <div className="inline-block mb-6 relative group border-3 border-[#FBC8A2] rounded-3xl">
                         
                         <img
                             src={companyData.logo}
                             alt={companyData.name}
-                            className="w-32 h-32 rounded-3xl object-cover s -2xl relative transform transition-transform duration-500 group-hover:scale-105"
+                            className="w-40 h-40 rounded-3xl object-cover s relative transform transition-transform duration-500 group-hover:scale-105"
                         />
                     </div>
 
@@ -105,28 +107,28 @@ export default function AccountPage() {
                         <span className=" text-black">{companyData.name}</span>
                     </h1>
 
-                    <div className="flex items-center justify-center gap-2 text-gray-500 mb-4">
+                        <div className="flex items-center justify-center gap-2 text-[#909090] mb-4">
                         <MapPin className="w-4 h-4" />
                         <span className="text-sm font-medium">{companyData.address}</span>
                     </div>
 
                     <div className="inline-block">
-                        <span className="px-6 py-2 bg-[#FBC8A2] text-[#153569] rounded-full text-sm font-semibold s -sm">
+                        <span className="px-6 py-2 bg-[#FBC8A2] text-[#153569] rounded-full text-sm font-semibold ">
                             {companyData.industry}
                         </span>
                     </div>
 
                     {/* Action Buttons */}
                     <div className="flex justify-between items-center w-full md:w-[33vw] mt-8 flex-col md:flex-row">
-                        <button className="group w-full max-w-40 fc px-4 md:px-8 py-2 bg-blue-500 text-white rounded-sm font-medium gl hover:gl hover:gl transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-2 mt-4">
+                            <button className="group w-full max-w-40 fc px-4 md:px-8 text-[#153569] py-2 bg-white hover:bg-blue-500 hover:text-white rounded-sm font-medium gl transition-all border border-[#153569] hover:border-blue-500 duration-300 hover:-translate-y-0.5 flex items-center gap-2 mt-4">
                             <Mail className="w-4 h-4 group-hover:rotate-12 transition-transform" />
                             Email
                         </button>
-                        <button className=" w-full max-w-40 fc px-4 md:px-8 py-2 bg-white text-[#153569] rounded-sm font-medium transition-all duration-300 hover:-translate-y-0.5 border border-[#153569] flex items-center gap-2 mt-4 group">
+                            <button className=" w-full hover:text-white hover:bg-blue-500 gl hover:border-blue-500 max-w-40 fc px-4 md:px-8 py-2 bg-white text-[#153569] rounded-sm font-medium transition-all duration-300 hover:-translate-y-0.5 border border-[#153569] flex items-center gap-2 mt-4 group">
                             <Phone className="w-4 h-4 group-hover:rotate-12 transition-transform" />
                             Call
                         </button>
-                        <button className=" w-full max-w-40 fc px-4 md:px-8 py-2 bg-white text-[#153569] rounded-sm font-medium transition-all duration-300 hover:-translate-y-0.5 border border-[#153569] flex items-center gap-2 mt-4 group">
+                            <button className=" w-full hover:text-white hover:bg-blue-500 gl hover:border-blue-500 max-w-40 fc px-4 md:px-8 py-2 bg-white text-[#153569] rounded-sm font-medium transition-all duration-300 hover:-translate-y-0.5 border border-[#153569] flex items-center gap-2 mt-4 group">
                             <Globe className="w-4 h-4 group-hover:rotate-12 transition-transform" />
                             Website
                         </button>
@@ -136,7 +138,7 @@ export default function AccountPage() {
                 {/* Top Row: About, Contact, Activity */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                     {/* About */}
-                    <div className="bg-white/80 backdrop-blur-sm rounded-md p-4 md:p-6 s -lg border border-gray-200/50 hover:s -xl transition-all duration-300 animate-fade-in-up stagger-1">
+                    <div className="bg-white/80 backdrop-blur-sm rounded-md p-4 md:p-6 s -lg hover:s -xl transition-all duration-300 animate-fade-in-up stagger-1 border border-[#B6B6B6]">
                         <h2 className="text-lg font-semibold mb-4 text-gray-900">About</h2>
                         <p className="text-[stone-600] leading-relaxed">
                             {companyData.about}
@@ -144,7 +146,7 @@ export default function AccountPage() {
                     </div>
 
                     {/* Contact Information */}
-                    <div className="bg-white rounded-md p-4 md:p-6 s -lg  hover:s  transition-all duration-300 animate-fade-in-up stagger-2">
+                        <div className="bg-white rounded-md p-4 md:p-6 s -lg  hover:s  transition-all duration-300 animate-fade-in-up stagger-2 border border-[#B6B6B6]">
                         <h2 className="text-lg font-semibold mb-6 text-gray-900">
                             Contact Information
                         </h2>
@@ -188,7 +190,7 @@ export default function AccountPage() {
                     </div>
 
                     {/* Activity */}
-                    <div className="bg-white backdrop-blur-sm rounded-md p-4 md:p-6 s -lg border border-gray-200/50 hover:s -xl transition-all duration-300 animate-fade-in-up stagger-3">
+                        <div className="bg-white backdrop-blur-sm rounded-md p-4 md:p-6 s -lg hover:s -xl transition-all duration-300 animate-fade-in-up stagger-3 border border-[#B6B6B6]">
                         <h2 className="text-lg font-semibold mb-6 text-gray-900">
                             Activity
                         </h2>
@@ -229,7 +231,7 @@ export default function AccountPage() {
                 {/* Bottom Row: Services and Gallery */}
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
                     {/* Services */}
-                    <div className="lg:col-span-2 rounded-md p-4 md:p-6 s  border border-gray-200/50 transition-all duration-300 animate-fade-in-up stagger-4">
+                        <div className="lg:col-span-2 rounded-md p-4 md:p-6 s transition-all duration-300 animate-fade-in-up stagger-4 border border-[#B6B6B6]">
                         <h2 className="text-lg font-semibold mb-6 text-gray-900">
                             Services
                         </h2>
@@ -266,7 +268,7 @@ export default function AccountPage() {
                     </div>
 
                     {/* Gallery */}
-                    <div className="lg:col-span-3 rounded-md p-4 md:p-6 s hover:s border transition-all duration-300 animate-fade-in-up stagger-5">
+                        <div className="lg:col-span-3 rounded-md p-4 md:p-6 s hover:s border transition-all duration-300 animate-fade-in-up stagger-5 border border-[#B6B6B6]">
                         <h2 className="text-lg font-semibold mb-6 text-gray-900">
                             Gallery
                         </h2>
@@ -281,6 +283,7 @@ export default function AccountPage() {
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     );
 }
