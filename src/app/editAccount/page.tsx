@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Basic from './components/basic';
 import Contacts from './components/contacts';
+import Services from './components/services';
 
 export interface EditData{
     basic:{
@@ -139,7 +140,7 @@ const ProfileLayout: React.FC = () => {
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200">
                     {/* Tabs */}
                     <div className="border-b border-gray-200">
-                        <div className="flex">
+                        <div className="flex flex-wrap">
                             {tabs.map((tab) => (
                                 <button
                                     key={tab.id}
@@ -160,7 +161,9 @@ const ProfileLayout: React.FC = () => {
 
                     {/* Form Content */}
                     <div className="p-4">
+                        {<Basic editData={editData} setEditData={setEditData} />}
                         {<Contacts editData={editData} setEditData={setEditData}/>}
+                        {<Services editData={editData} setEditData={setEditData} />}
                         
                         
                         
@@ -172,10 +175,10 @@ const ProfileLayout: React.FC = () => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex gap-4 mt-8">
+                <div className="flex flex-col md:flex-row gap-4 mt-8 ">
                     <button
                         onClick={handleSave}
-                        className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium gl"
+                        className="fc gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium gl"
                     >
                         <svg
                             className="w-5 h-5"
@@ -195,7 +198,7 @@ const ProfileLayout: React.FC = () => {
 
                     <button
                         onClick={handleCancel}
-                        className="flex items-center gap-2 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium glr"
+                        className="fc gap-2 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium glr"
                     >
                         <svg
                             className="w-5 h-5"

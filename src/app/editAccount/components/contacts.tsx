@@ -23,8 +23,8 @@ const Contacts: React.FC<ContactsProps> = ({ editData, setEditData }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Email Address */}
                 <div className="flex flex-col">
-                    <label htmlFor="email" className="text-sm font-medium text-gray-700 mb-2">
-                        Email Address
+                    <label htmlFor="country" className="text-sm text-gray-700 mb-2">
+                        Email Address<span className="text-red-500">*</span>
                     </label>
                     <input
                         id="email"
@@ -38,8 +38,8 @@ const Contacts: React.FC<ContactsProps> = ({ editData, setEditData }) => {
 
                 {/* Phone Number */}
                 <div className="flex flex-col">
-                    <label htmlFor="phone" className="text-sm font-medium text-gray-700 mb-2">
-                        Phone Number*
+                    <label htmlFor="country" className="text-sm text-gray-700 mb-2">
+                        Phone Number<span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                         <input
@@ -57,8 +57,8 @@ const Contacts: React.FC<ContactsProps> = ({ editData, setEditData }) => {
 
             {/* Website URL */}
             <div className="flex flex-col">
-                <label htmlFor="website" className="text-sm font-medium text-gray-700 mb-2">
-                    Website URL
+                <label htmlFor="country" className="text-sm text-gray-700 mb-2">
+                    Website URL<span className="text-red-500">*</span>
                 </label>
                 <input
                     id="website"
