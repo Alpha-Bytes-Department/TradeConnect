@@ -57,7 +57,7 @@ const Basic: React.FC<BasicProps> = ({ editData, setEditData }) => {
                         
                         
                     >
-                        {countries.map((country)=><option value="United States">{country}</option>)}
+                        {countries.map((country,index)=><option key={index} value="United States">{country}</option>)}
                         
                     </select>
                 </div>
