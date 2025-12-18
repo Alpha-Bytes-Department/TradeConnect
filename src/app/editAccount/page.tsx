@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Basic from './components/basic';
+import Contacts from './components/contacts';
 
 export interface EditData{
     basic:{
@@ -159,7 +160,8 @@ const ProfileLayout: React.FC = () => {
 
                     {/* Form Content */}
                     <div className="p-4">
-                        {<Basic editData={editData} setEditData={setEditData}/>}
+                        {<Contacts editData={editData} setEditData={setEditData}/>}
+                        
                         
                         
 
