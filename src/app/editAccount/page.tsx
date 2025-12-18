@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Basic from './components/basic';
 import Contacts from './components/contacts';
 import Services from './components/services';
+import Images from './components/image';
 
 export interface EditData{
     basic:{
@@ -164,6 +165,7 @@ const ProfileLayout: React.FC = () => {
                         {<Basic editData={editData} setEditData={setEditData} />}
                         {<Contacts editData={editData} setEditData={setEditData}/>}
                         {<Services editData={editData} setEditData={setEditData} />}
+                        {<Images editData={editData} setEditData={setEditData} />}
                         
                         
                         
