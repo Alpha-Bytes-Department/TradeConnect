@@ -1,4 +1,5 @@
-import React, { useRef, ChangeEvent } from 'react';
+import React, { useRef, useState, ChangeEvent } from 'react';
+import GalleryUploadModal from './galleryUploadModal';
 
 import { EditData } from '../page';
 
@@ -12,9 +13,12 @@ const Images: React.FC<ImagesProps> = ({ editData, setEditData }) => {
     const bannerInputRef = useRef<HTMLInputElement>(null);
     const galleryInputRef = useRef<HTMLInputElement>(null);
 
+    // ONLY NEW LINE - Modal state
+    const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
+
     const handleLogoChange = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (file && file.size <= 5 * 1024 * 1024) {
+        if (file && file.size <= 50 * 1024 * 1024) {
             setEditData((prev) => ({
                 ...prev,
                 images: {
@@ -29,7 +33,7 @@ const Images: React.FC<ImagesProps> = ({ editData, setEditData }) => {
 
     const handleBannerChange = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (file && file.size <= 5 * 1024 * 1024) {
+        if (file && file.size <= 50 * 1024 * 1024) {
             setEditData((prev) => ({
                 ...prev,
                 images: {
@@ -52,7 +56,7 @@ const Images: React.FC<ImagesProps> = ({ editData, setEditData }) => {
             return;
         }
 
-        const validFiles = files.filter((file) => file.size <= 5 * 1024 * 1024);
+        const validFiles = files.filter((file) => file.size <= 50 * 1024 * 1024);
         if (validFiles.length !== files.length) {
             alert('Some files were skipped because they exceed 5MB');
         }
@@ -62,6 +66,17 @@ const Images: React.FC<ImagesProps> = ({ editData, setEditData }) => {
             images: {
                 ...prev.images,
                 gallery: [...prev.images.gallery, ...validFiles],
+            },
+        }));
+    };
+
+    // NEW FUNCTION - handles gallery upload from modal
+    const handleGalleryUploadFromModal = (files: File[]) => {
+        setEditData((prev) => ({
+            ...prev,
+            images: {
+                ...prev.images,
+                gallery: [...prev.images.gallery, ...files],
             },
         }));
     };
@@ -84,11 +99,11 @@ const Images: React.FC<ImagesProps> = ({ editData, setEditData }) => {
     return (
         <div className="w-full mx-auto space-y-8">
             {/* Logo Section */}
-            <div>
+            <div className="">
                 <label htmlFor="country" className="text-sm text-gray-700 mb-2">
                     Business Logo<span className="text-red-500">*</span>
                 </label>
-                <div className="flex items-start gap-4">
+                <div className="flex flex-col md:flex-row items-start gap-4">
                     {/* Current Logo Preview */}
                     {editData.images.logo && (
                         <div className="w-40 h-40 rounded-lg overflow-hidden border-2 border-gray-200 flex-shrink-0">
@@ -231,10 +246,10 @@ const Images: React.FC<ImagesProps> = ({ editData, setEditData }) => {
                     </div>
                 )}
 
-                {/* Add More Images */}
+                {/* Add More Images - ONLY CHANGE: onClick opens modal instead of file input */}
                 {editData.images.gallery.length < 10 && (
                     <div
-                        onClick={() => galleryInputRef.current?.click()}
+                        onClick={() => setIsGalleryModalOpen(true)}
                         className="border-2 border-dashed border-gray-300 rounded-lg p-16 hover:border-gray-400 transition-colors cursor-pointer bg-gray-50 hover:bg-gray-100"
                     >
                         <div className="flex flex-col items-center justify-center text-center">
@@ -269,6 +284,15 @@ const Images: React.FC<ImagesProps> = ({ editData, setEditData }) => {
                     className="hidden"
                 />
             </div>
+
+            {/* NEW COMPONENT - Gallery Upload Modal */}
+            <GalleryUploadModal
+                isOpen={isGalleryModalOpen}
+                onClose={() => setIsGalleryModalOpen(false)}
+                onConfirm={handleGalleryUploadFromModal}
+                currentGalleryLength={editData.images.gallery.length}
+                maxImages={10}
+            />
         </div>
     );
 };
