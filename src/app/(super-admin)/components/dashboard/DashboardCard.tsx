@@ -44,8 +44,8 @@ export default function DashboardCard() {
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-9">
             {
                 dashboardCardData.map(item => (
-                    <div key={item.id} className="bg-[#FFFFFF] h-[160px] rounded-lg p-4 border border-[#B6B6B6] 
-                    shadow-2xl flex flex-col gap-2">
+                    <div key={item.id} className="bg-[#FFFFFF] h-[160px] rounded-lg p-4 border 
+                    flex flex-col gap-2">
                         <div className="w-11 h-11 rounded-lg p-[10px] flex items-center justify-center"
                             style={{ backgroundColor: item.iconBackgroundColor }}>
                             {cloneElement(item.iconName, {
