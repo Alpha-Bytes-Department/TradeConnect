@@ -212,10 +212,10 @@ const Images: React.FC<ImagesProps> = ({ editData, setEditData }) => {
 
                 {/* Gallery Grid */}
                 {editData.images.gallery.length > 0 && (
-                    <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div className="grid grid-cols-4 gap-2 mb-4">
                         {editData.images.gallery.map((image, index) => (
-                            <div key={index} className="relative group">
-                                <div className="aspect-[16/10] rounded-lg overflow-hidden border-2 border-gray-200">
+                            <div key={index} className="relative col-span-4 md:col-span-1 group">
+                                <div className="aspect-square rounded-lg overflow-hidden border-2 border-gray-200">
                                     <img
                                         src={getFilePreview(image)}
                                         alt={`Gallery image ${index + 1}`}
@@ -224,11 +224,11 @@ const Images: React.FC<ImagesProps> = ({ editData, setEditData }) => {
                                 </div>
                                 <button
                                     onClick={() => removeGalleryImage(index)}
-                                    className="absolute top-3 right-3 w-8 h-8 bg-black bg-opacity-70 hover:bg-opacity-90 rounded-full flex items-center justify-center transition-all"
+                                    className="absolute top-3 right-3 w-8 h-8 bg-white shadow-md shadow-gray-500 hover:bg-opacity-90 rounded-full flex items-center justify-center transition-all"
                                     aria-label="Remove image"
                                 >
                                     <svg
-                                        className="w-5 h-5 text-white"
+                                        className="w-5 h-5 text-gray-500"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -236,7 +236,7 @@ const Images: React.FC<ImagesProps> = ({ editData, setEditData }) => {
                                         <path
                                             strokeLinecap="round"
                                             strokeLinejoin="round"
-                                            strokeWidth={2}
+                                            strokeWidth={3}
                                             d="M6 18L18 6M6 6l12 12"
                                         />
                                     </svg>

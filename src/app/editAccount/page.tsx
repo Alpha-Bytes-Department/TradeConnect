@@ -127,9 +127,29 @@ const ProfileLayout: React.FC = () => {
         })
     }
 
+    const renderTab = () => {
+        switch (activeTab) {
+            case 'basic':
+                return <Basic editData={editData} setEditData={setEditData} />;
+
+            case 'contact':
+                return <Contacts editData={editData} setEditData={setEditData} />;
+
+            case 'services':
+                return <Services editData={editData} setEditData={setEditData} />;
+
+            case 'images':
+                return <Images editData={editData} setEditData={setEditData} />;
+
+            default:
+                return null;
+        }
+    };
+
+
 
     return (
-        <div className="min-h-screen bg-gray-50 p-4">
+        <div className="min-h-screen bg-gray-50 p-2 md:p-4">
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="mb-8">
@@ -161,13 +181,12 @@ const ProfileLayout: React.FC = () => {
                     </div>
 
                     {/* Form Content */}
-                    <div className="p-4">
-                        {<Basic editData={editData} setEditData={setEditData} />}
-                        {<Contacts editData={editData} setEditData={setEditData}/>}
-                        {<Services editData={editData} setEditData={setEditData} />}
-                        {<Images editData={editData} setEditData={setEditData} />}
+                    <div className="p-2 md:p-4">
                         
+                            
+                    
                         
+                        {renderTab()}
                         
 
 
