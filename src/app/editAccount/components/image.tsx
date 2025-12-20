@@ -2,6 +2,7 @@ import React, { useRef, useState, ChangeEvent } from 'react';
 import GalleryUploadModal from './galleryUploadModal';
 
 import { EditData } from '../page';
+import { PlusCircleIcon } from 'lucide-react';
 
 interface ImagesProps {
     editData: EditData;
@@ -253,21 +254,11 @@ const Images: React.FC<ImagesProps> = ({ editData, setEditData }) => {
                         className="border-2 border-dashed border-gray-300 rounded-lg p-16 hover:border-gray-400 transition-colors cursor-pointer bg-gray-50 hover:bg-gray-100"
                     >
                         <div className="flex flex-col items-center justify-center text-center">
-                            <svg
-                                className="w-12 h-12 text-gray-400 mb-3"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                                />
-                            </svg>
+                            <div className="bg-orange-500 rounded-full shadow-md hover:shadow-lg shadow-orange-500 text-white fc h-20 w-20 mb-10">
+                                <PlusCircleIcon size={45} strokeWidth={1}/>
+                            </div>
                             <p className="text-base font-medium text-gray-700 mb-1">
-                                Click to add more images
+                                Add gallery images.
                             </p>
                             <p className="text-sm text-gray-500">
                                 Add up to 10 images to showcase your business
