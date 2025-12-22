@@ -90,7 +90,7 @@ export default function AccountPage() {
     return (
         <div className="w-full min-h-screen ">
         <div className="relative w-full min-h-screen">
-            <div className="fc h-[50vw] md:h-[30vw] w-[100%] border m-auto overflow-hidden ">
+            <div className="fc h-[50vw] md:h-[30vw] w-[100%] m-auto overflow-hidden ">
                 <img src='accountsBanner.png' alt='accounts' className="w-[170%] "></img>
                 
             </div>
