@@ -1,0 +1,289 @@
+"use client";
+
+import { useState } from "react";
+import {
+    Mail,
+    Phone,
+    Globe,
+    MapPin,
+    Clock,
+    Calendar,
+    CalendarCheckIcon,
+    Clock10Icon,
+    CalendarIcon,
+} from "lucide-react";
+import { PiX } from "react-icons/pi";
+
+interface Service {
+    id: string;
+    name: string;
+}
+
+interface Activity {
+    active: boolean;
+    activeFor: number;
+    lastUpdated: string;
+}
+
+interface ContactInfo {
+    email: string;
+    phone: string;
+    website: string;
+}
+
+interface CompanyProfile {
+    name: string;
+    address: string;
+    industry: string;
+    logo: string;
+    about: string;
+    contact: ContactInfo;
+    services: Service[];
+    activities: Activity;
+    gallery: string[];
+}
+
+export default function AccountPage() {
+    const [activeService, setActiveService] = useState<string | null>(null);
+
+    const companyData: CompanyProfile = {
+        name: "Construction Partners",
+        address: "989 Builder Road, Dubai, UAE",
+        industry: "Construxion",
+        logo: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=400&fit=crop",
+        about:
+            "We are a trusted construction company dedicated to delivering high-quality projects on time and within budget. From residential buildings to commercial developments, we focus on safety, durability, and customer satisfaction at every step.",
+        contact: {
+            email: "info@constructionpartner.com",
+            phone: "+971 245 54 5 545",
+            website: "constructionparner.com",
+        },
+        services: [
+            { id: "1", name: "Commercial Construction" },
+            { id: "2", name: "Project Management" },
+            { id: "3", name: "Renovation" },
+            { id: "4", name: "Infrastructure" },
+            { id: "11", name: "Commercial Construction" },
+            { id: "21", name: "Project Management" },
+            { id: "31", name: "Renovation" },
+            { id: "41", name: "Infrastructure" },
+        ],
+        activities: {
+            active: true,
+            activeFor: 23,
+            lastUpdated: new Date().toISOString(),
+        },
+        gallery: [
+            "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=400&h=300&fit=crop",
+            "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop",
+            "https://images.unsplash.com/photo-1535732759880-bbd5c7265e3f?w=400&h=300&fit=crop",
+            "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=400&h=300&fit=crop",
+            "https://images.unsplash.com/photo-1541976590-713941681591?w=400&h=300&fit=crop",
+            "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=400&h=300&fit=crop",
+        ],
+    };
+
+    return (
+        <div className="w-full min-h-screen md:px-[50px]">
+        <div className="relative w-full min-h-screen">
+            <div className="fc h-[50vw] md:h-[30vw] w-[100%] border m-auto overflow-hidden mask-image-linear-fade">
+                <img src='accountsBanner.png' alt='accounts' className="w-[170%] "></img>
+                
+            </div>
+            
+            <div className="absolute top-[25vw] max-w-12xl mx-auto pb-6 md:pb-12 px-2">
+                {/* Header Section */}
+                <div className="fc flex-col text-center mb-12 animate-fade-in-up">
+                    <div className="inline-block mb-6 relative group border-3 border-[#FBC8A2] rounded-3xl">
+                        
+                        <img
+                            src={companyData.logo}
+                            alt={companyData.name}
+                            className="w-40 h-40 rounded-3xl object-cover s relative transform transition-transform duration-500 group-hover:scale-105"
+                        />
+                    </div>
+
+                    <h1 className="text-3xl font-semibold mb-4 tracking-tight">
+                        <span className=" text-black">{companyData.name}</span>
+                    </h1>
+
+                        <div className="flex items-center justify-center gap-2 text-[#909090] mb-4">
+                        <MapPin className="w-4 h-4" />
+                        <span className="text-sm font-medium">{companyData.address}</span>
+                    </div>
+
+                    <div className="inline-block">
+                        <span className="px-6 py-2 bg-[#FBC8A2] text-[#153569] rounded-full text-sm font-semibold ">
+                            {companyData.industry}
+                        </span>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex justify-between items-center w-full md:w-[33vw] mt-8 flex-col md:flex-row">
+                            <button className="group w-full max-w-40 fc px-4 md:px-8 text-[#153569] py-2 bg-white hover:bg-blue-500 hover:text-white rounded-sm font-medium gl transition-all border border-[#153569] hover:border-blue-500 duration-300 hover:-translate-y-0.5 flex items-center gap-2 mt-4">
+                            <Mail className="w-4 h-4 group-hover:rotate-12 transition-transform" />
+                            Email
+                        </button>
+                            <button className=" w-full hover:text-white hover:bg-blue-500 gl hover:border-blue-500 max-w-40 fc px-4 md:px-8 py-2 bg-white text-[#153569] rounded-sm font-medium transition-all duration-300 hover:-translate-y-0.5 border border-[#153569] flex items-center gap-2 mt-4 group">
+                            <Phone className="w-4 h-4 group-hover:rotate-12 transition-transform" />
+                            Call
+                        </button>
+                            <button className=" w-full hover:text-white hover:bg-blue-500 gl hover:border-blue-500 max-w-40 fc px-4 md:px-8 py-2 bg-white text-[#153569] rounded-sm font-medium transition-all duration-300 hover:-translate-y-0.5 border border-[#153569] flex items-center gap-2 mt-4 group">
+                            <Globe className="w-4 h-4 group-hover:rotate-12 transition-transform" />
+                            Website
+                        </button>
+                    </div>
+                </div>
+
+                {/* Top Row: About, Contact, Activity */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    {/* About */}
+                    <div className="bg-white/80 backdrop-blur-sm rounded-md p-4 md:p-6 s -lg hover:s -xl transition-all duration-300 animate-fade-in-up stagger-1 border border-[#B6B6B6]">
+                        <h2 className="text-lg font-semibold mb-4 text-gray-900">About</h2>
+                        <p className="text-[stone-600] leading-relaxed">
+                            {companyData.about}
+                        </p>
+                    </div>
+
+                    {/* Contact Information */}
+                        <div className="bg-white rounded-md p-4 md:p-6 s -lg  hover:s  transition-all duration-300 animate-fade-in-up stagger-2 border border-[#B6B6B6]">
+                        <h2 className="text-lg font-semibold mb-6 text-gray-900">
+                            Contact Information
+                        </h2>
+                        <div className="space-y-4">
+                            <div>
+                                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
+                                    Email
+                                </p>
+                                <a
+                                    href={`mailto:${companyData.contact.email}`}
+                                    className="text-[#327EF9] hover:text-blue-700 font-medium transition-colors"
+                                >
+                                    {companyData.contact.email}
+                                </a>
+                            </div>
+                            <div>
+                                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
+                                    Phone
+                                </p>
+                                <a
+                                    href={`tel:${companyData.contact.phone}`}
+                                    className="text-[#327EF9] hover:text-blue-700 font-medium transition-colors"
+                                >
+                                    {companyData.contact.phone}
+                                </a>
+                            </div>
+                            <div>
+                                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
+                                    Website
+                                </p>
+                                <a
+                                    href={`https://${companyData.contact.website}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-[#327EF9] hover:text-blue-700 font-medium transition-colors"
+                                >
+                                    {companyData.contact.website}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Activity */}
+                        <div className="bg-white backdrop-blur-sm rounded-md p-4 md:p-6 s -lg hover:s -xl transition-all duration-300 animate-fade-in-up stagger-3 border border-[#B6B6B6]">
+                        <h2 className="text-lg font-semibold mb-6 text-gray-900">
+                            Activity
+                        </h2>
+                        <div className="space-y-4">
+                            <div className="flex flex-col items-start gap-4">
+                                <div className="flex items-start flex-row">
+                                    <div className="fc h-12 w-12 rounded-sm bg-[#BFD7FD] text-[#2E73E3]">
+                                        <CalendarIcon />
+                                    </div>
+                                    <div className="flex flex-col items-left justify-center ml-2">
+                                        <p className="text-sm text-gray-500">Active for</p>
+                                        <p className="text-md text-[#327EF9]">
+                                            {companyData.activities.activeFor} Months
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start flex-row">
+                                    <div className="fc h-12 w-12 rounded-sm bg-[#FDDAC0] text-[#884B1D]">
+                                        <Clock10Icon />
+                                    </div>
+                                    <div className="flex flex-col items-left justify-center ml-2">
+                                        <p className="text-sm text-gray-500">Last Updated</p>
+                                        <div className="flex flex-row items-left justify-center gap-6">
+                                            <p className="text-md text-[#327EF9]">
+                                                {companyData.activities.lastUpdated.slice(0, 10)}
+                                            </p>
+                                            <p className="text-md text-[#327EF9]">
+                                                {companyData.activities.lastUpdated.slice(11, 16)}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Bottom Row: Services and Gallery */}
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                    {/* Services */}
+                        <div className="lg:col-span-2 rounded-md p-4 md:p-6 s transition-all duration-300 animate-fade-in-up stagger-4 border border-[#B6B6B6]">
+                        <h2 className="text-lg font-semibold mb-6 text-gray-900">
+                            Services
+                        </h2>
+                        <div className="space-y-3 overflow-y-scroll scrollbar-hide h-88">
+                            {companyData.services.map((service, index) => (
+                                <button
+                                    key={service.id}
+                                    onClick={() =>
+                                        setActiveService(
+                                            activeService === service.id ? null : service.id
+                                        )
+                                    }
+                                    className={`w-full text-left px-6 py-4 rounded-xl transition-all duration-300 border-1 bg-[#EBF2FE] border-[#A1C4FC]`}
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <div
+                                            className={`w-2 h-2 rounded-full transition-all duration-300 ${activeService === service.id
+                                                    ? "bg-blue-600 scale-125"
+                                                    : "bg-gray-400"
+                                                }`}
+                                        ></div>
+                                        <span
+                                            className={`font-medium transition-colors ${activeService === service.id
+                                                    ? "text-blue-900"
+                                                    : "text-gray-700"
+                                                }`}
+                                        >
+                                            {service.name}
+                                        </span>
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Gallery */}
+                        <div className="lg:col-span-3 rounded-md p-4 md:p-6 s hover:s border transition-all duration-300 animate-fade-in-up stagger-5 border border-[#B6B6B6]">
+                        <h2 className="text-lg font-semibold mb-6 text-gray-900">
+                            Gallery
+                        </h2>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6 overflow-y-scroll scrollbar-hide max-h-88">
+                            
+                            {companyData.gallery.map((image, index) => (
+                                <div key={index} className='fc col-span-1 overflow-hidden bg-black aspect-square rounded-sm'>
+                                    <img src={image} alt="image" className="w-full h-full object-cover" />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    );
+}
