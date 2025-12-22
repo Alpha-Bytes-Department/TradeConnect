@@ -139,6 +139,9 @@
   box-shadow: 0 0 10px 3px rgba(50, 126, 249, 1)
 }
 
+.glr:hover{
+  box-shadow: 0 0 10px 3px rgb(249, 50, 50)
+}
 .mask-image-linear-fade {
   -webkit-mask-image: linear-gradient(
     to top,
