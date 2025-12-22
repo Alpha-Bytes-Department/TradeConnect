@@ -139,7 +139,7 @@ const getData = async (): Promise<dashboardLatestBusiness[]> => {
         {
             id: 16,
             business_name: "BenQ",
-            country: "Taiwan",
+            country: "Taiwan y",
             last_login: "2024-12-05 09:30",
             status: "Active",
         },
