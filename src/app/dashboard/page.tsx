@@ -109,9 +109,9 @@ export default function Dashboard() {
     return (
             
 
-        <div className="w-full fc flex-col px-4">
+        <div className="w-full fc flex-col justify-around  gap-4 md:gap-6 my-4 md:my-6">
                 
-            <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 mb-8 bg-gradient-to-b from-[#8A38F5] to-[#005AF0] rounded-lg">
+            <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-gradient-to-b from-[#8A38F5] to-[#005AF0] rounded-lg">
                 <h1 className="text-2xl sm:text-2xl lg:text-2xl font-semibold mb-2 tracking-tight text-white">
                     Welcome back, Tech Solutions Inc.!
                 </h1>
@@ -120,7 +120,7 @@ export default function Dashboard() {
                 </p>
             </div>
             {/* Stats Grid */}
-            <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
+            <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4">
                     {statsData.map((stat, index) => {
                         const Icon = stat.icon;
                         return (
@@ -152,11 +152,11 @@ export default function Dashboard() {
                 </div>
 
                 {/* Quick Actions */}
-            <div className="w-full mb-8 bg-[#FEF3EB] p-6 rounded-lg">
-                    <h2 className="text-xl sm:text-xl font-semibold text-slate-800 mb-4 sm:mb-6">
+            <div className="w-full bg-[#FEF3EB] p-4 rounded-lg">
+                    <h2 className="text-xl sm:text-xl font-semibold text-slate-800 pb-4">
                         Quick Actions
                     </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ">
                         {quickActions.map((action) => {
                             const Icon = action.icon;
                             return (
@@ -189,12 +189,12 @@ export default function Dashboard() {
                 </div>
 
                 {/* Your Profile */}
-            <div className="w-full mb-8 sm:mb-12 bg-white p-6 rounded-lg border shadow-lg">
-                    <h2 className="text-xl sm:text-xl font-semibold text-slate-800 mb-4 sm:mb-6">
+            <div className="w-full bg-white p-4 rounded-lg border shadow-lg">
+                    <h2 className="text-xl sm:text-xl font-semibold text-slate-800 pb-4">
                         Your Profile
                     </h2>
                     <div className="bg-white rounded-2xl">
-                        <div className="flex flex-col lg:flex-row lg:items-center gap-6">
+                        <div className="flex flex-col lg:flex-row lg:items-center gap-4">
                             {/* Profile Image */}
                             <div className="flex-shrink-0">
                                 <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shadow-md bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center">
@@ -205,7 +205,7 @@ export default function Dashboard() {
                             </div>
 
                             {/* Profile Info */}
-                            <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
                                         Business Name
@@ -255,8 +255,8 @@ export default function Dashboard() {
                 </div>
 
                 {/* Recently Viewed Business */}
-            <div className="w-full bg-[#FEF3EB] p-6 rounded-lg" >
-                <h2 className="text-xl sm:text-xl font-semibold text-slate-800 mb-4 sm:mb-6">
+            <div className="w-full bg-[#FEF3EB] p-4 rounded-lg" >
+                <h2 className="text-xl sm:text-xl font-semibold text-slate-800 ">
                         Recently Viewed Business
                     </h2>
                     <div className=" overflow-hidden border border-slate-100">
