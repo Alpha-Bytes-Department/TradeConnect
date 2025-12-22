@@ -11,8 +11,12 @@ import {
     CalendarCheckIcon,
     Clock10Icon,
     CalendarIcon,
+    ArrowBigLeft,
+    ArrowBigLeftIcon,
+    ArrowLeft,
 } from "lucide-react";
 import { PiX } from "react-icons/pi";
+import { redirect } from 'next/navigation'
 
 interface Service {
     id: string;
@@ -84,22 +88,26 @@ export default function AccountPage() {
     };
 
     return (
-        <div className="w-full min-h-screen md:px-[50px]">
+        <div className="w-full min-h-screen ">
         <div className="relative w-full min-h-screen">
-            <div className="fc h-[50vw] md:h-[30vw] w-[100%] border m-auto overflow-hidden mask-image-linear-fade">
+            <div className="fc h-[50vw] md:h-[30vw] w-[100%] m-auto overflow-hidden ">
                 <img src='accountsBanner.png' alt='accounts' className="w-[170%] "></img>
                 
             </div>
+            <button className="absolute top-[5vw] left-[2vw] fc h-10 p-4 bg-blue-200 border-blue-400 rounded-lg gap-2" onClick={()=>{redirect('/directory')}}>
+                <ArrowLeft color={'#5d7dffff'}/>
+                <p className="text-blue-400 text-md">Back to Directory</p>
+            </button>
             
-            <div className="absolute top-[25vw] max-w-12xl mx-auto pb-6 md:pb-12 px-2">
+                <div className="absolute top-[29vw] md:top-[25.5vw] max-w-12xl mx-auto pb-6 md:pb-12 ">
                 {/* Header Section */}
                 <div className="fc flex-col text-center mb-12 animate-fade-in-up">
-                    <div className="inline-block mb-6 relative group border-3 border-[#FBC8A2] rounded-3xl">
+                    <div className="inline-block mb-6 relative group border-5 border-[#FFFFFF] rounded-full">
                         
                         <img
                             src={companyData.logo}
                             alt={companyData.name}
-                            className="w-40 h-40 rounded-3xl object-cover s relative transform transition-transform duration-500 group-hover:scale-105"
+                            className="w-40 h-40 rounded-full object-cover s relative transform transition-transform duration-500 group-hover:scale-105"
                         />
                     </div>
 
@@ -119,16 +127,13 @@ export default function AccountPage() {
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="flex justify-between items-center w-full md:w-[33vw] mt-8 flex-col md:flex-row">
+                    <div className="flex justify-center md:gap-10 items-center w-full md:w-[33vw] mt-8 flex-col md:flex-row">
                             <button className="group w-full max-w-40 fc px-4 md:px-8 text-[#153569] py-2 bg-white hover:bg-blue-500 hover:text-white rounded-sm font-medium gl transition-all border border-[#153569] hover:border-blue-500 duration-300 hover:-translate-y-0.5 flex items-center gap-2 mt-4">
                             <Mail className="w-4 h-4 group-hover:rotate-12 transition-transform" />
                             Email
                         </button>
-                            <button className=" w-full hover:text-white hover:bg-blue-500 gl hover:border-blue-500 max-w-40 fc px-4 md:px-8 py-2 bg-white text-[#153569] rounded-sm font-medium transition-all duration-300 hover:-translate-y-0.5 border border-[#153569] flex items-center gap-2 mt-4 group">
-                            <Phone className="w-4 h-4 group-hover:rotate-12 transition-transform" />
-                            Call
-                        </button>
-                            <button className=" w-full hover:text-white hover:bg-blue-500 gl hover:border-blue-500 max-w-40 fc px-4 md:px-8 py-2 bg-white text-[#153569] rounded-sm font-medium transition-all duration-300 hover:-translate-y-0.5 border border-[#153569] flex items-center gap-2 mt-4 group">
+                            
+                        <button className=" w-full hover:text-white hover:bg-blue-500 gl hover:border-blue-500 max-w-40 fc px-4 md:px-8 py-2 bg-white text-[#153569] rounded-sm font-medium transition-all duration-300 hover:-translate-y-0.5 border border-[#153569] flex items-center gap-2 mt-4 group">
                             <Globe className="w-4 h-4 group-hover:rotate-12 transition-transform" />
                             Website
                         </button>
@@ -162,17 +167,7 @@ export default function AccountPage() {
                                     {companyData.contact.email}
                                 </a>
                             </div>
-                            <div>
-                                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
-                                    Phone
-                                </p>
-                                <a
-                                    href={`tel:${companyData.contact.phone}`}
-                                    className="text-[#327EF9] hover:text-blue-700 font-medium transition-colors"
-                                >
-                                    {companyData.contact.phone}
-                                </a>
-                            </div>
+                           
                             <div>
                                 <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
                                     Website
