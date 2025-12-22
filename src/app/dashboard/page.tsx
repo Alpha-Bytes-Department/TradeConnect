@@ -104,7 +104,7 @@ const recentlyViewedBusinesses = [
 ];
 
 export default function Dashboard() {
-    const [hoveredAction, setHoveredAction] = useState(null);
+    const [hoveredAction, setHoveredAction] = useState<number|null>(0);
 
     return (
             
