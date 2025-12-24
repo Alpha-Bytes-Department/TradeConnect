@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Eye, EyeOff, Lock, Shield, X } from 'lucide-react';
+import { Eye, EyeOff, Lock, Shield, ShuffleIcon, X } from 'lucide-react';
 
 export default function ChangePassword() {
     const [currentPassword, setCurrentPassword] = useState('');
@@ -90,13 +90,13 @@ export default function ChangePassword() {
                                 Current Password<span className="text-red-500">*</span>
                             </label>
                             <div className="relative">
-                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                
                                 <input
                                     type={showCurrentPassword ? 'text' : 'password'}
                                     value={currentPassword}
                                     onChange={(e) => setCurrentPassword(e.target.value)}
                                     placeholder="Enter current password"
-                                    className="w-full pl-12 pr-12 py-4 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    className="w-full pl-6 pr-6 py-4 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 />
                                 <button
                                     type="button"
@@ -118,13 +118,13 @@ export default function ChangePassword() {
                                 New Password<span className="text-red-500">*</span>
                             </label>
                             <div className="relative">
-                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                
                                 <input
                                     type={showNewPassword ? 'text' : 'password'}
                                     value={newPassword}
                                     onChange={(e) => setNewPassword(e.target.value)}
                                     placeholder="Enter New password"
-                                    className="w-full pl-12 pr-12 py-4 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    className="w-full pl-6 pr-6 py-4 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 />
                                 <button
                                     type="button"
@@ -146,13 +146,13 @@ export default function ChangePassword() {
                                 Confirm Password<span className="text-red-500">*</span>
                             </label>
                             <div className="relative">
-                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                
                                 <input
                                     type={showConfirmPassword ? 'text' : 'password'}
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
                                     placeholder="Confirm New password"
-                                    className="w-full pl-12 pr-12 py-4 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    className="w-full pl-6 pr-6 py-4 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 />
                                 <button
                                     type="button"
@@ -176,7 +176,7 @@ export default function ChangePassword() {
                                 disabled={isSubmitting}
                                 className="w-full fc bg-blue-500 hover:bg-blue-600 text-white font-semibold py-4 px-8 rounded-xl flex items-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg gl"
                             >
-                                <Lock className="w-5 h-5" />
+                                
                                 {isSubmitting ? 'Updating...' : 'Update Password'}
                             </button>
                             <button
