@@ -2,9 +2,7 @@
 "use client"
 import { type ColumnDef } from "@tanstack/react-table"
 import { cn } from "@/lib/utils";
-import { Edit, Lock, LockKeyhole, SquarePen, Trash2 } from "lucide-react";
-import { FiEdit } from "react-icons/fi";
-import { RiDeleteBinLine } from "react-icons/ri";
+import { LockKeyhole, SquarePen, Trash2 } from "lucide-react";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -66,22 +64,22 @@ export const columns: ColumnDef<allBusinessesTable>[] = [
                 <div className="flex items-center gap-2">
                     <button
                         onClick={handleEdit}
-                        className="h-8 w-8 flex items-center justify-center rounded-md 
-                        hover:bg-gray-400 transition-colors"
+                        className="h-8 w-8 flex items-center justify-center rounded-sm 
+                        hover:bg-gray-400 hover:text-white transition-colors cursor-pointer"
                     >
                         <SquarePen className="h-4 w-4" />
                     </button>
                     <button
                         onClick={handleDelete}
-                        className="h-8 w-8 flex items-center justify-center rounded-md 
-                        text-red-600 hover:bg-red-100 transition-colors"
+                        className="h-8 w-8 flex items-center justify-center rounded-sm  
+                        text-red-600 hover:bg-red-100 transition-colors cursor-pointer"
                     >
                         <Trash2 className="h-4 w-4" />
                     </button>
                     <button
                         onClick={handleLock}
-                        className="h-8 w-8 flex items-center justify-center rounded-md 
-                        hover:bg-gray-400 transition-colors hover:text-white"
+                        className="h-8 w-8 flex items-center justify-center rounded-sm 
+                        hover:bg-gray-400 hover:text-white transition-colors cursor-pointer"
                     >
                         <LockKeyhole className="h-4 w-4" />
                     </button>
