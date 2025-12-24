@@ -90,16 +90,16 @@ export default function AccountPage() {
     return (
         <div className="w-full min-h-screen ">
         <div className="relative w-full min-h-screen">
-            <div className="fc h-[50vw] md:h-[30vw] w-[100%] m-auto overflow-hidden ">
+            <div className="fc h-[50vw] md:h-[22vw] w-[100%] m-auto overflow-hidden ">
                 <img src='accountsBanner.png' alt='accounts' className="w-[170%] "></img>
                 
             </div>
-            <button className="absolute top-[5vw] left-[2vw] fc h-10 p-4 bg-blue-200 border-blue-400 rounded-lg gap-2" onClick={()=>{redirect('/directory')}}>
-                <ArrowLeft color={'#5d7dffff'}/>
-                <p className="text-blue-400 text-md">Back to Directory</p>
+            <button className="absolute top-[2vw] left-[2vw] fc h-10 p-4 bg-blue-200 border-blue-400 rounded-lg gap-2" onClick={()=>{redirect('/directory')}}>
+                <ArrowLeft color={'#001a81ff'}/>
+                <p className="text-blue-900 text-md font-semibold">Back to Directory</p>
             </button>
             
-                <div className="absolute top-[29vw] md:top-[25.5vw] max-w-12xl mx-auto pb-6 md:pb-12 ">
+                <div className="absolute top-[calc(50vw-82px)] md:top-[calc(22vw-82px)] max-w-12xl mx-auto pb-6 md:pb-12 ">
                 {/* Header Section */}
                 <div className="fc flex-col text-center mb-12 animate-fade-in-up">
                     <div className="inline-block mb-6 relative group border-5 border-[#FFFFFF] rounded-full">
@@ -143,7 +143,7 @@ export default function AccountPage() {
                 {/* Top Row: About, Contact, Activity */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                     {/* About */}
-                    <div className="bg-white/80 backdrop-blur-sm rounded-md p-4 md:p-6 s -lg hover:s -xl transition-all duration-300 animate-fade-in-up stagger-1 border border-[#B6B6B6]">
+                        <div className="bg-white/80 backdrop-blur-sm rounded-md p-4 md:p-6 s hover:s transition-all duration-300 animate-fade-in-up stagger-1 border border-[#d6d6d6]">
                         <h2 className="text-lg font-semibold mb-4 text-gray-900">About</h2>
                         <p className="text-[stone-600] leading-relaxed">
                             {companyData.about}
@@ -151,7 +151,7 @@ export default function AccountPage() {
                     </div>
 
                     {/* Contact Information */}
-                        <div className="bg-white rounded-md p-4 md:p-6 s -lg  hover:s  transition-all duration-300 animate-fade-in-up stagger-2 border border-[#B6B6B6]">
+                        <div className="bg-white rounded-md p-4 md:p-6 s  hover:s  transition-all duration-300 animate-fade-in-up stagger-2 border border-[#d6d6d6]">
                         <h2 className="text-lg font-semibold mb-6 text-gray-900">
                             Contact Information
                         </h2>
@@ -185,7 +185,7 @@ export default function AccountPage() {
                     </div>
 
                     {/* Activity */}
-                        <div className="bg-white backdrop-blur-sm rounded-md p-4 md:p-6 s -lg hover:s -xl transition-all duration-300 animate-fade-in-up stagger-3 border border-[#B6B6B6]">
+                        <div className="bg-white backdrop-blur-sm rounded-md p-4 md:p-6 s -lg hover:s -xl transition-all duration-300 animate-fade-in-up stagger-3 border border-[#d6d6d6]">
                         <h2 className="text-lg font-semibold mb-6 text-gray-900">
                             Activity
                         </h2>
@@ -226,7 +226,7 @@ export default function AccountPage() {
                 {/* Bottom Row: Services and Gallery */}
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
                     {/* Services */}
-                        <div className="lg:col-span-2 rounded-md p-4 md:p-6 s transition-all duration-300 animate-fade-in-up stagger-4 border border-[#B6B6B6]">
+                        <div className="lg:col-span-2 rounded-md p-4 md:p-6 s transition-all duration-300 animate-fade-in-up stagger-4 border border-[#d6d6d6]">
                         <h2 className="text-lg font-semibold mb-6 text-gray-900">
                             Services
                         </h2>
@@ -263,7 +263,7 @@ export default function AccountPage() {
                     </div>
 
                     {/* Gallery */}
-                        <div className="lg:col-span-3 rounded-md p-4 md:p-6 s hover:s border transition-all duration-300 animate-fade-in-up stagger-5 border border-[#B6B6B6]">
+                        <div className="lg:col-span-3 rounded-md p-4 md:p-6 s hover:s border transition-all duration-300 animate-fade-in-up stagger-5 border border-[#d6d6d6]">
                         <h2 className="text-lg font-semibold mb-6 text-gray-900">
                             Gallery
                         </h2>
