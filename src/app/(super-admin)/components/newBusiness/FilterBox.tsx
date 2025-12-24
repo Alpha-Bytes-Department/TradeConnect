@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { HiOutlineSearch } from "react-icons/hi";
 import { SlList } from "react-icons/sl";
 import { BsGrid3X3Gap } from "react-icons/bs";
+import { useView } from "../../ListGridContext";
 
 interface FilterFormData {
     search: string;
@@ -15,7 +16,10 @@ interface FilterFormData {
     sortBy: string;
 }
 
+
 export default function FilterBox() {
+    const { list, grid, setList, setGrid } = useView();
+
     const { register, setValue, watch, handleSubmit } = useForm<FilterFormData>({
         defaultValues: {
             search: "",
@@ -97,13 +101,20 @@ export default function FilterBox() {
                     </Select>
                 </div>
                 <div className="flex items-center gap-6">
-                    <SlList className="w-6 h-6 cursor-pointer" />
-                    <BsGrid3X3Gap className="w-5 h-5 cursor-pointer" />
+                    <SlList className="w-6 h-6 cursor-pointer"
+                        onClick={() => {
+                            setList(true);
+                            setGrid(false)
+                        }}
+                    />
+                    <BsGrid3X3Gap className="w-5 h-5 cursor-pointer"
+                        onClick={() => {
+                            setGrid(true);
+                            setList(false);
+                        }}
+                    />
                 </div>
             </div>
-
-            {/* Optional: Add a submit button */}
-            {/* <button type="submit" className="mt-4">Submit</button> */}
         </form>
     );
 }
