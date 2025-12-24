@@ -12,6 +12,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { CiLock, CiMail } from "react-icons/ci";
 import { FaArrowRight } from "react-icons/fa6";
+import axios from "axios";
 
 const SignInSchema = z.object({
   emailAddress: z
@@ -52,12 +53,17 @@ export default function SignIn() {
   });
 
   const onSubmit = async (data: SignInFormData) => {
+    const payload={
+      "email": "tusharimranme0@gmail.com",
+        "password": "12345678"
+    }
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log("Form submitted:", data);
-      //router.push("/sign-in");
-      // Handle successful submission here
+      const response = await axios.post('http://127.0.0.1:8000/api/accounts/login/', payload, {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      return response.data;
     } catch (error) {
       console.error("Submission error:", error);
     }
