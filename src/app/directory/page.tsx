@@ -210,7 +210,7 @@ const page = () => {
                     </div>
 
                     {/* Bottom Row - Sort and View Toggle */}
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col md:flex-row gap-6 items-center justify-between md:px-12">
                         {/* Sort By */}
                         <div className="flex items-center gap-3">
                             <div className="flex items-center gap-2">
@@ -249,7 +249,7 @@ const page = () => {
                         </div>
 
                         {/* View Toggle */}
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-6">
                             <button
                                 onClick={() => setViewMode("grid")}
                                 className={`p-2 rounded-lg transition-colors ${viewMode === "grid"
