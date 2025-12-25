@@ -6,12 +6,10 @@ import {
 } from "@/components/ui/sidebar";
 //import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 //import { DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import Link from "next/link";
 import { LuBriefcaseBusiness, LuLayoutDashboard, LuSettings } from "react-icons/lu";
 import { FiPlusCircle } from "react-icons/fi";
 import { TbLogout } from "react-icons/tb";
 import { usePathname } from "next/navigation";
-import { BsGrid3X3Gap } from "react-icons/bs";
 
 type SidebarItem = {
     title: string;
@@ -34,11 +32,6 @@ const items: SidebarItem[] = [
         title: "Create Business",
         url: "/super-admin/create-business",
         icon: <FiPlusCircle />,
-    },
-    {
-        title: "Directory",
-        url: "/super-admin/directory",
-        icon: <BsGrid3X3Gap />,
     },
     {
         title: "Settings",

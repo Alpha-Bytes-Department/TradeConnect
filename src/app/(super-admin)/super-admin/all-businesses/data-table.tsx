@@ -1,135 +1,89 @@
 // Fahim
-// Bought from Shadcn.
 
 "use client"
-import {
-    type ColumnDef, flexRender, getCoreRowModel, useReactTable, getPaginationRowModel,
-    type SortingState, getSortedRowModel
-} from "@tanstack/react-table"
+import { type ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable }
+    from "@tanstack/react-table"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-// import { DataTablePagination } from "@/components/payments/TablePagination"
-import { useState } from "react"
 import { Pagination } from 'antd';
 import { useView } from "../../ListGridContext";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
-    // list?: boolean
-    // grid?: boolean
 }
 
-export function DataTable<TData, TValue>({
-    columns,
-    data,
-    // list,
-    // grid
-}: DataTableProps<TData, TValue>) {
-    const [sorting, setSorting] = useState<SortingState>([]);
-    const [rowSelection, setRowSelection] = useState({});
-    // const [pagination, setPagination] = useState({
-    //     pageIndex: 0,
-    //     pageSize: 10,
-    // });
-
+export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
     const table = useReactTable({
-        data,
-        columns,
-        getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-        onSortingChange: setSorting,
-        getSortedRowModel: getSortedRowModel(),
-        onRowSelectionChange: setRowSelection,
-        // onPaginationChange: setPagination,
-        state: {
-            sorting,
-            rowSelection,
-            //pagination
-        },
-    })
-
+        data, columns, getCoreRowModel: getCoreRowModel(),
+        getPaginationRowModel: getPaginationRowModel()
+    });
     const { grid, list } = useView();
-
     return (
         <div>
             {list && (
-                <div className="overflow-hidden rounded-md border mt-12">
-                    <Table>
-                        <TableHeader className="bg-[#BFD7FD] text-[#000000] font-poppins">
-                            {table.getHeaderGroups().map((headerGroup) => (
-                                <TableRow key={headerGroup.id}>
-                                    {headerGroup.headers.map((header) => {
-                                        return (
-                                            <TableHead key={header.id}>
-                                                {header.isPlaceholder
-                                                    ? null
-                                                    : flexRender(
-                                                        header.column.columnDef.header,
-                                                        header.getContext()
-                                                    )}
-                                            </TableHead>
-                                        )
-                                    })}
-                                </TableRow>
-                            ))}
-                        </TableHeader>
-                        <TableBody className="font-poppins">
-                            {table.getRowModel().rows?.length ? (
-                                table.getRowModel().rows.map((row) => (
-                                    <TableRow
-                                        key={row.id}
-                                        data-state={row.getIsSelected() && "selected"}
-                                    >
-                                        {row.getVisibleCells().map((cell) => (
-                                            <TableCell key={cell.id}>
-                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                            </TableCell>
-                                        ))}
+                <div>
+                    <p className="font-poppins text-[#515151] mt-6">Showing {" "}
+                        {table.getRowModel().rows.length} of {data.length} businesses</p>
+                    <div className="overflow-hidden rounded-md border mt-8">
+                        {/* ShadCN */}
+                        <Table>
+                            <TableHeader className="bg-[#BFD7FD] text-[#000000] font-poppins">
+                                {table.getHeaderGroups().map((headerGroup) => (
+                                    <TableRow key={headerGroup.id}>
+                                        {headerGroup.headers.map((header) => {
+                                            return (
+                                                <TableHead key={header.id}>
+                                                    {header.isPlaceholder
+                                                        ? null
+                                                        : flexRender(
+                                                            header.column.columnDef.header,
+                                                            header.getContext()
+                                                        )}
+                                                </TableHead>
+                                            )
+                                        })}
                                     </TableRow>
-                                ))
-                            ) : (
-                                <TableRow>
-                                    <TableCell colSpan={columns.length} className="h-24 text-center">
-                                        No results.
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
+                                ))}
+                            </TableHeader>
+                            <TableBody className="font-poppins">
+                                {table.getRowModel().rows?.length ? (
+                                    table.getRowModel().rows.map((row) => (
+                                        <TableRow
+                                            key={row.id}
+                                            data-state={row.getIsSelected() && "selected"}
+                                        >
+                                            {row.getVisibleCells().map((cell) => (
+                                                <TableCell key={cell.id}>
+                                                    {flexRender(cell.column.columnDef.cell,
+                                                        cell.getContext())}
+                                                </TableCell>
+                                            ))}
+                                        </TableRow>
+                                    ))
+                                ) : (
+                                    <TableRow>
+                                        <TableCell colSpan={columns.length} className="h-24 text-center
+                                        text-red-500">
+                                            No Business Data Found.
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+                    </div>
+
+                    <div className="mt-8">
+                        {/* Ant Design */}
+                        <Pagination className="font-poppins text-[#000000]"
+                            defaultCurrent={1}
+                            total={data.length}
+                            align="center"
+                            onChange={(page) => table.setPageIndex(page - 1)}
+                        />
+                        {/* Pagination should never be inside <Table>, <TableBody>, or <TableRow>. */}
+                    </div>
                 </div>
             )}
-
-            {/* Basic Pagination */}
-            {/* <div className="flex items-center justify-end space-x-2 py-4">
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => table.previousPage()}
-                    disabled={!table.getCanPreviousPage()}
-                    className="cursor-pointer"
-                >
-                    Previous
-                </Button>
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => table.nextPage()}
-                    disabled={!table.getCanNextPage()}
-                    className="cursor-pointer"
-                >
-                    Next
-                </Button>
-            </div> */}
-
-            {/* <DataTablePagination table={table} /> */}
-            <div className="mt-8">
-                <Pagination className="font-poppins text-[#000000]"
-                    defaultCurrent={1}
-                    total={data.length}
-                    align="center"
-                    onChange={(page) => table.setPageIndex(page - 1)}
-                />
-            </div>
         </div>
     )
 }
