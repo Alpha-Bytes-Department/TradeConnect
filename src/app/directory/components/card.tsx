@@ -21,9 +21,9 @@ const Card: React.FC<CardProps> = ({ prop }) => {
     const remainingCount = services ? services.length - 3 : 0;
 
     return (
-        <div className="col-span-4 md:col-span-1 max-w-[632px] bg-white rounded-2xl shadow-lg overflow-hidden">
+        <div className="col-span-4 md:col-span-1 w-full bg-white rounded-2xl shadow-lg overflow-hidden">
             {/* Header Image */}
-            <div className="relative w-full h-[240px]">
+            <div className="relative w-full h-[143px]">
                 <Image
                     src={headerImage ? headerImage : "/image.png"}
                     alt="Header"
@@ -33,10 +33,10 @@ const Card: React.FC<CardProps> = ({ prop }) => {
             </div>
 
             {/* Content */}
-            <div className="p-8">
+            <div className="p-4">
                 {/* Title Section */}
-                <div className="flex items-start gap-4 mb-6">
-                    <div className="relative w-[90px] h-[90px] rounded-2xl overflow-hidden flex-shrink-0 shadow-md">
+                <div className="fc items-start gap-4 mb-4">
+                    <div className="relative fc w-[94px] h-[63px] rounded-2xl overflow-hidden flex-shrink-0 shadow-md">
                         <Image
                             src={flagIcon ? flagIcon : "/image.png"}
                             alt={`${location} flag`}
@@ -44,8 +44,8 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                             className="object-cover"
                         />
                     </div>
-                    <div className="flex-1 pt-2">
-                        <h2 className="text-4xl font-semibold text-gray-800 mb-3">
+                    <div className="flex-1 flex flex-col">
+                        <h2 className="text-lg md:text-xl font-semibold text-gray-800 mb-1">
                             {title}
                         </h2>
                         <div className="flex items-center gap-2 text-gray-500">
@@ -68,15 +68,17 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                                     d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                                 />
                             </svg>
-                            <span className="text-xl">{location}</span>
+                            <span className="text-md md:text-md">{location}</span>
                         </div>
                     </div>
                 </div>
 
                 {/* Description */}
-                <p className="text-gray-700 text-lg leading-relaxed mb-6">
-                    {description}
-                </p>
+                <div className="h-24 overflow-y-auto pr-2 custom-scrollbar">
+                    <p className="text-gray-700 text-md leading-relaxed mb-4 line-clamp-3">
+                        {description}
+                    </p>
+                </div>
 
                 {/* Services */}
                 <div className="mb-6">
@@ -85,13 +87,13 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                         {displayedServices?.map((service, index) => (
                             <span
                                 key={index}
-                                className="px-6 py-3 bg-blue-100 text-gray-700 text-base rounded-full"
+                                className="px-4 py-2 bg-blue-100 text-gray-700 text-base rounded-full"
                             >
                                 {service}
                             </span>
                         ))}
                         {remainingCount > 0 && (
-                            <span className="px-6 py-3 bg-blue-100 text-gray-700 text-base rounded-full">
+                            <span className="px-4 py-2 bg-blue-100 text-gray-700 text-base rounded-full">
                                 {remainingCount}+
                             </span>
                         )}
@@ -104,7 +106,7 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                         href="https://google.com"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="fc flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xl font-medium py-4 rounded-xl transition-colors"
+                        className="fc flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xl font-medium py-2 rounded-xl transition-colors"
                     >
                         View Profile
                     </Link>
@@ -113,7 +115,7 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                         href="https://google.com"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-16 h-16 border-2 border-gray-300 hover:border-blue-600 rounded-xl flex items-center justify-center transition-colors group"
+                        className="w-14 h-14 border-2 border-gray-300 hover:border-blue-600 rounded-xl flex items-center justify-center transition-colors group"
                     >
                         <svg
                             className="w-8 h-8 text-gray-600 group-hover:text-blue-600 transition-colors"

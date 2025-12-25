@@ -9,7 +9,7 @@ interface CardView{
 
 const cardView: React.FC<CardView> = ({ companies }) => {
   return (
-    <div className='grid grid-cols-4 gap-4'>
+    <div className='grid grid-cols-4 gap-6'>
           {companies.map((company,i)=>(<Card key={i} prop={company}/>))}
     </div>
     
