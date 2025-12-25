@@ -22,8 +22,8 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         <div>
             {list && (
                 <div>
-                    <p className="font-poppins text-[#515151] mt-6">Showing 10 of {data.length}
-                        businesses</p>
+                    <p className="font-poppins text-[#515151] mt-6">Showing {" "}
+                        {table.getRowModel().rows.length} of {data.length} businesses</p>
                     <div className="overflow-hidden rounded-md border mt-8">
                         {/* ShadCN */}
                         <Table>
@@ -64,13 +64,14 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                                     <TableRow>
                                         <TableCell colSpan={columns.length} className="h-24 text-center
                                         text-red-500">
-                                            No Businesses Data Found.
+                                            No Business Data Found.
                                         </TableCell>
                                     </TableRow>
                                 )}
                             </TableBody>
                         </Table>
                     </div>
+
                     <div className="mt-8">
                         {/* Ant Design */}
                         <Pagination className="font-poppins text-[#000000]"
@@ -79,6 +80,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                             align="center"
                             onChange={(page) => table.setPageIndex(page - 1)}
                         />
+                        {/* Pagination should never be inside <Table>, <TableBody>, or <TableRow>. */}
                     </div>
                 </div>
             )}
