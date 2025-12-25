@@ -21,7 +21,7 @@ const Card: React.FC<CardProps> = ({ prop }) => {
     const remainingCount = services ? services.length - 3 : 0;
 
     return (
-        <div className="col-span-4 md:col-span-1 w-full bg-white rounded-2xl shadow-lg overflow-hidden">
+        <div className="col-span-4 md:col-span-1 w-full bg-white rounded-2xl shadow-lg overflow-hidden border">
             {/* Header Image */}
             <div className="relative w-full h-[143px]">
                 <Image
