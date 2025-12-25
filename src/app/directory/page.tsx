@@ -31,7 +31,7 @@ const page = () => {
             flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
             title: "TradeConnect Logistics",
             location: "New York, NY",
-            description: "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
+            description: "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
             services: [
                 "International Shipping",
                 "Warehouse Management",
