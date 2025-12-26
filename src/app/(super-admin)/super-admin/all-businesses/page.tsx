@@ -1,8 +1,9 @@
 // Fahim
-import FilterBox from "../../components/newBusiness/FilterBox";
+import FilterBox from "../../components/allBusiness/FilterBox";
 import { allBusinessesTable, columns } from "./columns";
 import { DataTable } from "./data-table";
-import { allBusinessesData } from "../../data";
+import { allBusinessData } from "../../data";
+import GridView from "../../components/allBusiness/GridView";
 
 export default async function AllBusiness() {
     const data = await getData();
@@ -13,10 +14,11 @@ export default async function AllBusiness() {
                 businesses</p>
             <FilterBox />
             <DataTable columns={columns} data={data} />
+            <GridView />
         </div>
     );
 }
 
 const getData = async (): Promise<allBusinessesTable[]> => {
-    return allBusinessesData;
+    return allBusinessData;
 }
