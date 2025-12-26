@@ -1,5 +1,4 @@
 // Fahim
-
 "use client"
 import { type ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable }
     from "@tanstack/react-table"
@@ -24,7 +23,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                 <div>
                     <p className="font-poppins text-[#515151] mt-6">Showing {" "}
                         {table.getRowModel().rows.length} of {data.length} businesses</p>
-                    <div className="overflow-hidden rounded-md border mt-8">
+                    <div className="overflow-x-auto rounded-md border mt-8">
                         {/* ShadCN */}
                         <Table>
                             <TableHeader className="bg-[#BFD7FD] text-[#000000] font-poppins">

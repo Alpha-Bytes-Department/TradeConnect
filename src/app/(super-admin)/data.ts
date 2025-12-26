@@ -116,7 +116,7 @@ export const business_Data = [
 
 
 
-export const allBusinessesData = [
+export const allBusinessData = [
     {
         id: 1,
         business_name: "Daraz",
@@ -125,6 +125,11 @@ export const allBusinessesData = [
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Active",
+        banner_src: "/all-business-card-banners/1.jpg",
+        flag_src: "/all-business-card-flags/1.jpg",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
         id: 2,
@@ -134,6 +139,11 @@ export const allBusinessesData = [
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Active",
+        banner_src: "/all-business-card-banners/2.jpg",
+        flag_src: "/all-business-card-flags/2.png",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
         id: 3,
@@ -143,6 +153,11 @@ export const allBusinessesData = [
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Locked",
+        banner_src: "/all-business-card-banners/3.jpg",
+        flag_src: "/all-business-card-flags/3.png",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
         id: 4,
@@ -152,6 +167,11 @@ export const allBusinessesData = [
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Active",
+        banner_src: "/all-business-card-banners/4.jpg",
+        flag_src: "/all-business-card-flags/4.png",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
         id: 5,
@@ -161,6 +181,11 @@ export const allBusinessesData = [
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Active",
+        banner_src: "/all-business-card-banners/5.jpg",
+        flag_src: "/all-business-card-flags/5.png",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
         id: 6,
@@ -170,6 +195,11 @@ export const allBusinessesData = [
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Locked",
+        banner_src: "/all-business-card-banners/6.jpg",
+        flag_src: "/all-business-card-flags/6.png",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
         id: 7,
@@ -179,6 +209,11 @@ export const allBusinessesData = [
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Locked",
+        banner_src: "/all-business-card-banners/6.jpg",
+        flag_src: "/all-business-card-flags/1.jpg",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
         id: 8,
@@ -188,6 +223,11 @@ export const allBusinessesData = [
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Active",
+        banner_src: "/all-business-card-banners/6.jpg",
+        flag_src: "/all-business-card-flags/2.png",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
         id: 9,
@@ -197,6 +237,11 @@ export const allBusinessesData = [
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Active",
+        banner_src: "/all-business-card-banners/6.jpg",
+        flag_src: "/all-business-card-flags/3.png",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
         id: 10,
@@ -206,6 +251,11 @@ export const allBusinessesData = [
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Locked",
+        banner_src: "/all-business-card-banners/6.jpg",
+        flag_src: "/all-business-card-flags/4.png",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
         id: 11,
@@ -215,6 +265,11 @@ export const allBusinessesData = [
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Locked",
+        banner_src: "/all-business-card-banners/6.jpg",
+        flag_src: "/all-business-card-flags/5.png",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
         id: 12,
@@ -224,6 +279,11 @@ export const allBusinessesData = [
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Active",
+        banner_src: "/all-business-card-banners/6.jpg",
+        flag_src: "/all-business-card-flags/6.png",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
         id: 13,
@@ -233,6 +293,11 @@ export const allBusinessesData = [
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Locked",
+        banner_src: "/all-business-card-banners/6.jpg",
+        flag_src: "/all-business-card-flags/1.jpg",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
         id: 14,
@@ -242,6 +307,11 @@ export const allBusinessesData = [
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Active",
+        banner_src: "/all-business-card-banners/6.jpg",
+        flag_src: "/all-business-card-flags/2.png",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
         id: 15,
@@ -251,6 +321,11 @@ export const allBusinessesData = [
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Active",
+        banner_src: "/all-business-card-banners/6.jpg",
+        flag_src: "/all-business-card-flags/3.png",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
         id: 16,
@@ -260,149 +335,238 @@ export const allBusinessesData = [
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Active",
+        banner_src: "/all-business-card-banners/6.jpg",
+        flag_src: "/all-business-card-flags/4.png",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
-        id: 1,
+        id: 17,
         business_name: "Daraz",
         country: "Bangladesh",
         email: "saikhseraj2017@gmail.com",
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Active",
+        banner_src: "/all-business-card-banners/6.jpg",
+        flag_src: "/all-business-card-flags/5.png",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
-        id: 2,
+        id: 18,
         business_name: "Adidas",
         country: "USA",
         email: "saikhseraj2017@gmail.com",
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Active",
+        banner_src: "/all-business-card-banners/6.jpg",
+        flag_src: "/all-business-card-flags/6.png",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
-        id: 3,
+        id: 19,
         business_name: "Amazon",
         country: "UK",
         email: "saikhseraj2017@gmail.com",
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Locked",
+        banner_src: "/all-business-card-banners/6.jpg",
+        flag_src: "/all-business-card-flags/1.jpg",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
-        id: 4,
+        id: 20,
         business_name: "Rolex",
         country: "UK",
         email: "saikhseraj2017@gmail.com",
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Active",
+        banner_src: "/all-business-card-banners/6.jpg",
+        flag_src: "/all-business-card-flags/2.png",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
-        id: 5,
+        id: 21,
         business_name: "Chilox",
         country: "Bangladesh",
         email: "saikhseraj2017@gmail.com",
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Active",
+        banner_src: "/all-business-card-banners/6.jpg",
+        flag_src: "/all-business-card-flags/3.png",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
-        id: 6,
+        id: 22,
         business_name: "Unilever",
         country: "Germany",
         email: "saikhseraj2017@gmail.com",
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Locked",
+        banner_src: "/all-business-card-banners/6.jpg",
+        flag_src: "/all-business-card-flags/4.png",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
-        id: 7,
+        id: 23,
         business_name: "Nivea Men",
         country: "France",
         email: "saikhseraj2017@gmail.com",
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Locked",
+        banner_src: "/all-business-card-banners/6.jpg",
+        flag_src: "/all-business-card-flags/5.png",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
-        id: 8,
+        id: 24,
         business_name: "Laurial Paris",
         country: "France",
         email: "saikhseraj2017@gmail.com",
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Active",
+        banner_src: "/all-business-card-banners/6.jpg",
+        flag_src: "/all-business-card-flags/6.png",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
-        id: 9,
+        id: 25,
         business_name: "Dell",
         country: "USA",
         email: "saikhseraj2017@gmail.com",
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Active",
+        banner_src: "/all-business-card-banners/6.jpg",
+        flag_src: "/all-business-card-flags/1.jpg",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
-        id: 10,
+        id: 26,
         business_name: "HP",
         country: "USA",
         email: "saikhseraj2017@gmail.com",
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Locked",
+        banner_src: "/all-business-card-banners/6.jpg",
+        flag_src: "/all-business-card-flags/2.png",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
-        id: 11,
+        id: 27,
         business_name: "ASUS",
         country: "Taiwan",
         email: "saikhseraj2017@gmail.com",
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Locked",
+        banner_src: "/all-business-card-banners/6.jpg",
+        flag_src: "/all-business-card-flags/3.png",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
-        id: 12,
+        id: 28,
         business_name: "Oleves",
         country: "China",
         email: "saikhseraj2017@gmail.com",
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Active",
+        banner_src: "/all-business-card-banners/6.jpg",
+        flag_src: "/all-business-card-flags/4.png",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
-        id: 13,
+        id: 29,
         business_name: "Transcend",
         country: "Taiwan",
         email: "saikhseraj2017@gmail.com",
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Locked",
+        banner_src: "/all-business-card-banners/6.jpg",
+        flag_src: "/all-business-card-flags/5.png",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
-        id: 14,
+        id: 30,
         business_name: "Fantech",
         country: "Phillipines",
         email: "saikhseraj2017@gmail.com",
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Active",
+        banner_src: "/all-business-card-banners/6.jpg",
+        flag_src: "/all-business-card-flags/6.png",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
-        id: 15,
+        id: 31,
         business_name: "Logitech",
         country: "Switzerland",
         email: "saikhseraj2017@gmail.com",
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Active",
+        banner_src: "/all-business-card-banners/6.jpg",
+        flag_src: "/all-business-card-flags/1.jpg",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
     {
-        id: 16,
+        id: 32,
         business_name: "BenQ",
         country: "Taiwan",
         email: "saikhseraj2017@gmail.com",
         created_date: "2024-01-05",
         last_login: "2024-12-05 09:30",
         status: "Active",
+        banner_src: "/all-business-card-banners/6.jpg",
+        flag_src: "/all-business-card-flags/2.png",
+        description: `Full-service construction company delivering high-quality projects across the 
+        Middle East`,
+        services: ["Commercial Construction", "Project Management", "Course Development"],
     },
 ];
+
+
+
+
