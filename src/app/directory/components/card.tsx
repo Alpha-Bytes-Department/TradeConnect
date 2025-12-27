@@ -87,13 +87,13 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                         {displayedServices?.map((service, index) => (
                             <span
                                 key={index}
-                                className="px-2 py-1 bg-blue-100 text-blue-900 text-base rounded-full"
+                                className="px-3 py-1 bg-blue-100 text-blue-900 text-base rounded-full shadow-md shadow-blue-200"
                             >
                                 {service}
                             </span>
                         ))}
                         {remainingCount > 0 && (
-                            <span className="px-2 py-1 bg-blue-100 text-blue-900 text-base rounded-full">
+                            <span className="px-3 py-1 bg-blue-100 text-blue-900 text-base rounded-full shadow-md shadow-blue-200">
                                 {remainingCount}+
                             </span>
                         )}
