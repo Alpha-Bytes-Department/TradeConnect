@@ -101,13 +101,15 @@ export default function FilterBox() {
                     </Select>
                 </div>
                 <div className="flex items-center gap-6">
-                    <SlList className="w-6 h-6 cursor-pointer"
+                    <SlList className={`w-5 h-5 cursor-pointer 
+                    ${list ? "bg-[#BFD7FD] p-2 w-8 h-8 rounded-lg" : ""}`}
                         onClick={() => {
                             setList(true);
                             setGrid(false)
                         }}
                     />
-                    <BsGrid3X3Gap className="w-5 h-5 cursor-pointer"
+                    <BsGrid3X3Gap className={`w-5 h-5 cursor-pointer 
+                    ${grid ? "bg-[#BFD7FD] p-2 w-8 h-8 rounded-lg" : ""}`}
                         onClick={() => {
                             setGrid(true);
                             setList(false);

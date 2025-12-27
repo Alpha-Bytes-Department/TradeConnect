@@ -116,6 +116,21 @@ export const business_Data = [
 
 
 
+
+export interface BusinessCardData {
+    id: number;
+    business_name: string;
+    country: string;
+    email: string;
+    created_date: string;
+    last_login: string;
+    status: string;
+    banner_src: string;
+    flag_src: string; // This should be country code like "BD", "AE", etc.
+    description: string;
+    services: string[];
+}
+
 export const allBusinessData = [
     {
         id: 1,
@@ -126,7 +141,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Active",
         banner_src: "/all-business-card-banners/1.jpg",
-        flag_src: "/all-business-card-flags/1.jpg",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -140,7 +155,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Active",
         banner_src: "/all-business-card-banners/2.jpg",
-        flag_src: "/all-business-card-flags/2.png",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -154,7 +169,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Locked",
         banner_src: "/all-business-card-banners/3.jpg",
-        flag_src: "/all-business-card-flags/3.png",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -168,7 +183,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Active",
         banner_src: "/all-business-card-banners/4.jpg",
-        flag_src: "/all-business-card-flags/4.png",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -182,7 +197,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Active",
         banner_src: "/all-business-card-banners/5.jpg",
-        flag_src: "/all-business-card-flags/5.png",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -196,7 +211,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Locked",
         banner_src: "/all-business-card-banners/6.jpg",
-        flag_src: "/all-business-card-flags/6.png",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -210,7 +225,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Locked",
         banner_src: "/all-business-card-banners/6.jpg",
-        flag_src: "/all-business-card-flags/1.jpg",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -224,7 +239,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Active",
         banner_src: "/all-business-card-banners/6.jpg",
-        flag_src: "/all-business-card-flags/2.png",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -238,7 +253,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Active",
         banner_src: "/all-business-card-banners/6.jpg",
-        flag_src: "/all-business-card-flags/3.png",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -252,7 +267,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Locked",
         banner_src: "/all-business-card-banners/6.jpg",
-        flag_src: "/all-business-card-flags/4.png",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -266,7 +281,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Locked",
         banner_src: "/all-business-card-banners/6.jpg",
-        flag_src: "/all-business-card-flags/5.png",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -280,7 +295,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Active",
         banner_src: "/all-business-card-banners/6.jpg",
-        flag_src: "/all-business-card-flags/6.png",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -294,7 +309,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Locked",
         banner_src: "/all-business-card-banners/6.jpg",
-        flag_src: "/all-business-card-flags/1.jpg",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -308,7 +323,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Active",
         banner_src: "/all-business-card-banners/6.jpg",
-        flag_src: "/all-business-card-flags/2.png",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -322,7 +337,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Active",
         banner_src: "/all-business-card-banners/6.jpg",
-        flag_src: "/all-business-card-flags/3.png",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -336,7 +351,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Active",
         banner_src: "/all-business-card-banners/6.jpg",
-        flag_src: "/all-business-card-flags/4.png",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -350,7 +365,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Active",
         banner_src: "/all-business-card-banners/6.jpg",
-        flag_src: "/all-business-card-flags/5.png",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -364,7 +379,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Active",
         banner_src: "/all-business-card-banners/6.jpg",
-        flag_src: "/all-business-card-flags/6.png",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -378,7 +393,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Locked",
         banner_src: "/all-business-card-banners/6.jpg",
-        flag_src: "/all-business-card-flags/1.jpg",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -392,7 +407,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Active",
         banner_src: "/all-business-card-banners/6.jpg",
-        flag_src: "/all-business-card-flags/2.png",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -406,7 +421,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Active",
         banner_src: "/all-business-card-banners/6.jpg",
-        flag_src: "/all-business-card-flags/3.png",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -420,7 +435,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Locked",
         banner_src: "/all-business-card-banners/6.jpg",
-        flag_src: "/all-business-card-flags/4.png",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -434,7 +449,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Locked",
         banner_src: "/all-business-card-banners/6.jpg",
-        flag_src: "/all-business-card-flags/5.png",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -448,7 +463,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Active",
         banner_src: "/all-business-card-banners/6.jpg",
-        flag_src: "/all-business-card-flags/6.png",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -462,7 +477,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Active",
         banner_src: "/all-business-card-banners/6.jpg",
-        flag_src: "/all-business-card-flags/1.jpg",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -476,7 +491,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Locked",
         banner_src: "/all-business-card-banners/6.jpg",
-        flag_src: "/all-business-card-flags/2.png",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -490,7 +505,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Locked",
         banner_src: "/all-business-card-banners/6.jpg",
-        flag_src: "/all-business-card-flags/3.png",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -504,7 +519,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Active",
         banner_src: "/all-business-card-banners/6.jpg",
-        flag_src: "/all-business-card-flags/4.png",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -518,7 +533,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Locked",
         banner_src: "/all-business-card-banners/6.jpg",
-        flag_src: "/all-business-card-flags/5.png",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -532,7 +547,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Active",
         banner_src: "/all-business-card-banners/6.jpg",
-        flag_src: "/all-business-card-flags/6.png",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -546,7 +561,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Active",
         banner_src: "/all-business-card-banners/6.jpg",
-        flag_src: "/all-business-card-flags/1.jpg",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
@@ -560,7 +575,7 @@ export const allBusinessData = [
         last_login: "2024-12-05 09:30",
         status: "Active",
         banner_src: "/all-business-card-banners/6.jpg",
-        flag_src: "/all-business-card-flags/2.png",
+        flag_src: "🇦🇪",
         description: `Full-service construction company delivering high-quality projects across the 
         Middle East`,
         services: ["Commercial Construction", "Project Management", "Course Development"],
