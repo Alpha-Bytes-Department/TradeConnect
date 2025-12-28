@@ -53,9 +53,9 @@ export default function SignIn() {
   });
 
   const onSubmit = async (data: SignInFormData) => {
-    const payload={
+    const payload = {
       "email": "tusharimranme0@gmail.com",
-        "password": "12345678"
+      "password": "12345678"
     }
     try {
       const response = await axios.post('http://127.0.0.1:8000/api/accounts/login/', payload, {
