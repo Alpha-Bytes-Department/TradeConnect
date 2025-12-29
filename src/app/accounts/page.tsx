@@ -120,11 +120,11 @@ export default function AccountPage() {
                 <div className="absolute top-[calc(50vw-82px)] md:top-[calc(22vw-82px)] max-w-12xl mx-auto pb-6 md:pb-12 ">
                     {/* Header Section */}
                     <div className="fc flex-col text-center mb-12 animate-fade-in-up">
-                        <div className="inline-block mb-6 relative group border-5 border-[#FFFFFF] rounded-full">
+                        <div className="inline-block mb-6 relative group border-5 border-[#FFFFFF] rounded-lg">
                             <img
                                 src={companyData.logo}
                                 alt={companyData.name}
-                                className="w-40 h-40 rounded-full object-cover s relative transform transition-transform duration-500 group-hover:scale-105"
+                                className="w-40 h-40 rounded-lg object-cover s relative transform transition-transform duration-500 group-hover:scale-105"
                             />
                         </div>
 
@@ -226,35 +226,21 @@ export default function AccountPage() {
                             <h2 className="text-lg font-semibold mb-6 text-gray-900">
                                 Services
                             </h2>
-                            <div className="space-y-3 overflow-y-scroll scrollbar-hide max-h-72">
-                                {companyData.services.map((service, index) => (
-                                    <button
-                                        key={service.id}
-                                        onClick={() =>
-                                            setActiveService(
-                                                activeService === service.id ? null : service.id
-                                            )
-                                        }
-                                        className={`w-full text-left px-6 py-4 rounded-xl transition-all duration-300 border-1 bg-[#EBF2FE] border-[#A1C4FC]`}
+                            
+                            <div className="flex flex-wrap gap-3">
+                                {companyData.services?.map((service, index) => (
+                                    <span
+                                        key={index}
+                                        className="px-3 py-1 bg-blue-100 text-blue-900 text-base rounded-full shadow-md shadow-blue-200"
                                     >
-                                        <div className="flex items-center gap-3">
-                                            <div
-                                                className={`w-2 h-2 rounded-full transition-all duration-300 ${activeService === service.id
-                                                    ? "bg-blue-600 scale-125"
-                                                    : "bg-gray-400"
-                                                    }`}
-                                            ></div>
-                                            <span
-                                                className={`font-medium transition-colors ${activeService === service.id
-                                                    ? "text-blue-900"
-                                                    : "text-gray-700"
-                                                    }`}
-                                            >
-                                                {service.name}
-                                            </span>
-                                        </div>
-                                    </button>
+                                        {service.name}
+                                    </span>
                                 ))}
+                                {(companyData.services.length -3) > 0 && (
+                                    <span className="px-3 py-1 bg-blue-100 text-blue-900 text-base rounded-full shadow-md shadow-blue-200">
+                                        {(companyData.services.length - 3)}+
+                                    </span>
+                                )}
                             </div>
                         </div>
 
