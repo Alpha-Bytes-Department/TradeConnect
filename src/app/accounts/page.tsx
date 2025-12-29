@@ -79,6 +79,18 @@ export default function AccountPage() {
             { id: "21", name: "Project Management" },
             { id: "31", name: "Renovation" },
             { id: "41", name: "Infrastructure" },
+            { id: "51", name: "Commercial Construction" },
+            { id: "x1", name: "Commercial Construction" },
+            { id: "x2", name: "Project Management" },
+            { id: "x3", name: "Renovation" },
+            { id: "x4", name: "Infrastructure" },
+            { id: "x11", name: "Commercial Construction" },
+            { id: "x21", name: "Project Management" },
+            { id: "x31", name: "Renovation" },
+            { id: "xx1", name: "Infrastructure" },
+            { id: "x51", name: "Commercial Construction" },
+          
+            
         ],
         activities: {
             active: true,
@@ -227,20 +239,20 @@ export default function AccountPage() {
                                 Services
                             </h2>
                             
-                            <div className="flex flex-wrap gap-3">
+                            <div className="flex max-h-70 flex-wrap overflow-auto gap-3 pl-4 pb-4">
                                 {companyData.services?.map((service, index) => (
                                     <span
                                         key={index}
-                                        className="px-3 py-1 bg-blue-100 text-blue-900 text-base rounded-full shadow-md shadow-blue-200"
+                                        className="px-4 py-2 bg-blue-100 text-blue-900 text-base rounded-full shadow-md shadow-blue-200"
                                     >
                                         {service.name}
                                     </span>
                                 ))}
-                                {(companyData.services.length -3) > 0 && (
+                                {/*(companyData.services.length -5) > 0 && (
                                     <span className="px-3 py-1 bg-blue-100 text-blue-900 text-base rounded-full shadow-md shadow-blue-200">
-                                        {(companyData.services.length - 3)}+
+                                        {(companyData.services.length - 5)}+
                                     </span>
-                                )}
+                                )*/}
                             </div>
                         </div>
 
