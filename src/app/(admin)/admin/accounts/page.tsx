@@ -14,9 +14,12 @@ import {
     ArrowBigLeft,
     ArrowBigLeftIcon,
     ArrowLeft,
+    Cross,
+    X,
 } from "lucide-react";
 import { PiX } from "react-icons/pi";
 import { redirect } from "next/navigation";
+import Image from "next/image";
 
 interface Service {
     id: string;
@@ -52,6 +55,10 @@ interface CompanyProfile {
 
 export default function AccountPage() {
     const [activeService, setActiveService] = useState<string | null>(null);
+    const [modal, setModal]= useState<number|undefined>(undefined)
+
+
+
 
 
 
@@ -170,10 +177,10 @@ export default function AccountPage() {
                     </div>
 
                     {/* Top Row: About, Contact, Activity */}
-                    <div className="fc flex-col mb-6 md:flex-row md:h-[590px] gap-6">
-                        <div className="flex-1 h-[100%] w-full fc flex-col gap-6">
+                    <div className="fc flex-col mb-6 md:flex-row md:h-[630px] gap-6">
+                        <div className="flex-1 md:h-[100%] w-full fc flex-col gap-6">
                             {/* About */}
-                            <div className="flex-1 bg-white/80 backdrop-blur-sm rounded-md p-4 md:p-4 s hover:s transition-all duration-300 animate-fade-in-up stagger-1 border border-[#d6d6d6]">
+                            <div className="flex-1 bg-white/80 backdrop-blur-sm rounded-md p-4 md:p-6 s hover:s transition-all duration-300 animate-fade-in-up stagger-1 border border-[#d6d6d6]">
                                 <h2 className="text-lg font-semibold mb-4 text-gray-900">
                                     About
                                 </h2>
@@ -184,7 +191,7 @@ export default function AccountPage() {
 
 
                             {/* Services */}
-                            <div className="flex-1 w-full rounded-md p-4 md:p-4 s transition-all duration-300 animate-fade-in-up stagger-4 border border-[#d6d6d6]">
+                            <div className="flex-1 w-full rounded-md p-4 md:p-6 s transition-all duration-300 animate-fade-in-up stagger-4 border border-[#d6d6d6]">
                                 <h2 className="text-lg font-semibold mb-6 text-gray-900">
                                     Services
                                 </h2>
@@ -211,7 +218,7 @@ export default function AccountPage() {
 
 
                             {/* Activity */}
-                            <div className="flex-1 w-full lg:col-span-1 bg-white backdrop-blur-sm rounded-md p-4 md:p-4 s -lg hover:s 
+                            <div className="flex-1 w-full lg:col-span-1 bg-white backdrop-blur-sm rounded-md p-4 md:p-6 s -lg hover:s 
                              transition-all duration-300 animate-fade-in-up stagger-3 border border-[#d6d6d6]">
                                 <h2 className="text-lg font-semibold mb-6 text-gray-900">
                                     Activity
@@ -252,7 +259,7 @@ export default function AccountPage() {
 
 
                         {/* Contact Information */}
-                        <div className="flex-1 w-full h-[100%] bg-white rounded-md p-4 md:p-4 s  hover:s  transition-all duration-300 animate-fade-in-up border border-[#d6d6d6]">
+                        <div className="flex-1 w-full h-[100%] bg-white rounded-md p-4 md:p-6 s  hover:s  transition-all duration-300 animate-fade-in-up border border-[#d6d6d6]">
                             <h2 className="text-lg font-semibold mb-6 text-gray-900">
                                 Contact Information
                             </h2>
@@ -317,24 +324,42 @@ export default function AccountPage() {
                             <h2 className="text-lg font-semibold mb-6 text-gray-900">
                                 Gallery
                             </h2>
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6 overflow-y-scroll scrollbar-hide max-h-88">
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-2 md:gap-6 overflow-y-scroll scrollbar-hide max-h-88">
                                 {companyData.gallery.map((image, index) => (
-                                    <div
+                                    <button
                                         key={index}
-                                        className="fc col-span-1 overflow-hidden bg-black aspect-square rounded-sm"
+                                        onClick={()=>setModal(index)}
+                                        className="fc col-span-1 overflow-hidden bg-black aspect-[16/9] rounded-sm"
                                     >
                                         <img
                                             src={image}
                                             alt="image"
                                             className="w-full h-full object-cover"
                                         />
-                                    </div>
+                                    </button>
                                 ))}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            {modal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                    <div className="relative bg-white rounded-lg shadow-xl w-full max-w-md">
+                        <button onClick={() => setModal(undefined)} className="absolute left-[410px] top-[5px] bg-white text-gray-500 p-1 font-bold rounded-full">
+                            <X/>
+                        </button>
+                        <Image
+                            src={`${companyData.gallery[modal]}`}
+                            alt="Image Enlarged"
+                            width={500}
+                            height={300}
+                            className="object-cover rounded-lg"
+                        />
+
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
