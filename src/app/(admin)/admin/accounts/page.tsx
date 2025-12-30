@@ -322,13 +322,13 @@ export default function AccountPage() {
                         {/* Gallery */}
                         <div className="lg:col-span-5 rounded-md p-4 md:p-6 s hover:s border transition-all duration-300 animate-fade-in-up stagger-5 border border-[#d6d6d6]">
                             <h2 className="text-lg font-semibold mb-6 text-gray-900">
-                                Gallery
+                                Gallery{modal}
                             </h2>
                             <div className="grid grid-cols-1 md:grid-cols-4 gap-2 md:gap-6 overflow-y-scroll scrollbar-hide max-h-88">
                                 {companyData.gallery.map((image, index) => (
                                     <button
                                         key={index}
-                                        onClick={()=>setModal(index)}
+                                        onClick={()=>setModal(index+1)}
                                         className="fc col-span-1 overflow-hidden bg-black aspect-[16/9] rounded-sm"
                                     >
                                         <img
@@ -350,7 +350,7 @@ export default function AccountPage() {
                             <X/>
                         </button>
                         <Image
-                            src={`${companyData.gallery[modal]}`}
+                            src={`${companyData.gallery[modal-1]}`}
                             alt="Image Enlarged"
                             width={500}
                             height={300}
