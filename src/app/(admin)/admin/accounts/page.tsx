@@ -14,9 +14,12 @@ import {
     ArrowBigLeft,
     ArrowBigLeftIcon,
     ArrowLeft,
+    Cross,
+    X,
 } from "lucide-react";
 import { PiX } from "react-icons/pi";
 import { redirect } from "next/navigation";
+import Image from "next/image";
 
 interface Service {
     id: string;
@@ -52,8 +55,12 @@ interface CompanyProfile {
 
 export default function AccountPage() {
     const [activeService, setActiveService] = useState<string | null>(null);
+    const [modal, setModal]= useState<number|undefined>(undefined)
 
-    
+
+
+
+
 
     const companyData: CompanyProfile = {
         name: "Construction Partners",
@@ -89,8 +96,8 @@ export default function AccountPage() {
             { id: "x31", name: "Renovation" },
             { id: "xx1", name: "Infrastructure" },
             { id: "x51", name: "Commercial Construction" },
-          
-            
+
+
         ],
         activities: {
             active: true,
@@ -129,7 +136,7 @@ export default function AccountPage() {
                     </p>
                 </button>
 
-                <div className="absolute top-[calc(50vw-82px)] md:top-[calc(22vw-82px)] max-w-12xl mx-auto pb-6 md:pb-12 ">
+                <div className="absolute flex flex-col top-[calc(50vw-82px)] md:top-[calc(22vw-82px)] max-w-12xl mx-auto pb-6 md:pb-12">
                     {/* Header Section */}
                     <div className="fc flex-col text-center mb-12 animate-fade-in-up">
                         <div className="inline-block mb-6 relative group border-5 border-[#FFFFFF] rounded-lg">
@@ -170,19 +177,89 @@ export default function AccountPage() {
                     </div>
 
                     {/* Top Row: About, Contact, Activity */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                        {/* About */}
-                        <div className="bg-white/80 backdrop-blur-sm rounded-md p-4 md:p-6 s hover:s transition-all duration-300 animate-fade-in-up stagger-1 border border-[#d6d6d6]">
-                            <h2 className="text-lg font-semibold mb-4 text-gray-900">
-                                About
-                            </h2>
-                            <p className="text-[stone-600] leading-relaxed">
-                                {companyData.about}
-                            </p>
+                    <div className="fc flex-col mb-6 md:flex-row md:h-[630px] gap-6">
+                        <div className="flex-1 md:h-[100%] w-full fc flex-col gap-6">
+                            {/* About */}
+                            <div className="flex-1 bg-white/80 backdrop-blur-sm rounded-md p-4 md:p-6 s hover:s transition-all duration-300 animate-fade-in-up stagger-1 border border-[#d6d6d6]">
+                                <h2 className="text-lg font-semibold mb-4 text-gray-900">
+                                    About
+                                </h2>
+                                <p className="text-[stone-600] h-22 leading-relaxed overflow-auto">
+                                    {companyData.about}
+                                </p>
+                            </div>
+
+
+                            {/* Services */}
+                            <div className="flex-1 w-full rounded-md p-4 md:p-6 s transition-all duration-300 animate-fade-in-up stagger-4 border border-[#d6d6d6]">
+                                <h2 className="text-lg font-semibold mb-6 text-gray-900">
+                                    Services
+                                </h2>
+
+                                <div className="flex max-h-20 flex-wrap overflow-auto gap-3 pl-4 pb-4">
+                                    {companyData.services?.map((service, index) => (
+                                        <span
+                                            key={index}
+                                            className="px-3 py-1 bg-blue-100 text-blue-900 text-base rounded-full shadow-md shadow-blue-200"
+                                        >
+                                            {service.name}
+                                        </span>
+                                    ))}
+                                    {/*(companyData.services.length -5) > 0 && (
+                                    <span className="px-3 py-1 bg-blue-100 text-blue-900 text-base rounded-full shadow-md shadow-blue-200">
+                                        {(companyData.services.length - 5)}+
+                                    </span>
+                                )*/}
+                                </div>
+                            </div>
+
+
+
+
+
+                            {/* Activity */}
+                            <div className="flex-1 w-full lg:col-span-1 bg-white backdrop-blur-sm rounded-md p-4 md:p-6 s -lg hover:s 
+                             transition-all duration-300 animate-fade-in-up stagger-3 border border-[#d6d6d6]">
+                                <h2 className="text-lg font-semibold mb-6 text-gray-900">
+                                    Activity
+                                </h2>
+                                <div className="space-y-4">
+                                    <div className="flex flex-col items-start gap-2">
+                                        <div className="flex items-start flex-row">
+                                            <div className="fc h-12 w-12 rounded-sm bg-[#BFD7FD] text-[#2E73E3]">
+                                                <CalendarIcon />
+                                            </div>
+                                            <div className="flex flex-col items-left justify-center ml-2">
+                                                <p className="text-sm text-gray-500">Active for</p>
+                                                <p className="text-md text-[#327EF9]">
+                                                    {companyData.activities.activeFor} Months
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-start flex-row">
+                                            <div className="fc h-12 w-12 rounded-sm bg-[#FDDAC0] text-[#884B1D]">
+                                                <Clock10Icon />
+                                            </div>
+                                            <div className="flex flex-col items-left justify-center ml-2">
+                                                <p className="text-sm text-gray-500">Last Updated</p>
+                                                <div className="flex flex-row items-left justify-center gap-6">
+                                                    <p className="text-md text-[#327EF9]">
+                                                        {companyData.activities.lastUpdated.slice(0, 10)}
+                                                    </p>
+                                                    <p className="text-md text-[#327EF9]">
+                                                        {companyData.activities.lastUpdated.slice(11, 16)}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
+
                         {/* Contact Information */}
-                        <div className="bg-white rounded-md p-4 md:p-6 s  hover:s  transition-all duration-300 animate-fade-in-up stagger-2 border border-[#d6d6d6]">
+                        <div className="flex-1 w-full h-[100%] bg-white rounded-md p-4 md:p-6 s  hover:s  transition-all duration-300 animate-fade-in-up border border-[#d6d6d6]">
                             <h2 className="text-lg font-semibold mb-6 text-gray-900">
                                 Contact Information
                             </h2>
@@ -233,97 +310,56 @@ export default function AccountPage() {
                                 </div>
                             </div>
                         </div>
-                        {/* Services */}
-                        <div className=" rounded-md p-4 md:p-6 s transition-all duration-300 animate-fade-in-up stagger-4 border border-[#d6d6d6]">
-                            <h2 className="text-lg font-semibold mb-6 text-gray-900">
-                                Services
-                            </h2>
-                            
-                            <div className="flex max-h-70 flex-wrap overflow-auto gap-3 pl-4 pb-4">
-                                {companyData.services?.map((service, index) => (
-                                    <span
-                                        key={index}
-                                        className="px-4 py-2 bg-blue-100 text-blue-900 text-base rounded-full shadow-md shadow-blue-200"
-                                    >
-                                        {service.name}
-                                    </span>
-                                ))}
-                                {/*(companyData.services.length -5) > 0 && (
-                                    <span className="px-3 py-1 bg-blue-100 text-blue-900 text-base rounded-full shadow-md shadow-blue-200">
-                                        {(companyData.services.length - 5)}+
-                                    </span>
-                                )*/}
-                            </div>
-                        </div>
-
-                        
                     </div>
 
-                    {/* Bottom Row: Services and Gallery */}
+
+                    {/* Bottom Row: Gallery */}
                     <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
 
-                        {/* Activity */}
-                        <div className="lg:col-span-1 bg-white backdrop-blur-sm rounded-md p-4 md:p-6 s -lg hover:s -xl transition-all duration-300 animate-fade-in-up stagger-3 border border-[#d6d6d6]">
-                            <h2 className="text-lg font-semibold mb-6 text-gray-900">
-                                Activity
-                            </h2>
-                            <div className="space-y-4">
-                                <div className="flex flex-col items-start gap-4">
-                                    <div className="flex items-start flex-row">
-                                        <div className="fc h-12 w-12 rounded-sm bg-[#BFD7FD] text-[#2E73E3]">
-                                            <CalendarIcon />
-                                        </div>
-                                        <div className="flex flex-col items-left justify-center ml-2">
-                                            <p className="text-sm text-gray-500">Active for</p>
-                                            <p className="text-md text-[#327EF9]">
-                                                {companyData.activities.activeFor} Months
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-start flex-row">
-                                        <div className="fc h-12 w-12 rounded-sm bg-[#FDDAC0] text-[#884B1D]">
-                                            <Clock10Icon />
-                                        </div>
-                                        <div className="flex flex-col items-left justify-center ml-2">
-                                            <p className="text-sm text-gray-500">Last Updated</p>
-                                            <div className="flex flex-row items-left justify-center gap-6">
-                                                <p className="text-md text-[#327EF9]">
-                                                    {companyData.activities.lastUpdated.slice(0, 10)}
-                                                </p>
-                                                <p className="text-md text-[#327EF9]">
-                                                    {companyData.activities.lastUpdated.slice(11, 16)}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
+
+
 
                         {/* Gallery */}
-                        <div className="lg:col-span-4 rounded-md p-4 md:p-6 s hover:s border transition-all duration-300 animate-fade-in-up stagger-5 border border-[#d6d6d6]">
+                        <div className="lg:col-span-5 rounded-md p-4 md:p-6 s hover:s border transition-all duration-300 animate-fade-in-up stagger-5 border border-[#d6d6d6]">
                             <h2 className="text-lg font-semibold mb-6 text-gray-900">
                                 Gallery
                             </h2>
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6 overflow-y-scroll scrollbar-hide max-h-88">
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-2 md:gap-6 overflow-y-scroll scrollbar-hide max-h-88">
                                 {companyData.gallery.map((image, index) => (
-                                    <div
+                                    <button
                                         key={index}
-                                        className="fc col-span-1 overflow-hidden bg-black aspect-square rounded-sm"
+                                        onClick={()=>setModal(index)}
+                                        className="fc col-span-1 overflow-hidden bg-black aspect-[16/9] rounded-sm"
                                     >
                                         <img
                                             src={image}
                                             alt="image"
                                             className="w-full h-full object-cover"
                                         />
-                                    </div>
+                                    </button>
                                 ))}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            {modal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                    <div className="relative bg-white rounded-lg shadow-xl w-full max-w-md">
+                        <button onClick={() => setModal(undefined)} className="absolute left-[410px] top-[5px] bg-white text-gray-500 p-1 font-bold rounded-full">
+                            <X/>
+                        </button>
+                        <Image
+                            src={`${companyData.gallery[modal]}`}
+                            alt="Image Enlarged"
+                            width={500}
+                            height={300}
+                            className="object-cover rounded-lg"
+                        />
+
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

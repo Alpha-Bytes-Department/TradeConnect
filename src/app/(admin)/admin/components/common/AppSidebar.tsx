@@ -22,29 +22,25 @@ type SidebarItem = {
 const items: SidebarItem[] = [
     {
         title: "Dashboard",
-        url: "/super-admin/dashboard",
+        url: "/admin/accounts",
         icon: <LuLayoutDashboard />,
     },
     {
-        title: "All Businesses",
-        url: "/super-admin/all-businesses",
+        title: "Change Password",
+        url: "/admin/changePassword",
         icon: <LuBriefcaseBusiness />,
     },
     {
-        title: "Create Business",
-        url: "/super-admin/create-business",
+        title: "Business Directory",
+        url: "/admin/directory",
         icon: <FiPlusCircle />,
     },
     {
-        title: "Directory",
-        url: "/super-admin/directory",
+        title: "Edit Acoount",
+        url: "/admin/editAccount",
         icon: <BsGrid3X3Gap />,
     },
-    {
-        title: "Settings",
-        url: "/super-admin/settings",
-        icon: <LuSettings />,
-    },
+    
 ];
 
 export default function AppSidebar() {
@@ -54,7 +50,7 @@ export default function AppSidebar() {
             <SidebarHeader className="py-4">
                 <div className="flex flex-col pl-3 transition-all group-data-[collapsible=icon]:hidden">
                     <p className="font-poppins font-medium text-[#1C4589] text-xl">TradeConnect</p>
-                    <p className="text-[#626262]">Super Admin</p>
+                    <p className="text-[#626262]">Admin</p>
                 </div>
             </SidebarHeader>
             <SidebarSeparator />
