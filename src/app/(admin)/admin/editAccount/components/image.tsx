@@ -100,63 +100,11 @@ const Images: React.FC<ImagesProps> = ({ editData, setEditData }) => {
     return (
         <div className="w-full mx-auto space-y-8">
             {/* Logo Section */}
-            <div className="">
-                <label htmlFor="country" className="text-sm text-gray-700 mb-2">
-                    Business Logo<span className="text-red-500">*</span>
-                </label>
-                <div className="flex flex-col md:flex-row items-start gap-4">
-                    {/* Current Logo Preview */}
-                    {editData.images.logo && (
-                        <div className="w-40 h-40 rounded-lg overflow-hidden border-2 border-gray-200 flex-shrink-0">
-                            <img
-                                src={getFilePreview(editData.images.logo)}
-                                alt="Business logo"
-                                className="w-full h-full object-cover"
-                            />
-                        </div>
-                    )}
-
-                    {/* Upload Area */}
-                    <div
-                        onClick={() => logoInputRef.current?.click()}
-                        className="flex-1 border-2 border-dashed border-gray-300 rounded-lg p-12 hover:border-gray-400 transition-colors cursor-pointer bg-gray-50 hover:bg-gray-100"
-                    >
-                        <div className="flex flex-col items-center justify-center text-center">
-                            <svg
-                                className="w-12 h-12 text-gray-400 mb-3"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                                />
-                            </svg>
-                            <p className="text-base font-medium text-gray-700 mb-1">
-                                Click to upload new logo
-                            </p>
-                            <p className="text-sm text-gray-500">
-                                PNG, JPG, up to 5MB (Square recommended)
-                            </p>
-                        </div>
-                    </div>
-                    <input
-                        ref={logoInputRef}
-                        type="file"
-                        accept="image/png,image/jpeg,image/jpg"
-                        onChange={handleLogoChange}
-                        className="hidden"
-                    />
-                </div>
-            </div>
-
+            
             {/* Banner Section */}
             <div>
                 <label htmlFor="country" className="text-sm text-gray-700 mb-2">
-                    Business Banner<span className="text-red-500">*</span>
+                    Business logo<span className="text-red-500">*</span>
                 </label>
                 {/* Current Banner Preview */}
                 {editData.images.banner && (
