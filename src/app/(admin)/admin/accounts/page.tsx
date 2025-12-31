@@ -16,6 +16,8 @@ import {
     ArrowLeft,
     Cross,
     X,
+    MailIcon,
+    PhoneIcon,
 } from "lucide-react";
 import { PiX } from "react-icons/pi";
 import { redirect } from "next/navigation";
@@ -33,12 +35,18 @@ interface Activity {
 }
 
 interface ContactInfo {
-    name: string;
-    position: string;
-    officeNumber: string;
-    email: string;
-    mobileNumber: string;
-    website: string;
+    office:{
+        phone: string;
+        email: string;
+    };
+    contacts:
+        {
+        name: string;
+        position: string;
+        email: string;
+        phone: string;
+        }[],
+    
 }
 
 interface CompanyProfile {
@@ -70,12 +78,30 @@ export default function AccountPage() {
         about:
             "We are a trusted construction company dedicated to delivering high-quality projects on time and within budget. From residential buildings to commercial developments, we focus on safety, durability, and customer satisfaction at every step.",
         contact: {
-            email: "mmislam272@gmail.com",
-            name: "John Doe",
-            position: "CEO",
-            officeNumber: "+971 245 54 5 545",
-            mobileNumber: "+971 245 54 5 545",
-            website: "constructionparner.com",
+            office:{
+                phone: '5656565494555',
+                email: 'mmislam272@gmail.com',
+            },
+            contacts: [
+                {
+                    name: 'Sample Name',
+                    position: 'CEO',
+                    phone: '5656565494555',
+                    email: 'mmislam272@gmail.com',
+                },
+                {
+                    name: 'Sample Name',
+                    position: 'CEO',
+                    phone: '5656565494555',
+                    email: 'mmislam272@gmail.com',
+                },
+                {
+                    name: 'Sample Name',
+                    position: 'CEO',
+                    phone: '5656565494555',
+                    email: 'mmislam272@gmail.com',
+                },
+            ]
         },
         services: [
             { id: "1", name: "Commercial Construction" },
@@ -177,8 +203,8 @@ export default function AccountPage() {
                     </div>
 
                     {/* Top Row: About, Contact, Activity */}
-                    <div className="fc flex-col mb-6 md:flex-row md:h-[630px] gap-6">
-                        <div className="flex-1 md:h-[100%] w-full fc flex-col gap-6">
+                    <div className="flex flex-col mb-6 md:flex-row md:h-[630px] gap-6">
+                        <div className="flex-1 md:h-[100%] w-full flex flex-col gap-6">
                             {/* About */}
                             <div className="flex-1 bg-white/80 backdrop-blur-sm rounded-md p-4 md:p-6 s hover:s transition-all duration-300 animate-fade-in-up stagger-1 border border-[#d6d6d6]">
                                 <h2 className="text-lg font-semibold mb-4 text-gray-900">
@@ -260,41 +286,16 @@ export default function AccountPage() {
 
                         {/* Contact Information */}
                         <div className="flex-1 w-full h-[100%] bg-white rounded-md p-4 md:p-6 s  hover:s  transition-all duration-300 animate-fade-in-up border border-[#d6d6d6]">
-                            <h2 className="text-lg font-semibold mb-6 text-gray-900">
+                            <h2 className="text-lg font-semibold mb-4 text-gray-900">
                                 Contact Information
                             </h2>
-                            <div className="space-y-4">
-                                <div>
-                                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
-                                        Name
-                                    </p>
-                                    <span className="text-[#327EF9] hover:text-blue-700 font-medium transition-colors">
-                                        {companyData.contact.name}
-                                    </span>
-                                </div>
-
-                                <div>
-                                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
-                                        Position
-                                    </p>
-                                    <span className="text-[#327EF9] hover:text-blue-700 font-medium transition-colors">
-                                        {companyData.contact.position}
-                                    </span>
-                                </div>
+                            <div className="space-y-1 border-b border-gray-300 p-4">
                                 <div>
                                     <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
                                         Office Number
                                     </p>
                                     <span className="text-[#327EF9] hover:text-blue-700 font-medium transition-colors">
-                                        {companyData.contact.officeNumber}
-                                    </span>
-                                </div>
-                                <div>
-                                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
-                                        Mobile Number
-                                    </p>
-                                    <span className="text-[#327EF9] hover:text-blue-700 font-medium transition-colors">
-                                        {companyData.contact.mobileNumber}
+                                        {companyData.contact.office.phone}
                                     </span>
                                 </div>
                                 <div>
@@ -302,13 +303,41 @@ export default function AccountPage() {
                                         Email
                                     </p>
                                     <a
-                                        href={`mailto:${companyData.contact.email}`}
+                                        href={`mailto:${companyData.contact.office.email}`}
                                         className="text-[#327EF9] hover:text-blue-700 font-medium transition-colors"
                                     >
-                                        {companyData.contact.email}
+                                        {companyData.contact.office.email}
                                     </a>
                                 </div>
                             </div>
+
+                            <h3 className="text-md text-gray-500 font-semibold p-2 pb-4">Contact Persons</h3>
+
+                            {companyData.contact.contacts.map((item,index)=>
+                            <div key={index} className="border border-[#327EF9] hover:bg-[#327EF922] px-4 p-2 mb-2 rounded-lg">
+                                <div>
+                                    <span className="flex flex-row items-center gap-2 text-[#000000] text-lg font-medium transition-colors">
+                                        {item.name}
+                                    </span>
+                                </div><div>
+                                    <span className="flex flex-row items-center gap-2 text-gray-500 text-md font-medium transition-colors">
+                                            {item.position}
+                                    </span>
+                                </div>
+                                <div>
+                                        <span className="flex flex-row items-center gap-2 text-[#327EF9] hover:text-blue-700  text-md font-semibold transition-colors">
+                                            <PhoneIcon color={'#327EF9'} size={16} />{item.phone}
+                                    </span>
+                                </div>
+                                <div>
+                                    <a
+                                            href={`mailto:${item.email}`}
+                                            className="flex flex-row items-center gap-2 text-[#327EF9] text-md font-semibold hover:text-blue-700 transition-colors"
+                                    >
+                                            <MailIcon color={'#327EF9'} size={16} />{item.email}
+                                    </a>
+                                </div>
+                            </div>)}
                         </div>
                     </div>
 
