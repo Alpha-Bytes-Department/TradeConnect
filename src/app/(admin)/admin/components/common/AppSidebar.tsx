@@ -21,26 +21,15 @@ type SidebarItem = {
 
 const items: SidebarItem[] = [
     {
+        title: "Business Directory",
+        url: "/admin/directory",
+        icon: <BsGrid3X3Gap />,
+    },
+    {
         title: "Dashboard",
         url: "/admin/accounts",
         icon: <LuLayoutDashboard />,
     },
-    {
-        title: "Change Password",
-        url: "/admin/changePassword",
-        icon: <LuBriefcaseBusiness />,
-    },
-    {
-        title: "Business Directory",
-        url: "/admin/directory",
-        icon: <FiPlusCircle />,
-    },
-    {
-        title: "Edit Acoount",
-        url: "/admin/editAccount",
-        icon: <BsGrid3X3Gap />,
-    },
-    
 ];
 
 export default function AppSidebar() {

@@ -17,11 +17,11 @@ const ListView: React.FC<DirectoryListProps> = ({ companies }) => {
                 <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
                     {/* Header */}
                     <div className="grid grid-cols-[2fr_1.2fr_1.5fr_1.5fr_0.8fr] gap-6 px-8 py-5 bg-[#fff3e3] border-b border-slate-200">
-                        <div className="text-sm font-bold text-slate-800 tracking-wide">Business</div>
-                        <div className="text-sm font-bold text-slate-800 tracking-wide">Country</div>
-                        <div className="text-sm font-bold text-slate-800 tracking-wide">Services</div>
-                        <div className="text-sm font-bold text-slate-800 tracking-wide">Contact</div>
-                        <div className="text-sm font-bold text-slate-800 tracking-wide">Action</div>
+                        <div className="text-lg font-semibold text-slate-800 tracking-wide">Business</div>
+                        <div className="text-lg font-semibold text-slate-800 tracking-wide">Country</div>
+                        <div className="text-lg font-semibold text-slate-800 tracking-wide">Services</div>
+                        <div className="text-lg font-semibold text-slate-800 tracking-wide">Contact</div>
+                        <div className="text-lg font-semibold text-slate-800 tracking-wide">Action</div>
                     </div>
 
                     {/* Rows */}
