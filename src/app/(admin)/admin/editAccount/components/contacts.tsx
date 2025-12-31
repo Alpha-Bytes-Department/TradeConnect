@@ -1,9 +1,19 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { EditData } from '../page';
+import AddContactModal from './contactsModal';
 
 interface ContactsProps {
     editData: EditData;
     setEditData: React.Dispatch<React.SetStateAction<EditData>>;
+}
+
+interface Contact {
+    id: string;
+    fullName: string;
+    role: string;
+    email: string;
+    phoneNumber: string;
+    isPrimary: boolean;
 }
 
 const Contacts: React.FC<ContactsProps> = ({ editData, setEditData }) => {
@@ -15,6 +25,18 @@ const Contacts: React.FC<ContactsProps> = ({ editData, setEditData }) => {
                 [field]: value,
             },
         }));
+    };
+
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [contacts, setContacts] = useState<Contact[]>([]);
+
+    const handleAddContact = (data: Omit<Contact, 'id'>) => {
+        const newContact: Contact = {
+            ...data,
+            id: Date.now().toString(),
+        };
+        setContacts([...contacts, newContact]);
     };
 
     return (
@@ -69,6 +91,11 @@ const Contacts: React.FC<ContactsProps> = ({ editData, setEditData }) => {
                     placeholder="https://techsolutions.com"
                 />
             </div>
+            <AddContactModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSubmit={handleAddContact}
+            />
         </div>
     );
 };

@@ -153,7 +153,7 @@ export default function AccountPage() {
                 <button
                     className="absolute top-[2vw] left-[2vw] fc h-10 p-4 bg-blue-200 border-blue-400 rounded-lg gap-2"
                     onClick={() => {
-                        redirect("/directory");
+                        redirect("/admin/directory");
                     }}
                 >
                     <ArrowLeft color={"#001a81ff"} />

@@ -18,20 +18,18 @@ export interface CompanyData {
 
 const page = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [selectedCountry, setSelectedCountry] = useState("All Countries");
-    const [selectedService, setSelectedService] = useState("Services");
+    const [selectedCountry, setSelectedCountry] = useState("United States");
+    const [selectedService, setSelectedService] = useState("Technology");
     const [sortBy, setSortBy] = useState("A-Z");
     const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
     const countries = [
-        "All Countries",
         "United States",
         "United Kingdom",
         "Canada",
         "Australia",
     ];
     const services = [
-        "Services",
         "Technology",
         "Healthcare",
         "Finance",
@@ -46,14 +44,15 @@ const page = () => {
                 "https://images.unsplash.com/photo-1497366216548-37526070297c",
             flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
             title: "TradeConnect Logistics",
-            location: "New York, NY",
+            location: "United States",
             description:
                 "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
             services: [
-                "International Shipping",
-                "Warehouse Management",
-                "Last-mile Delivery",
-                "Customs Brokerage",
+                "Technology",
+                "Healthcare",
+                "Finance",
+                "Education",
+                "Retail",
             ],
         },
         {
@@ -61,14 +60,15 @@ const page = () => {
                 "https://images.unsplash.com/photo-1497366216548-37526070297c",
             flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
             title: "TradeConnect Logistics",
-            location: "New York, NY",
+            location: "United States",
             description:
                 "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
             services: [
-                "International Shipping",
-                "Warehouse Management",
-                "Last-mile Delivery",
-                "Customs Brokerage",
+                "Technology",
+                "Healthcare",
+                "Finance",
+                "Education",
+                
             ],
         },
         {
@@ -76,14 +76,15 @@ const page = () => {
                 "https://images.unsplash.com/photo-1497366216548-37526070297c",
             flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
             title: "TradeConnect Logistics",
-            location: "New York, NY",
+            location: "United States",
             description:
                 "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
             services: [
-                "International Shipping",
-                "Warehouse Management",
-                "Last-mile Delivery",
-                "Customs Brokerage",
+                "Technology",
+                "Healthcare",
+                "Finance",
+                
+                "Retail",
             ],
         },
         {
@@ -91,14 +92,15 @@ const page = () => {
                 "https://images.unsplash.com/photo-1497366216548-37526070297c",
             flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
             title: "TradeConnect Logistics",
-            location: "New York, NY",
+            location: "Australia",
             description:
                 "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
             services: [
-                "International Shipping",
-                "Warehouse Management",
-                "Last-mile Delivery",
-                "Customs Brokerage",
+                "Technology",
+                "Healthcare",
+                
+                "Education",
+                "Retail",
             ],
         },
         {
@@ -106,14 +108,15 @@ const page = () => {
                 "https://images.unsplash.com/photo-1497366216548-37526070297c",
             flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
             title: "TradeConnect Logistics",
-            location: "New York, NY",
+            location: "Australia",
             description:
                 "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
             services: [
-                "International Shipping",
-                "Warehouse Management",
-                "Last-mile Delivery",
-                "Customs Brokerage",
+                "Technology",
+                
+                "Finance",
+                "Education",
+                "Retail",
             ],
         },
         {
@@ -121,21 +124,19 @@ const page = () => {
                 "https://images.unsplash.com/photo-1497366216548-37526070297c",
             flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
             title: "TradeConnect Logistics",
-            location: "New York, NY",
+            location: "Canada",
             description:
                 "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
             services: [
-                "International Shipping",
-                "Warehouse Management",
-                "Last-mile Delivery",
-                "Customs Brokerage",
-                "International Shipping",
-                "Warehouse Management",
-                "Last-mile Delivery",
-                "Customs Brokerage",
+                "Healthcare",
+                "Finance",
+                "Education",
+                "Retail",
             ],
         },
     ];
+
+    const modifiedData=data.filter((item)=>item.services.includes(selectedService)).filter((item)=>item.location.toLowerCase()===selectedCountry.toLowerCase()).filter((item)=>item.title.toLowerCase().includes(searchTerm.toLowerCase()))
 
     return (
         <div className="w-full bg-gray-50 min-h-screen">
@@ -276,13 +277,13 @@ const page = () => {
 
                 {/* Results Count */}
                 <div className="mb-6">
-                    <p className="text-gray-600">Showing {data.length} businesses</p>
+                    <p className="text-gray-600">Showing {modifiedData.length} businesses</p>
                 </div>
 
                 {/* Children Content */}
                 <div className="fc">
-                    {viewMode==='grid'?<CardView companies={data} />
-                    :<ListView companies={data} />}
+                    {viewMode === 'grid' ? <CardView companies={modifiedData} />
+                        : <ListView companies={modifiedData} />}
                 </div>
             </div>
         </div>
