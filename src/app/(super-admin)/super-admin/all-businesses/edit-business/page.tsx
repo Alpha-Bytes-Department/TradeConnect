@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue }
     from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Upload, X } from "lucide-react";
+import { LockKeyhole, Save, Trash2, Upload, X } from "lucide-react";
 import { useState } from "react";
 import { Controller } from "react-hook-form";
 
@@ -455,6 +455,40 @@ export default function EditBusiness() {
                         </div>
                     </div>
                 }
+            </div>
+
+            <div className="flex justify-between">
+                <div className="flex flex-col lg:flex-row gap-6 mt-6">
+                    <button type="submit" className="flex items-center justify-center gap-2 bg-[#327EF9] 
+                text-[#EBF2FE] font-poppins px-4 py-2 rounded-lg cursor-pointer">
+                        <Save className="text-[#EBF2FE] w-5 h-5" />
+                        Save Changes
+                    </button>
+                    <button type="button" className="flex items-center justify-center 
+                gap-2 bg-[#B3261E] text-[#EBF2FE] font-poppins px-4 py-2 rounded-lg cursor-pointer">
+                        <X className="text-[#EBF2FE] w-5 h-5" />
+                        Cancel
+                    </button>
+                </div>
+
+                <div className="flex flex-col lg:flex-row gap-6 mt-6">
+                    <button type="button" className="flex items-center justify-center gap-2 bg-[#CFB584] 
+                text-[#AD7703] font-poppins px-4 py-2 rounded-lg cursor-pointer">
+                        <LockKeyhole className="text-[#AD7703] w-5 h-5" />
+                        Locked Account
+                    </button>
+                    <button type="button" className="flex items-center justify-center 
+                gap-2 bg-[#F59D9D] text-[#B3261E] font-poppins px-4 py-2 rounded-lg cursor-pointer">
+                        <Trash2 className="text-[#B3261E] w-5 h-5" />
+                        Delete Business
+                    </button>
+                </div>
+            </div>
+
+            <div className="p-3 bg-[#76A9FB] rounded-lg mt-8">
+                <p className="font-poppins text-[#1C4589] text-sm"><span className="font-medium">Note:
+                </span> Your profile information is visible to all logged-in users in the directory.
+                    Make sure all information is accurate and up-to date.</p>
             </div>
         </div>
     );

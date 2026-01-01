@@ -1,10 +1,10 @@
 // Fahim
 import DashboardCard from "../../components/dashboard/DashboardCard";
-import { Chart } from "../../components/dashboard/Chart";
 import Link from "next/link";
 import { columns, dashboardLatestBusiness } from "./columns";
 import { DataTable } from "./data-table";
 import { business_Data } from "../../data";
+import Chart from "../../components/dashboard/Chart";
 
 export default async function Dashboard() {
     const data = await getData();
@@ -20,7 +20,8 @@ export default async function Dashboard() {
             </div>
             <div className="flex justify-between items-center mt-16 mb-4">
                 <h1 className="font-medium font-poppins text-xl text-[#141414]">Latest Business</h1>
-                <Link href="" className="text-[#327EF9] text-xl">View All</Link>
+                <Link href="/super-admin/all-businesses" className="font-medium text-[#327EF9] text-xl">
+                    View All</Link>
             </div>
             <DataTable columns={columns} data={data} />
         </div>

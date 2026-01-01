@@ -1,11 +1,9 @@
 // Fahim
 "use client"
 import {
-    Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu,
-    SidebarMenuButton, SidebarMenuItem, SidebarSeparator
+    Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader,
+    SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarSeparator
 } from "@/components/ui/sidebar";
-//import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
-//import { DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { LuBriefcaseBusiness, LuLayoutDashboard, LuSettings } from "react-icons/lu";
 import { FiPlusCircle } from "react-icons/fi";
 import { TbLogout } from "react-icons/tb";
@@ -57,16 +55,24 @@ export default function AppSidebar() {
                     {/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {items.map((item) => (
-                                <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton asChild>
-                                        <a href={item.url}>
-                                            {item.icon}
-                                            <span>{item.title}</span>
-                                        </a>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
+                            {items.map((item) => {
+                                const isActive = pathname === item.url;
+                                // console.log(pathname);
+                                // console.log(isActive);
+                                return (
+                                    <SidebarMenuItem key={item.title}>
+                                        <SidebarMenuButton asChild
+                                            className={`${isActive ?
+                                                "bg-[#BFD7FD] text-[#2459B1] hover:bg-[#BFD7FD] hover:text-[#2459B1]" : "text-black"}`}>
+                                            <a href={item.url}>
+                                                {item.icon}
+                                                <span>{item.title}</span>
+                                            </a>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                )
+                            })
+                            }
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
@@ -75,7 +81,7 @@ export default function AppSidebar() {
             <SidebarFooter>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton className="text-red-600">
+                        <SidebarMenuButton className="text-red-600 hover:text-red-600 cursor-pointer">
                             <TbLogout />
                             Log Out
                         </SidebarMenuButton>
