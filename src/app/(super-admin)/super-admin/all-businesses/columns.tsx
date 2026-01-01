@@ -3,6 +3,7 @@
 import { type ColumnDef } from "@tanstack/react-table"
 import { cn } from "@/lib/utils";
 import { LockKeyhole, SquarePen, Trash2 } from "lucide-react";
+import { redirect } from "next/navigation";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -63,7 +64,8 @@ export const columns: ColumnDef<allBusinessesTable>[] = [
             return (
                 <div className="flex items-center gap-2">
                     <button
-                        onClick={handleEdit}
+                        // onClick={handleEdit}
+                        onClick={() => { redirect("/super-admin/all-businesses/edit-business") }}
                         className="h-8 w-8 flex items-center justify-center rounded-sm 
                         hover:bg-gray-400 hover:text-white transition-colors cursor-pointer"
                     >
