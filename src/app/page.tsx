@@ -70,40 +70,18 @@ export default function SignIn() {
   };
 
   return (
-    <div className="w-full h-screen flex">
+    <div className="w-full h-screen relative flex items-center justify-center 
+    bg-[url(/log-in-images/login-image.jpg)] bg-cover bg-center">
       {/* <div className="hidden lg:block lg:w-[50%] xl:w-[60%] 2xl:w-[70%] h-full bg-[url(/sign-up-images/stage.png)] bg-cover 
             bg-center" /> */}
       {/* The above code will cause hydration error. The below is OK. */}
 
-      <div className="hidden lg:block lg:w-[50%] h-full relative">
-        <Image src="/log-in-images/login-image.jpg" alt="background" fill className="object-cover object-center" />
-        <div className="absolute w-full h-full z-10 bg-[#15356970]/44" /> {/*Overlay*/}
-        <div className="absolute w-full inset-0 p-14 flex flex-col justify-between z-20">
-          <h1 className="text-[#1C4589] text-5xl font-bold font-poppins">TradeConnect</h1>
-          <div className="flex flex-col gap-4">
-            <h1 className="font-medium font-poppins text-[#FEF3EB] text-4xl">Business Directory Network</h1>
-            <p className="font-poppins text-[#EBF2FE]">Connect with trusted business worldwide. Access exclusive
-              partnerships and grow your network.</p>
-            <div className="flex gap-2 items-center">
-              <FaArrowRight className="text-[#EBF2FE]" />
-              <p className="font-poppins text-[#EBF2FE]">Secure Access Management.</p>
-            </div>
-            <div className="flex gap-2 items-center">
-              <FaArrowRight className="text-[#EBF2FE]" />
-              <p className="font-poppins text-[#EBF2FE]">Verified Business Profiles</p>
-            </div>
-            <div className="flex gap-2 items-center">
-              <FaArrowRight className="text-[#EBF2FE]" />
-              <p className="font-poppins text-[#EBF2FE]">Global network Access</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* <Image src="/log-in-images/login-image.jpg" alt="background" fill className="object-cover 
+        object-center" /> */}
 
-
-      {/* Form */}
-      <div className="w-full lg:w-[50%] h-full flex items-center justify-center bg-white">
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-[400px] px-5 md:px-0">
+      <div className="flex flex-col items-center justify-center p-3">
+        <form onSubmit={handleSubmit(onSubmit)} className="max-w-[480px] px-5 md:px-0 bg-[#F6F6F6] 
+        border z-20 rounded-lg">
           <div className="w-full flex flex-col gap-3">
             <h1 className="font-poppins font-bold text-[#0E0E0E] text-3xl">Welcome Back!</h1>
             <p className="font-poppins text-[#7A7A7A]">Sign in to access the business directory</p>
@@ -159,6 +137,28 @@ export default function SignIn() {
             </Button>
           </div>
         </form>
+
+        <div className="absolute w-full inset-0 p-14 flex flex-col justify-between z-20">
+          <h1 className="text-[#1C4589] text-5xl font-bold font-poppins">TradeConnect</h1>
+          <div className="flex flex-col gap-4">
+            <h1 className="font-medium font-poppins text-[#FEF3EB] text-4xl">Business Directory
+              Network</h1>
+            <p className="font-poppins text-[#EBF2FE]">Connect with trusted business worldwide. Access
+              exclusive partnerships and grow your network.</p>
+            <div className="flex gap-2 items-center">
+              <FaArrowRight className="text-[#EBF2FE]" />
+              <p className="font-poppins text-[#EBF2FE]">Secure Access Management.</p>
+            </div>
+            <div className="flex gap-2 items-center">
+              <FaArrowRight className="text-[#EBF2FE]" />
+              <p className="font-poppins text-[#EBF2FE]">Verified Business Profiles</p>
+            </div>
+            <div className="flex gap-2 items-center">
+              <FaArrowRight className="text-[#EBF2FE]" />
+              <p className="font-poppins text-[#EBF2FE]">Global network Access</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
