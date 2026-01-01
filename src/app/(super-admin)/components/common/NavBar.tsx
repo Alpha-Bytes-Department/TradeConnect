@@ -1,104 +1,46 @@
 // Fahim
 "use client"
-import { LogOut, Moon, Settings, SquareMenu, Sun, User } from "lucide-react";
-// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-// import {
-//     DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator,
-//     DropdownMenuTrigger
-// } from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button";
+import { ChevronDown, LogOut, Settings } from "lucide-react";
 import { SidebarSeparator, SidebarTrigger, useSidebar } from '@/components/ui/sidebar';
-import Link from "next/link";
 import Image from "next/image";
-// import { useTheme } from "next-themes";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { redirect } from "next/navigation";
 
 export default function Navbar() {
-    // const { theme, setTheme } = useTheme();
-    // const { toggleSidebar } = useSidebar();
-
     return (
         <div>
             <nav className="p-4 flex items-center justify-between">
                 {/*Left*/}
                 <SidebarTrigger />
-                {/* <Button variant="outline" onClick={toggleSidebar}>Custom Button</Button> */}
 
                 {/*Right*/}
                 <div className="flex justify-end items-center gap-3">
                     <div className="relative w-12 h-12">
-                        <Image src={"/dashboard-images/AdminPhoto.jpg"} alt="admin-photo" fill className="rounded-full" />
+                        <Image src={"/dashboard-images/AdminPhoto.jpg"} alt="admin-photo" fill
+                            className="rounded-full" />
                     </div>
                     <div>
                         <h1 className="font-poppins text-[#252525]">Admin</h1>
                         <p className="font-poppins text-[#595959]">admin@business.com</p>
                     </div>
-                </div>
-
-                {/* <div className="flex items-center gap-4"> */}
-                {/* Theme Menu */}
-                {/* <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="outline" size="icon">
-                                <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all 
-                            dark:scale-0 dark:-rotate-90" />
-                                <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 
-                            transition-all dark:scale-100 dark:rotate-0" />
-                                <span className="sr-only">Toggle theme</span>
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => setTheme("light")}>
-                                Light
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => setTheme("dark")}>
-                                Dark
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => setTheme("system")}>
-                                System
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu> */}
-
-                {/* User Menu */}
-                {/* <DropdownMenu>
-                        <DropdownMenuTrigger>
-                            <Avatar>
-                                <AvatarImage src="https://github.com/shadcn.png" />
-                                <AvatarFallback>CN</AvatarFallback>
-                            </Avatar>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem>
-                                <User className="w-[1.2rem] h-[1.2rem] mr-2" />
-                                Profile
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                                <Settings className="w-[1.2rem] h-[1.2rem] mr-2" />
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <ChevronDown className="cursor-pointer" />
+                        </PopoverTrigger>
+                        <PopoverContent className="w-64 mr-4 flex flex-col gap-4 bg-white">
+                            <button className="font-poppins text-[#252525] cursor-pointer 
+                            flex items-center gap-3" onClick={() => redirect("/super-admin/settings")}>
+                                <Settings className="w-5 h-5" />
                                 Settings
-                            </DropdownMenuItem>
-                            <DropdownMenuItem variant="destructive">
-                                <LogOut className="w-[1.2rem] h-[1.2rem] mr-2" />
+                            </button>
+                            <button className="font-poppins text-[#B3261E] cursor-pointer
+                            flex items-center gap-3">
+                                <LogOut className="w-5 h-5" />
                                 Log Out
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu> */}
-
-                {/* <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="outline" size="icon">
-                                <SquareMenu />
-                                <span className="sr-only">Open Menu</span>
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                            <DropdownMenuItem>Top</DropdownMenuItem>
-                            <DropdownMenuItem>Bottom</DropdownMenuItem>
-                            <DropdownMenuItem>Right</DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </div> */}
+                            </button>
+                        </PopoverContent>
+                    </Popover>
+                </div>
             </nav>
             <SidebarSeparator />
         </div>
