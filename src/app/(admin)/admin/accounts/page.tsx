@@ -34,18 +34,22 @@ interface Activity {
     lastUpdated: string;
 }
 
-interface ContactInfo {
+export interface Contact {
+    id: string;
+    name: string;
+    position: string;
+    email: string;
+    phone: string;
+    isPrimary: boolean;
+}
+
+export interface ContactInfo {
     office:{
         phone: string;
         email: string;
+        website: string;
     };
-    contacts:
-        {
-        name: string;
-        position: string;
-        email: string;
-        phone: string;
-        }[],
+    contacts: Contact[],
     
 }
 
@@ -81,25 +85,32 @@ export default function AccountPage() {
             office:{
                 phone: '5656565494555',
                 email: 'mmislam272@gmail.com',
+                website: 'dtrhfgg'
             },
             contacts: [
                 {
+                    id: '1',
                     name: 'Sample Name',
                     position: 'CEO',
                     phone: '5656565494555',
                     email: 'mmislam272@gmail.com',
+                    isPrimary: true,
                 },
                 {
+                    id: '2', 
                     name: 'Sample Name',
                     position: 'CEO',
                     phone: '5656565494555',
                     email: 'mmislam272@gmail.com',
+                    isPrimary: false,
                 },
                 {
+                    id: '3', 
                     name: 'Sample Name',
                     position: 'CEO',
                     phone: '5656565494555',
                     email: 'mmislam272@gmail.com',
+                    isPrimary: false,
                 },
             ]
         },
