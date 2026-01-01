@@ -2,20 +2,17 @@ import React,{useState} from 'react';
 import { EditData } from '../page';
 import AddContactModal from './contactsModal';
 import { Mail, Pencil, Phone, Plus, Star, Trash2 } from 'lucide-react';
+import { ContactInfo,Contact } from '../../accounts/page';
+import EditContactModal from './contactsUpdateModal';
 
 interface ContactsProps {
     editData: EditData;
     setEditData: React.Dispatch<React.SetStateAction<EditData>>;
 }
 
-interface Contact {
-    id: string;
-    fullName: string;
-    role: string;
-    email: string;
-    phoneNumber: string;
-    isPrimary: boolean;
-}
+
+
+
 
 const Contacts: React.FC<ContactsProps> = ({ editData, setEditData }) => {
     const handleInputChange = (field: keyof EditData['contact'], value: string) => {
@@ -29,7 +26,7 @@ const Contacts: React.FC<ContactsProps> = ({ editData, setEditData }) => {
     };
 
 
-    const contact= {
+    const sampleContact:ContactInfo   = {
         office: {
             phone: '5656565494555',
             email: 'mmislam272@gmail.com',
@@ -37,7 +34,7 @@ const Contacts: React.FC<ContactsProps> = ({ editData, setEditData }) => {
         },
         contacts: [
             {
-                id: 1,
+                id: '1',
                 name: 'Sample Name',
                 position: 'CEO',
                 phone: '5656565494555',
@@ -46,35 +43,77 @@ const Contacts: React.FC<ContactsProps> = ({ editData, setEditData }) => {
             },
             {
                 
-                id: 2,
+                id: '2',
                 name: 'Sample Name',
                 position: 'CEO',
                 phone: '5656565494555',
                 email: 'mmislam272@gmail.com',
-                isPrimary: true,
+                isPrimary: false,
             },
             {
-                id: 3, 
+                id: '3', 
                 name: 'Sample Name',
                 position: 'CEO',
                 phone: '5656565494555',
                 email: 'mmislam272@gmail.com',
-                isPrimary: true,
+                isPrimary: false,
             },
         ]
     }
 
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [contacts, setContacts] = useState<Contact[]>([]);
+    const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+    const [contact, setContact] = useState<ContactInfo>(sampleContact);
+    const [idToEdit, setIdToEdit] = useState<string>('');
 
     const handleAddContact = (data: Omit<Contact, 'id'>) => {
-        const newContact: Contact = {
+        console.log(data)
+        const newContacts: Contact = {
             ...data,
             id: Date.now().toString(),
         };
-        setContacts([...contacts, newContact]);
+
+        let newContact:ContactInfo={...contact}
+
+        newContact.contacts.push(newContacts)
+
+        setContact(newContact);
     };
+
+
+    const handleEditContact = (data:Contact) => {
+
+        setContact({...contact,contacts:contact.contacts.map((item)=>{
+            if(item.id===data.id){
+                return data
+            }
+            else{
+                return item
+            }
+        }
+        )})
+        
+        
+    };
+
+    const onEditContact=(id:string)=>{
+        
+        setIsEditModalOpen(true)
+        setIdToEdit(id)
+        
+
+    }
+
+    const onDeleteContacts = (id:any) => {
+        setContact({...contact,contacts:contact.contacts.filter((con:any)=>con.id!==id)
+        })
+    }
+
+
+    console.log(contact)
+
+
 
     return (
         <div className="w-full mx-auto space-y-6">
@@ -196,7 +235,7 @@ const Contacts: React.FC<ContactsProps> = ({ editData, setEditData }) => {
                                         <Pencil className="w-4 h-4" />
                                     </button>
                                     <button
-                                        onClick={() => onDeleteContact(contact.id)}
+                                        onClick={() => onDeleteContacts(contact.id)}
                                         className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                                         aria-label="Delete contact"
                                     >
@@ -215,6 +254,14 @@ const Contacts: React.FC<ContactsProps> = ({ editData, setEditData }) => {
                 onClose={() => setIsModalOpen(false)}
                 onSubmit={handleAddContact}
             />
+
+            <EditContactModal
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+                onSubmit={handleEditContact}
+                contact={contact.contacts.find((item) => item.id === idToEdit)}
+            />
+
         </div>
     );
 };

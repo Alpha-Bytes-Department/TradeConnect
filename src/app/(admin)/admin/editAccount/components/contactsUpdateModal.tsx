@@ -1,13 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { X, Star, ChevronDown } from 'lucide-react';
 import { Contact } from '../../accounts/page';
 
-interface AddContactModalProps {
+interface updateContactModalProps {
     isOpen: boolean;
     onClose: () => void;
     onSubmit: (data: Contact) => void;
+    contact: Contact;
 }
 
 
@@ -24,30 +25,28 @@ const roles = [
     'Other',
 ];
 
-export default function AddContactModal({ isOpen, onClose, onSubmit }: AddContactModalProps) {
+export default function EditContactModal({ isOpen, onClose, onSubmit, contact }: updateContactModalProps) {
     const [formData, setFormData] = useState<Contact>({
         id: new Date().toISOString(),
-        name: '',
-        position: '',
-        email: '',
-        phone: '',
-        isPrimary: false,
+        name: contact?.name||'',
+        position: contact?.position||'',
+        email: contact?.email||'',
+        phone: contact?.phone||'',
+        isPrimary: contact?.isPrimary||false,
     });
+
+
+    useEffect(() => {
+        if (contact) {
+            setFormData(contact);
+        }
+    }, [contact, isOpen]);
 
     const [isRoleDropdownOpen, setIsRoleDropdownOpen] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         onSubmit(formData);
-        // Reset form
-        setFormData({
-            id: new Date().toISOString(),
-            name: '',
-            position: '',
-            email: '',
-            phone: '',
-            isPrimary: false,
-        });
         onClose();
     };
 
@@ -225,7 +224,7 @@ export default function AddContactModal({ isOpen, onClose, onSubmit }: AddContac
                                 type="submit"
                                 className="px-5 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-all active:scale-95 shadow-sm hover:shadow-md"
                             >
-                                Add Contact
+                                Update Contact
                             </button>
                         </div>
                     </form>
