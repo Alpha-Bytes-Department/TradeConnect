@@ -255,12 +255,14 @@ const Contacts: React.FC<ContactsProps> = ({ editData, setEditData }) => {
                 onSubmit={handleAddContact}
             />
 
-            <EditContactModal
+            {isEditModalOpen && idToEdit && (
+                <EditContactModal
                 isOpen={isEditModalOpen}
                 onClose={() => setIsEditModalOpen(false)}
                 onSubmit={handleEditContact}
-                contact={contact.contacts.find((item) => item.id === idToEdit)}
-            />
+                contact={contact.contacts.find((item) => item.id === idToEdit)!}
+            />)
+            }
 
         </div>
     );
