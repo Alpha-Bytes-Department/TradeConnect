@@ -29,7 +29,7 @@ export interface Data{
     }
 }
 
-type TabType = 'basic' | 'contact' | 'services' | 'images';
+type TabType = 'basic' | 'contact' | 'branch' | 'certification' | 'services' | 'images';
 
 
 const ProfileLayout: React.FC = () => {
@@ -40,73 +40,14 @@ const ProfileLayout: React.FC = () => {
     const tabs: { id: TabType; label: string }[] = [
         { id: 'basic', label: 'Basic Information' },
         { id: 'contact', label: 'Contact Information' },
+        { id: 'branch', label: 'Branches' },
+        { id: 'certification', label: 'Certifications' },
         { id: 'services', label: 'Services & About' },
         { id: 'images', label: 'Images' },
     ];
 
     const [activeTab,setActiveTab]=useState<string>('basic')
-    const [data, setData] = useState<Data>({
-        basic: {
-            name: 'stringyyyyy',
-            country: 'string',
-            address: 'string'
-        },
-        contact: {
-            office: {
-                phone: '5656565494555',
-                email: 'mmislam272@gmail.com',
-                website: '',
-            },
-            contacts: [
-                {
-                    id: '1',
-                    name: 'Sample Name',
-                    position: 'CEO',
-                    phone: '5656565494555',
-                    email: 'mmislam272@gmail.com',
-                    isPrimary: true,
-                },
-                {
-
-                    id: '2',
-                    name: 'Sample Name',
-                    position: 'CEO',
-                    phone: '5656565494555',
-                    email: 'mmislam272@gmail.com',
-                    isPrimary: false,
-                },
-                {
-                    id: '3',
-                    name: 'Sample Name',
-                    position: 'CEO',
-                    phone: '5656565494555',
-                    email: 'mmislam272@gmail.com',
-                    isPrimary: false,
-                },
-            ]
-        }
-,
-    services: {
-            services: 'string',
-            about: 'string',
-        },
-    images: {
-        logo: new File(
-            ['fake image content'],
-            'logo.png',
-            { type: 'image/png' }
-        ),
-        banner: new File(
-            ['fake image content'],
-            'logo.png',
-            { type: 'image/png' }
-        ),
-            gallery: [],
-        },
-    })
-
-
-    const companyData: CompanyProfile = {
+    const [data, setData] = useState<CompanyProfile>({
         name: "Construction Partners",
         address: "989 Builder Road, Dubai, UAE",
         industry: "Construxion",
@@ -118,7 +59,7 @@ const ProfileLayout: React.FC = () => {
             office: {
                 phone: "5656565494555",
                 email: "mmislam272@gmail.com",
-                website: "dtrhfgg",
+                website: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=400&fit=crop",
             },
             contacts: [
                 {
@@ -218,7 +159,10 @@ const ProfileLayout: React.FC = () => {
                 phone: "+1 555-0123"
             }
         ],
-    };
+    })
+
+
+    
 
 
 
