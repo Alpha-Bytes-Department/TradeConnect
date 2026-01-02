@@ -517,18 +517,17 @@ export default function AccountPage() {
             </div>
             {modal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-                    <div className="relative bg-white rounded-lg shadow-xl w-full max-w-md">
+                    <div className="relative bg-white rounded-lg shadow-xl w-full max-w-7xl aspect-video overflow-hidden border">
                         <button
                             onClick={() => setModal(undefined)}
-                            className="absolute left-[410px] top-[5px] bg-white text-gray-500 p-1 font-bold rounded-full"
+                            className=" absolute z-100 left-[1240px] top-[5px] bg-white text-gray-500 p-1 font-bold rounded-full"
                         >
                             <X />
                         </button>
                         <Image
                             src={`${companyData.gallery[modal - 1]}`}
                             alt="Image Enlarged"
-                            width={500}
-                            height={300}
+                            fill
                             className="object-cover rounded-lg"
                         />
                     </div>

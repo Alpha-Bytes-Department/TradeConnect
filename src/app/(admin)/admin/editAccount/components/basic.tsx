@@ -1,15 +1,15 @@
 import React from 'react';
-import { EditData } from '../page';
+import { Data } from '../page';
 
 
 interface BasicProps {
-    editData: EditData;
-    setEditData: React.Dispatch<React.SetStateAction<EditData>>;
+    data: Data;
+    setData: React.Dispatch<React.SetStateAction<Data>>;
 }
 
-const Basic: React.FC<BasicProps> = ({ editData, setEditData }) => {
-    const handleInputChange = (field: keyof EditData['basic'], value: string) => {
-        setEditData(prev => ({
+const Basic: React.FC<BasicProps> = ({ data, setData }) => {
+    const handleInputChange = (field: keyof Data['basic'], value: string) => {
+        setData(prev => ({
             ...prev,
             basic: {
                 ...prev.basic,
@@ -30,7 +30,7 @@ const Basic: React.FC<BasicProps> = ({ editData, setEditData }) => {
                     <input
                         id="business-name"
                         type="text"
-                        value={editData.basic.name}
+                        value={data.basic.name}
                         onChange={(e) => handleInputChange('name', e.target.value)}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                         placeholder="Tech Solution Inc."
@@ -44,7 +44,7 @@ const Basic: React.FC<BasicProps> = ({ editData, setEditData }) => {
                     </label>
                     <select
                         id="country"
-                        value={editData.basic.country}
+                        value={data.basic.country}
                         onChange={(e) => handleInputChange('country', e.target.value)}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 appearance-none bg-white cursor-pointer"
                         style={{
@@ -71,7 +71,7 @@ const Basic: React.FC<BasicProps> = ({ editData, setEditData }) => {
                 <input
                     id="address"
                     type="text"
-                    value={editData.basic.address}
+                    value={data.basic.address}
                     onChange={(e) => handleInputChange('address', e.target.value)}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                     placeholder="123 Tech street, san Francisco, CA 94105"

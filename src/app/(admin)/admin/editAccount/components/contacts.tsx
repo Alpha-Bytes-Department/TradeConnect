@@ -1,22 +1,22 @@
 import React,{useState} from 'react';
-import { EditData } from '../page';
+import { Data } from '../page';
 import AddContactModal from './contactsModal';
 import { Mail, Pencil, Phone, Plus, Star, Trash2 } from 'lucide-react';
 import { ContactInfo,Contact } from '../../accounts/page';
 import EditContactModal from './contactsUpdateModal';
 
 interface ContactsProps {
-    editData: EditData;
-    setEditData: React.Dispatch<React.SetStateAction<EditData>>;
+    data: Data;
+    setData: React.Dispatch<React.SetStateAction<Data>>;
 }
 
 
 
 
 
-const Contacts: React.FC<ContactsProps> = ({ editData, setEditData }) => {
-    const handleInputChange = (field: keyof EditData['contact'], value: string) => {
-        setEditData((prev) => ({
+const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
+    const handleInputChange = (field: keyof Data['contact'], value: string) => {
+        setData((prev) => ({
             ...prev,
             contact: {
                 ...prev.contact,
@@ -127,7 +127,7 @@ const Contacts: React.FC<ContactsProps> = ({ editData, setEditData }) => {
                     <input
                         id="email"
                         type="email"
-                        value={editData.contact.email}
+                        value={data.contact.email}
                         onChange={(e) => handleInputChange('email', e.target.value)}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                         placeholder="business@company.com"
@@ -144,7 +144,7 @@ const Contacts: React.FC<ContactsProps> = ({ editData, setEditData }) => {
                             id="phone"
                             type='tel'
                             maxLength={14}
-                            value={editData.contact.phone}
+                            value={data.contact.phone}
                             onChange={(e) => handleInputChange('phone', e.target.value)}
                             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                             placeholder="+1 555 0123 5248"
@@ -161,7 +161,7 @@ const Contacts: React.FC<ContactsProps> = ({ editData, setEditData }) => {
                 <input
                     id="website"
                     type="url"
-                    value={editData.contact.website}
+                    value={data.contact.website}
                     onChange={(e) => handleInputChange('website', e.target.value)}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                     placeholder="https://techsolutions.com"

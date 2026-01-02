@@ -6,7 +6,7 @@ import Contacts from './components/contacts';
 import Services from './components/services';
 import Images from './components/image';
 
-export interface EditData{
+export interface Data{
     basic:{
         name:string,
         country: string,
@@ -44,7 +44,7 @@ const ProfileLayout: React.FC = () => {
     ];
 
     const [activeTab,setActiveTab]=useState<string>('basic')
-    const [editData, setEditData] = useState<EditData>({
+    const [data, setData] = useState<Data>({
         basic: {
             name: 'stringyyyyy',
             country: 'string',
@@ -79,7 +79,7 @@ const ProfileLayout: React.FC = () => {
     const handleSave=()=>{
     
 
-        setEditData({
+        setData({
             basic: {
                 name: '',
                 country: '',
@@ -106,7 +106,7 @@ const ProfileLayout: React.FC = () => {
 
 
     const handleCancel=()=>{
-       setEditData({
+       setData({
             basic: {
                 name: '',
                     country: '',
@@ -132,16 +132,16 @@ const ProfileLayout: React.FC = () => {
     const renderTab = () => {
         switch (activeTab) {
             case 'basic':
-                return <Basic editData={editData} setEditData={setEditData} />;
+                return <Basic data={data} setData={setData} />;
 
             case 'contact':
-                return <Contacts editData={editData} setEditData={setEditData} />;
+                return <Contacts data={data} setData={setData} />;
 
             case 'services':
-                return <Services editData={editData} setEditData={setEditData} />;
+                return <Services data={data} setData={setData} />;
 
             case 'images':
-                return <Images editData={editData} setEditData={setEditData} />;
+                return <Images data={data} setData={setData} />;
 
             default:
                 return null;
