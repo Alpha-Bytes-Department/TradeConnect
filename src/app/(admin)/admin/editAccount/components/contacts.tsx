@@ -192,18 +192,18 @@ const Contacts: React.FC<ContactsProps> = ({ editData, setEditData }) => {
                     {contact.contacts.map((contact,index) => (
                         <div
                             key={index}
-                            className="bg-gray-50 border border-gray-200 rounded-lg p-4"
+                            className="bg-gray-50 border border-blue-400 hover:bg-blue-100 rounded-lg p-4"
                         >
                             <div className="flex items-start justify-between">
                                 <div className="flex-1">
                                     {/* Name and Primary Badge */}
                                     <div className="flex items-center gap-2 mb-2">
-                                        <h3 className="text-base font-medium text-gray-900">
+                                        <h3 className="text-base font-medium text-gray-900 mb-2">
                                             {contact.name}
                                         </h3>
                                         {contact.isPrimary && (
-                                            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-orange-100 text-orange-600 text-xs font-medium rounded">
-                                                <Star className="w-3 h-3 fill-orange-600" />
+                                            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-orange-100 text-orange-400 border border-orange-400 rounded-full text-xs font-medium">
+                                                <Star className="w-3 h-3 fill-orange-400" />
                                                 Primary
                                             </span>
                                         )}
