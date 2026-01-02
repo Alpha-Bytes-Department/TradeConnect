@@ -5,6 +5,7 @@ import Basic from './components/basic';
 import Contacts from './components/contacts';
 import Services from './components/services';
 import Images from './components/image';
+import { ContactInfo,Contact,Activity,Award,LocationData,CompanyProfile} from '../accounts/page';
 
 export interface Data{
     basic:{
@@ -50,11 +51,41 @@ const ProfileLayout: React.FC = () => {
             country: 'string',
             address: 'string'
         },
-    contact: {
-            email: 'string',
-            phone: 'string',
-            website: 'string',
-        },
+        contact: {
+            office: {
+                phone: '5656565494555',
+                email: 'mmislam272@gmail.com',
+                website: '',
+            },
+            contacts: [
+                {
+                    id: '1',
+                    name: 'Sample Name',
+                    position: 'CEO',
+                    phone: '5656565494555',
+                    email: 'mmislam272@gmail.com',
+                    isPrimary: true,
+                },
+                {
+
+                    id: '2',
+                    name: 'Sample Name',
+                    position: 'CEO',
+                    phone: '5656565494555',
+                    email: 'mmislam272@gmail.com',
+                    isPrimary: false,
+                },
+                {
+                    id: '3',
+                    name: 'Sample Name',
+                    position: 'CEO',
+                    phone: '5656565494555',
+                    email: 'mmislam272@gmail.com',
+                    isPrimary: false,
+                },
+            ]
+        }
+,
     services: {
             services: 'string',
             about: 'string',
@@ -73,6 +104,121 @@ const ProfileLayout: React.FC = () => {
             gallery: [],
         },
     })
+
+
+    const companyData: CompanyProfile = {
+        name: "Construction Partners",
+        address: "989 Builder Road, Dubai, UAE",
+        industry: "Construxion",
+        logo: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=400&fit=crop",
+        banner: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=400&fit=crop",
+        about:
+            "We are a trusted construction company dedicated to delivering high-quality projects on time and within budget. From residential buildings to commercial developments, we focus on safety, durability, and customer satisfaction at every step.",
+        contact: {
+            office: {
+                phone: "5656565494555",
+                email: "mmislam272@gmail.com",
+                website: "dtrhfgg",
+            },
+            contacts: [
+                {
+                    id: "1",
+                    name: "Sample Name",
+                    position: "CEO",
+                    phone: "5656565494555",
+                    email: "mmislam272@gmail.com",
+                    isPrimary: true,
+                },
+                {
+                    id: "2",
+                    name: "Sample Name",
+                    position: "CEO",
+                    phone: "5656565494555",
+                    email: "mmislam272@gmail.com",
+                    isPrimary: false,
+                },
+                {
+                    id: "3",
+                    name: "Sample Name",
+                    position: "CEO",
+                    phone: "5656565494555",
+                    email: "mmislam272@gmail.com",
+                    isPrimary: false,
+                },
+            ],
+        },
+        services: [
+            { id: "1", name: "Commercial Construction" },
+            { id: "2", name: "Project Management" },
+            { id: "3", name: "Renovation" },
+            { id: "4", name: "Infrastructure" },
+            { id: "11", name: "Commercial Construction" },
+            { id: "21", name: "Project Management" },
+            { id: "31", name: "Renovation" },
+            { id: "41", name: "Infrastructure" },
+            { id: "51", name: "Commercial Construction" },
+            { id: "x1", name: "Commercial Construction" },
+            { id: "x2", name: "Project Management" },
+            { id: "x3", name: "Renovation" },
+            { id: "x4", name: "Infrastructure" },
+            { id: "x11", name: "Commercial Construction" },
+            { id: "x21", name: "Project Management" },
+            { id: "x31", name: "Renovation" },
+            { id: "xx1", name: "Infrastructure" },
+            { id: "x51", name: "Commercial Construction" },
+        ],
+        awards: [
+            { id: "1", name: "Commercial Construction" },
+            { id: "2", name: "Project Management" },
+            { id: "3", name: "Renovation" },
+            { id: "4", name: "Infrastructure" },
+            { id: "11", name: "Commercial Construction" },
+            { id: "21", name: "Project Management" },
+            { id: "31", name: "Renovation" },
+            { id: "41", name: "Infrastructure" },
+            { id: "51", name: "Commercial Construction" },
+            { id: "x1", name: "Commercial Construction" },
+            { id: "x2", name: "Project Management" },
+            { id: "x3", name: "Renovation" },
+            { id: "x4", name: "Infrastructure" },
+            { id: "x11", name: "Commercial Construction" },
+            { id: "x21", name: "Project Management" },
+            { id: "x31", name: "Renovation" },
+            { id: "xx1", name: "Infrastructure" },
+            { id: "x51", name: "Commercial Construction" },
+        ],
+        activities: {
+            active: true,
+            activeFor: 23,
+            lastUpdated: new Date().toISOString(),
+        },
+        gallery: [
+            "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=400&h=300&fit=crop",
+            "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop",
+            "https://images.unsplash.com/photo-1535732759880-bbd5c7265e3f?w=400&h=300&fit=crop",
+            "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=400&h=300&fit=crop",
+            "https://images.unsplash.com/photo-1541976590-713941681591?w=400&h=300&fit=crop",
+            "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=400&h=300&fit=crop",
+        ],
+        location: [
+            {
+                name: "Paris Office",
+                address: "123 Tech Street, San Francisco, CA 94105",
+                city: "San Francisco",
+                country: "United States",
+                email: "paris@gmail.com",
+                phone: "+1 555-0123"
+            },
+            {
+                name: "USA Office",
+                address: "123 Tech Street, San Francisco, CA 94105",
+                city: "San Francisco",
+                country: "United States",
+                email: "paris@gmail.com",
+                phone: "+1 555-0123"
+            }
+        ],
+    };
 
 
 

@@ -24,26 +24,27 @@ import { PiX } from "react-icons/pi";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 
-interface Service {
+export interface Service {
     id: string;
     name: string;
 }
 
-interface LocationData {
+export interface LocationData {
     name: string;
     address: string;
     city: string;
+    country: string;
     email: string;
     phone: string;
 }
 
 
-interface Award {
+export interface Award {
     id: string;
     name: string;
 }
 
-interface Activity {
+export interface Activity {
     active: boolean;
     activeFor: number;
     lastUpdated: string;
@@ -67,18 +68,19 @@ export interface ContactInfo {
     contacts: Contact[];
 }
 
-interface CompanyProfile {
+export interface CompanyProfile {
     name: string;
     address: string;
     industry: string;
-    logo: string;
     about: string;
     contact: ContactInfo;
     services: Service[];
     awards: Award[];
     activities: Activity;
-    gallery: string[];
     location: LocationData[];
+    logo: File | string | undefined,
+    banner: File |string | undefined,
+    gallery: File[] | string[] | undefined[],
 }
 
 
@@ -92,6 +94,7 @@ export default function AccountPage() {
         address: "989 Builder Road, Dubai, UAE",
         industry: "Construxion",
         logo: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=400&fit=crop",
+        banner:"https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=400&fit=crop",
         about:
             "We are a trusted construction company dedicated to delivering high-quality projects on time and within budget. From residential buildings to commercial developments, we focus on safety, durability, and customer satisfaction at every step.",
         contact: {
@@ -184,14 +187,16 @@ export default function AccountPage() {
             {
                 name: "Paris Office",
                 address: "123 Tech Street, San Francisco, CA 94105",
-                city: "San Francisco, United States",
+                city: "San Francisco",
+                country: "United States",
                 email: "paris@gmail.com",
                 phone: "+1 555-0123"
             },
             {
                 name: "USA Office",
                 address: "123 Tech Street, San Francisco, CA 94105",
-                city: "San Francisco, United States",
+                city: "San Francisco",
+                country: "United States",
                 email: "paris@gmail.com",
                 phone: "+1 555-0123"
             }
