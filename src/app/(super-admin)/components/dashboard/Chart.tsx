@@ -6,13 +6,13 @@ import { CartesianGrid, Line, LineChart, XAxis, YAxis, ResponsiveContainer, Tool
     from "recharts";
 
 const chartData = [
-    { date: "21 Dec", logins: 186, newBusinesses: 80 },
-    { date: "22 Dec", logins: 305, newBusinesses: 200 },
-    { date: "23 Dec", logins: 237, newBusinesses: 120 },
-    { date: "24 Dec", logins: 73, newBusinesses: 190 },
-    { date: "25 Dec", logins: 209, newBusinesses: 130 },
-    { date: "26 Dec", logins: 214, newBusinesses: 140 },
-    { date: "27 Dec", logins: 219, newBusinesses: 170 },
+    { date: "21 Dec", Logins: 186, NewBusinesses: 80 },
+    { date: "22 Dec", Logins: 305, NewBusinesses: 200 },
+    { date: "23 Dec", Logins: 237, NewBusinesses: 120 },
+    { date: "24 Dec", Logins: 73, NewBusinesses: 190 },
+    { date: "25 Dec", Logins: 209, NewBusinesses: 130 },
+    { date: "26 Dec", Logins: 214, NewBusinesses: 140 },
+    { date: "27 Dec", Logins: 219, NewBusinesses: 170 },
 ];
 
 export default function Chart() {
@@ -26,8 +26,8 @@ export default function Chart() {
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Line type="monotone" dataKey="logins" stroke="#3B82F6" />
-                    <Line type="monotone" dataKey="newBusinesses" stroke="#10B981" />
+                    <Line type="monotone" dataKey="Logins" stroke="#3B82F6" />
+                    <Line type="monotone" dataKey="NewBusinesses" stroke="#10B981" />
                 </LineChart>
             </ResponsiveContainer>
         </div>
