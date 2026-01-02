@@ -18,18 +18,20 @@ export interface CompanyData {
 
 const page = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [selectedCountry, setSelectedCountry] = useState("United States");
-    const [selectedService, setSelectedService] = useState("Technology");
+    const [selectedCountry, setSelectedCountry] = useState('No Selection');
+    const [selectedService, setSelectedService] = useState('No Selection');
     const [sortBy, setSortBy] = useState("A-Z");
     const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
     const countries = [
+        'No Selection',
         "United States",
         "United Kingdom",
         "Canada",
         "Australia",
     ];
     const services = [
+        'No Selection',
         "Technology",
         "Healthcare",
         "Finance",
@@ -45,6 +47,8 @@ const page = () => {
             flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
             title: "TradeConnect Logistics",
             location: "United States",
+            seenBy:25,
+            joined: '2025-01-03T07:40:00Z',
             description:
                 "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
             services: [
@@ -61,6 +65,8 @@ const page = () => {
             flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
             title: "TradeConnect Logistics",
             location: "United States",
+            seenBy: 65,
+            joined: '2025-01-03T07:40:00Z',
             description:
                 "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
             services: [
@@ -77,6 +83,8 @@ const page = () => {
             flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
             title: "TradeConnect Logistics",
             location: "United States",
+            seenBy: 25,
+            joined: '2025-01-02T07:40:00Z',
             description:
                 "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
             services: [
@@ -91,8 +99,10 @@ const page = () => {
             headerImage:
                 "https://images.unsplash.com/photo-1497366216548-37526070297c",
             flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            title: "TradeConnect Logistics",
+            title: "bradeConnect Logistics",
             location: "Australia",
+            seenBy: 15,
+            joined: '2025-01-01T07:40:00Z',
             description:
                 "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
             services: [
@@ -109,6 +119,8 @@ const page = () => {
             flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
             title: "TradeConnect Logistics",
             location: "Australia",
+            seenBy: 45,
+            joined: '2025-01-05T07:40:00Z',
             description:
                 "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
             services: [
@@ -125,6 +137,8 @@ const page = () => {
             flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
             title: "TradeConnect Logistics",
             location: "Canada",
+            seenBy: 35,
+            joined: '2025-01-06T07:40:00Z',
             description:
                 "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
             services: [
@@ -136,7 +150,17 @@ const page = () => {
         },
     ];
 
-    const modifiedData=data.filter((item)=>item.services.includes(selectedService)).filter((item)=>item.location.toLowerCase()===selectedCountry.toLowerCase()).filter((item)=>item.title.toLowerCase().includes(searchTerm.toLowerCase()))
+    let temp=selectedService==='No Selection'?data:data.filter((item)=>item.services.includes(selectedService))
+    
+    
+   temp=selectedCountry==='No Selection'?temp: temp.filter((item)=>item.location.toLowerCase()===selectedCountry.toLowerCase())
+    
+    
+       temp = selectedCountry === '' ? temp : temp.filter((item)=>item.title.toLowerCase().includes(searchTerm.toLowerCase()))
+
+    temp = sortBy === 'A-Z' ? temp.sort((a, b) => a.title.localeCompare(b.title)) : sortBy === 'Z-A' ? temp.sort((a, b) => b.title.localeCompare(a.title)) : sortBy === 'Most Recent' ? temp.sort((a, b) => a.joined.localeCompare(b.joined)) : temp.sort((a, b) => a.seenBy - b.seenBy)
+
+const modifiedData=temp
 
     return (
         <div className="w-full bg-gray-50 min-h-screen">

@@ -100,6 +100,8 @@ const ProfileLayout: React.FC = () => {
                 gallery: [],
             },
         })
+
+        
     }   
 
 
