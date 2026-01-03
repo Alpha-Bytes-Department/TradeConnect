@@ -1,5 +1,5 @@
 // Fahim
-import { Globe, Mail, MapPin } from "lucide-react";
+import { Globe, Landmark, Mail, MapPin, Phone } from "lucide-react";
 import Image from "next/image";
 import { IoInformationCircleOutline } from "react-icons/io5";
 export default function BusinessDetails() {
@@ -10,11 +10,11 @@ export default function BusinessDetails() {
                 <Image src="/all-business-card-banners/3.jpg" alt="" fill
                     className="object-cover object-center" />
             </div>
-            <div className="max-w-[300px] h-[150px] mx-auto -mt-16 relative">
+            {/* <div className="max-w-[300px] h-[150px] mx-auto -mt-16 relative">
                 <Image src="/all-business-card-banners/2.jpg" alt="" fill
                     className="rounded-lg object-cover object-center
                     hover:scale-110 transition-transform duration-300 ease-in-out" />
-            </div>
+            </div> */}
 
             <div className="flex flex-col items-center justify-center gap-2 mt-12">
                 <h1 className="font-poppins font-semibold text-[#141414] 
@@ -43,8 +43,8 @@ export default function BusinessDetails() {
             </div>
 
             <div className="flex flex-col lg:flex-row gap-6 mt-8">
-                <div className="flex flex-col gap-3 w-full lg:w-1/2">
-                    <div className="p-2 border  rounded-lg bg-[#FFFFFF] 
+                <div className="w-full lg:w-1/2 flex flex-col gap-3">
+                    <div className="p-4 border rounded-lg bg-[#FFFFFF] 
                     shadow-lg">
                         <h1 className="font-poppins font-semibold 
                         text-[#121212] text-xl">About</h1>
@@ -56,7 +56,8 @@ export default function BusinessDetails() {
                             durability, and customer satisfaction at every
                             step.</p>
                     </div>
-                    <div className="p-2 border  rounded-lg bg-[#FFFFFF] 
+
+                    <div className="p-4 border rounded-lg bg-[#FFFFFF] 
                     shadow-lg">
                         <h1 className="font-poppins font-semibold 
                         text-[#121212] text-xl">Services</h1>
@@ -73,7 +74,138 @@ export default function BusinessDetails() {
                         <p className="bg-[#BFD7FD] inline-block px-2 py-1 mt-1 font-poppins 
                                 text-[#153569] text-xs rounded-full">Commercial Construction</p>
                     </div>
-                    <div className="p-2 border  rounded-lg bg-[#FFFFFF] 
+
+                    <div className="p-4 border rounded-lg bg-[#FFFFFF] 
+                    shadow-lg">
+                        <h1 className="font-poppins font-semibold 
+                        text-[#121212] text-xl">Certifications</h1>
+                        <p className="bg-[#27930029] inline-block px-2 py-1 mt-1 font-poppins 
+                        text-[#279300] text-xs rounded-full">Commercial Construction</p>
+                        <p className="bg-[#27930029] inline-block px-2 py-1 mt-1 font-poppins 
+                        text-[#279300] text-xs rounded-full">Local Freight Association</p>
+                    </div>
+
+                    <div className="p-4 border rounded-lg bg-[#FFFFFF] 
+                    shadow-lg">
+                        <h1 className="font-poppins font-semibold 
+                        text-[#121212] text-xl">Branch Locations</h1>
+                        <div className="p-3 bg-[#EBF2FE] rounded-lg mt-4">
+                            <div className="flex items-center gap-2">
+                                <Landmark className="w-5 h-5" />
+                                <p className="font-poppins text-[#3F3F3F]">Paris Office</p>
+                            </div>
+                            <div className="flex gap-2 mt-2">
+                                <MapPin className="w-5 h-5" />
+                                <p className="font-poppins text-[#3F3F3F]">
+                                    123 Tech Street, San Francisco, CA 94105 San Francisco, United States
+                                </p>
+                            </div>
+                            <div className="flex items-center gap-2 mt-2">
+                                <Mail className="w-5 h-5 text-[#327EF9]" />
+                                <p className="font-poppins text-[#327EF9]">
+                                    sarah@gmail.com
+                                </p>
+                            </div>
+                            <div className="flex items-center gap-2 mt-2">
+                                <Phone className="w-5 h-5 text-[#327EF9]" />
+                                <p className="font-poppins text-[#327EF9]">
+                                    +1 555-0125
+                                </p>
+                            </div>
+                        </div>
+                        <div className="p-3 bg-[#EBF2FE] rounded-lg mt-4">
+                            <div className="flex items-center gap-2">
+                                <Landmark className="w-5 h-5" />
+                                <p className="font-poppins text-[#3F3F3F]">USA Office</p>
+                            </div>
+                            <div className="flex gap-2 mt-2">
+                                <MapPin className="w-5 h-5" />
+                                <p className="font-poppins text-[#3F3F3F]">
+                                    123 Tech Street, San Francisco, CA 94105 San Francisco, United States
+                                </p>
+                            </div>
+                            <div className="flex items-center gap-2 mt-2">
+                                <Mail className="w-5 h-5 text-[#327EF9]" />
+                                <p className="font-poppins text-[#327EF9]">
+                                    sarah@gmail.com
+                                </p>
+                            </div>
+                            <div className="flex items-center gap-2 mt-2">
+                                <Phone className="w-5 h-5 text-[#327EF9]" />
+                                <p className="font-poppins text-[#327EF9]">
+                                    +1 555-0125
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="w-full lg:w-1/2 flex flex-col gap-3">
+                    <div className="p-4 border rounded-lg bg-[#FFFFFF] 
+                    shadow-lg">
+                        <h1 className="font-poppins font-semibold 
+                        text-[#121212] text-xl">Contact Information</h1>
+                        <div className="mt-3">
+                            <p className="font-poppins text-[#595959] text-sm">Office number</p>
+                            <p className="font-poppins text-[#327EF9] text-sm">+971 245 54 5 643</p>
+                        </div>
+                        <div>
+                            <p className="font-poppins text-[#595959] text-sm">Office Email</p>
+                            <p className="font-poppins text-[#327EF9] text-sm">asksaha9@gmail.com</p>
+                        </div>
+                        <div className="w-full h-[1px] bg-gray-300 mt-3" />
+                        <p className="font-poppins text-[#595959] text-sm mt-3">Contact Persons</p>
+                        <div className="p-2 border rounded-lg mt-3">
+                            <p className="font-medium font-poppins">Sarah Johnson</p>
+                            <p className="font-poppins text-[#909090]">CEO</p>
+                            <div className="flex items-center gap-2 mt-2">
+                                <Mail className="w-5 h-5 text-[#327EF9]" />
+                                <p className="font-poppins text-[#327EF9]">
+                                    sarah@gmail.com
+                                </p>
+                            </div>
+                            <div className="flex items-center gap-2 mt-2">
+                                <Phone className="w-5 h-5 text-[#327EF9]" />
+                                <p className="font-poppins text-[#327EF9]">
+                                    +1 555-0125
+                                </p>
+                            </div>
+                        </div>
+                        <div className="p-2 border rounded-lg mt-3">
+                            <p className="font-medium font-poppins">Sarah Johnson</p>
+                            <p className="font-poppins text-[#909090]">Managing Director</p>
+                            <div className="flex items-center gap-2 mt-2">
+                                <Mail className="w-5 h-5 text-[#327EF9]" />
+                                <p className="font-poppins text-[#327EF9]">
+                                    sarah@gmail.com
+                                </p>
+                            </div>
+                            <div className="flex items-center gap-2 mt-2">
+                                <Phone className="w-5 h-5 text-[#327EF9]" />
+                                <p className="font-poppins text-[#327EF9]">
+                                    +1 555-0125
+                                </p>
+                            </div>
+                        </div>
+                        <div className="p-2 border rounded-lg mt-3">
+                            <p className="font-medium font-poppins">Sarah Johnson</p>
+                            <p className="font-poppins text-[#909090]">Sales Manager</p>
+                            <div className="flex items-center gap-2 mt-2">
+                                <Mail className="w-5 h-5 text-[#327EF9]" />
+                                <p className="font-poppins text-[#327EF9]">
+                                    sarah@gmail.com
+                                </p>
+                            </div>
+                            <div className="flex items-center gap-2 mt-2">
+                                <Phone className="w-5 h-5 text-[#327EF9]" />
+                                <p className="font-poppins text-[#327EF9]">
+                                    +1 555-0125
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="p-4 border rounded-lg bg-[#FFFFFF] 
                     shadow-lg">
                         <h1 className="font-poppins font-semibold 
                         text-[#121212] text-xl">Activity</h1>
@@ -97,9 +229,43 @@ export default function BusinessDetails() {
                         </div>
                     </div>
                 </div>
-                <div className="w-full lg:w-1/2 border shadow-lg rounded-lg">
-                    <h1 className="font-poppins font-semibold 
-                        text-[#121212] text-xl">Activity</h1>
+            </div>
+
+            <div className="p-4 rounded-lg border shadow-lg bg-[#FFFFFF] mt-11">
+                <h1 className="font-medium font-poppins text-[#121212]">Gallery</h1>
+                <div className="grid grid-cols-4 gap-6 mt-3">
+                    <div className="relative h-[160px]">
+                        <Image src="/all-business-card-banners/1.jpg" alt="" fill
+                            className="object-cover object-center rounded-lg cursor-pointer" />
+                    </div>
+                    <div className="relative h-[160px]">
+                        <Image src="/all-business-card-banners/2.jpg" alt="" fill
+                            className="object-cover object-center rounded-lg cursor-pointer" />
+                    </div>
+                    <div className="relative h-[160px]">
+                        <Image src="/all-business-card-banners/3.jpg" alt="" fill
+                            className="object-cover object-center rounded-lg cursor-pointer" />
+                    </div>
+                    <div className="relative h-[160px]">
+                        <Image src="/all-business-card-banners/4.jpg" alt="" fill
+                            className="object-cover object-center rounded-lg cursor-pointer" />
+                    </div>
+                    <div className="relative h-[160px]">
+                        <Image src="/all-business-card-banners/5.jpg" alt="" fill
+                            className="object-cover object-center rounded-lg cursor-pointer" />
+                    </div>
+                    <div className="relative h-[160px]">
+                        <Image src="/all-business-card-banners/6.jpg" alt="" fill
+                            className="object-cover object-center rounded-lg cursor-pointer" />
+                    </div>
+                    <div className="relative h-[160px]">
+                        <Image src="/all-business-card-banners/1.jpg" alt="" fill
+                            className="object-cover object-center rounded-lg cursor-pointer" />
+                    </div>
+                    <div className="relative h-[160px]">
+                        <Image src="/all-business-card-banners/2.jpg" alt="" fill
+                            className="object-cover object-center rounded-lg cursor-pointer" />
+                    </div>
                 </div>
             </div>
         </div>

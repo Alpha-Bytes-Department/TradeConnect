@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue }
     from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { LockKeyhole, Save, Trash2, Upload, X } from "lucide-react";
+import { Divide, Eye, EyeOff, LockKeyhole, Save, Trash2, Upload, X } from "lucide-react";
 import { useState } from "react";
 import { Controller } from "react-hook-form";
 
@@ -24,6 +24,8 @@ export default function EditBusiness() {
     const [bannerPreview, setBannerPreview] = useState<string | null>(null);
     const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
     const [errors, setErrors] = useState<Errors>({ banner: '', gallery: '' });
+    const [showPassword1, setShowPassword1] = useState(false);
+    const [showPassword2, setShowPassword2] = useState(false);
 
     // Type annotation for validation function
     const validateFile = (file: File): string | null => {
@@ -120,9 +122,9 @@ export default function EditBusiness() {
                 <div className="flex justify-around border-b">
                     <button
                         onClick={() => setActiveTab('basic')}
-                        className={`px-8 py-4 font-medium font-poppins relative
+                        className={`px-8 py-2 font-medium font-poppins border-b-2 transition-colors 
                             text-[#141414] cursor-pointer 
-                            ${activeTab === 'basic' ? 'after:absolute after:left-0 after:bottom-0 after:w-full after:h-[2px] after:bg-[#327EF9]'
+                            ${activeTab === 'basic' ? 'border-[#327EF9]'
                                 : ''
                             }`}
                     >
@@ -130,9 +132,9 @@ export default function EditBusiness() {
                     </button>
                     <button
                         onClick={() => setActiveTab('contact')}
-                        className={`px-8 py-4 font-medium font-poppins border-b-2 -mb-[1px] transition-colors 
+                        className={`px-8 py-2 font-medium font-poppins border-b-2 transition-colors 
                             text-[#141414] cursor-pointer
-                            ${activeTab === 'contact' ? 'border-[#327EF9] relative z-10'
+                            ${activeTab === 'contact' ? 'border-[#327EF9]'
                                 : 'border-transparent hover:text-gray-700'
                             }`}
                     >
@@ -140,9 +142,9 @@ export default function EditBusiness() {
                     </button>
                     <button
                         onClick={() => setActiveTab('services')}
-                        className={`px-8 py-4 font-medium font-poppins border-b-2 -mb-[1px] transition-colors 
+                        className={`px-8 py-2 font-medium font-poppins border-b-2 transition-colors 
                             text-[#141414] cursor-pointer
-                            ${activeTab === 'services' ? 'border-[#327EF9] relative z-10'
+                            ${activeTab === 'services' ? 'border-[#327EF9]'
                                 : 'border-transparent hover:text-gray-700'
                             }`}
                     >
@@ -150,13 +152,23 @@ export default function EditBusiness() {
                     </button>
                     <button
                         onClick={() => setActiveTab('images')}
-                        className={`px-8 py-4 font-medium font-poppins border-b-2 -mb-[1px] transition-colors 
+                        className={`px-8 py-2 font-medium font-poppins border-b-2 transition-colors 
                             text-[#141414] cursor-pointer 
-                            ${activeTab === 'images' ? 'border-[#327EF9] relative z-10'
+                            ${activeTab === 'images' ? 'border-[#327EF9]'
                                 : 'border-transparent hover:text-gray-700'
                             }`}
                     >
                         Images
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('changePassword')}
+                        className={`px-8 py-2 font-medium font-poppins border-b-2 transition-colors 
+                            text-[#141414] cursor-pointer 
+                            ${activeTab === 'changePassword' ? 'border-[#327EF9]'
+                                : 'border-transparent hover:text-gray-700'
+                            }`}
+                    >
+                        Change Password
                     </button>
                 </div>
 
@@ -452,6 +464,59 @@ export default function EditBusiness() {
                             {errors.gallery && (
                                 <p className="font-poppins text-red-500 text-sm mt-2">{errors.gallery}</p>
                             )}
+                        </div>
+                    </div>
+                }
+
+                {activeTab === 'changePassword' &&
+                    <div>
+                        <div className="w-1/2 grid gap-3 items-center mt-5">
+                            <label htmlFor="newPassword" className="text-[#252525] font-poppins">New Password*</label>
+                            <div className="relative w-full">
+                                <Input
+                                    type={showPassword1 ? "text" : "password"}
+                                    id="password"
+                                    placeholder="Enter New password"
+                                    className="pr-10 pl-9 font-poppins bg-[#F2F2F2] text-black" // leave space for the eye button
+                                // {...register("password")}
+                                />
+                                <LockKeyhole className="absolute top-2.5 left-2.5 w-5 h-5" />
+                                <button type="button" className="absolute right-3 top-3.5 cursor-pointer"
+                                    onClick={() => setShowPassword1(!showPassword1)}>
+                                    {showPassword1 ? (
+                                        <EyeOff className="h-4 w-4" />
+                                    ) : (
+                                        <Eye className="h-4 w-4" />
+                                    )}
+                                </button>
+                            </div>
+                            {/* {errors.password && (
+                                <p className="text-red-500 text-sm font-poppins">{errors.password.message}</p>
+                            )} */}
+                        </div>
+                        <div className="w-1/2 grid gap-3 items-center mt-5">
+                            <label htmlFor="newPassword" className="text-[#252525] font-poppins">Confirm Password*</label>
+                            <div className="relative w-full">
+                                <Input
+                                    type={showPassword2 ? "text" : "password"}
+                                    id="password"
+                                    placeholder="Confirm New password"
+                                    className="pr-10 pl-9 font-poppins bg-[#F2F2F2] text-black" // leave space for the eye button
+                                // {...register("password")}
+                                />
+                                <LockKeyhole className="absolute top-2.5 left-2.5 w-5 h-5" />
+                                <button type="button" className="absolute right-3 top-3.5 cursor-pointer"
+                                    onClick={() => setShowPassword2(!showPassword2)}>
+                                    {showPassword2 ? (
+                                        <EyeOff className="h-4 w-4" />
+                                    ) : (
+                                        <Eye className="h-4 w-4" />
+                                    )}
+                                </button>
+                            </div>
+                            {/* {errors.password && (
+                                <p className="text-red-500 text-sm font-poppins">{errors.password.message}</p>
+                            )} */}
                         </div>
                     </div>
                 }
