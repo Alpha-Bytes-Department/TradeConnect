@@ -71,16 +71,15 @@ export interface ContactInfo {
 export interface CompanyProfile {
     name: string;
     address: string;
-    industry: string;
+    country: string;
     about: string;
     contact: ContactInfo;
     services: Service[];
     awards: Award[];
-    activities: Activity;
     location: LocationData[];
     logo: File | string | undefined,
     banner: File |string | undefined,
-    gallery: File[] | string[] | undefined[],
+    gallery: (File | string | undefined)[],
 }
 
 
@@ -89,10 +88,16 @@ export default function AccountPage() {
     const [activeService, setActiveService] = useState<string | null>(null);
     const [modal, setModal] = useState<number | undefined>(undefined);
 
+    const activities:Activity= {
+        active: true,
+        activeFor: 23,
+        lastUpdated: new Date().toISOString(),
+    }
+
     const companyData: CompanyProfile = {
         name: "Construction Partners",
         address: "989 Builder Road, Dubai, UAE",
-        industry: "Construxion",
+        country: 'UAE',
         logo: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=400&fit=crop",
         banner:"https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=400&fit=crop",
         about:
@@ -170,11 +175,7 @@ export default function AccountPage() {
             { id: "xx1", name: "Infrastructure" },
             { id: "x51", name: "Commercial Construction" },
         ],
-        activities: {
-            active: true,
-            activeFor: 23,
-            lastUpdated: new Date().toISOString(),
-        },
+        
         gallery: [
             "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=400&h=300&fit=crop",
             "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop",
@@ -247,11 +248,6 @@ export default function AccountPage() {
                             <span className="text-sm font-medium">{companyData.address}</span>
                         </div>
 
-                        <div className="inline-block">
-                            <span className="px-6 py-2 bg-[#FBC8A2] text-[#153569] rounded-full text-sm font-semibold ">
-                                {companyData.industry}
-                            </span>
-                        </div>
 
                         {/* Action Buttons */}
                         <div className="flex justify-center md:gap-10 items-center w-full md:w-[33vw] mt-8 flex-col md:flex-row">
@@ -468,7 +464,7 @@ export default function AccountPage() {
                                             <div className="flex flex-col items-left justify-center ml-2">
                                                 <p className="text-sm text-gray-500">Active for</p>
                                                 <p className="text-sm text-[#327EF9]">
-                                                    {companyData.activities.activeFor} Months
+                                                    {activities.activeFor} Months
                                                 </p>
                                             </div>
                                         </div>
@@ -480,10 +476,10 @@ export default function AccountPage() {
                                                 <p className="text-sm text-gray-500">Last Updated</p>
                                                 <div className="flex flex-row items-left justify-center gap-6">
                                                     <p className="text-sm text-[#327EF9]">
-                                                        {companyData.activities.lastUpdated.slice(0, 10)}
+                                                        {activities.lastUpdated.slice(0, 10)}
                                                     </p>
                                                     <p className="text-sm text-[#327EF9]">
-                                                        {companyData.activities.lastUpdated.slice(11, 16)}
+                                                        {activities.lastUpdated.slice(11, 16)}
                                                     </p>
                                                 </div>
                                             </div>

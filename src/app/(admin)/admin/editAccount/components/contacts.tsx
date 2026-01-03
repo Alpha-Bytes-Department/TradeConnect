@@ -6,7 +6,7 @@ import { ContactInfo,Contact } from '../../accounts/page';
 import EditContactModal from './contactsUpdateModal';
 
 interface ContactsProps {
-    data: Data;
+    data: Contact;
     setData: React.Dispatch<React.SetStateAction<Data>>;
 }
 
@@ -127,7 +127,7 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
                     <input
                         id="email"
                         type="email"
-                        value={data.contact.email}
+                        value={data.email}
                         onChange={(e) => handleInputChange('email', e.target.value)}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                         placeholder="business@company.com"
@@ -144,7 +144,7 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
                             id="phone"
                             type='tel'
                             maxLength={14}
-                            value={data.contact.phone}
+                            value={data.phone}
                             onChange={(e) => handleInputChange('phone', e.target.value)}
                             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                             placeholder="+1 555 0123 5248"
@@ -161,7 +161,7 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
                 <input
                     id="website"
                     type="url"
-                    value={data.contact.website}
+                    value={data.email}
                     onChange={(e) => handleInputChange('website', e.target.value)}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                     placeholder="https://techsolutions.com"

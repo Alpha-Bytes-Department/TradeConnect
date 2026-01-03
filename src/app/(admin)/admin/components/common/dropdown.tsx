@@ -24,6 +24,12 @@ export default function AccountDropdown() {
         setIsOpen(false);
     };
 
+    const handleLogOut = () => {
+        
+        setIsOpen(false);
+        router.push('/admin/dashboard');
+    };
+
     return (
         <div className="relative" ref={dropdownRef}>
             <button
@@ -42,12 +48,19 @@ export default function AccountDropdown() {
             </button>
 
             {isOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 px-2 z-50">
                     <button
                         onClick={handleEditAccount}
-                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                        className="fc w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors border-b border-gray-300"
                     >
                         Edit Account
+                    </button>
+
+                    <button
+                        onClick={handleLogOut}
+                        className="fc w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-gray-100 transition-colors"
+                    >
+                        Log Out
                     </button>
                 </div>
             )}

@@ -2,8 +2,9 @@
 'use client'
 import React from 'react';
 import { Data } from '../page';
+import { Service } from '../../accounts/page';
 interface ContactsProps {
-    data: Data;
+    data: Service[];
     setData: React.Dispatch<React.SetStateAction<Data>>;
 }
 
@@ -38,7 +39,7 @@ const Services: React.FC<ContactsProps> = ({ data, setData }) => {
                 <input
                     id="services"
                     type="text"
-                    value={data.services.services}
+                    value={data.services}
                     onChange={handleServicesChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Software Development, Cloud Solutions, IT Consulting"
@@ -53,14 +54,14 @@ const Services: React.FC<ContactsProps> = ({ data, setData }) => {
                 </label>
                 <textarea
                     id="about"
-                    value={data.services.about}
+                    value={data.about}
                     onChange={handleAboutChange}
                     rows={6}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 resize-none"
                     placeholder="Leading technology solutions provider with 15+ years of experience in enterprise software development."
                 />
                 <p className="mt-1 text-xs text-gray-500">
-                    {data.services.about.length} characters
+                    {data.about.length} characters
                 </p>
             </div>
         </div>

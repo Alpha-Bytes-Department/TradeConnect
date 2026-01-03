@@ -27,7 +27,7 @@ const items: SidebarItem[] = [
     },
     {
         title: "Dashboard",
-        url: "/admin/accounts",
+        url: "/admin/dashboard",
         icon: <LuLayoutDashboard />,
     },
 ];

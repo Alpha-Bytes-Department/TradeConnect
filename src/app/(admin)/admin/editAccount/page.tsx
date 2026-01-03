@@ -5,7 +5,7 @@ import Basic from './components/basic';
 import Contacts from './components/contacts';
 import Services from './components/services';
 import Images from './components/image';
-import { ContactInfo,Contact,Activity,Award,LocationData,CompanyProfile} from '../accounts/page';
+import { ContactInfo,Contact,Activity,Award,LocationData,CompanyProfile, Service} from '../accounts/page';
 
 export interface Data{
     basic:{
@@ -46,13 +46,17 @@ const ProfileLayout: React.FC = () => {
         { id: 'images', label: 'Images' },
     ];
 
+    
+
+
+
+
     const [activeTab,setActiveTab]=useState<string>('basic')
     const [data, setData] = useState<CompanyProfile>({
         name: "Construction Partners",
         address: "989 Builder Road, Dubai, UAE",
-        industry: "Construxion",
-        logo: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=400&fit=crop",
-        banner: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=400&fit=crop",
+        country: 'UAE',
+        banner: new File([""], "test-image.png", { type: "image/png" }),
         about:
             "We are a trusted construction company dedicated to delivering high-quality projects on time and within budget. From residential buildings to commercial developments, we focus on safety, durability, and customer satisfaction at every step.",
         contact: {
@@ -128,18 +132,17 @@ const ProfileLayout: React.FC = () => {
             { id: "xx1", name: "Infrastructure" },
             { id: "x51", name: "Commercial Construction" },
         ],
-        activities: {
-            active: true,
-            activeFor: 23,
-            lastUpdated: new Date().toISOString(),
-        },
         gallery: [
-            "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=400&h=300&fit=crop",
-            "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop",
-            "https://images.unsplash.com/photo-1535732759880-bbd5c7265e3f?w=400&h=300&fit=crop",
-            "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=400&h=300&fit=crop",
-            "https://images.unsplash.com/photo-1541976590-713941681591?w=400&h=300&fit=crop",
-            "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=400&h=300&fit=crop",
+            new File([""], "test-image.png", { type: "image/png" }),
+            new File([""], "test-image.png", { type: "image/png" }),
+            new File([""], "test-image.png", { type: "image/png" }),
+            new File([""], "test-image.png", { type: "image/png" }),
+            new File([""], "test-image.png", { type: "image/png" }),
+            new File([""], "test-image.png", { type: "image/png" }),
+            new File([""], "test-image.png", { type: "image/png" }),
+            new File([""], "test-image.png", { type: "image/png" }),
+
+            
         ],
         location: [
             {
@@ -163,32 +166,125 @@ const ProfileLayout: React.FC = () => {
 
 
     
-
+    const [basic, setBasic] = useState<{ name: string, address: string, country: string }>({name:data.name,address:data.address,country:data.country})
+    const [contact, setContact] = useState<ContactInfo>({
+        office: {
+            phone: data.contact.office.phone,
+            email: data.contact.office.email,
+            website: data.contact.office.website,
+        },
+        contacts: data.contact.contacts,
+    })
+    const [branch, setBranch] = useState<LocationData[]>(data.location)
+    const [certification, setCertification] = useState<Award[]>(data.awards)
+    const [services, setServices] = useState<Service[]>(data.services)
+    const [images, setImages] = useState<{ banner: File | null, gallery: (File | null)[] }>({ banner: data.banner, gallery: data.gallery })
 
 
     const handleSave=()=>{
     
 
         setData({
-            basic: {
-                name: '',
-                country: '',
-                address: ''
-            },
+            
+            name: "USA Office",
+            address: "123 Tech Street, San Francisco, CA 94105",
+            country: "United States",
             contact: {
-                email: '',
-                phone: '',
-                website: '',
+                office: {
+                    phone: "5656565494555",
+                    email: "mmislam272@gmail.com",
+                    website: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=400&fit=crop",
+                },
+                contacts: [
+                    {
+                        id: "1",
+                        name: "Sample Name",
+                        position: "CEO",
+                        phone: "5656565494555",
+                        email: "mmislam272@gmail.com",
+                        isPrimary: true,
+                    },
+                    {
+                        id: "2",
+                        name: "Sample Name",
+                        position: "CEO",
+                        phone: "5656565494555",
+                        email: "mmislam272@gmail.com",
+                        isPrimary: false,
+                    },
+                    {
+                        id: "3",
+                        name: "Sample Name",
+                        position: "CEO",
+                        phone: "5656565494555",
+                        email: "mmislam272@gmail.com",
+                        isPrimary: false,
+                    },
+                ],
             },
-            services: {
-                services: '',
-                about: '',
-            },
-            images: {
-                logo: undefined,
-                banner: undefined,
-                gallery: [],
-            },
+            location: [
+                {
+                    name: "Paris Office",
+                    address: "123 Tech Street, San Francisco, CA 94105",
+                    city: "San Francisco",
+                    country: "United States",
+                    email: "paris@gmail.com",
+                    phone: "+1 555-0123"
+                },
+                {
+                    name: "USA Office",
+                    address: "123 Tech Street, San Francisco, CA 94105",
+                    city: "San Francisco",
+                    country: "United States",
+                    email: "paris@gmail.com",
+                    phone: "+1 555-0123"
+                }
+            ],
+            awards: [
+                { id: "1", name: "Commercial Construction" },
+                { id: "2", name: "Project Management" },
+                { id: "3", name: "Renovation" },
+                { id: "4", name: "Infrastructure" },
+                { id: "11", name: "Commercial Construction" },
+                { id: "21", name: "Project Management" },
+                { id: "31", name: "Renovation" },
+                { id: "41", name: "Infrastructure" },
+                { id: "51", name: "Commercial Construction" },
+                { id: "x1", name: "Commercial Construction" },
+                { id: "x2", name: "Project Management" },
+                { id: "x3", name: "Renovation" },
+                { id: "x4", name: "Infrastructure" },
+                { id: "x11", name: "Commercial Construction" },
+                { id: "x21", name: "Project Management" },
+                { id: "x31", name: "Renovation" },
+                { id: "xx1", name: "Infrastructure" },
+                { id: "x51", name: "Commercial Construction" },
+            ],
+            services: [
+                { id: "1", name: "Commercial Construction" },
+                { id: "2", name: "Project Management" },
+                { id: "3", name: "Renovation" },
+                { id: "4", name: "Infrastructure" },
+                { id: "11", name: "Commercial Construction" },
+                { id: "21", name: "Project Management" },
+                { id: "31", name: "Renovation" },
+                { id: "41", name: "Infrastructure" },
+                { id: "51", name: "Commercial Construction" },
+                { id: "x1", name: "Commercial Construction" },
+                { id: "x2", name: "Project Management" },
+                { id: "x3", name: "Renovation" },
+                { id: "x4", name: "Infrastructure" },
+                { id: "x11", name: "Commercial Construction" },
+                { id: "x21", name: "Project Management" },
+                { id: "x31", name: "Renovation" },
+                { id: "xx1", name: "Infrastructure" },
+                { id: "x51", name: "Commercial Construction" },
+            ],
+            about: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident, aliquam accusamus. Dignissimos saepe laborum culpa, tempore sunt animi similique repellendus perferendis ex! Similique accusantium laboriosam magnam laborum porro nisi fugit!",
+            banner: new File([""], "test-image.png", { type: "image/png" }),
+            gallery: [],
+            
+            
         })
 
         
@@ -196,42 +292,22 @@ const ProfileLayout: React.FC = () => {
 
 
     const handleCancel=()=>{
-       setData({
-            basic: {
-                name: '',
-                    country: '',
-                        address: ''
-            },
-            contact: {
-                email: '',
-                    phone: '',
-                        website: '',
-        },
-            services: {
-                services: '',
-                    about: '',
-        },
-            images: {
-                logo: undefined,
-                banner: undefined,
-                gallery: [],
-        },
-        })
+       setData({})
     }
 
     const renderTab = () => {
         switch (activeTab) {
             case 'basic':
-                return <Basic data={data} setData={setData} />;
+                return <Basic data={basic} setData={setBasic} />;
 
             case 'contact':
-                return <Contacts data={data} setData={setData} />;
+                return <Contacts data={contact} setData={setContact} />;
 
             case 'services':
-                return <Services data={data} setData={setData} />;
+                return <Services data={services} setData={setServices} />;
 
             case 'images':
-                return <Images data={data} setData={setData} />;
+                return <Images data={images} setData={setImages} />;
 
             default:
                 return null;

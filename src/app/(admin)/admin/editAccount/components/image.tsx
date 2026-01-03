@@ -5,12 +5,11 @@ import { Data } from '../page';
 import { PlusCircleIcon } from 'lucide-react';
 
 interface ImagesProps {
-    data: Data;
+    data: {banner: File | null, gallery: (File | null)[]};
     setData: React.Dispatch<React.SetStateAction<Data>>;
 }
 
 const Images: React.FC<ImagesProps> = ({ data, setData }) => {
-    const logoInputRef = useRef<HTMLInputElement>(null);
     const bannerInputRef = useRef<HTMLInputElement>(null);
     const galleryInputRef = useRef<HTMLInputElement>(null);
 
@@ -49,7 +48,7 @@ const Images: React.FC<ImagesProps> = ({ data, setData }) => {
 
     const handleGalleryChange = (e: ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files || []);
-        const currentGalleryLength = data.images.gallery.length;
+        const currentGalleryLength = data.gallery.length;
         const remainingSlots = 10 - currentGalleryLength;
 
         if (files.length > remainingSlots) {
@@ -107,10 +106,10 @@ const Images: React.FC<ImagesProps> = ({ data, setData }) => {
                     Business logo<span className="text-red-500">*</span>
                 </label>
                 {/* Current Banner Preview */}
-                {data.images.banner && (
+                {data.banner && (
                     <div className="w-full h-56 rounded-lg overflow-hidden border-2 border-gray-200 mb-4">
                         <img
-                            src={getFilePreview(data.images.banner)}
+                            src={getFilePreview(data.banner)}
                             alt="Business banner"
                             className="w-full h-full object-cover"
                         />
@@ -160,9 +159,9 @@ const Images: React.FC<ImagesProps> = ({ data, setData }) => {
                 </label>
 
                 {/* Gallery Grid */}
-                {data.images.gallery.length > 0 && (
+                {data.gallery.length > 0 && (
                     <div className="grid grid-cols-4 gap-2 mb-4">
-                        {data.images.gallery.map((image, index) => (
+                        {data.gallery.map((image, index) => (
                             <div key={index} className="relative col-span-4 md:col-span-1 group">
                                 <div className="aspect-square rounded-lg overflow-hidden border-2 border-gray-200">
                                     <img
@@ -196,7 +195,7 @@ const Images: React.FC<ImagesProps> = ({ data, setData }) => {
                 )}
 
                 {/* Add More Images - ONLY CHANGE: onClick opens modal instead of file input */}
-                {data.images.gallery.length < 10 && (
+                {data.gallery.length < 10 && (
                     <div
                         onClick={() => setIsGalleryModalOpen(true)}
                         className="border-2 border-dashed border-gray-300 rounded-lg p-16 hover:border-gray-400 transition-colors cursor-pointer bg-gray-50 hover:bg-gray-100"
@@ -229,7 +228,7 @@ const Images: React.FC<ImagesProps> = ({ data, setData }) => {
                 isOpen={isGalleryModalOpen}
                 onClose={() => setIsGalleryModalOpen(false)}
                 onConfirm={handleGalleryUploadFromModal}
-                currentGalleryLength={data.images.gallery.length}
+                currentGalleryLength={data.gallery.length}
                 maxImages={10}
             />
         </div>
