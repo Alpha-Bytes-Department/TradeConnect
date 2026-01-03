@@ -7,7 +7,7 @@ import Services from './components/services';
 import Images from './components/image';
 import { ContactInfo,Contact,Activity,Award,LocationData,CompanyProfile, Service} from '../accounts/page';
 
-export interface Data{
+/*export interface Data{
     basic:{
         name:string,
         country: string,
@@ -27,7 +27,7 @@ export interface Data{
         banner: File | undefined,
         gallery: File[],
     }
-}
+}*/
 
 type TabType = 'basic' | 'contact' | 'branch' | 'certification' | 'services' | 'images';
 
@@ -56,7 +56,7 @@ const ProfileLayout: React.FC = () => {
         name: "Construction Partners",
         address: "989 Builder Road, Dubai, UAE",
         country: 'UAE',
-        banner: new File([""], "test-image.png", { type: "image/png" }),
+        banner: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=400&h=300&fit=crop" ,
         about:
             "We are a trusted construction company dedicated to delivering high-quality projects on time and within budget. From residential buildings to commercial developments, we focus on safety, durability, and customer satisfaction at every step.",
         contact: {
@@ -133,17 +133,13 @@ const ProfileLayout: React.FC = () => {
             { id: "x51", name: "Commercial Construction" },
         ],
         gallery: [
-            new File([""], "test-image.png", { type: "image/png" }),
-            new File([""], "test-image.png", { type: "image/png" }),
-            new File([""], "test-image.png", { type: "image/png" }),
-            new File([""], "test-image.png", { type: "image/png" }),
-            new File([""], "test-image.png", { type: "image/png" }),
-            new File([""], "test-image.png", { type: "image/png" }),
-            new File([""], "test-image.png", { type: "image/png" }),
-            new File([""], "test-image.png", { type: "image/png" }),
-
-            
-        ],
+            "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=400&h=300&fit=crop",
+            "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop",
+            "https://images.unsplash.com/photo-1535732759880-bbd5c7265e3f?w=400&h=300&fit=crop",
+            "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=400&h=300&fit=crop",
+            "https://images.unsplash.com/photo-1541976590-713941681591?w=400&h=300&fit=crop",
+            "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=400&h=300&fit=crop",
+],
         location: [
             {
                 name: "Paris Office",
@@ -178,10 +174,10 @@ const ProfileLayout: React.FC = () => {
     const [branch, setBranch] = useState<LocationData[]>(data.location)
     const [certification, setCertification] = useState<Award[]>(data.awards)
     const [services, setServices] = useState<Service[]>(data.services)
-    const [images, setImages] = useState<{ banner: File | null, gallery: (File | null)[] }>({ banner: data.banner, gallery: data.gallery })
+    const [images, setImages] = useState<{ banner: File | string | undefined, gallery: (File | string | undefined)[] }>({ banner: data.banner, gallery: data.gallery })
 
 
-    const handleSave=()=>{
+    /*const handleSave=()=>{
     
 
         setData({
@@ -288,13 +284,33 @@ const ProfileLayout: React.FC = () => {
         })
 
         
-    }   
+    }  */ 
 
 
     const handleCancel=()=>{
-       setData({})
+       
+    }
+    const handleSave = () => {
+        setData({...data,
+        name:basic.name,
+        address:basic.address,
+        country:basic.country,
+        
+        contact:contact,
+
+        location:branch,
+
+        services:services,
+
+        banner:images.banner,
+        gallery: images.gallery,
+
+
+        })
     }
 
+
+    
     const renderTab = () => {
         switch (activeTab) {
             case 'basic':

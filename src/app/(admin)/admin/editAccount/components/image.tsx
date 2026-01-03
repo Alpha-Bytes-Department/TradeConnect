@@ -1,11 +1,11 @@
 import React, { useRef, useState, ChangeEvent } from 'react';
 import GalleryUploadModal from './galleryUploadModal';
 
-import { Data } from '../page';
+
 import { PlusCircleIcon } from 'lucide-react';
 
 interface ImagesProps {
-    data: {banner: File | null, gallery: (File | null)[]};
+    data: { banner: File | string | null, gallery: (File | string | null)[] };
     setData: React.Dispatch<React.SetStateAction<Data>>;
 }
 
@@ -16,20 +16,7 @@ const Images: React.FC<ImagesProps> = ({ data, setData }) => {
     // ONLY NEW LINE - Modal state
     const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
 
-    const handleLogoChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file && file.size <= 50 * 1024 * 1024) {
-            setData((prev) => ({
-                ...prev,
-                images: {
-                    ...prev.images,
-                    logo: file,
-                },
-            }));
-        } else if (file) {
-            alert('File size must be less than 5MB');
-        }
-    };
+    
 
     const handleBannerChange = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
