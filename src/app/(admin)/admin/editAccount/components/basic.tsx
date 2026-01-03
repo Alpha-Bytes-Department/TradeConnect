@@ -1,9 +1,6 @@
 import React from 'react';
-import { Data } from '../page';
-
-
 interface BasicProps {
-    data: Data;
+    data: { name: string, address: string, country: string };
     setData: React.Dispatch<React.SetStateAction<Data>>;
 }
 
@@ -30,7 +27,7 @@ const Basic: React.FC<BasicProps> = ({ data, setData }) => {
                     <input
                         id="business-name"
                         type="text"
-                        value={data.basic.name}
+                        value={data.name}
                         onChange={(e) => handleInputChange('name', e.target.value)}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                         placeholder="Tech Solution Inc."
@@ -44,7 +41,7 @@ const Basic: React.FC<BasicProps> = ({ data, setData }) => {
                     </label>
                     <select
                         id="country"
-                        value={data.basic.country}
+                        value={data.country}
                         onChange={(e) => handleInputChange('country', e.target.value)}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 appearance-none bg-white cursor-pointer"
                         style={{
@@ -71,7 +68,7 @@ const Basic: React.FC<BasicProps> = ({ data, setData }) => {
                 <input
                     id="address"
                     type="text"
-                    value={data.basic.address}
+                    value={data.address}
                     onChange={(e) => handleInputChange('address', e.target.value)}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                     placeholder="123 Tech street, san Francisco, CA 94105"

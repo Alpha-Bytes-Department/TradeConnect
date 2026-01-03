@@ -1,12 +1,12 @@
 import React,{useState} from 'react';
-import { Data } from '../page';
+
 import AddContactModal from './contactsModal';
 import { Mail, Pencil, Phone, Plus, Star, Trash2 } from 'lucide-react';
 import { ContactInfo,Contact } from '../../accounts/page';
 import EditContactModal from './contactsUpdateModal';
 
 interface ContactsProps {
-    data: Contact;
+    data: ContactInfo;
     setData: React.Dispatch<React.SetStateAction<Data>>;
 }
 
@@ -127,7 +127,7 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
                     <input
                         id="email"
                         type="email"
-                        value={data.email}
+                        value={data.office.email}
                         onChange={(e) => handleInputChange('email', e.target.value)}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                         placeholder="business@company.com"
@@ -144,7 +144,7 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
                             id="phone"
                             type='tel'
                             maxLength={14}
-                            value={data.phone}
+                            value={data.office.phone}
                             onChange={(e) => handleInputChange('phone', e.target.value)}
                             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                             placeholder="+1 555 0123 5248"
@@ -161,7 +161,7 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
                 <input
                     id="website"
                     type="url"
-                    value={data.email}
+                    value={data.office.email}
                     onChange={(e) => handleInputChange('website', e.target.value)}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                     placeholder="https://techsolutions.com"

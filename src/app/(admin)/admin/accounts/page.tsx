@@ -77,9 +77,8 @@ export interface CompanyProfile {
     services: Service[];
     awards: Award[];
     location: LocationData[];
-    logo: File | string | undefined,
-    banner: File |string | undefined,
-    gallery: (File | string | undefined)[],
+    banner: File |string | null,
+    gallery: (File | string | null)[],
 }
 
 
@@ -98,7 +97,6 @@ export default function AccountPage() {
         name: "Construction Partners",
         address: "989 Builder Road, Dubai, UAE",
         country: 'UAE',
-        logo: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=400&fit=crop",
         banner:"https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=400&fit=crop",
         about:
             "We are a trusted construction company dedicated to delivering high-quality projects on time and within budget. From residential buildings to commercial developments, we focus on safety, durability, and customer satisfaction at every step.",
@@ -505,7 +503,7 @@ export default function AccountPage() {
                                         className="fc col-span-1 overflow-hidden bg-black aspect-[16/9] rounded-sm"
                                     >
                                         <img
-                                            src={image}
+                                            src={image?image:''}
                                             alt="image"
                                             className="w-full h-full object-cover"
                                         />
