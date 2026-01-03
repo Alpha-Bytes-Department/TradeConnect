@@ -1,16 +1,15 @@
 import React, { useRef, useState, ChangeEvent } from 'react';
 import GalleryUploadModal from './galleryUploadModal';
 
-import { EditData } from '../page';
+import { Data } from '../page';
 import { PlusCircleIcon } from 'lucide-react';
 
 interface ImagesProps {
-    editData: EditData;
-    setEditData: React.Dispatch<React.SetStateAction<EditData>>;
+    data: {banner: File | null, gallery: (File | null)[]};
+    setData: React.Dispatch<React.SetStateAction<Data>>;
 }
 
-const Images: React.FC<ImagesProps> = ({ editData, setEditData }) => {
-    const logoInputRef = useRef<HTMLInputElement>(null);
+const Images: React.FC<ImagesProps> = ({ data, setData }) => {
     const bannerInputRef = useRef<HTMLInputElement>(null);
     const galleryInputRef = useRef<HTMLInputElement>(null);
 
@@ -20,7 +19,7 @@ const Images: React.FC<ImagesProps> = ({ editData, setEditData }) => {
     const handleLogoChange = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file && file.size <= 50 * 1024 * 1024) {
-            setEditData((prev) => ({
+            setData((prev) => ({
                 ...prev,
                 images: {
                     ...prev.images,
@@ -35,7 +34,7 @@ const Images: React.FC<ImagesProps> = ({ editData, setEditData }) => {
     const handleBannerChange = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file && file.size <= 50 * 1024 * 1024) {
-            setEditData((prev) => ({
+            setData((prev) => ({
                 ...prev,
                 images: {
                     ...prev.images,
@@ -49,7 +48,7 @@ const Images: React.FC<ImagesProps> = ({ editData, setEditData }) => {
 
     const handleGalleryChange = (e: ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files || []);
-        const currentGalleryLength = editData.images.gallery.length;
+        const currentGalleryLength = data.gallery.length;
         const remainingSlots = 10 - currentGalleryLength;
 
         if (files.length > remainingSlots) {
@@ -62,7 +61,7 @@ const Images: React.FC<ImagesProps> = ({ editData, setEditData }) => {
             alert('Some files were skipped because they exceed 5MB');
         }
 
-        setEditData((prev) => ({
+        setData((prev) => ({
             ...prev,
             images: {
                 ...prev.images,
@@ -73,7 +72,7 @@ const Images: React.FC<ImagesProps> = ({ editData, setEditData }) => {
 
     // NEW FUNCTION - handles gallery upload from modal
     const handleGalleryUploadFromModal = (files: File[]) => {
-        setEditData((prev) => ({
+        setData((prev) => ({
             ...prev,
             images: {
                 ...prev.images,
@@ -83,7 +82,7 @@ const Images: React.FC<ImagesProps> = ({ editData, setEditData }) => {
     };
 
     const removeGalleryImage = (index: number) => {
-        setEditData((prev) => ({
+        setData((prev) => ({
             ...prev,
             images: {
                 ...prev.images,
@@ -107,10 +106,10 @@ const Images: React.FC<ImagesProps> = ({ editData, setEditData }) => {
                     Business logo<span className="text-red-500">*</span>
                 </label>
                 {/* Current Banner Preview */}
-                {editData.images.banner && (
+                {data.banner && (
                     <div className="w-full h-56 rounded-lg overflow-hidden border-2 border-gray-200 mb-4">
                         <img
-                            src={getFilePreview(editData.images.banner)}
+                            src={getFilePreview(data.banner)}
                             alt="Business banner"
                             className="w-full h-full object-cover"
                         />
@@ -160,9 +159,9 @@ const Images: React.FC<ImagesProps> = ({ editData, setEditData }) => {
                 </label>
 
                 {/* Gallery Grid */}
-                {editData.images.gallery.length > 0 && (
+                {data.gallery.length > 0 && (
                     <div className="grid grid-cols-4 gap-2 mb-4">
-                        {editData.images.gallery.map((image, index) => (
+                        {data.gallery.map((image, index) => (
                             <div key={index} className="relative col-span-4 md:col-span-1 group">
                                 <div className="aspect-square rounded-lg overflow-hidden border-2 border-gray-200">
                                     <img
@@ -196,7 +195,7 @@ const Images: React.FC<ImagesProps> = ({ editData, setEditData }) => {
                 )}
 
                 {/* Add More Images - ONLY CHANGE: onClick opens modal instead of file input */}
-                {editData.images.gallery.length < 10 && (
+                {data.gallery.length < 10 && (
                     <div
                         onClick={() => setIsGalleryModalOpen(true)}
                         className="border-2 border-dashed border-gray-300 rounded-lg p-16 hover:border-gray-400 transition-colors cursor-pointer bg-gray-50 hover:bg-gray-100"
@@ -229,7 +228,7 @@ const Images: React.FC<ImagesProps> = ({ editData, setEditData }) => {
                 isOpen={isGalleryModalOpen}
                 onClose={() => setIsGalleryModalOpen(false)}
                 onConfirm={handleGalleryUploadFromModal}
-                currentGalleryLength={editData.images.gallery.length}
+                currentGalleryLength={data.gallery.length}
                 maxImages={10}
             />
         </div>

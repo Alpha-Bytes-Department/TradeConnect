@@ -21,13 +21,13 @@ type SidebarItem = {
 
 const items: SidebarItem[] = [
     {
-        title: "Business Directory",
+        title: "Directory",
         url: "/admin/directory",
         icon: <BsGrid3X3Gap />,
     },
     {
         title: "Dashboard",
-        url: "/admin/accounts",
+        url: "/admin/dashboard",
         icon: <LuLayoutDashboard />,
     },
 ];

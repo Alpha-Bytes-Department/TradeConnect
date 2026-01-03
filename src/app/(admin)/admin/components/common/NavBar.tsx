@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { SidebarSeparator, SidebarTrigger, useSidebar } from '@/components/ui/sidebar';
 import Link from "next/link";
 import Image from "next/image";
+import AccountDropdown from "./dropdown";
 // import { useTheme } from "next-themes";
 
 export default function Navbar() {
@@ -18,7 +19,7 @@ export default function Navbar() {
 
     return (
         <div>
-            <nav className="flex items-center justify-between min-h-21">
+            <nav className="flex items-center justify-between min-h-21 px-8">
                 {/*Left*/}
                 <SidebarTrigger />
                 {/* <Button variant="outline" onClick={toggleSidebar}>Custom Button</Button> */}
@@ -31,6 +32,9 @@ export default function Navbar() {
                     <div>
                         <h1 className="font-poppins text-[#252525]">Admin</h1>
                         <p className="font-poppins text-[#595959]">admin@business.com</p>
+                    </div>
+                    <div className="fc">
+                        <AccountDropdown/>
                     </div>
                 </div>
 

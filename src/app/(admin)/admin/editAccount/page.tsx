@@ -5,8 +5,9 @@ import Basic from './components/basic';
 import Contacts from './components/contacts';
 import Services from './components/services';
 import Images from './components/image';
+import { ContactInfo,Contact,Activity,Award,LocationData,CompanyProfile, Service} from '../accounts/page';
 
-export interface EditData{
+export interface Data{
     basic:{
         name:string,
         country: string,
@@ -28,7 +29,7 @@ export interface EditData{
     }
 }
 
-type TabType = 'basic' | 'contact' | 'services' | 'images';
+type TabType = 'basic' | 'contact' | 'branch' | 'certification' | 'services' | 'images';
 
 
 const ProfileLayout: React.FC = () => {
@@ -39,66 +40,251 @@ const ProfileLayout: React.FC = () => {
     const tabs: { id: TabType; label: string }[] = [
         { id: 'basic', label: 'Basic Information' },
         { id: 'contact', label: 'Contact Information' },
+        { id: 'branch', label: 'Branches' },
+        { id: 'certification', label: 'Certifications' },
         { id: 'services', label: 'Services & About' },
         { id: 'images', label: 'Images' },
     ];
 
+    
+
+
+
+
     const [activeTab,setActiveTab]=useState<string>('basic')
-    const [editData, setEditData] = useState<EditData>({
-        basic: {
-            name: 'stringyyyyy',
-            country: 'string',
-            address: 'string'
+    const [data, setData] = useState<CompanyProfile>({
+        name: "Construction Partners",
+        address: "989 Builder Road, Dubai, UAE",
+        country: 'UAE',
+        banner: new File([""], "test-image.png", { type: "image/png" }),
+        about:
+            "We are a trusted construction company dedicated to delivering high-quality projects on time and within budget. From residential buildings to commercial developments, we focus on safety, durability, and customer satisfaction at every step.",
+        contact: {
+            office: {
+                phone: "5656565494555",
+                email: "mmislam272@gmail.com",
+                website: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=400&fit=crop",
+            },
+            contacts: [
+                {
+                    id: "1",
+                    name: "Sample Name",
+                    position: "CEO",
+                    phone: "5656565494555",
+                    email: "mmislam272@gmail.com",
+                    isPrimary: true,
+                },
+                {
+                    id: "2",
+                    name: "Sample Name",
+                    position: "CEO",
+                    phone: "5656565494555",
+                    email: "mmislam272@gmail.com",
+                    isPrimary: false,
+                },
+                {
+                    id: "3",
+                    name: "Sample Name",
+                    position: "CEO",
+                    phone: "5656565494555",
+                    email: "mmislam272@gmail.com",
+                    isPrimary: false,
+                },
+            ],
         },
-    contact: {
-            email: 'string',
-            phone: 'string',
-            website: 'string',
-        },
-    services: {
-            services: 'string',
-            about: 'string',
-        },
-    images: {
-        logo: new File(
-            ['fake image content'],
-            'logo.png',
-            { type: 'image/png' }
-        ),
-        banner: new File(
-            ['fake image content'],
-            'logo.png',
-            { type: 'image/png' }
-        ),
-            gallery: [],
-        },
+        services: [
+            { id: "1", name: "Commercial Construction" },
+            { id: "2", name: "Project Management" },
+            { id: "3", name: "Renovation" },
+            { id: "4", name: "Infrastructure" },
+            { id: "11", name: "Commercial Construction" },
+            { id: "21", name: "Project Management" },
+            { id: "31", name: "Renovation" },
+            { id: "41", name: "Infrastructure" },
+            { id: "51", name: "Commercial Construction" },
+            { id: "x1", name: "Commercial Construction" },
+            { id: "x2", name: "Project Management" },
+            { id: "x3", name: "Renovation" },
+            { id: "x4", name: "Infrastructure" },
+            { id: "x11", name: "Commercial Construction" },
+            { id: "x21", name: "Project Management" },
+            { id: "x31", name: "Renovation" },
+            { id: "xx1", name: "Infrastructure" },
+            { id: "x51", name: "Commercial Construction" },
+        ],
+        awards: [
+            { id: "1", name: "Commercial Construction" },
+            { id: "2", name: "Project Management" },
+            { id: "3", name: "Renovation" },
+            { id: "4", name: "Infrastructure" },
+            { id: "11", name: "Commercial Construction" },
+            { id: "21", name: "Project Management" },
+            { id: "31", name: "Renovation" },
+            { id: "41", name: "Infrastructure" },
+            { id: "51", name: "Commercial Construction" },
+            { id: "x1", name: "Commercial Construction" },
+            { id: "x2", name: "Project Management" },
+            { id: "x3", name: "Renovation" },
+            { id: "x4", name: "Infrastructure" },
+            { id: "x11", name: "Commercial Construction" },
+            { id: "x21", name: "Project Management" },
+            { id: "x31", name: "Renovation" },
+            { id: "xx1", name: "Infrastructure" },
+            { id: "x51", name: "Commercial Construction" },
+        ],
+        gallery: [
+            new File([""], "test-image.png", { type: "image/png" }),
+            new File([""], "test-image.png", { type: "image/png" }),
+            new File([""], "test-image.png", { type: "image/png" }),
+            new File([""], "test-image.png", { type: "image/png" }),
+            new File([""], "test-image.png", { type: "image/png" }),
+            new File([""], "test-image.png", { type: "image/png" }),
+            new File([""], "test-image.png", { type: "image/png" }),
+            new File([""], "test-image.png", { type: "image/png" }),
+
+            
+        ],
+        location: [
+            {
+                name: "Paris Office",
+                address: "123 Tech Street, San Francisco, CA 94105",
+                city: "San Francisco",
+                country: "United States",
+                email: "paris@gmail.com",
+                phone: "+1 555-0123"
+            },
+            {
+                name: "USA Office",
+                address: "123 Tech Street, San Francisco, CA 94105",
+                city: "San Francisco",
+                country: "United States",
+                email: "paris@gmail.com",
+                phone: "+1 555-0123"
+            }
+        ],
     })
 
+
+    
+    const [basic, setBasic] = useState<{ name: string, address: string, country: string }>({name:data.name,address:data.address,country:data.country})
+    const [contact, setContact] = useState<ContactInfo>({
+        office: {
+            phone: data.contact.office.phone,
+            email: data.contact.office.email,
+            website: data.contact.office.website,
+        },
+        contacts: data.contact.contacts,
+    })
+    const [branch, setBranch] = useState<LocationData[]>(data.location)
+    const [certification, setCertification] = useState<Award[]>(data.awards)
+    const [services, setServices] = useState<Service[]>(data.services)
+    const [images, setImages] = useState<{ banner: File | null, gallery: (File | null)[] }>({ banner: data.banner, gallery: data.gallery })
 
 
     const handleSave=()=>{
     
 
-        setEditData({
-            basic: {
-                name: '',
-                country: '',
-                address: ''
-            },
+        setData({
+            
+            name: "USA Office",
+            address: "123 Tech Street, San Francisco, CA 94105",
+            country: "United States",
             contact: {
-                email: '',
-                phone: '',
-                website: '',
+                office: {
+                    phone: "5656565494555",
+                    email: "mmislam272@gmail.com",
+                    website: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=400&fit=crop",
+                },
+                contacts: [
+                    {
+                        id: "1",
+                        name: "Sample Name",
+                        position: "CEO",
+                        phone: "5656565494555",
+                        email: "mmislam272@gmail.com",
+                        isPrimary: true,
+                    },
+                    {
+                        id: "2",
+                        name: "Sample Name",
+                        position: "CEO",
+                        phone: "5656565494555",
+                        email: "mmislam272@gmail.com",
+                        isPrimary: false,
+                    },
+                    {
+                        id: "3",
+                        name: "Sample Name",
+                        position: "CEO",
+                        phone: "5656565494555",
+                        email: "mmislam272@gmail.com",
+                        isPrimary: false,
+                    },
+                ],
             },
-            services: {
-                services: '',
-                about: '',
-            },
-            images: {
-                logo: undefined,
-                banner: undefined,
-                gallery: [],
-            },
+            location: [
+                {
+                    name: "Paris Office",
+                    address: "123 Tech Street, San Francisco, CA 94105",
+                    city: "San Francisco",
+                    country: "United States",
+                    email: "paris@gmail.com",
+                    phone: "+1 555-0123"
+                },
+                {
+                    name: "USA Office",
+                    address: "123 Tech Street, San Francisco, CA 94105",
+                    city: "San Francisco",
+                    country: "United States",
+                    email: "paris@gmail.com",
+                    phone: "+1 555-0123"
+                }
+            ],
+            awards: [
+                { id: "1", name: "Commercial Construction" },
+                { id: "2", name: "Project Management" },
+                { id: "3", name: "Renovation" },
+                { id: "4", name: "Infrastructure" },
+                { id: "11", name: "Commercial Construction" },
+                { id: "21", name: "Project Management" },
+                { id: "31", name: "Renovation" },
+                { id: "41", name: "Infrastructure" },
+                { id: "51", name: "Commercial Construction" },
+                { id: "x1", name: "Commercial Construction" },
+                { id: "x2", name: "Project Management" },
+                { id: "x3", name: "Renovation" },
+                { id: "x4", name: "Infrastructure" },
+                { id: "x11", name: "Commercial Construction" },
+                { id: "x21", name: "Project Management" },
+                { id: "x31", name: "Renovation" },
+                { id: "xx1", name: "Infrastructure" },
+                { id: "x51", name: "Commercial Construction" },
+            ],
+            services: [
+                { id: "1", name: "Commercial Construction" },
+                { id: "2", name: "Project Management" },
+                { id: "3", name: "Renovation" },
+                { id: "4", name: "Infrastructure" },
+                { id: "11", name: "Commercial Construction" },
+                { id: "21", name: "Project Management" },
+                { id: "31", name: "Renovation" },
+                { id: "41", name: "Infrastructure" },
+                { id: "51", name: "Commercial Construction" },
+                { id: "x1", name: "Commercial Construction" },
+                { id: "x2", name: "Project Management" },
+                { id: "x3", name: "Renovation" },
+                { id: "x4", name: "Infrastructure" },
+                { id: "x11", name: "Commercial Construction" },
+                { id: "x21", name: "Project Management" },
+                { id: "x31", name: "Renovation" },
+                { id: "xx1", name: "Infrastructure" },
+                { id: "x51", name: "Commercial Construction" },
+            ],
+            about: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident, aliquam accusamus. Dignissimos saepe laborum culpa, tempore sunt animi similique repellendus perferendis ex! Similique accusantium laboriosam magnam laborum porro nisi fugit!",
+            banner: new File([""], "test-image.png", { type: "image/png" }),
+            gallery: [],
+            
+            
         })
 
         
@@ -106,42 +292,22 @@ const ProfileLayout: React.FC = () => {
 
 
     const handleCancel=()=>{
-       setEditData({
-            basic: {
-                name: '',
-                    country: '',
-                        address: ''
-            },
-            contact: {
-                email: '',
-                    phone: '',
-                        website: '',
-        },
-            services: {
-                services: '',
-                    about: '',
-        },
-            images: {
-                logo: undefined,
-                banner: undefined,
-                gallery: [],
-        },
-        })
+       setData({})
     }
 
     const renderTab = () => {
         switch (activeTab) {
             case 'basic':
-                return <Basic editData={editData} setEditData={setEditData} />;
+                return <Basic data={basic} setData={setBasic} />;
 
             case 'contact':
-                return <Contacts editData={editData} setEditData={setEditData} />;
+                return <Contacts data={contact} setData={setContact} />;
 
             case 'services':
-                return <Services editData={editData} setEditData={setEditData} />;
+                return <Services data={services} setData={setServices} />;
 
             case 'images':
-                return <Images editData={editData} setEditData={setEditData} />;
+                return <Images data={images} setData={setImages} />;
 
             default:
                 return null;
