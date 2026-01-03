@@ -6,6 +6,7 @@ import { allBusinessData } from "../../data";
 import { MapPin } from "lucide-react";
 import { Pagination } from "antd";
 import { useState } from "react";
+import { redirect } from "next/navigation";
 
 const getFlagEmoji = (countryCode: string) => {
     console.log("Country code:", countryCode); // Debug
@@ -83,13 +84,15 @@ export default function GridView() {
                                     <div className="grid grid-cols-4 gap-2 mt-3">
                                         <div className="col-span-3">
                                             <button className="w-full py-2 bg-[#BFD7FD] font-poppins 
-                                        font-medium text-[#2459B1] text-center rounded-lg cursor-pointer">
+                                        font-medium text-[#2459B1] text-center rounded-lg cursor-pointer"
+                                                onClick={() => { redirect("/super-admin/business-details") }}>
                                                 View Profile</button>
                                         </div>
                                         <div className="">
                                             <button className="w-full py-2 bg-[#FFFFFF] font-poppins 
                                         font-medium text-[#2459B1] text-center rounded-lg cursor-pointer 
-                                        border border-[#1C4589]">
+                                        border border-[#1C4589]"
+                                                onClick={() => { redirect("/super-admin/edit-business") }}>
                                                 Edit</button>
                                         </div>
                                     </div>

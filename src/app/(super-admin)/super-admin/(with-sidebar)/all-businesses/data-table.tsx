@@ -4,7 +4,7 @@ import { type ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, use
     from "@tanstack/react-table"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Pagination } from 'antd';
-import { useView } from "../../ListGridContext";
+import { useView } from "@/app/(super-admin)/ListGridContext";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]

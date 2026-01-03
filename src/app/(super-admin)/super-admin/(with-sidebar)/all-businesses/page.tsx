@@ -1,9 +1,9 @@
 // Fahim
-import FilterBox from "../../components/allBusiness/FilterBox";
+import FilterBox from "@/app/(super-admin)/components/allBusiness/FilterBox";
 import { allBusinessesTable, columns } from "./columns";
 import { DataTable } from "./data-table";
-import { allBusinessData } from "../../data";
-import GridView from "../../components/allBusiness/GridView";
+import { allBusinessData } from "@/app/(super-admin)/data";
+import GridView from "@/app/(super-admin)/components/allBusiness/GridView";
 
 export default async function AllBusiness() {
     const data = await getData();

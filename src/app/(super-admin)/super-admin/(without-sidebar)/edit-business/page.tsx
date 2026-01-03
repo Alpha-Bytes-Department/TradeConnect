@@ -113,9 +113,8 @@ export default function EditBusiness() {
         setGalleryImages((prev) => prev.filter((_, i) => i !== index));
     };
 
-
     return (
-        <div className="">
+        <div className="max-w-[1300px] mx-auto">
             <h1 className="font-medium font-poppins text-[#0B0B0B] text-2xl mt-6">Edit Profile</h1>
             <p className="font-poppins text-[#626262]">Update your business information and images</p>
             <div className="bg-white rounded-lg shadow-sm border mt-6">
@@ -125,7 +124,7 @@ export default function EditBusiness() {
                         className={`px-8 py-2 font-medium font-poppins border-b-2 transition-colors 
                             text-[#141414] cursor-pointer 
                             ${activeTab === 'basic' ? 'border-[#327EF9]'
-                                : ''
+                                : 'border-transparent hover:text-gray-700'
                             }`}
                     >
                         Basic Information
@@ -469,7 +468,7 @@ export default function EditBusiness() {
                 }
 
                 {activeTab === 'changePassword' &&
-                    <div>
+                    <div className="p-3">
                         <div className="w-1/2 grid gap-3 items-center mt-5">
                             <label htmlFor="newPassword" className="text-[#252525] font-poppins">New Password*</label>
                             <div className="relative w-full">
@@ -477,7 +476,7 @@ export default function EditBusiness() {
                                     type={showPassword1 ? "text" : "password"}
                                     id="password"
                                     placeholder="Enter New password"
-                                    className="pr-10 pl-9 font-poppins bg-[#F2F2F2] text-black" // leave space for the eye button
+                                    className="pr-10 pl-9 font-poppins bg-[#FFFFFF] text-black" // leave space for the eye button
                                 // {...register("password")}
                                 />
                                 <LockKeyhole className="absolute top-2.5 left-2.5 w-5 h-5" />
@@ -501,7 +500,7 @@ export default function EditBusiness() {
                                     type={showPassword2 ? "text" : "password"}
                                     id="password"
                                     placeholder="Confirm New password"
-                                    className="pr-10 pl-9 font-poppins bg-[#F2F2F2] text-black" // leave space for the eye button
+                                    className="pr-10 pl-9 font-poppins bg-[#FFFFFF] text-black" // leave space for the eye button
                                 // {...register("password")}
                                 />
                                 <LockKeyhole className="absolute top-2.5 left-2.5 w-5 h-5" />

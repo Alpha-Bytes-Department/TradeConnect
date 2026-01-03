@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import "@/app/globals.css";
 import { SidebarProvider } from "@/components/ui/sidebar";
 // import { cookies } from "next/headers";
-import AppSidebar from "../components/common/AppSidebar";
-import Navbar from "../components/common/NavBar";
-import { ViewProvider } from "../ListGridContext";
+import AppSidebar from "../../components/common/AppSidebar";
+import Navbar from "../../components/common/NavBar";
+import { ViewProvider } from "../../ListGridContext";
 
 export const metadata: Metadata = {
     title: "Super Admin",
