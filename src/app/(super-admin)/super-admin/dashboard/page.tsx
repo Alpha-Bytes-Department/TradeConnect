@@ -6,6 +6,7 @@ import { DataTable } from "./data-table";
 import { business_Data } from "../../data";
 import Chart from "../../components/dashboard/Chart";
 
+
 export default async function Dashboard() {
     const data = await getData();
     return (
