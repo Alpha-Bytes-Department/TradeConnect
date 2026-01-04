@@ -77,8 +77,8 @@ export interface CompanyProfile {
     services: Service[];
     awards: Award[];
     location: LocationData[];
-    banner: File |string | null,
-    gallery: (File | string | null)[],
+    banner: string,
+    gallery: string [],
 }
 
 

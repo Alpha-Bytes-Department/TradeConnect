@@ -6,6 +6,8 @@ import Contacts from './components/contacts';
 import Services from './components/services';
 import Images from './components/image';
 import { ContactInfo,Contact,Activity,Award,LocationData,CompanyProfile, Service} from '../accounts/page';
+import Branches from './components/branches';
+import Certifications from './components/certifications';
 
 /*export interface Data{
     basic:{
@@ -29,7 +31,7 @@ import { ContactInfo,Contact,Activity,Award,LocationData,CompanyProfile, Service
     }
 }*/
 
-type TabType = 'basic' | 'contact' | 'branch' | 'certification' | 'services' | 'images';
+type TabType = 'basic' | 'contact' | 'branches' | 'certification' | 'services' | 'images';
 
 
 const ProfileLayout: React.FC = () => {
@@ -40,7 +42,7 @@ const ProfileLayout: React.FC = () => {
     const tabs: { id: TabType; label: string }[] = [
         { id: 'basic', label: 'Basic Information' },
         { id: 'contact', label: 'Contact Information' },
-        { id: 'branch', label: 'Branches' },
+        { id: 'branches', label: 'Branches' },
         { id: 'certification', label: 'Certifications' },
         { id: 'services', label: 'Services & About' },
         { id: 'images', label: 'Images' },
@@ -174,119 +176,10 @@ const ProfileLayout: React.FC = () => {
     const [branch, setBranch] = useState<LocationData[]>(data.location)
     const [certification, setCertification] = useState<Award[]>(data.awards)
     const [services, setServices] = useState<Service[]>(data.services)
-    const [images, setImages] = useState<{ banner: File | string | undefined, gallery: (File | string | undefined)[] }>({ banner: data.banner, gallery: data.gallery })
+    const [images, setImages] = useState<{ banner:string, gallery: string[] }>({ banner: data.banner, gallery: data.gallery })
 
 
-    /*const handleSave=()=>{
     
-
-        setData({
-            
-            name: "USA Office",
-            address: "123 Tech Street, San Francisco, CA 94105",
-            country: "United States",
-            contact: {
-                office: {
-                    phone: "5656565494555",
-                    email: "mmislam272@gmail.com",
-                    website: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=400&fit=crop",
-                },
-                contacts: [
-                    {
-                        id: "1",
-                        name: "Sample Name",
-                        position: "CEO",
-                        phone: "5656565494555",
-                        email: "mmislam272@gmail.com",
-                        isPrimary: true,
-                    },
-                    {
-                        id: "2",
-                        name: "Sample Name",
-                        position: "CEO",
-                        phone: "5656565494555",
-                        email: "mmislam272@gmail.com",
-                        isPrimary: false,
-                    },
-                    {
-                        id: "3",
-                        name: "Sample Name",
-                        position: "CEO",
-                        phone: "5656565494555",
-                        email: "mmislam272@gmail.com",
-                        isPrimary: false,
-                    },
-                ],
-            },
-            location: [
-                {
-                    name: "Paris Office",
-                    address: "123 Tech Street, San Francisco, CA 94105",
-                    city: "San Francisco",
-                    country: "United States",
-                    email: "paris@gmail.com",
-                    phone: "+1 555-0123"
-                },
-                {
-                    name: "USA Office",
-                    address: "123 Tech Street, San Francisco, CA 94105",
-                    city: "San Francisco",
-                    country: "United States",
-                    email: "paris@gmail.com",
-                    phone: "+1 555-0123"
-                }
-            ],
-            awards: [
-                { id: "1", name: "Commercial Construction" },
-                { id: "2", name: "Project Management" },
-                { id: "3", name: "Renovation" },
-                { id: "4", name: "Infrastructure" },
-                { id: "11", name: "Commercial Construction" },
-                { id: "21", name: "Project Management" },
-                { id: "31", name: "Renovation" },
-                { id: "41", name: "Infrastructure" },
-                { id: "51", name: "Commercial Construction" },
-                { id: "x1", name: "Commercial Construction" },
-                { id: "x2", name: "Project Management" },
-                { id: "x3", name: "Renovation" },
-                { id: "x4", name: "Infrastructure" },
-                { id: "x11", name: "Commercial Construction" },
-                { id: "x21", name: "Project Management" },
-                { id: "x31", name: "Renovation" },
-                { id: "xx1", name: "Infrastructure" },
-                { id: "x51", name: "Commercial Construction" },
-            ],
-            services: [
-                { id: "1", name: "Commercial Construction" },
-                { id: "2", name: "Project Management" },
-                { id: "3", name: "Renovation" },
-                { id: "4", name: "Infrastructure" },
-                { id: "11", name: "Commercial Construction" },
-                { id: "21", name: "Project Management" },
-                { id: "31", name: "Renovation" },
-                { id: "41", name: "Infrastructure" },
-                { id: "51", name: "Commercial Construction" },
-                { id: "x1", name: "Commercial Construction" },
-                { id: "x2", name: "Project Management" },
-                { id: "x3", name: "Renovation" },
-                { id: "x4", name: "Infrastructure" },
-                { id: "x11", name: "Commercial Construction" },
-                { id: "x21", name: "Project Management" },
-                { id: "x31", name: "Renovation" },
-                { id: "xx1", name: "Infrastructure" },
-                { id: "x51", name: "Commercial Construction" },
-            ],
-            about: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident, aliquam accusamus. Dignissimos saepe laborum culpa, tempore sunt animi similique repellendus perferendis ex! Similique accusantium laboriosam magnam laborum porro nisi fugit!",
-            banner: new File([""], "test-image.png", { type: "image/png" }),
-            gallery: [],
-            
-            
-        })
-
-        
-    }  */ 
-
-
     const handleCancel=()=>{
        
     }
@@ -324,6 +217,14 @@ const ProfileLayout: React.FC = () => {
 
             case 'images':
                 return <Images data={images} setData={setImages} />;
+
+            case 'branches':
+                return <Branches data={branch} setData={setBranch} />;
+
+            case 'certification':
+                return <Certifications data={certification} setData={setCertification} />;
+
+            
 
             default:
                 return null;

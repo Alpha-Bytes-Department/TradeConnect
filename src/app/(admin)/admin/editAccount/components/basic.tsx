@@ -1,7 +1,7 @@
 import React from 'react';
 interface BasicProps {
     data: { name: string, address: string, country: string };
-    setData: React.Dispatch<React.SetStateAction<Data>>;
+    setData: React.Dispatch<React.SetStateAction<{ name: string, address: string, country: string }>>;
 }
 
 const Basic: React.FC<BasicProps> = ({ data, setData }) => {
