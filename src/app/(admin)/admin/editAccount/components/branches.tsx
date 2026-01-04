@@ -1,45 +1,44 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { MapPin, Mail, Phone, Pencil, Trash2, Plus } from "lucide-react";
 import { LocationData } from "../../accounts/page";
-
+import AddBranchModal from "./addBranchesModal";
 
 interface BranchLocationsProps {
     data: LocationData[];
     setData: React.Dispatch<React.SetStateAction<LocationData[]>>;
 }
 
-export default function Branches({
-    data,
-    setData,
-}: BranchLocationsProps) {
-    const handleEdit = (index: number) => {
-        // Handle edit logic
-        console.log("Edit branch at index:", index);
+export default function Branches({ data, setData }: BranchLocationsProps) {
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [isData, setIsData] = useState<LocationData | undefined>(undefined);
+
+    // CHANGE 1: Search by ID instead of array index for reliability
+    const handleEdit = (id: string) => {
+        const temp = data.find((item) => item.id === id);
+        setIsData(temp);
+        setIsModalOpen(true);
     };
 
-    const handleDelete = (index: number) => {
-        const updatedLocations = data.filter((_, i) => i !== index);
+    // CHANGE 2: Filter by ID to ensure the correct item is removed
+    const handleDelete = (id: string) => {
+        const updatedLocations = data.filter((item) => item.id !== id);
         setData(updatedLocations);
     };
 
+    // CHANGE 3: Reset isData to undefined so the modal opens empty for new branches
     const handleAddBranch = () => {
-        // Handle add branch logic
-        console.log("Add new branch");
+        setIsData(undefined);
+        setIsModalOpen(true);
     };
 
     return (
         <div className="w-full mx-auto">
-            {/* Header */}
             <div className="flex items-center justify-between mb-4">
                 <div>
-                    <h1 className="text-xl font-semibold text-gray-900">
-                        Branch Locations
-                    </h1>
-                    <p className="text-sm text-gray-500 mt-0.5">
-                        Manage your business branch data
-                    </p>
+                    <h1 className="text-xl font-semibold text-gray-900">Branch Locations</h1>
+                    <p className="text-sm text-gray-500 mt-0.5">Manage your business branch data</p>
                 </div>
                 <button
                     onClick={handleAddBranch}
@@ -50,61 +49,44 @@ export default function Branches({
                 </button>
             </div>
 
-            {/* Branch Cards */}
             <div className="space-y-4">
-                {data.map((location, index) => (
+                {data.map((location) => (
                     <div
-                        key={index}
+                        key={location.id} // CHANGE 4: Use location.id as key instead of index
                         className="bg-white border border-blue-400 rounded-lg p-5 hover:bg-blue-100 transition-colors"
                     >
                         <div className="flex items-start justify-between">
                             <div className="flex-1">
-                                {/* Branch Name */}
-                                <h2 className="text-base font-semibold text-gray-900 mb-3">
-                                    {location.name}
-                                </h2>
-
-                                {/* Address */}
+                                <h2 className="text-base font-semibold text-gray-900 mb-3">{location.name}</h2>
                                 <div className="flex items-start gap-2 mb-2">
                                     <MapPin className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
                                     <div className="text-sm text-gray-600">
                                         <div>{location.address}</div>
-                                        <div>
-                                            {location.city}, {location.country}
-                                        </div>
+                                        <div>{location.city}, {location.country}</div>
                                     </div>
                                 </div>
-
-                                {/* Contact Info */}
                                 <div className="flex items-center gap-6 mt-3">
                                     <div className="flex items-center gap-2">
                                         <Mail className="w-4 h-4 text-gray-400" />
-                                        <span className="text-sm text-gray-600">
-                                            {location.email}
-                                        </span>
+                                        <span className="text-sm text-gray-600">{location.email}</span>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <Phone className="w-4 h-4 text-gray-400" />
-                                        <span className="text-sm text-gray-600">
-                                            {location.phone}
-                                        </span>
+                                        <span className="text-sm text-gray-600">{location.phone}</span>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Action Buttons */}
                             <div className="flex items-center gap-2 ml-4">
                                 <button
-                                    onClick={() => handleEdit(index)}
+                                    onClick={() => handleEdit(location.id)}
                                     className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                                    aria-label="Edit branch"
                                 >
                                     <Pencil className="w-4 h-4 text-gray-600" />
                                 </button>
                                 <button
-                                    onClick={() => handleDelete(index)}
+                                    onClick={() => handleDelete(location.id)}
                                     className="p-2 hover:bg-red-50 rounded-lg transition-colors"
-                                    aria-label="Delete branch"
                                 >
                                     <Trash2 className="w-4 h-4 text-red-600" />
                                 </button>
@@ -113,6 +95,13 @@ export default function Branches({
                     </div>
                 ))}
             </div>
+            <AddBranchModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                data={data}
+                editable={isData}
+                setData={setData}
+            />
         </div>
     );
 }

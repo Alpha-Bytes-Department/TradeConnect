@@ -29,6 +29,7 @@ export interface Service {
 }
 
 export interface LocationData {
+    id: string,
     name: string;
     address: string;
     city: string;
@@ -182,7 +183,8 @@ export default function AccountPage() {
             "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=400&h=300&fit=crop",
         ],
         location: [
-            {
+            {   
+                id: '1',
                 name: "Paris Office",
                 address: "123 Tech Street, San Francisco, CA 94105",
                 city: "San Francisco",
@@ -191,6 +193,7 @@ export default function AccountPage() {
                 phone: "+1 555-0123"
             },
             {
+                id: '2', 
                 name: "USA Office",
                 address: "123 Tech Street, San Francisco, CA 94105",
                 city: "San Francisco",

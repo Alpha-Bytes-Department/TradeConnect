@@ -144,6 +144,7 @@ const ProfileLayout: React.FC = () => {
 ],
         location: [
             {
+                id: '1',
                 name: "Paris Office",
                 address: "123 Tech Street, San Francisco, CA 94105",
                 city: "San Francisco",
@@ -152,6 +153,7 @@ const ProfileLayout: React.FC = () => {
                 phone: "+1 555-0123"
             },
             {
+                id: '2', 
                 name: "USA Office",
                 address: "123 Tech Street, San Francisco, CA 94105",
                 city: "San Francisco",

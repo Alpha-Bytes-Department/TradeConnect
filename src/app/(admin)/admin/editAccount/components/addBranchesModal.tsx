@@ -1,14 +1,23 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
-import { LocationData } from '../../accounts/page';
+import { useState, useEffect } from 'react';
+
+interface LocationData {
+  id: string,
+  name: string;
+  address: string;
+  city: string;
+  country: string;
+  email: string;
+  phone: string;
+}
 
 interface AddBranchModalProps {
   isOpen: boolean;
   onClose: () => void;
-  location?: LocationData;
-  setLocations: React.Dispatch<React.SetStateAction<LocationData[]>>;
+  data: LocationData[];
+  editable?: LocationData;
+  setData: (data: LocationData[]) => void;
 }
 
 const countries = [
@@ -18,61 +27,23 @@ const countries = [
   'Australia',
   'Germany',
   'France',
-  'Italy',
-  'Spain',
   'Japan',
   'China',
   'India',
   'Brazil',
-  'Mexico',
-  'Netherlands',
-  'Sweden',
-  'Norway',
-  'Denmark',
-  'Finland',
-  'Switzerland',
-  'Austria',
-  'Belgium',
-  'Portugal',
-  'Greece',
-  'Poland',
-  'Czech Republic',
-  'Ireland',
-  'New Zealand',
-  'Singapore',
-  'South Korea',
-  'Thailand',
-  'Vietnam',
-  'Philippines',
-  'Malaysia',
-  'Indonesia',
-  'Turkey',
-  'South Africa',
-  'Egypt',
-  'Nigeria',
-  'Kenya',
-  'Argentina',
-  'Chile',
-  'Colombia',
-  'Peru',
-  'Venezuela',
-  'Ukraine',
-  'Romania',
-  'Hungary',
-  'Slovakia',
-  'Bulgaria',
-  'Croatia',
-  'Serbia',
-  'Slovenia',
+  'Bangladesh',
+  // Add more countries as needed
 ];
 
 export default function AddBranchModal({
   isOpen,
   onClose,
-  location,
-  setLocations,
+  data,
+  editable,
+  setData,
 }: AddBranchModalProps) {
   const [formData, setFormData] = useState<LocationData>({
+    id: '',
     name: '',
     address: '',
     city: '',
@@ -81,11 +52,14 @@ export default function AddBranchModal({
     phone: '',
   });
 
+  const [errors, setErrors] = useState<Partial<Record<keyof LocationData, string>>>({});
+
   useEffect(() => {
-    if (location) {
-      setFormData(location);
+    if (editable) {
+      setFormData(editable);
     } else {
       setFormData({
+        id:'',
         name: '',
         address: '',
         city: '',
@@ -94,53 +68,64 @@ export default function AddBranchModal({
         phone: '',
       });
     }
-  }, [location, isOpen]);
+  }, [data, isOpen]);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const validateForm = (): boolean => {
+    const newErrors: Partial<Record<keyof LocationData, string>> = {};
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // Validate required fields
-    if (!formData.name || !formData.address || !formData.city ||
-      !formData.country || !formData.email || !formData.phone) {
-      alert('Please fill in all required fields');
-      return;
+    if (!formData.name.trim()) {
+      newErrors.name = 'Branch name is required';
+    }
+    if (!formData.address.trim()) {
+      newErrors.address = 'Full address is required';
+    }
+    if (!formData.city.trim()) {
+      newErrors.city = 'City is required';
+    }
+    if (!formData.country.trim()) {
+      newErrors.country = 'Country is required';
+    }
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email address is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Invalid email address';
+    }
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Phone number is required';
     }
 
-    if (location) {
-      // Update existing location
-      setLocations((prev) =>
-        prev.map((loc) =>
-          loc === location ? formData : loc
-        )
-      );
-    } else {
-      // Add new location
-      setLocations((prev) => [...prev, formData]);
-    }
-
-    onClose();
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  const handleCancel = () => {
-    setFormData({
-      name: '',
-      address: '',
-      city: '',
-      country: '',
-      email: '',
-      phone: '',
-    });
-    onClose();
+  const handleSubmit = () => {
+    if (validateForm()) {
+      if (!editable) {
+        // Generate a unique ID for new branches
+        const newBranch = { ...formData, id: Date.now().toString() };
+        setData([...data, newBranch]);
+      } else {
+        // CHANGE: Use map to update the specific item while keeping all others
+        const updatedData = data.map((item) =>
+          item.id === editable.id ? formData : item
+        );
+        setData(updatedData);
+      }
+
+      onClose();
+    }
+  };
+
+  const handleChange = (field: keyof LocationData, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    // Clear error for this field when user starts typing
+    if (errors[field]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
+    }
   };
 
   if (!isOpen) return null;
@@ -149,208 +134,214 @@ export default function AddBranchModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black bg-opacity-50"
-        onClick={handleCancel}
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        onClick={onClose}
       />
 
       {/* Modal */}
-      <div className="relative bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+      <div className="relative bg-white rounded-lg shadow-2xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-2xl font-semibold text-gray-900">
               Add New Branch
             </h2>
-            <p className="text-sm text-gray-500 mt-0.5">
+            <p className="text-sm text-gray-500 mt-1">
               Add a new branch location to your business
             </p>
           </div>
           <button
-            onClick={handleCancel}
-            className="text-gray-400 hover:text-gray-500 transition-colors"
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 transition-colors"
           >
-            <X size={20} />
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
           </button>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
+        {/* Form Content */}
+        <div className="p-6 space-y-5">
           {/* Branch Name */}
           <div>
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-gray-700 mb-1.5"
-            >
-              Branch Name*
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Branch Name<span className="text-red-500">*</span>
             </label>
             <input
               type="text"
-              id="name"
-              name="name"
               value={formData.name}
-              onChange={handleChange}
+              onChange={(e) => handleChange('name', e.target.value)}
               placeholder="e.x. New York Office, Downtown Branch"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              required
+              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${errors.name ? 'border-red-500' : 'border-gray-300'
+                }`}
             />
+            {errors.name && (
+              <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+            )}
           </div>
 
           {/* Full Address */}
           <div>
-            <label
-              htmlFor="address"
-              className="block text-sm font-medium text-gray-700 mb-1.5"
-            >
-              Full Address*
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Full Address<span className="text-red-500">*</span>
             </label>
             <input
               type="text"
-              id="address"
-              name="address"
               value={formData.address}
-              onChange={handleChange}
+              onChange={(e) => handleChange('address', e.target.value)}
               placeholder="Street address, building number"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              required
+              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${errors.address ? 'border-red-500' : 'border-gray-300'
+                }`}
             />
+            {errors.address && (
+              <p className="text-red-500 text-sm mt-1">{errors.address}</p>
+            )}
           </div>
 
           {/* City and Country Row */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* City */}
             <div>
-              <label
-                htmlFor="city"
-                className="block text-sm font-medium text-gray-700 mb-1.5"
-              >
-                City*
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                City<span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
-                id="city"
-                name="city"
                 value={formData.city}
-                onChange={handleChange}
+                onChange={(e) => handleChange('city', e.target.value)}
                 placeholder="City name"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                required
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${errors.city ? 'border-red-500' : 'border-gray-300'
+                  }`}
               />
+              {errors.city && (
+                <p className="text-red-500 text-sm mt-1">{errors.city}</p>
+              )}
             </div>
 
             {/* Country */}
             <div>
-              <label
-                htmlFor="country"
-                className="block text-sm font-medium text-gray-700 mb-1.5"
-              >
-                Country*
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Country<span className="text-red-500">*</span>
               </label>
-              <select
-                id="country"
-                name="country"
-                value={formData.country}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white cursor-pointer"
-                style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E")`,
-                  backgroundPosition: 'right 0.5rem center',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundSize: '1.5em 1.5em',
-                  paddingRight: '2.5rem',
-                }}
-                required
-              >
-                <option value="" disabled>
-                  Select country
-                </option>
-                {countries.map((country) => (
-                  <option key={country} value={country}>
-                    {country}
+              <div className="relative">
+                <select
+                  value={formData.country}
+                  onChange={(e) => handleChange('country', e.target.value)}
+                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white transition-all ${errors.country ? 'border-red-500' : 'border-gray-300'
+                    } ${!formData.country ? 'text-gray-400' : 'text-gray-900'}`}
+                >
+                  <option value="" disabled>
+                    Select country
                   </option>
-                ))}
-              </select>
+                  {countries.map((country) => (
+                    <option key={country} value={country}>
+                      {country}
+                    </option>
+                  ))}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-700">
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </div>
+              </div>
+              {errors.country && (
+                <p className="text-red-500 text-sm mt-1">{errors.country}</p>
+              )}
             </div>
           </div>
 
           {/* Phone Number and Email Row */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Phone Number */}
             <div>
-              <label
-                htmlFor="phone"
-                className="block text-sm font-medium text-gray-700 mb-1.5"
-              >
-                Phone Number*
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Phone Number<span className="text-red-500">*</span>
               </label>
               <input
                 type="tel"
-                id="phone"
-                name="phone"
                 value={formData.phone}
-                onChange={handleChange}
+                onChange={(e) => handleChange('phone', e.target.value)}
                 placeholder="+1 555-0123"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                required
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${errors.phone ? 'border-red-500' : 'border-gray-300'
+                  }`}
               />
+              {errors.phone && (
+                <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
+              )}
             </div>
 
             {/* Email Address */}
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-1.5"
-              >
-                Email Address*
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Email Address<span className="text-red-500">*</span>
               </label>
               <input
                 type="email"
-                id="email"
-                name="email"
                 value={formData.email}
-                onChange={handleChange}
+                onChange={(e) => handleChange('email', e.target.value)}
                 placeholder="branch@company.com"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                required
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${errors.email ? 'border-red-500' : 'border-gray-300'
+                  }`}
               />
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+              )}
             </div>
           </div>
-        </form>
+        </div>
 
-        {/* Footer */}
-        <div className="flex items-center justify-end gap-3 px-6 py-4 bg-gray-50 rounded-b-lg">
+        {/* Footer with Buttons */}
+        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-200">
           <button
-            type="button"
-            onClick={handleCancel}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+            onClick={onClose}
+            className="flex items-center gap-2 px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg transition-colors"
           >
-            <span className="flex items-center gap-2">
-              <X size={16} />
-              Cancel
-            </span>
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+            Cancel
           </button>
           <button
-            type="submit"
             onClick={handleSubmit}
-            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
           >
-            <span className="flex items-center gap-2">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M8 3.33334V12.6667M3.33334 8H12.6667"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              Add Branch
-            </span>
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path d="M12 4v16m8-8H4"></path>
+            </svg>
+            {data ? 'Update Branch' : 'Add Branch'}
           </button>
         </div>
       </div>
