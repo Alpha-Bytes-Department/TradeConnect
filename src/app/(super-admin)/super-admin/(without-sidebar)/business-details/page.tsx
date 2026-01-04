@@ -2,6 +2,7 @@
 import { Globe, Landmark, Mail, MapPin, Phone } from "lucide-react";
 import Image from "next/image";
 import { IoInformationCircleOutline } from "react-icons/io5";
+
 export default function BusinessDetails() {
     return (
         <div className="max-w-[1300px] mx-auto">
