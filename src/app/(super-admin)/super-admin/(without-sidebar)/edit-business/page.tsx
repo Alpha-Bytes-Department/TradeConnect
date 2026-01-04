@@ -560,6 +560,12 @@ export default function EditBusiness() {
                 </span> Your profile information is visible to all logged-in users in the directory.
                     Make sure all information is accurate and up-to date.</p>
             </div>
+
+            <div className="p-3 bg-[#76A9FB] rounded-lg mt-8">
+                <p className="font-poppins text-[#1C4589] text-sm"><span className="font-medium">Note:
+                </span> Your profile information is visible to all logged-in users in the directory.
+                    Make sure all information is accurate and up-to date.</p>
+            </div>
         </div>
     );
 }
