@@ -117,7 +117,7 @@ export default function EditBusiness() {
         <div className="max-w-[1300px] mx-auto">
             <h1 className="font-medium font-poppins text-[#0B0B0B] text-2xl mt-6">Edit Profile</h1>
             <p className="font-poppins text-[#626262]">Update your business information and images</p>
-            <div className="bg-white rounded-lg shadow-sm border mt-6">
+            <div className="bg-white rounded-lg shadow-md border mt-6">
                 <div className="flex justify-around border-b">
                     <button
                         onClick={() => setActiveTab('basic')}
@@ -547,18 +547,6 @@ export default function EditBusiness() {
                         Delete Business
                     </button>
                 </div>
-            </div>
-
-            <div className="p-3 bg-[#76A9FB] rounded-lg mt-8">
-                <p className="font-poppins text-[#1C4589] text-sm"><span className="font-medium">Note:
-                </span> Your profile information is visible to all logged-in users in the directory.
-                    Make sure all information is accurate and up-to date.</p>
-            </div>
-
-            <div className="p-3 bg-[#76A9FB] rounded-lg mt-8">
-                <p className="font-poppins text-[#1C4589] text-sm"><span className="font-medium">Note:
-                </span> Your profile information is visible to all logged-in users in the directory.
-                    Make sure all information is accurate and up-to date.</p>
             </div>
 
             <div className="p-3 bg-[#76A9FB] rounded-lg mt-8">
