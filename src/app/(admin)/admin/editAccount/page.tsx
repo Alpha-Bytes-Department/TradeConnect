@@ -95,24 +95,24 @@ const ProfileLayout: React.FC = () => {
             ],
         },
         services: [
-            { id: "1", name: "Commercial Construction" },
-            { id: "2", name: "Project Management" },
-            { id: "3", name: "Renovation" },
-            { id: "4", name: "Infrastructure" },
-            { id: "11", name: "Commercial Construction" },
-            { id: "21", name: "Project Management" },
-            { id: "31", name: "Renovation" },
-            { id: "41", name: "Infrastructure" },
-            { id: "51", name: "Commercial Construction" },
-            { id: "x1", name: "Commercial Construction" },
-            { id: "x2", name: "Project Management" },
-            { id: "x3", name: "Renovation" },
-            { id: "x4", name: "Infrastructure" },
-            { id: "x11", name: "Commercial Construction" },
-            { id: "x21", name: "Project Management" },
-            { id: "x31", name: "Renovation" },
-            { id: "xx1", name: "Infrastructure" },
-            { id: "x51", name: "Commercial Construction" },
+            { name: "Commercial Construction" },
+            { name: "Project Management" },
+            {  name: "Renovation" },
+            {  name: "Infrastructure" },
+            { name: "Commercial Construction" },
+            { name: "Project Management" },
+            { name: "Renovation" },
+            { name: "Infrastructure" },
+            { name: "Commercial Construction" },
+            { name: "Commercial Construction" },
+            { name: "Project Management" },
+            { name: "Renovation" },
+            { name: "Infrastructure" },
+            { name: "Commercial Construction" },
+            { name: "Project Management" },
+            { name: "Renovation" },
+            { name: "Infrastructure" },
+            { name: "Commercial Construction" },
         ],
         awards: [
             { id: "1", name: "Commercial Construction" },
@@ -175,7 +175,7 @@ const ProfileLayout: React.FC = () => {
     })
     const [branch, setBranch] = useState<LocationData[]>(data.location)
     const [certification, setCertification] = useState<Award[]>(data.awards)
-    const [services, setServices] = useState<Service[]>(data.services)
+    const [services, setServices] = useState<{about:string,services:Service[]}>({about:data.about,services:data.services})
     const [images, setImages] = useState<{ banner:string, gallery: string[] }>({ banner: data.banner, gallery: data.gallery })
 
 
@@ -193,7 +193,8 @@ const ProfileLayout: React.FC = () => {
 
         location:branch,
 
-        services:services,
+        about:services.about,
+        services:services.services,
 
         banner:images.banner,
         gallery: images.gallery,

@@ -25,7 +25,6 @@ import { redirect } from "next/navigation";
 import Image from "next/image";
 
 export interface Service {
-    id: string;
     name: string;
 }
 
@@ -134,24 +133,24 @@ export default function AccountPage() {
             ],
         },
         services: [
-            { id: "1", name: "Commercial Construction" },
-            { id: "2", name: "Project Management" },
-            { id: "3", name: "Renovation" },
-            { id: "4", name: "Infrastructure" },
-            { id: "11", name: "Commercial Construction" },
-            { id: "21", name: "Project Management" },
-            { id: "31", name: "Renovation" },
-            { id: "41", name: "Infrastructure" },
-            { id: "51", name: "Commercial Construction" },
-            { id: "x1", name: "Commercial Construction" },
-            { id: "x2", name: "Project Management" },
-            { id: "x3", name: "Renovation" },
-            { id: "x4", name: "Infrastructure" },
-            { id: "x11", name: "Commercial Construction" },
-            { id: "x21", name: "Project Management" },
-            { id: "x31", name: "Renovation" },
-            { id: "xx1", name: "Infrastructure" },
-            { id: "x51", name: "Commercial Construction" },
+            {  name: "Commercial Construction" },
+            {  name: "Project Management" },
+            { name: "Renovation" },
+            { name: "Infrastructure" },
+            { name: "Commercial Construction" },
+            { name: "Project Management" },
+            { name: "Renovation" },
+            { name: "Infrastructure" },
+            { name: "Commercial Construction" },
+            { name: "Commercial Construction" },
+            { name: "Project Management" },
+            { name: "Renovation" },
+            { name: "Infrastructure" },
+            { name: "Commercial Construction" },
+            { name: "Project Management" },
+            { name: "Renovation" },
+            { name: "Infrastructure" },
+            { name: "Commercial Construction" },
         ],
         awards: [
             { id: "1", name: "Commercial Construction" },
