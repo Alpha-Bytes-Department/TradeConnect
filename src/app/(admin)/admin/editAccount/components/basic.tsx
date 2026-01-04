@@ -1,17 +1,23 @@
 import React from 'react';
+
+interface Basic{
+ name: string,
+address: string,
+country: string 
+}
+
 interface BasicProps {
-    data: { name: string, address: string, country: string };
-    setData: React.Dispatch<React.SetStateAction<{ name: string, address: string, country: string }>>;
+    data: Basic;
+    setData: React.Dispatch<React.SetStateAction<Basic>>;
 }
 
 const Basic: React.FC<BasicProps> = ({ data, setData }) => {
-    const handleInputChange = (field: keyof Data['basic'], value: string) => {
+    const handleInputChange = (field: keyof Basic, value: string) => {
         setData(prev => ({
             ...prev,
-            basic: {
-                ...prev.basic,
+            
                 [field]: value
-            }
+            
         }));
     };
     const countries = ['United States', 'Canada', 'Singapore', 'France', 'Dubai', 'Argentina', 'Germany', 'Nepal', 'Finland']
@@ -54,7 +60,7 @@ const Basic: React.FC<BasicProps> = ({ data, setData }) => {
                         
                         
                     >
-                        {countries.map((country,index)=><option key={index} value="United States">{country}</option>)}
+                        {countries.map((country,index)=><option key={index} value={country}>{country}</option>)}
                         
                     </select>
                 </div>

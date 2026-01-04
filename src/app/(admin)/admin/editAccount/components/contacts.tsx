@@ -15,11 +15,13 @@ interface ContactsProps {
 
 
 const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
-    const handleInputChange = (field: keyof ContactInfo['contact'], value: string) => {
+
+
+    const handleBasicChange = (field: keyof ContactInfo['office'], value: string) => {
         setData((prev) => ({
             ...prev,
-            contact: {
-                ...prev.contact,
+            office: {
+                ...prev.office,
                 [field]: value,
             },
         }));
@@ -128,7 +130,7 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
                         id="email"
                         type="email"
                         value={data.office.email}
-                        onChange={(e) => handleInputChange('email', e.target.value)}
+                        onChange={(e) => handleBasicChange('email', e.target.value)}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                         placeholder="business@company.com"
                     />
@@ -145,7 +147,7 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
                             type='tel'
                             maxLength={14}
                             value={data.office.phone}
-                            onChange={(e) => handleInputChange('phone', e.target.value)}
+                            onChange={(e) => handleBasicChange('phone', e.target.value)}
                             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                             placeholder="+1 555 0123 5248"
                         />
@@ -161,8 +163,8 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
                 <input
                     id="website"
                     type="url"
-                    value={data.office.email}
-                    onChange={(e) => handleInputChange('website', e.target.value)}
+                    value={data.office.website}
+                    onChange={(e) => handleBasicChange('website', e.target.value)}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                     placeholder="https://techsolutions.com"
                 />
