@@ -476,7 +476,7 @@ export default function EditBusiness() {
                                     type={showPassword1 ? "text" : "password"}
                                     id="password"
                                     placeholder="Enter New password"
-                                    className="pr-10 pl-9 font-poppins bg-[#FFFFFF] text-black" // leave space for the eye button
+                                    className="pr-10 pl-9 font-poppins bg-[#FFFFFF] text-[#3F3F3F]" // leave space for the eye button
                                 // {...register("password")}
                                 />
                                 <LockKeyhole className="absolute top-2.5 left-2.5 w-5 h-5" />
@@ -500,7 +500,7 @@ export default function EditBusiness() {
                                     type={showPassword2 ? "text" : "password"}
                                     id="password"
                                     placeholder="Confirm New password"
-                                    className="pr-10 pl-9 font-poppins bg-[#FFFFFF] text-black" // leave space for the eye button
+                                    className="pr-10 pl-9 font-poppins bg-[#FFFFFF] text-[#3F3F3F]" // leave space for the eye button
                                 // {...register("password")}
                                 />
                                 <LockKeyhole className="absolute top-2.5 left-2.5 w-5 h-5" />
@@ -549,7 +549,7 @@ export default function EditBusiness() {
                 </div>
             </div>
 
-            <div className="p-3 bg-[#76A9FB] rounded-lg mt-8">
+            <div className="p-3 bg-[#EBF2FE] border border-[#76A9FB] rounded-lg mt-8">
                 <p className="font-poppins text-[#1C4589] text-sm"><span className="font-medium">Note:
                 </span> Your profile information is visible to all logged-in users in the directory.
                     Make sure all information is accurate and up-to date.</p>
