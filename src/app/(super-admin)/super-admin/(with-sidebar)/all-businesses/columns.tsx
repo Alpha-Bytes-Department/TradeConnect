@@ -77,7 +77,7 @@ export const columns: ColumnDef<allBusinessesTable>[] = [
                 <div className="flex items-center gap-2">
                     <button
                         // onClick={handleEdit}
-                        onClick={() => { redirect("/super-admin/all-businesses/edit-business") }}
+                        onClick={() => { redirect("/super-admin/edit-business") }}
                         className="h-8 w-8 flex items-center justify-center rounded-sm 
                         hover:bg-gray-400 hover:text-white transition-colors cursor-pointer"
                     >

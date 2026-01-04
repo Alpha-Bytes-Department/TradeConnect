@@ -1,10 +1,10 @@
 // Fahim
-import DashboardCard from "../../components/dashboard/DashboardCard";
+import DashboardCard from "@/app/(super-admin)/components/dashboard/DashboardCard";
 import Link from "next/link";
 import { columns, dashboardLatestBusiness } from "./columns";
 import { DataTable } from "./data-table";
-import { business_Data } from "../../data";
-import Chart from "../../components/dashboard/Chart";
+import { business_Data } from "@/app/(super-admin)/data";
+import Chart from "@/app/(super-admin)/components/dashboard/Chart";
 
 export default async function Dashboard() {
     const data = await getData();

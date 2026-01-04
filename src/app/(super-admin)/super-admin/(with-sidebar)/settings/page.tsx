@@ -1,5 +1,5 @@
 // Fahim
-import SettingsPage from "../../components/Settings/SettingsPage";
+import SettingsPage from "@/app/(super-admin)/components/Settings/SettingsPage";
 export default function Settings() {
     return (
         <div className="p-6 bg-[#F6F6F6]">

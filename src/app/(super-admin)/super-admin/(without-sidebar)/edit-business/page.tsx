@@ -113,9 +113,8 @@ export default function EditBusiness() {
         setGalleryImages((prev) => prev.filter((_, i) => i !== index));
     };
 
-
     return (
-        <div className="p-4">
+        <div className="max-w-[1300px] mx-auto">
             <h1 className="font-medium font-poppins text-[#0B0B0B] text-2xl mt-6">Edit Profile</h1>
             <p className="font-poppins text-[#626262]">Update your business information and images</p>
             <div className="bg-white rounded-lg shadow-md border mt-6">

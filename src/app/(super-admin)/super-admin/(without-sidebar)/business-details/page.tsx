@@ -4,7 +4,7 @@ import Image from "next/image";
 import { IoInformationCircleOutline } from "react-icons/io5";
 export default function BusinessDetails() {
     return (
-        <div className="">
+        <div className="max-w-[1300px] mx-auto">
             <div className="relative w-full h-[350px] px-8 flex items-center
             justify-center">
                 <Image src="/all-business-card-banners/3.jpg" alt="" fill

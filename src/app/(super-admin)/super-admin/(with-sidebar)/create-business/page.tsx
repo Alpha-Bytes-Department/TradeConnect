@@ -1,5 +1,5 @@
 // Fahim
-import CreateBusinessForm from "../../components/createBusiness/CreateBusinessForm";
+import CreateBusinessForm from "@/app/(super-admin)/components/createBusiness/CreateBusinessForm";
 export default function CreateBusiness() {
     return (
         <div className="p-6 bg-[#F6F6F6]">
