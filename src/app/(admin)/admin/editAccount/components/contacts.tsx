@@ -7,7 +7,7 @@ import EditContactModal from './contactsUpdateModal';
 
 interface ContactsProps {
     data: ContactInfo;
-    setData: React.Dispatch<React.SetStateAction<Data>>;
+    setData: React.Dispatch<React.SetStateAction<ContactInfo>>;
 }
 
 
@@ -15,7 +15,7 @@ interface ContactsProps {
 
 
 const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
-    const handleInputChange = (field: keyof Data['contact'], value: string) => {
+    const handleInputChange = (field: keyof ContactInfo['contact'], value: string) => {
         setData((prev) => ({
             ...prev,
             contact: {
