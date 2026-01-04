@@ -1,149 +1,356 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { LocationData } from '../../accounts/page';
 
 interface AddBranchModalProps {
-  data: LocationData;
-  setBranch: (data: Location) => void;
+  isOpen: boolean;
+  onClose: () => void;
+  location?: LocationData;
+  setLocations: React.Dispatch<React.SetStateAction<LocationData[]>>;
 }
 
-export default function Branches({ data, setBranch }: AddBranchModalProps) {
-  const handleInputChange = (field: keyof LocationData, value: string) => {
-    setBranch({ ...data, [field]: value });
+const countries = [
+  'United States',
+  'United Kingdom',
+  'Canada',
+  'Australia',
+  'Germany',
+  'France',
+  'Italy',
+  'Spain',
+  'Japan',
+  'China',
+  'India',
+  'Brazil',
+  'Mexico',
+  'Netherlands',
+  'Sweden',
+  'Norway',
+  'Denmark',
+  'Finland',
+  'Switzerland',
+  'Austria',
+  'Belgium',
+  'Portugal',
+  'Greece',
+  'Poland',
+  'Czech Republic',
+  'Ireland',
+  'New Zealand',
+  'Singapore',
+  'South Korea',
+  'Thailand',
+  'Vietnam',
+  'Philippines',
+  'Malaysia',
+  'Indonesia',
+  'Turkey',
+  'South Africa',
+  'Egypt',
+  'Nigeria',
+  'Kenya',
+  'Argentina',
+  'Chile',
+  'Colombia',
+  'Peru',
+  'Venezuela',
+  'Ukraine',
+  'Romania',
+  'Hungary',
+  'Slovakia',
+  'Bulgaria',
+  'Croatia',
+  'Serbia',
+  'Slovenia',
+];
+
+export default function AddBranchModal({
+  isOpen,
+  onClose,
+  location,
+  setLocations,
+}: AddBranchModalProps) {
+  const [formData, setFormData] = useState<LocationData>({
+    name: '',
+    address: '',
+    city: '',
+    country: '',
+    email: '',
+    phone: '',
+  });
+
+  useEffect(() => {
+    if (location) {
+      setFormData(location);
+    } else {
+      setFormData({
+        name: '',
+        address: '',
+        city: '',
+        country: '',
+        email: '',
+        phone: '',
+      });
+    }
+  }, [location, isOpen]);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Validate required fields
+    if (!formData.name || !formData.address || !formData.city ||
+      !formData.country || !formData.email || !formData.phone) {
+      alert('Please fill in all required fields');
+      return;
+    }
+
+    if (location) {
+      // Update existing location
+      setLocations((prev) =>
+        prev.map((loc) =>
+          loc === location ? formData : loc
+        )
+      );
+    } else {
+      // Add new location
+      setLocations((prev) => [...prev, formData]);
+    }
+
+    onClose();
+  };
+
+  const handleCancel = () => {
+    setFormData({
+      name: '',
+      address: '',
+      city: '',
+      country: '',
+      email: '',
+      phone: '',
+    });
+    onClose();
+  };
+
+  if (!isOpen) return null;
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-black bg-opacity-50"
+        onClick={handleCancel}
+      />
+
+      {/* Modal */}
+      <div className="relative bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">Add New Branch</h2>
-            <p className="text-sm text-gray-500 mt-0.5">Add a new branch data to your business</p>
+            <h2 className="text-lg font-semibold text-gray-900">
+              Add New Branch
+            </h2>
+            <p className="text-sm text-gray-500 mt-0.5">
+              Add a new branch location to your business
+            </p>
           </div>
           <button
-            className="text-gray-400 hover:text-gray-600 transition-colors"
-            onClick={() => { }}
+            onClick={handleCancel}
+            className="text-gray-400 hover:text-gray-500 transition-colors"
           >
             <X size={20} />
           </button>
         </div>
 
         {/* Form */}
-        <div className="px-6 py-5 space-y-4">
+        <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
           {/* Branch Name */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              Branch Name<span className="text-red-500">*</span>
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700 mb-1.5"
+            >
+              Branch Name*
             </label>
             <input
               type="text"
-              value={data.name}
-              onChange={(e) => handleInputChange('name', e.target.value)}
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
               placeholder="e.x. New York Office, Downtown Branch"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
             />
           </div>
 
           {/* Full Address */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              Full Address<span className="text-red-500">*</span>
+            <label
+              htmlFor="address"
+              className="block text-sm font-medium text-gray-700 mb-1.5"
+            >
+              Full Address*
             </label>
             <input
               type="text"
-              value={data.address}
-              onChange={(e) => handleInputChange('address', e.target.value)}
+              id="address"
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
               placeholder="Street address, building number"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
             />
           </div>
 
-          {/* City and Country */}
+          {/* City and Country Row */}
           <div className="grid grid-cols-2 gap-4">
+            {/* City */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                City<span className="text-red-500">*</span>
+              <label
+                htmlFor="city"
+                className="block text-sm font-medium text-gray-700 mb-1.5"
+              >
+                City*
               </label>
               <input
                 type="text"
-                value={data.city}
-                onChange={(e) => handleInputChange('city', e.target.value)}
+                id="city"
+                name="city"
+                value={formData.city}
+                onChange={handleChange}
                 placeholder="City name"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
               />
             </div>
+
+            {/* Country */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Country<span className="text-red-500">*</span>
+              <label
+                htmlFor="country"
+                className="block text-sm font-medium text-gray-700 mb-1.5"
+              >
+                Country*
               </label>
               <select
-                value={data.country}
-                onChange={(e) => handleInputChange('country', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm appearance-none bg-white"
-                style={{ backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`, backgroundPosition: 'right 0.5rem center', backgroundRepeat: 'no-repeat', backgroundSize: '1.5em 1.5em' }}
+                id="country"
+                name="country"
+                value={formData.country}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white cursor-pointer"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E")`,
+                  backgroundPosition: 'right 0.5rem center',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: '1.5em 1.5em',
+                  paddingRight: '2.5rem',
+                }}
+                required
               >
-                <option value="">Select country</option>
-                <option value="United States">United States</option>
-                <option value="Canada">Canada</option>
-                <option value="United Kingdom">United Kingdom</option>
-                <option value="Australia">Australia</option>
-                <option value="Germany">Germany</option>
-                <option value="France">France</option>
-                <option value="Japan">Japan</option>
-                <option value="China">China</option>
-                <option value="India">India</option>
-                <option value="Brazil">Brazil</option>
+                <option value="" disabled>
+                  Select country
+                </option>
+                {countries.map((country) => (
+                  <option key={country} value={country}>
+                    {country}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
 
-          {/* Phone Number and Email Address */}
+          {/* Phone Number and Email Row */}
           <div className="grid grid-cols-2 gap-4">
+            {/* Phone Number */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Phone Number<span className="text-red-500">*</span>
+              <label
+                htmlFor="phone"
+                className="block text-sm font-medium text-gray-700 mb-1.5"
+              >
+                Phone Number*
               </label>
               <input
                 type="tel"
-                value={data.phone}
-                onChange={(e) => handleInputChange('phone', e.target.value)}
+                id="phone"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
                 placeholder="+1 555-0123"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
               />
             </div>
+
+            {/* Email Address */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Email Address<span className="text-red-500">*</span>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-1.5"
+              >
+                Email Address*
               </label>
               <input
                 type="email"
-                value={data.email}
-                onChange={(e) => handleInputChange('email', e.target.value)}
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
                 placeholder="branch@company.com"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
               />
             </div>
           </div>
-        </div>
+        </form>
 
         {/* Footer */}
-        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-200">
+        <div className="flex items-center justify-end gap-3 px-6 py-4 bg-gray-50 rounded-b-lg">
           <button
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors flex items-center gap-2"
-            onClick={() => { }}
+            type="button"
+            onClick={handleCancel}
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
           >
-            <X size={16} />
-            Cancel
+            <span className="flex items-center gap-2">
+              <X size={16} />
+              Cancel
+            </span>
           </button>
           <button
-            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors flex items-center gap-2"
-            onClick={() => { }}
+            type="submit"
+            onClick={handleSubmit}
+            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="10" strokeWidth="2" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-            </svg>
-            Add Branch
+            <span className="flex items-center gap-2">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 3.33334V12.6667M3.33334 8H12.6667"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              Add Branch
+            </span>
           </button>
         </div>
       </div>
