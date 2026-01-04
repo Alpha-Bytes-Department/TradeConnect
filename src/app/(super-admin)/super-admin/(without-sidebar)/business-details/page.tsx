@@ -1,9 +1,30 @@
 // Fahim
+"use client"
+import Modal from "@/components/ui/modal";
 import { Globe, Landmark, Mail, MapPin, Phone } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
 import { IoInformationCircleOutline } from "react-icons/io5";
 
 export default function BusinessDetails() {
+    const [activeModal, setActiveModal] = useState<string | null>(null);
+    const animations = [
+        {
+            type: "fade" as const,
+            name: "Fade",
+            description: "Simple fade-in animation",
+            color: "bg-purple-500 hover:bg-purple-600",
+        },
+    ];
+
+    const openModal = (type: string) => {
+        setActiveModal(type);
+    };
+
+    const closeModal = () => {
+        setActiveModal(null);
+    };
+
     return (
         <div className="max-w-[1300px] mx-auto">
             <div className="relative w-full h-[350px] px-8 flex items-center
@@ -235,10 +256,24 @@ export default function BusinessDetails() {
             <div className="p-4 rounded-lg border shadow-lg bg-[#FFFFFF] mt-11">
                 <h1 className="font-medium font-poppins text-[#121212]">Gallery</h1>
                 <div className="grid grid-cols-4 gap-6 mt-3">
-                    <div className="relative h-[160px]">
+                    <div className="relative h-[160px]" onClick={() => openModal(animations[0].type)}>
                         <Image src="/all-business-card-banners/1.jpg" alt="" fill
                             className="object-cover object-center rounded-lg cursor-pointer" />
                     </div>
+                    {activeModal &&
+                        <Modal
+                            isOpen={activeModal === "fade"}
+                            onClose={closeModal}
+                            // title={`${animations[0].name} Animation`}
+                            animation="fade"
+                            size="md"
+                        >
+                            <div className="max-w-[500px] h-[300px] relative">
+                                <Image src="/all-business-card-banners/2.jpg" alt="" fill
+                                    className="object-cover rounded-lg cursor-pointer" />
+                            </div>
+                        </Modal>
+                    }
                     <div className="relative h-[160px]">
                         <Image src="/all-business-card-banners/2.jpg" alt="" fill
                             className="object-cover object-center rounded-lg cursor-pointer" />
