@@ -85,7 +85,7 @@ export const columns: ColumnDef<dashboardLatestBusiness>[] = [
             return (
                 <div className="flex items-center gap-2">
                     <button
-                        onClick={handleDelete}
+                        onClick={() => redirect("/super-admin/business-details")}
                         className="h-8 w-8 flex items-center justify-center rounded-sm  
                         text-[#2459B1] hover:bg-red-100 transition-colors cursor-pointer"
                     >
@@ -93,7 +93,7 @@ export const columns: ColumnDef<dashboardLatestBusiness>[] = [
                     </button>
                     <button
                         //onClick={handleEdit}
-                        onClick={() => { redirect("/super-admin/all-businesses/edit-business") }}
+                        onClick={() => { redirect("/super-admin/edit-business") }}
                         className="h-8 w-8 flex items-center justify-center rounded-sm 
                         hover:bg-gray-400 hover:text-white transition-colors cursor-pointer"
                     >
