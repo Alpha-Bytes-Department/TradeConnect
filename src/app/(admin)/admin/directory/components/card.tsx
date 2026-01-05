@@ -100,14 +100,14 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                 {/* Action Buttons */}
                 <div className="flex gap-3">
                     <Button
-                        onClick={()=>router.push('/admin/accounts')}
+                        onClick={()=>router.push('/accounts')}
                         className="fc flex-1 bg-blue-600 hover:bg-blue-700 text-white text-lg font-medium py-1 rounded-xl transition-colors"
                     >
                         View Profile
                     </Button>
 
                     <Link
-                        href="/admin/accounts"
+                        href="/accounts"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="w-10 h-10 border-2 border-gray-300 hover:border-blue-600 rounded-xl flex items-center justify-center transition-colors group"
