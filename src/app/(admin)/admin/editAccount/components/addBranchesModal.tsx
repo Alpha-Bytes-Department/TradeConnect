@@ -117,7 +117,8 @@ export default function AddBranchModal({
   };
 
   const handleChange = (field: keyof LocationData, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+  
+    setFormData((prev) => ({ ...prev, [field]: field === 'phone' ? value.replace(/[^\d+]/g, ""):value }));
     // Clear error for this field when user starts typing
     if (errors[field]) {
       setErrors((prev) => {
@@ -276,6 +277,7 @@ export default function AddBranchModal({
               </label>
               <input
                 type="tel"
+                maxLength={15}
                 value={formData.phone}
                 onChange={(e) => handleChange('phone', e.target.value)}
                 placeholder="+1 555-0123"

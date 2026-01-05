@@ -147,7 +147,7 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
                             type='tel'
                             maxLength={14}
                             value={data.office.phone}
-                            onChange={(e) => handleBasicChange('phone', e.target.value)}
+                            onChange={(e) => handleBasicChange('phone', e.target.value.replace(/[^\d+]/g, ''))}
                             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                             placeholder="+1 555 0123 5248"
                         />

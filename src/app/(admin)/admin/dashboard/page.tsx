@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
     CheckSquare,
     Calendar,
@@ -98,6 +99,7 @@ const recentlyViewedBusinesses = [
 
 export default function Dashboard() {
     const [hoveredAction, setHoveredAction] = useState<number | null>(0);
+    const router=useRouter()
 
     return (
         <div className="w-full fc flex-col justify-around  gap-4 md:gap-6 my-4 md:my-6">
@@ -263,7 +265,7 @@ export default function Dashboard() {
                         {/* Public View Button */}
                         <div className="flex-shrink-0 lg:self-start">
                             <button
-                                onClick={() => alert("Public View clicked")}
+                                onClick={() => router.push('/accounts')}
                                 className="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
                             >
                                 <Eye className="w-5 h-5" />
@@ -276,57 +278,39 @@ export default function Dashboard() {
 
             {/* Recently Viewed Business */}
             <div className="w-full bg-[#FEF3EB] p-4 rounded-lg border">
-                <h2 className="text-xl sm:text-xl font-semibold text-slate-800 ">
+                <h2 className="text-xl font-semibold text-slate-800 mb-4">
                     Recently Viewed Business
                 </h2>
-                <div className=" overflow-hidden border border-slate-100">
+
+                <div className="overflow-hidden border border-slate-100 bg-[#FEF3EB] rounded-lg">
                     {/* Desktop Table View */}
                     <div className="hidden lg:block overflow-x-auto">
                         <table className="w-full">
                             <thead>
                                 <tr className="bg-slate-50 border-b border-slate-200">
-                                    <th className="text-left py-4 px-6 text-xs font-bold text-slate-600 uppercase tracking-wider">
-                                        Business
-                                    </th>
-                                    <th className="text-left py-4 px-6 text-xs font-bold text-slate-600 uppercase tracking-wider">
-                                        Country
-                                    </th>
-                                    <th className="text-left py-4 px-6 text-xs font-bold text-slate-600 uppercase tracking-wider">
-                                        Services
-                                    </th>
-                                    <th className="text-left py-4 px-6 text-xs font-bold text-slate-600 uppercase tracking-wider">
-                                        Action
-                                    </th>
+                                    <th className="text-left py-4 px-6 text-xs font-bold text-slate-600 uppercase tracking-wider">Business</th>
+                                    <th className="text-left py-4 px-6 text-xs font-bold text-slate-600 uppercase tracking-wider">Country</th>
+                                    <th className="text-left py-4 px-6 text-xs font-bold text-slate-600 uppercase tracking-wider">Services</th>
+                                    <th className="text-left py-4 px-6 text-xs font-bold text-slate-600 uppercase tracking-wider">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {recentlyViewedBusinesses.map((business) => (
-                                    <tr
-                                        key={business.id}
-                                        className="border-b border-slate-300 hover:bg-slate-50 transition-colors"
-                                    >
+                                    <tr key={business.id} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
                                         <td className="py-5 px-6">
                                             <div className="flex items-center gap-4">
-                                                <div
-                                                    className={`${business.logoColor} w-12 h-12 rounded-xl flex items-center justify-center font-bold text-sm shadow-sm`}
-                                                >
+                                                <div className={`${business.logoColor} w-12 h-12 rounded-xl flex items-center justify-center font-bold text-sm shadow-sm`}>
                                                     {business.logo}
                                                 </div>
-                                                <span className="font-semibold text-slate-800">
-                                                    {business.name}
-                                                </span>
+                                                <span className="font-semibold text-slate-800">{business.name}</span>
                                             </div>
                                         </td>
-                                        <td className="py-5 px-6 text-slate-700">
-                                            {business.country}
-                                        </td>
-                                        <td className="py-5 px-6 text-slate-700 max-w-md">
-                                            {business.services}
-                                        </td>
+                                        <td className="py-5 px-6 text-slate-700">{business.country}</td>
+                                        <td className="py-5 px-6 text-slate-700 max-w-md truncate">{business.services}</td>
                                         <td className="py-5 px-6">
                                             <button
-                                                onClick={() => alert(`View ${business.name}`)}
-                                                className="w-28 fc rounded-lg h-10 bg-blue-200 action:bg-blue-400 action:text-white text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-2 hover:gap-3 transition-all group"
+                                                onClick={() => router.push(`/accounts/${business.id}`)}
+                                                className="w-28 h-10 rounded-lg bg-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold flex items-center justify-center gap-2 transition-all group"
                                             >
                                                 View
                                                 <ExternalLink className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -339,30 +323,21 @@ export default function Dashboard() {
                     </div>
 
                     {/* Mobile Card View */}
-                    <div className="lg:hidden divide-y divide-slate-100 ">
+                    <div className="lg:hidden divide-y divide-slate-100">
                         {recentlyViewedBusinesses.map((business) => (
-                            <div
-                                key={business.id}
-                                className="p-6 hover:bg-slate-50 transition-colors"
-                            >
+                            <div key={business.id} className="p-6 hover:bg-slate-50 transition-colors">
                                 <div className="flex items-start gap-4 mb-4">
-                                    <div
-                                        className={`${business.logoColor} w-14 h-14 rounded-xl flex items-center justify-center font-bold shadow-sm flex-shrink-0`}
-                                    >
+                                    <div className={`${business.logoColor} w-14 h-14 rounded-xl flex items-center justify-center font-bold shadow-sm flex-shrink-0`}>
                                         {business.logo}
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <h3 className="font-semibold text-slate-800 mb-1">
-                                            {business.name}
-                                        </h3>
+                                        <h3 className="font-semibold text-slate-800 mb-1">{business.name}</h3>
                                         <p className="text-sm text-slate-600">{business.country}</p>
                                     </div>
                                 </div>
-                                <p className="text-sm text-slate-700 mb-4">
-                                    {business.services}
-                                </p>
+                                <p className="text-sm text-slate-700 mb-4 line-clamp-2">{business.services}</p>
                                 <button
-                                    onClick={() => alert(`View ${business.name}`)}
+                                    onClick={() => router.push(`/admin/accounts/${business.id}`)}
                                     className="w-full bg-blue-50 text-blue-600 py-2.5 px-4 rounded-lg font-semibold hover:bg-blue-100 transition-colors flex items-center justify-center gap-2"
                                 >
                                     View
@@ -373,6 +348,7 @@ export default function Dashboard() {
                     </div>
                 </div>
             </div>
+            
 
             <style>{`
         @keyframes fadeIn {
