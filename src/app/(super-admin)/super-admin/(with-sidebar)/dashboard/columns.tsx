@@ -14,12 +14,31 @@ export type dashboardLatestBusiness = {
     country: string,
     last_login: string,
     status: string,
+    banner_src: string
 };
 
 export const columns: ColumnDef<dashboardLatestBusiness>[] = [
+    // {
+    //     accessorKey: "business_name",
+    //     header: "Business Name",
+    // },
     {
         accessorKey: "business_name",
         header: "Business Name",
+        cell: ({ row }) => {
+            const businessName = row.getValue("business_name") as string;
+            const businessPhoto = row.original.banner_src;
+            return (
+                <div className="flex items-center gap-3">
+                    <img
+                        src={businessPhoto || "/placeholder-business.png"}
+                        alt={businessName}
+                        className="w-10 h-10 rounded-full object-cover"
+                    />
+                    <p>{businessName}</p>
+                </div>
+            );
+        },
     },
     {
         accessorKey: "country",
