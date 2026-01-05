@@ -40,7 +40,7 @@ export default function AddContactModal({ isOpen, onClose, onSubmit }: AddContac
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onSubmit({...formData,position:otherPosition});
+        formData.position === 'Other' ? onSubmit({ ...formData, position: otherPosition }) : onSubmit(formData)
         // Reset form
         setFormData({
             id: new Date().toISOString(),
