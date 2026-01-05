@@ -48,7 +48,8 @@ export default function SignIn() {
   });
 
   const onSubmit = async (data: SignInFormData) => {
-    router.push("/super-admin/dashboard");
+    if (data.emailAddress === "admin@gmail.com" && data.password === "HelloFahim19")
+      router.push("/super-admin/dashboard");
     // const payload = {
     //   "email": "tusharimranme0@gmail.com",
     //   "password": "12345678"
