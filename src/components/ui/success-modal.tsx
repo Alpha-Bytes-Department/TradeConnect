@@ -1,9 +1,7 @@
 "use client";
-
 import React, { useState } from "react";
 import Modal from "./modal";
 import { Button } from "./button";
-
 
 const SuccessModalView: React.FC = () => {
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
