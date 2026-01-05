@@ -125,10 +125,10 @@ const Images: React.FC<ImagesProps> = ({ data, setData }) => {
                 <label className="text-sm text-gray-700 mb-2">Gallery Images</label>
 
                 {data.gallery.length > 0 && (
-                    <div className="grid grid-cols-4 gap-2 mb-4">
+                    <div className="grid grid-cols-2 gap-2 mb-4">
                         {data.gallery.map((image, index) => (
-                            <div key={index} className="relative col-span-4 md:col-span-1 group">
-                                <div className="aspect-square rounded-lg overflow-hidden border-2 border-gray-200">
+                            <div key={index} className="relative col-span-2 md:col-span-1 group">
+                                <div className="aspect-video rounded-lg overflow-hidden border-2 border-gray-200">
                                     <SafeImg
                                         src={image}
                                         alt={`Gallery image ${index + 1}`}
@@ -137,7 +137,7 @@ const Images: React.FC<ImagesProps> = ({ data, setData }) => {
                                 </div>
                                 <button
                                     onClick={() => removeGalleryImage(index)}
-                                    className="absolute top-3 right-3 w-8 h-8 bg-white shadow-md shadow-gray-500 hover:bg-opacity-90 rounded-full flex items-center justify-center transition-all"
+                                    className="absolute top-3 right-3 w-6 h-6 bg-white shadow-md shadow-gray-500 hover:bg-opacity-90 rounded-full flex items-center justify-center transition-all"
                                 >
                                     <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />

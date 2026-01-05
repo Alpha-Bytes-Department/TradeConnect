@@ -156,7 +156,7 @@ const page = () => {
    temp=selectedCountry==='No Selection'?temp: temp.filter((item)=>item.location.toLowerCase()===selectedCountry.toLowerCase())
     
     
-       temp = selectedCountry === '' ? temp : temp.filter((item)=>item.title.toLowerCase().includes(searchTerm.toLowerCase()))
+       temp = searchTerm === '' ? temp : temp.filter((item)=>item.title.toLowerCase().startsWith(searchTerm.toLowerCase()))
 
     temp = sortBy === 'A-Z' ? temp.sort((a, b) => a.title.localeCompare(b.title)) : sortBy === 'Z-A' ? temp.sort((a, b) => b.title.localeCompare(a.title)) : sortBy === 'Most Recent' ? temp.sort((a, b) => a.joined.localeCompare(b.joined)) : temp.sort((a, b) => a.seenBy - b.seenBy)
 
@@ -235,7 +235,7 @@ const modifiedData=temp
                     </div>
 
                     {/* Bottom Row - Sort and View Toggle */}
-                    <div className="flex flex-col md:flex-row gap-6 items-center justify-between md:px-12">
+                    <div className="flex flex-col md:flex-row gap-6 items-center justify-between ">
                         {/* Sort By */}
                         <div className="flex items-center gap-3">
                             <div className="flex items-center gap-2">

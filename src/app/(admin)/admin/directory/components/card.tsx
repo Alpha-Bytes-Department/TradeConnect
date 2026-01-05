@@ -98,7 +98,7 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex gap-3">
+                <div className="flex items-center gap-3">
                     <Button
                         onClick={()=>router.push('/accounts')}
                         className="fc flex-1 bg-blue-600 hover:bg-blue-700 text-white text-lg font-medium py-1 rounded-xl transition-colors"
