@@ -34,11 +34,13 @@ export default function AddContactModal({ isOpen, onClose, onSubmit }: AddContac
         isPrimary: false,
     });
 
+    const [otherPosition, setOtherPosition]=useState<string>('')
+
     const [isRoleDropdownOpen, setIsRoleDropdownOpen] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onSubmit(formData);
+        onSubmit({...formData,position:otherPosition});
         // Reset form
         setFormData({
             id: new Date().toISOString(),
@@ -152,6 +154,24 @@ export default function AddContactModal({ isOpen, onClose, onSubmit }: AddContac
                                             ))}
                                         </div>
                                     )}
+
+                                    {
+                                        (formData.position==='Other')&&(
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 my-2">
+                                                    Add Position<span className="text-red-500">*</span>
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    required
+                                                    value={otherPosition}
+                                                    onChange={(e) => setOtherPosition(e.target.value) }
+                                                    placeholder="e.x. Chief Executive Officer(CEO)"
+                                                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400"
+                                                />
+                                            </div>
+                                        )
+                                    }
                                 </div>
                             </div>
 
