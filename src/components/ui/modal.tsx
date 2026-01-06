@@ -132,7 +132,7 @@ const Modal: React.FC<ModalProps> = ({
   const modalVariants = getModalVariants(animation);
   // Handle body scroll and pointer events
 
-  useEffect(() => { // this is working. collected from chatGPT.
+  useEffect(() => { // This is working. It is collected from chatGPT.
     const body = document.body;
 
     if (isOpen) {
@@ -147,7 +147,7 @@ const Modal: React.FC<ModalProps> = ({
   }, [isOpen]);
 
 
-  // useEffect(() => {
+  // useEffect(() => { // This is faulty. It does not work properly.
   //   if (isOpen) {
   //     // Store original values
   //     const originalOverflow = document.body.style.overflow;
