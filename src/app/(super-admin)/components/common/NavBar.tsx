@@ -5,8 +5,12 @@ import { SidebarSeparator, SidebarTrigger, useSidebar } from '@/components/ui/si
 import Image from "next/image";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { redirect } from "next/navigation";
+import LogOutModal from "./LogOutModal";
+import { useView } from "../../ListGridContext";
 
 export default function Navbar() {
+    const { isLogoutOpen, setIsLogoutOpen } = useView();
+
     return (
         <div>
             <nav className="p-4 flex items-center justify-between">
@@ -34,12 +38,13 @@ export default function Navbar() {
                                 Settings
                             </button>
                             <button className="font-poppins text-[#B3261E] cursor-pointer
-                            flex items-center gap-3">
+                            flex items-center gap-3" onClick={() => setIsLogoutOpen(true)}>
                                 <LogOut className="w-5 h-5" />
                                 Log Out
                             </button>
                         </PopoverContent>
                     </Popover>
+                    {isLogoutOpen && <LogOutModal />}
                 </div>
             </nav>
             <SidebarSeparator />
