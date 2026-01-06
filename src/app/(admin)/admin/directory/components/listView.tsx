@@ -52,7 +52,7 @@ const ListView: React.FC<DirectoryListProps> = ({ companies }) => {
 
                                 {/* Country Column */}
                                 <div className="flex items-center">
-                                    <p className="text-sm text-slate-700 font-medium">{item.country ? item.country:'-'}</p>
+                                    <p className="text-sm text-slate-500 ">{item.country ? item.country:'-'}</p>
                                 </div>
 
                                 {/* Services Column */}
@@ -89,7 +89,7 @@ const ListView: React.FC<DirectoryListProps> = ({ companies }) => {
                                         href="https://google.com"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="fc flex-1 bg-blue-100 hover:bg-blue-700 text-blue-700 hover:text-white text-xl font-medium py-2 rounded-xl transition-colors border border-blue-600"
+                                        className="fc gap-3 bg-blue-100 hover:bg-blue-700 text-blue-700 hover:text-white text-xl font-medium py-2 px-4 rounded-xl transition-colors border border-blue-600 "
                                     >
                                         <span>View</span>
                                         <ExternalLink className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-200" />

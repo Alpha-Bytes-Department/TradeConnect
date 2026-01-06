@@ -15,7 +15,7 @@ interface ContactsProps {
 const Services: React.FC<ContactsProps> = ({ data, setData }) => {
 
     const handleServicesChange = (
-        e: React.ChangeEvent<HTMLInputElement>
+        e: React.ChangeEvent<HTMLTextAreaElement>
     ) => {
         const value = e.target.value;
 
@@ -48,9 +48,9 @@ const Services: React.FC<ContactsProps> = ({ data, setData }) => {
                     Services Offered<span className="text-red-500">*</span>
                 </label>
 
-                <input
+                <textarea
                     id="services"
-                    type="text"
+                    rows={6}
                     value={data.services.map(s => s.name).join(', ')}
                     onChange={handleServicesChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500"

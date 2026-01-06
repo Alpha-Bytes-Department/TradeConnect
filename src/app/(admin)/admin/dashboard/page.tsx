@@ -11,6 +11,7 @@ import {
     ExternalLink,
     Calendar1Icon,
 } from "lucide-react";
+import Image from "next/image";
 
 const progressTab = {
     label: "Profile Completeness",
@@ -216,20 +217,23 @@ export default function Dashboard() {
                     Your Profile
                 </h2>
                 <div className="bg-white rounded-2xl">
-                    <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+                    <div className="fc flex-col lg:flex-row lg:items-center gap-4">
                         {/* Profile Image */}
                         <div className="flex-shrink-0">
-                            <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shadow-md bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center">
-                                <div className="w-full h-full bg-gradient-to-br from-slate-300 to-slate-400 flex items-center justify-center text-white text-3xl font-bold">
-                                    TS
-                                </div>
+                            <div className="relative w-32 h-32 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shadow-md bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center">
+                                <Image
+                                    src='/accountsBanner.png'
+                                    alt='image'
+                                    fill
+                                    className="object-cover aspect-square"
+                                />
                             </div>
                         </div>
 
                         {/* Profile Info */}
                         <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+                                <p className="text-lg font-semibold text-slate-500 tracking-wider mb-2">
                                     Business Name
                                 </p>
                                 <p className="text-base font-semibold text-slate-800">
@@ -237,7 +241,7 @@ export default function Dashboard() {
                                 </p>
                             </div>
                             <div>
-                                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+                                <p className="text-lg font-semibold text-slate-500 tracking-wider mb-2">
                                     Country
                                 </p>
                                 <p className="text-base font-semibold text-slate-800">
@@ -245,7 +249,7 @@ export default function Dashboard() {
                                 </p>
                             </div>
                             <div>
-                                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+                                <p className="text-lg font-semibold text-slate-500 tracking-wider mb-2">
                                     Email
                                 </p>
                                 <p className="text-base font-semibold text-slate-800">
@@ -253,7 +257,7 @@ export default function Dashboard() {
                                 </p>
                             </div>
                             <div>
-                                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+                                <p className="text-lg font-semibold text-slate-500 tracking-wider mb-2">
                                     Last Updated
                                 </p>
                                 <p className="text-base font-semibold text-slate-800">
@@ -263,7 +267,7 @@ export default function Dashboard() {
                         </div>
 
                         {/* Public View Button */}
-                        <div className="flex-shrink-0 lg:self-start">
+                        <div className="flex-shrink-0 lg:self-end">
                             <button
                                 onClick={() => router.push('/accounts')}
                                 className="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
