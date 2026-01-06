@@ -52,7 +52,7 @@ const ListView: React.FC<DirectoryListProps> = ({ companies }) => {
 
                                 {/* Country Column */}
                                 <div className="flex items-center">
-                                    <p className="text-sm text-slate-700 font-medium">{item.country ? item.country:'-'}</p>
+                                    <p className="text-sm text-slate-500 ">{item.country ? item.country:'-'}</p>
                                 </div>
 
                                 {/* Services Column */}

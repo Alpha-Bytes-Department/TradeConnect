@@ -58,6 +58,7 @@ const page = () => {
                 "Education",
                 "Retail",
             ],
+            country: 'UK',
         },
         {
             headerImage:
@@ -76,6 +77,7 @@ const page = () => {
                 "Education",
                 
             ],
+            country: 'UK',
         },
         {
             headerImage:
@@ -94,6 +96,7 @@ const page = () => {
                 
                 "Retail",
             ],
+            country: 'USA',
         },
         {
             headerImage:
@@ -112,6 +115,7 @@ const page = () => {
                 "Education",
                 "Retail",
             ],
+            country: 'Australia',
         },
         {
             headerImage:
@@ -130,6 +134,7 @@ const page = () => {
                 "Education",
                 "Retail",
             ],
+            country: 'Canada',
         },
         {
             headerImage:
@@ -147,6 +152,7 @@ const page = () => {
                 "Education",
                 "Retail",
             ],
+            country: 'UK',
         },
     ];
 
