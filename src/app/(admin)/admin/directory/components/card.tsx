@@ -1,9 +1,21 @@
 import React from "react";
 import Image from "next/image";
-import { CompanyData } from "../page";
+
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
+
+export interface CompanyData {
+    headerImage?: string;
+    flagIcon?: string;
+    title?: string;
+    location?: string;
+    description?: string;
+    services?: string[];
+    website?: string;
+    country?: string;
+    phone?: string;
+}
 
 interface CardProps {
     prop: CompanyData;

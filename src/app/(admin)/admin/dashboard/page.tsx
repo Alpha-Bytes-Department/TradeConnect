@@ -231,9 +231,9 @@ export default function Dashboard() {
                         </div>
 
                         {/* Profile Info */}
-                        <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-8">
                             <div>
-                                <p className="text-lg font-semibold text-slate-500 tracking-wider mb-2">
+                                <p className="text-sm font-semibold text-slate-500 tracking-wider mb-1">
                                     Business Name
                                 </p>
                                 <p className="text-base font-semibold text-slate-800">
@@ -241,7 +241,7 @@ export default function Dashboard() {
                                 </p>
                             </div>
                             <div>
-                                <p className="text-lg font-semibold text-slate-500 tracking-wider mb-2">
+                                <p className="text-sm font-semibold text-slate-500 tracking-wider mb-1">
                                     Country
                                 </p>
                                 <p className="text-base font-semibold text-slate-800">
@@ -249,7 +249,7 @@ export default function Dashboard() {
                                 </p>
                             </div>
                             <div>
-                                <p className="text-lg font-semibold text-slate-500 tracking-wider mb-2">
+                                <p className="text-sm font-semibold text-slate-500 tracking-wider mb-1">
                                     Email
                                 </p>
                                 <p className="text-base font-semibold text-slate-800">
@@ -257,7 +257,7 @@ export default function Dashboard() {
                                 </p>
                             </div>
                             <div>
-                                <p className="text-lg font-semibold text-slate-500 tracking-wider mb-2">
+                                <p className="text-sm font-semibold text-slate-500 tracking-wider mb-1">
                                     Last Updated
                                 </p>
                                 <p className="text-base font-semibold text-slate-800">
@@ -270,7 +270,7 @@ export default function Dashboard() {
                         <div className="flex-shrink-0 lg:self-end">
                             <button
                                 onClick={() => router.push('/accounts')}
-                                className="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
+                                className="w-full m-1 sm:w-auto bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
                             >
                                 <Eye className="w-5 h-5" />
                                 Public View
