@@ -91,9 +91,10 @@ export default function AppSidebar() {
                             <TbLogout />
                             Log Out
                         </SidebarMenuButton>
-                        {isLogoutOpen && <LogOutModal />}
+                        {/* {isLogoutOpen && <LogOutModal />} */}
                     </SidebarMenuItem>
                 </SidebarMenu>
+                <LogOutModal />
             </SidebarFooter>
         </Sidebar>
     );

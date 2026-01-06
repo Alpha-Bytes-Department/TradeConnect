@@ -44,7 +44,8 @@ export default function Navbar() {
                             </button>
                         </PopoverContent>
                     </Popover>
-                    {isLogoutOpen && <LogOutModal />}
+                    <LogOutModal />
+                    {/* {isLogoutOpen && <LogOutModal />} */}
                 </div>
             </nav>
             <SidebarSeparator />
