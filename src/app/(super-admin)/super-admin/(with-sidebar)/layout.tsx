@@ -23,15 +23,15 @@ export default async function RootLayout({
     return (
         <html lang="en">
             <body className={`antialiased`}>
-                <SidebarProvider>
-                    <AppSidebar />
-                    <main className="w-full">
-                        <Navbar />
-                        <ViewProvider>
+                <ViewProvider>
+                    <SidebarProvider>
+                        <AppSidebar />
+                        <main className="w-full">
+                            <Navbar />
                             {children}
-                        </ViewProvider>
-                    </main>
-                </SidebarProvider>
+                        </main>
+                    </SidebarProvider>
+                </ViewProvider>
             </body>
         </html>
     );

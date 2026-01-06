@@ -16,7 +16,6 @@ interface FilterFormData {
     sortBy: string;
 }
 
-
 export default function FilterBox() {
     const { list, grid, setList, setGrid } = useView();
 
