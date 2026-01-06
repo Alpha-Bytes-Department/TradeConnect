@@ -26,9 +26,8 @@ export default function BusinessDetails() {
     };
 
     return (
-        <div className="max-w-[1300px] mx-auto">
-            <div className="relative w-full h-[350px] px-8 flex items-center
-            justify-center">
+        <div className="max-w-[1300px] mx-auto p-3">
+            <div className="relative w-full h-[350px] px-4 flex items-center justify-center">
                 <Image src="/all-business-card-banners/3.jpg" alt="" fill
                     className="object-cover object-center" />
             </div>
@@ -64,10 +63,10 @@ export default function BusinessDetails() {
                 </div>
             </div>
 
-            <div className="flex flex-col lg:flex-row gap-6 mt-8">
-                <div className="w-full lg:w-1/2 flex flex-col gap-3">
-                    <div className="p-4 border rounded-lg bg-[#FFFFFF] 
-                    shadow-lg">
+            <div className="flex flex-col lg:flex-row gap-6 mt-8 h-[700px]">
+                <div className="w-full lg:w-1/2 h-full flex flex-col gap-3">
+                    {/* About */}
+                    <div className="h-[223px] p-4 border rounded-lg bg-[#FFFFFF] shadow-lg">
                         <h1 className="font-poppins font-semibold 
                         text-[#121212] text-xl">About</h1>
                         <p className="font-poppins text-[#3F3F3F] text-sm">
@@ -79,8 +78,8 @@ export default function BusinessDetails() {
                             step.</p>
                     </div>
 
-                    <div className="p-4 border rounded-lg bg-[#FFFFFF] 
-                    shadow-lg">
+                    {/* Services */}
+                    <div className="h-[223px] p-4 border rounded-lg bg-[#FFFFFF] shadow-lg">
                         <h1 className="font-poppins font-semibold 
                         text-[#121212] text-xl">Services</h1>
                         <p className="bg-[#BFD7FD] inline-block px-2 py-1 mt-1 font-poppins 
@@ -97,8 +96,8 @@ export default function BusinessDetails() {
                                 text-[#153569] text-xs rounded-full">Commercial Construction</p>
                     </div>
 
-                    <div className="p-4 border rounded-lg bg-[#FFFFFF] 
-                    shadow-lg">
+                    {/* Certifications */}
+                    <div className="h-[223px] p-4 border rounded-lg bg-[#FFFFFF] shadow-lg">
                         <h1 className="font-poppins font-semibold 
                         text-[#121212] text-xl">Certifications</h1>
                         <p className="bg-[#27930029] inline-block px-2 py-1 mt-1 font-poppins 
@@ -106,148 +105,152 @@ export default function BusinessDetails() {
                         <p className="bg-[#27930029] inline-block px-2 py-1 mt-1 font-poppins 
                         text-[#279300] text-xs rounded-full">Local Freight Association</p>
                     </div>
+                </div>
 
-                    <div className="p-4 border rounded-lg bg-[#FFFFFF] 
-                    shadow-lg">
-                        <h1 className="font-poppins font-semibold 
-                        text-[#121212] text-xl">Branch Locations</h1>
-                        <div className="p-3 bg-[#EBF2FE] rounded-lg mt-4">
-                            <div className="flex items-center gap-2">
-                                <Landmark className="w-5 h-5" />
-                                <p className="font-poppins text-[#3F3F3F]">Paris Office</p>
-                            </div>
-                            <div className="flex gap-2 mt-2">
-                                <MapPin className="w-5 h-5" />
-                                <p className="font-poppins text-[#3F3F3F]">
-                                    123 Tech Street, San Francisco, CA 94105 San Francisco, United States
-                                </p>
-                            </div>
-                            <div className="flex items-center gap-2 mt-2">
-                                <Mail className="w-5 h-5 text-[#327EF9]" />
-                                <p className="font-poppins text-[#327EF9]">
-                                    sarah@gmail.com
-                                </p>
-                            </div>
-                            <div className="flex items-center gap-2 mt-2">
-                                <Phone className="w-5 h-5 text-[#327EF9]" />
-                                <p className="font-poppins text-[#327EF9]">
-                                    +1 555-0125
-                                </p>
-                            </div>
+                {/* Contact Information */}
+                <div className="w-full lg:w-1/2 h-full flex flex-col gap-3 p-4 border rounded-lg 
+                bg-[#FFFFFF] shadow-lg">
+                    <h1 className="font-poppins font-semibold 
+                        text-[#121212] text-xl">Contact Information</h1>
+                    <div className="mt-3">
+                        <p className="font-poppins text-[#595959] text-sm">Office number</p>
+                        <p className="font-poppins text-[#327EF9] text-sm">+971 245 54 5 643</p>
+                    </div>
+                    <div>
+                        <p className="font-poppins text-[#595959] text-sm">Office Email</p>
+                        <p className="font-poppins text-[#327EF9] text-sm">asksaha9@gmail.com</p>
+                    </div>
+                    <div className="w-full h-[1px] bg-gray-300 mt-3" />
+                    <p className="font-poppins text-[#595959] text-sm">Contact Persons</p>
+                    <div className="p-2 border rounded-lg">
+                        <p className="font-medium font-poppins">Sarah Johnson</p>
+                        <p className="font-poppins text-[#909090]">CEO</p>
+                        <div className="flex items-center gap-2 mt-2">
+                            <Mail className="w-5 h-5 text-[#327EF9]" />
+                            <p className="font-poppins text-[#327EF9]">
+                                sarah@gmail.com
+                            </p>
                         </div>
-                        <div className="p-3 bg-[#EBF2FE] rounded-lg mt-4">
-                            <div className="flex items-center gap-2">
-                                <Landmark className="w-5 h-5" />
-                                <p className="font-poppins text-[#3F3F3F]">USA Office</p>
-                            </div>
-                            <div className="flex gap-2 mt-2">
-                                <MapPin className="w-5 h-5" />
-                                <p className="font-poppins text-[#3F3F3F]">
-                                    123 Tech Street, San Francisco, CA 94105 San Francisco, United States
-                                </p>
-                            </div>
-                            <div className="flex items-center gap-2 mt-2">
-                                <Mail className="w-5 h-5 text-[#327EF9]" />
-                                <p className="font-poppins text-[#327EF9]">
-                                    sarah@gmail.com
-                                </p>
-                            </div>
-                            <div className="flex items-center gap-2 mt-2">
-                                <Phone className="w-5 h-5 text-[#327EF9]" />
-                                <p className="font-poppins text-[#327EF9]">
-                                    +1 555-0125
-                                </p>
-                            </div>
+                        <div className="flex items-center gap-2 mt-2">
+                            <Phone className="w-5 h-5 text-[#327EF9]" />
+                            <p className="font-poppins text-[#327EF9]">
+                                +1 555-0125
+                            </p>
+                        </div>
+                    </div>
+                    <div className="p-2 border rounded-lg mt-3">
+                        <p className="font-medium font-poppins">Sarah Johnson</p>
+                        <p className="font-poppins text-[#909090]">Managing Director</p>
+                        <div className="flex items-center gap-2 mt-2">
+                            <Mail className="w-5 h-5 text-[#327EF9]" />
+                            <p className="font-poppins text-[#327EF9]">
+                                sarah@gmail.com
+                            </p>
+                        </div>
+                        <div className="flex items-center gap-2 mt-2">
+                            <Phone className="w-5 h-5 text-[#327EF9]" />
+                            <p className="font-poppins text-[#327EF9]">
+                                +1 555-0125
+                            </p>
+                        </div>
+                    </div>
+                    <div className="p-2 border rounded-lg mt-3">
+                        <p className="font-medium font-poppins">Sarah Johnson</p>
+                        <p className="font-poppins text-[#909090]">Sales Manager</p>
+                        <div className="flex items-center gap-2 mt-2">
+                            <Mail className="w-5 h-5 text-[#327EF9]" />
+                            <p className="font-poppins text-[#327EF9]">
+                                sarah@gmail.com
+                            </p>
+                        </div>
+                        <div className="flex items-center gap-2 mt-2">
+                            <Phone className="w-5 h-5 text-[#327EF9]" />
+                            <p className="font-poppins text-[#327EF9]">
+                                +1 555-0125
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div className="flex flex-col lg:flex-row gap-6 mt-8 h-[450px]">
+                {/* Branch Locations */}
+                <div className="w-full lg:w-1/2 h-full p-4 border rounded-lg bg-[#FFFFFF] shadow-lg">
+                    <h1 className="font-poppins font-semibold 
+                        text-[#121212] text-xl">Branch Locations</h1>
+                    <div className="p-3 bg-[#EBF2FE] rounded-lg mt-4">
+                        <div className="flex items-center gap-2">
+                            <Landmark className="w-5 h-5" />
+                            <p className="font-poppins text-[#3F3F3F]">Paris Office</p>
+                        </div>
+                        <div className="flex gap-2 mt-2">
+                            <MapPin className="w-5 h-5" />
+                            <p className="font-poppins text-[#3F3F3F]">
+                                123 Tech Street, San Francisco, CA 94105 San Francisco, United States
+                            </p>
+                        </div>
+                        <div className="flex items-center gap-2 mt-2">
+                            <Mail className="w-5 h-5 text-[#327EF9]" />
+                            <p className="font-poppins text-[#327EF9]">
+                                sarah@gmail.com
+                            </p>
+                        </div>
+                        <div className="flex items-center gap-2 mt-2">
+                            <Phone className="w-5 h-5 text-[#327EF9]" />
+                            <p className="font-poppins text-[#327EF9]">
+                                +1 555-0125
+                            </p>
+                        </div>
+                    </div>
+                    <div className="p-3 bg-[#EBF2FE] rounded-lg mt-4">
+                        <div className="flex items-center gap-2">
+                            <Landmark className="w-5 h-5" />
+                            <p className="font-poppins text-[#3F3F3F]">USA Office</p>
+                        </div>
+                        <div className="flex gap-2 mt-2">
+                            <MapPin className="w-5 h-5" />
+                            <p className="font-poppins text-[#3F3F3F]">
+                                123 Tech Street, San Francisco, CA 94105 San Francisco, United States
+                            </p>
+                        </div>
+                        <div className="flex items-center gap-2 mt-2">
+                            <Mail className="w-5 h-5 text-[#327EF9]" />
+                            <p className="font-poppins text-[#327EF9]">
+                                sarah@gmail.com
+                            </p>
+                        </div>
+                        <div className="flex items-center gap-2 mt-2">
+                            <Phone className="w-5 h-5 text-[#327EF9]" />
+                            <p className="font-poppins text-[#327EF9]">
+                                +1 555-0125
+                            </p>
                         </div>
                     </div>
                 </div>
 
-                <div className="w-full lg:w-1/2 flex flex-col gap-3">
-                    <div className="p-4 border rounded-lg bg-[#FFFFFF] 
-                    shadow-lg">
-                        <h1 className="font-poppins font-semibold 
-                        text-[#121212] text-xl">Contact Information</h1>
-                        <div className="mt-3">
-                            <p className="font-poppins text-[#595959] text-sm">Office number</p>
-                            <p className="font-poppins text-[#327EF9] text-sm">+971 245 54 5 643</p>
+                {/* Activity */}
+                <div className="w-full lg:w-1/2 h-full p-4 border rounded-lg bg-[#FFFFFF] shadow-lg">
+                    <h1 className="font-poppins font-semibold 
+                        text-[#121212] text-xl">Activity</h1>
+                    <div className="flex gap-3 mt-3">
+                        <div className="bg-[#BFD7FD] w-11 h-11 rounded-lg flex items-center 
+                            justify-center">
+                            <IoInformationCircleOutline className="text-[#2459B1] w-7 h-7" />
                         </div>
                         <div>
-                            <p className="font-poppins text-[#595959] text-sm">Office Email</p>
-                            <p className="font-poppins text-[#327EF9] text-sm">asksaha9@gmail.com</p>
-                        </div>
-                        <div className="w-full h-[1px] bg-gray-300 mt-3" />
-                        <p className="font-poppins text-[#595959] text-sm mt-3">Contact Persons</p>
-                        <div className="p-2 border rounded-lg mt-3">
-                            <p className="font-medium font-poppins">Sarah Johnson</p>
-                            <p className="font-poppins text-[#909090]">CEO</p>
-                            <div className="flex items-center gap-2 mt-2">
-                                <Mail className="w-5 h-5 text-[#327EF9]" />
-                                <p className="font-poppins text-[#327EF9]">
-                                    sarah@gmail.com
-                                </p>
-                            </div>
-                            <div className="flex items-center gap-2 mt-2">
-                                <Phone className="w-5 h-5 text-[#327EF9]" />
-                                <p className="font-poppins text-[#327EF9]">
-                                    +1 555-0125
-                                </p>
-                            </div>
-                        </div>
-                        <div className="p-2 border rounded-lg mt-3">
-                            <p className="font-medium font-poppins">Sarah Johnson</p>
-                            <p className="font-poppins text-[#909090]">Managing Director</p>
-                            <div className="flex items-center gap-2 mt-2">
-                                <Mail className="w-5 h-5 text-[#327EF9]" />
-                                <p className="font-poppins text-[#327EF9]">
-                                    sarah@gmail.com
-                                </p>
-                            </div>
-                            <div className="flex items-center gap-2 mt-2">
-                                <Phone className="w-5 h-5 text-[#327EF9]" />
-                                <p className="font-poppins text-[#327EF9]">
-                                    +1 555-0125
-                                </p>
-                            </div>
-                        </div>
-                        <div className="p-2 border rounded-lg mt-3">
-                            <p className="font-medium font-poppins">Sarah Johnson</p>
-                            <p className="font-poppins text-[#909090]">Sales Manager</p>
-                            <div className="flex items-center gap-2 mt-2">
-                                <Mail className="w-5 h-5 text-[#327EF9]" />
-                                <p className="font-poppins text-[#327EF9]">
-                                    sarah@gmail.com
-                                </p>
-                            </div>
-                            <div className="flex items-center gap-2 mt-2">
-                                <Phone className="w-5 h-5 text-[#327EF9]" />
-                                <p className="font-poppins text-[#327EF9]">
-                                    +1 555-0125
-                                </p>
-                            </div>
+                            <h1 className="font-poppins font-medium text-[#595959]">Active for</h1>
+                            <p className="font-poppins text-[#2E73E3] text-xs">23 Months</p>
                         </div>
                     </div>
-
-                    <div className="p-4 border rounded-lg bg-[#FFFFFF] 
-                    shadow-lg">
-                        <h1 className="font-poppins font-semibold 
-                        text-[#121212] text-xl">Activity</h1>
-                        <div className="flex gap-3 mt-3">
-                            <div className="bg-[#BFD7FD] w-11 h-11 rounded-lg flex items-center justify-center">
-                                <IoInformationCircleOutline className="text-[#2459B1] w-7 h-7" />
-                            </div>
-                            <div>
-                                <h1 className="font-poppins font-medium text-[#595959]">Active for</h1>
-                                <p className="font-poppins text-[#2E73E3] text-xs">23 Months</p>
-                            </div>
+                    <div className="flex gap-3 mt-3">
+                        <div className="bg-[#FDDAC0] w-11 h-11 rounded-lg flex items-center 
+                            justify-center">
+                            <IoInformationCircleOutline className="text-[#884B1D] w-7 h-7" />
                         </div>
-                        <div className="flex gap-3 mt-3">
-                            <div className="bg-[#FDDAC0] w-11 h-11 rounded-lg flex items-center justify-center">
-                                <IoInformationCircleOutline className="text-[#884B1D] w-7 h-7" />
-                            </div>
-                            <div>
-                                <h1 className="font-poppins font-medium text-[#595959]">Last Updates</h1>
-                                <p className="font-poppins text-[#327EF9] text-xs">2024-12-04   11:30</p>
-                            </div>
+                        <div>
+                            <h1 className="font-poppins font-medium text-[#595959]">Last Updates</h1>
+                            <p className="font-poppins text-[#327EF9] text-xs">2024-12-04   11:30</p>
                         </div>
                     </div>
                 </div>
