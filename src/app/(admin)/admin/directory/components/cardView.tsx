@@ -1,7 +1,20 @@
 import React from "react";
 import Card from "./card";
-import { CompanyData } from "../page";
+
 import Link from "next/link";
+
+
+export interface CompanyData {
+  headerImage?: string;
+  flagIcon?: string;
+  title?: string;
+  location?: string;
+  description?: string;
+  services?: string[];
+  website?: string;
+  country?: string;
+  phone?: string;
+}
 
 interface CardView {
   companies: CompanyData[];

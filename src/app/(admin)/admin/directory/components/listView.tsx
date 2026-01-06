@@ -1,9 +1,19 @@
 import React from 'react';
 import { ExternalLink } from 'lucide-react';
-import { CompanyData } from '../page';
+
 import Link from 'next/link';
 
-
+interface CompanyData {
+    headerImage?: string;
+    flagIcon?: string;
+    title?: string;
+    location?: string;
+    description?: string;
+    services?: string[];
+    website?: string;
+    country?: string;
+    phone?: string;
+}
 
 interface DirectoryListProps {
     companies: CompanyData[];

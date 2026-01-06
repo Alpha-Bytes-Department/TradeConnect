@@ -1,5 +1,5 @@
 import React from 'react';
-import { Award } from '../../accounts/page';
+import { Award } from '../.././interfaces';
 
 
 interface BusinessCertificationsProps {

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { MapPin, Mail, Phone, Pencil, Trash2, Plus } from "lucide-react";
-import { LocationData } from "../../accounts/page";
+import { LocationData } from "../.././interfaces";
 import AddBranchModal from "./addBranchesModal";
 
 interface BranchLocationsProps {

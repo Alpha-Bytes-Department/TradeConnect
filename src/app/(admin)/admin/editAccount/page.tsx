@@ -5,7 +5,7 @@ import Basic from './components/basic';
 import Contacts from './components/contacts';
 import Services from './components/services';
 import Images from './components/image';
-import { ContactInfo,Contact,Activity,Award,LocationData,CompanyProfile, Service} from '../accounts/page';
+import { ContactInfo,Contact,Activity,Award,LocationData,CompanyProfile, Service} from '.././interfaces';
 import Branches from './components/branches';
 import Certifications from './components/certifications';
 import { Save } from 'lucide-react';

@@ -2,7 +2,7 @@ import React,{useState} from 'react';
 
 import AddContactModal from './contactsModal';
 import { Mail, Pencil, Phone, Plus, Star, Trash2 } from 'lucide-react';
-import { ContactInfo,Contact } from '../../accounts/page';
+import { ContactInfo,Contact } from '../.././interfaces';
 import EditContactModal from './contactsUpdateModal';
 
 interface ContactsProps {
