@@ -5,7 +5,7 @@ import Basic from './components/basic';
 import Contacts from './components/contacts';
 import Services from './components/services';
 import Images from './components/image';
-import { ContactInfo,Contact,Activity,Award,LocationData,CompanyProfile, Service} from '.././interfaces';
+import { ContactInfo,Award,LocationData,CompanyProfile, Service} from '.././interfaces';
 import Branches from './components/branches';
 import Certifications from './components/certifications';
 import { Save } from 'lucide-react';
@@ -54,7 +54,7 @@ const ProfileLayout: React.FC = () => {
 
 
 
-    const [activeTab,setActiveTab]=useState<string>('basic')
+    const [activeTab, setActiveTab] = useState<'basic' | 'contact' | 'branches' | 'certification' | 'services' | 'images'>('basic')
     const [data, setData] = useState<CompanyProfile>({
         name: "Construction Partners",
         address: "989 Builder Road, Dubai, UAE",
