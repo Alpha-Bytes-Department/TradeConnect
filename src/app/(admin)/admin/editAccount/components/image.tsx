@@ -1,6 +1,6 @@
 import React, { useRef, useState, ChangeEvent, useEffect } from 'react';
 import GalleryUploadModal from './galleryUploadModal';
-import { PlusCircleIcon } from 'lucide-react';
+import { PlusCircleIcon, Upload } from 'lucide-react';
 
 // This handles the UI rendering safely without memory leaks
 const SafeImg = ({ src, alt, className }: { src: File | string | null; alt: string; className: string }) => {
@@ -104,11 +104,9 @@ const Images: React.FC<ImagesProps> = ({ data, setData }) => {
                     className="border-2 border-dashed border-gray-300 rounded-lg p-16 hover:border-gray-400 transition-colors cursor-pointer bg-gray-50 hover:bg-gray-100"
                 >
                     <div className="flex flex-col items-center justify-center text-center">
-                        <svg className="w-12 h-12 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                        </svg>
+                        <Upload size={54} color={'#777'}/>
                         <p className="text-base font-medium text-gray-700 mb-1">Click to upload new Banner</p>
-                        <p className="text-sm text-gray-500">PNG, JPG, up to 5MB (1200x400 recommended)</p>
+                        <p className="text-lg text-gray-500">PNG, JPG, up to 5MB (1200x400 recommended)</p>
                     </div>
                 </div>
                 <input
