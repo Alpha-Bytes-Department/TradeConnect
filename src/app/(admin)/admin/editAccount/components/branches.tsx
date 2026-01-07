@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { MapPin, Mail, Phone, Pencil, Trash2, Plus } from "lucide-react";
-import { LocationData } from "../../interfaces";
+import { MapPin, Mail, Phone, Pencil, Trash2, Plus, PlusCircleIcon } from "lucide-react";
+import { LocationData } from '@/app/(admin)/admin/interfaces';
 import AddBranchModal from "./addBranchesModal";
 
 interface BranchLocationsProps {
@@ -44,7 +44,7 @@ export default function Branches({ data, setData }: BranchLocationsProps) {
                     onClick={handleAddBranch}
                     className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors"
                 >
-                    <Plus className="w-4 h-4" />
+                    <PlusCircleIcon className="w-4 h-4" />
                     Add Branch
                 </button>
             </div>
