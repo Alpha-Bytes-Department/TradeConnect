@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 import LogOutModal from "./LogOutModal";
 import { useView } from "../../ListGridContext";
 
-export default function Navbar() {
+export default function NavBarWithTrigger() {
     const { isLogoutOpen, setIsLogoutOpen } = useView();
 
     return (
