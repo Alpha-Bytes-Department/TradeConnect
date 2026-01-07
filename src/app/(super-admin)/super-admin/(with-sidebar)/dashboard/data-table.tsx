@@ -42,9 +42,9 @@ export function DataTable<TData, TValue>({
 
     return (
         <div>
-            <div className="overflow-hidden rounded-md border">
+            <div className="overflow-x-auto rounded-md border mt-8">
                 <Table>
-                    <TableHeader>
+                    <TableHeader className="bg-[#BFD7FD] text-[#000000] font-poppins">
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {
@@ -62,7 +62,7 @@ export function DataTable<TData, TValue>({
                             </TableRow>
                         ))}
                     </TableHeader>
-                    <TableBody>
+                    <TableBody className="font-poppins">
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
