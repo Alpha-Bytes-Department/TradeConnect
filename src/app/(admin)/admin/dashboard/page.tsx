@@ -41,6 +41,7 @@ const quickActions = [
         id: 1,
         icon: Edit3,
         title: "Edit Profile",
+        link: '/editAccount',
         description: "Update your information",
         color: "bg-blue-100",
         iconColor: "text-blue-600",
@@ -49,6 +50,7 @@ const quickActions = [
         id: 2,
         icon: Lock,
         title: "Change Password",
+        link: '/changePassword',
         description: "Update security",
         color: "bg-purple-100",
         iconColor: "text-purple-600",
@@ -57,6 +59,7 @@ const quickActions = [
         id: 3,
         icon: ImageIcon,
         title: "Update Images",
+        link: '/editAccount',
         description: "Add photos to gallery",
         color: "bg-green-100",
         iconColor: "text-green-600",
@@ -76,7 +79,7 @@ const recentlyViewedBusinesses = [
         name: "Global Marketing Pro",
         country: "United Kingdom",
         services: "Digital Marketing, SEO, Brand Strategy, Social Media Management",
-        logo: "GM",
+        logo: "/logo.jpg",
         logoColor: "bg-slate-700 text-white",
     },
     {
@@ -85,7 +88,7 @@ const recentlyViewedBusinesses = [
         country: "Canada",
         services:
             "Financial Planning, Investment Advisory, Tax Consulting, Wealth Management",
-        logo: "FE",
+        logo: "/logo.jpg",
         logoColor: "bg-amber-100 text-amber-900",
     },
     {
@@ -93,7 +96,7 @@ const recentlyViewedBusinesses = [
         name: "Design Studio Co",
         country: "Australia",
         services: "Graphic Design, UI/UX Design, Brand Identity, Product Design",
-        logo: "DS",
+        logo: "/logo.jpg",
         logoColor: "bg-rose-400 text-white",
     },
 ];
@@ -104,11 +107,11 @@ export default function Dashboard() {
 
     return (
         <div className="w-full fc flex-col justify-around  gap-4 md:gap-6 my-4 md:my-6">
-            <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-gradient-to-b from-[#8A38F5] to-[#005AF0] rounded-lg">
-                <h1 className="text-2xl sm:text-2xl lg:text-2xl font-semibold mb-2 tracking-tight text-white">
+            <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-gradient-to-b from-[#005AF0] to-[#8A38F5] rounded-lg">
+                <h1 className="text-3xl sm:text-2xl lg:text-2xl font-semibold mb-2 tracking-tight text-white">
                     Welcome back, Tech Solutions Inc.!
                 </h1>
-                <p className="text-purple-100 text-md sm:text-base font-light">
+                <p className="text-purple-100 text-xl sm:text-base font-light">
                     Manage your business profile and explore the directory
                 </p>
             </div>
@@ -180,12 +183,12 @@ export default function Dashboard() {
                     Quick Actions
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ">
-                    {quickActions.map((action) => {
+                    {quickActions.map((action,index) => {
                         const Icon = action.icon;
                         return (
                             <button
                                 key={action.id}
-                                onClick={() => alert(`${action.title} clicked`)}
+                                onClick={() => router.push(`${quickActions[index].link}`)}
                                 onMouseEnter={() => setHoveredAction(action.id)}
                                 onMouseLeave={() => setHoveredAction(null)}
                                 className="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 text-left group border border-slate-100 hover:border-indigo-200"
@@ -303,8 +306,20 @@ export default function Dashboard() {
                                     <tr key={business.id} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
                                         <td className="py-5 px-6">
                                             <div className="flex items-center gap-4">
-                                                <div className={`${business.logoColor} w-12 h-12 rounded-xl flex items-center justify-center font-bold text-sm shadow-sm`}>
-                                                    {business.logo}
+                                                <div className={`relative flex-shrink-0 w-12 h-12 rounded-xl overflow-hidden shadow-sm flex items-center justify-center ${business.logo ? 'bg-white border border-slate-100' : business.logoColor}`}>
+                                                    {business.logo ? (
+                                                        <Image
+                                                            src={business.logo}
+                                                            alt={`${business.name} logo`}
+                                                            fill
+                                                            sizes="w-12 h-12"
+                                                            className="object-cover" // 'object-contain' keeps the full logo visible without cropping
+                                                        />
+                                                    ) : (
+                                                        <span className="font-bold text-sm">
+                                                            {business.logo}
+                                                        </span>
+                                                    )}
                                                 </div>
                                                 <span className="font-semibold text-slate-800">{business.name}</span>
                                             </div>

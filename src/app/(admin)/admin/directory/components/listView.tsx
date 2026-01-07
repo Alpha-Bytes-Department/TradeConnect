@@ -51,30 +51,28 @@ const ListView: React.FC<DirectoryListProps> = ({ companies }) => {
                                         />
                                     </div>
                                     <div className="min-w-0">
-                                        <h3 className="text-base font-semibold text-slate-900 truncate group-hover:text-blue-600 transition-colors duration-200">
+                                        <h3 className="text-lg font-semibold text-slate-900 truncate group-hover:text-blue-600 transition-colors duration-200">
                                             {item.title}
                                         </h3>
-                                        <p className="text-sm text-slate-500 mt-0.5">
-                                            {item.location || 'Business Partners'}
-                                        </p>
+                                        
                                     </div>
                                 </div>
 
                                 {/* Country Column */}
                                 <div className="flex items-center">
-                                    <p className="text-sm text-slate-500 ">{item.country ? item.country:'-'}</p>
+                                    <p className="text-md font-semibold text-slate-500 ">{item.country ? item.country:'-'}</p>
                                 </div>
 
                                 {/* Services Column */}
                                 <div className="flex items-center">
                                     <div className="space-y-1">
                                         {item.services?.slice(0, 2).map((service, idx) => (
-                                            <p key={idx} className="text-sm text-slate-700">
+                                            <p key={idx} className="text-sm font-semibold text-slate-700">
                                                 {service}
                                             </p>
                                         ))}
                                         {item.services && item.services.length > 2 && (
-                                            <p className="text-xs text-slate-500 font-medium mt-1">
+                                            <p className="text-md font-semibold text-slate-500 font-medium mt-1">
                                                 {item.services.length-2}+
                                             </p>
                                         )}
@@ -84,10 +82,10 @@ const ListView: React.FC<DirectoryListProps> = ({ companies }) => {
                                 {/* Contact Column */}
                                 <div className="flex items-center">
                                     <div className="space-y-1">
-                                        <p className="text-sm text-slate-700">
+                                        <p className="text-md font-semibold text-slate-700">
                                             {item.website || 'info@company.com'}
                                         </p>
-                                        <p className="text-sm text-slate-500">
+                                        <p className="text-md font-semibold text-slate-500">
                                             {item.phone || '+971 544 4546 4641'}
                                         </p>
                                     </div>
@@ -99,10 +97,10 @@ const ListView: React.FC<DirectoryListProps> = ({ companies }) => {
                                         href="https://google.com"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="fc gap-3 bg-blue-100 hover:bg-blue-700 text-blue-700 hover:text-white text-xl font-medium py-2 px-4 rounded-xl transition-colors border border-blue-600 "
+                                        className="fc gap-3 bg-blue-100 hover:bg-blue-700 text-blue-700 hover:text-white text-md  font-semibold py-2 px-4 rounded-xl transition-colors border border-blue-600 "
                                     >
                                         <span>View</span>
-                                        <ExternalLink className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-200" />
+                                        <ExternalLink className="w-5 h-5 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-200" />
                                     </Link>
                                 </div>
                             </div>

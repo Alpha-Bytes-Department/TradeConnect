@@ -1,20 +1,23 @@
 import React from 'react';
-import { EditData } from '../page';
 
-
-interface BasicProps {
-    editData: EditData;
-    setEditData: React.Dispatch<React.SetStateAction<EditData>>;
+interface Basic{
+ name: string,
+address: string,
+country: string 
 }
 
-const Basic: React.FC<BasicProps> = ({ editData, setEditData }) => {
-    const handleInputChange = (field: keyof EditData['basic'], value: string) => {
-        setEditData(prev => ({
+interface BasicProps {
+    data: Basic;
+    setData: React.Dispatch<React.SetStateAction<Basic>>;
+}
+
+const Basic: React.FC<BasicProps> = ({ data, setData }) => {
+    const handleInputChange = (field: keyof Basic, value: string) => {
+        setData(prev => ({
             ...prev,
-            basic: {
-                ...prev.basic,
+            
                 [field]: value
-            }
+            
         }));
     };
     const countries = ['United States', 'Canada', 'Singapore', 'France', 'Dubai', 'Argentina', 'Germany', 'Nepal', 'Finland']
@@ -30,7 +33,7 @@ const Basic: React.FC<BasicProps> = ({ editData, setEditData }) => {
                     <input
                         id="business-name"
                         type="text"
-                        value={editData.basic.name}
+                        value={data.name}
                         onChange={(e) => handleInputChange('name', e.target.value)}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                         placeholder="Tech Solution Inc."
@@ -44,7 +47,7 @@ const Basic: React.FC<BasicProps> = ({ editData, setEditData }) => {
                     </label>
                     <select
                         id="country"
-                        value={editData.basic.country}
+                        value={data.country}
                         onChange={(e) => handleInputChange('country', e.target.value)}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 appearance-none bg-white cursor-pointer"
                         style={{
@@ -57,7 +60,7 @@ const Basic: React.FC<BasicProps> = ({ editData, setEditData }) => {
                         
                         
                     >
-                        {countries.map((country,index)=><option key={index} value="United States">{country}</option>)}
+                        {countries.map((country,index)=><option key={index} value={country}>{country}</option>)}
                         
                     </select>
                 </div>
@@ -71,7 +74,7 @@ const Basic: React.FC<BasicProps> = ({ editData, setEditData }) => {
                 <input
                     id="address"
                     type="text"
-                    value={editData.basic.address}
+                    value={data.address}
                     onChange={(e) => handleInputChange('address', e.target.value)}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                     placeholder="123 Tech street, san Francisco, CA 94105"
