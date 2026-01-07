@@ -2,7 +2,7 @@
 import DashboardCard from "../../components/dashboard/DashboardCard";
 import { Chart } from "../../components/dashboard/Chart";
 import Link from "next/link";
-import { columns, dashboardLatestBusiness } from "./columns.tsx";
+import { columns, dashboardLatestBusiness } from "./columns";
 import { DataTable } from "./data-table";
 
 
