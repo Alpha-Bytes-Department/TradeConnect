@@ -2,7 +2,7 @@
 
 import { useState,useEffect } from 'react';
 import { X, Star, ChevronDown } from 'lucide-react';
-import { Contact } from '../../interfaces';
+import { Contact } from '@/app/(admin)/admin/interfaces';
 
 interface updateContactModalProps {
     isOpen: boolean;

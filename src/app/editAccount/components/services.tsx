@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { Service } from '../../interfaces';
+import { Service } from '@/app/(admin)/admin/interfaces';
 
 interface ServicesData {
     about: string;

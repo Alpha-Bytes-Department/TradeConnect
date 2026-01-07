@@ -10,7 +10,7 @@ import Certifications from './components/certifications';
 import { Save } from 'lucide-react';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import Navbar from '../(admin)/admin/components/common/NavBar';
-import { ContactInfo, Award, LocationData,CompanyProfile,Service } from '../(admin)/admin/interfaces';
+import { ContactInfo, Award, LocationData,CompanyProfile,Service } from '@/app/(admin)/admin/interfaces';
 
 /*export interface Data{
     basic:{
