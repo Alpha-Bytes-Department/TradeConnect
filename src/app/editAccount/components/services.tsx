@@ -1,66 +1,84 @@
-
-'use client'
+'use client';
 import React from 'react';
-import { EditData } from '../page';
-interface ContactsProps {
-    editData: EditData;
-    setEditData: React.Dispatch<React.SetStateAction<EditData>>;
+import { Service } from '../../interfaces';
+
+interface ServicesData {
+    about: string;
+    services: Service[];
 }
 
-const Services: React.FC<ContactsProps> = ({ editData, setEditData }) => {
-    const handleServicesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setEditData((prev) => ({
+interface ContactsProps {
+    data: ServicesData;
+    setData: React.Dispatch<React.SetStateAction<ServicesData>>;
+}
+
+const Services: React.FC<ContactsProps> = ({ data, setData }) => {
+
+    const handleServicesChange = (
+        e: React.ChangeEvent<HTMLTextAreaElement>
+    ) => {
+        const value = e.target.value;
+
+        const servicesArray: Service[] = value
+            .split(',')
+            .map(item => item.trim())
+            .filter(Boolean)
+            .map(name => ({ name }));
+
+        setData(prev => ({
             ...prev,
-            services: {
-                ...prev.services,
-                services: e.target.value,
-            },
+            services: servicesArray
         }));
     };
 
-    const handleAboutChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setEditData((prev) => ({
+    const handleAboutChange = (
+        e: React.ChangeEvent<HTMLTextAreaElement>
+    ) => {
+        setData(prev => ({
             ...prev,
-            services: {
-                ...prev.services,
-                about: e.target.value,
-            },
+            about: e.target.value
         }));
     };
 
     return (
         <div className="space-y-6">
-            {/* Services Offered Field */}
+            {/* Services */}
             <div>
-                <label htmlFor="country" className="text-sm text-gray-700 mb-2">
+                <label htmlFor="services" className="text-sm text-gray-700 mb-2">
                     Services Offered<span className="text-red-500">*</span>
                 </label>
-                <input
+
+                <textarea
                     id="services"
-                    type="text"
-                    value={editData.services.services}
+                    rows={6}
+                    value={data.services.map(s => s.name).join(', ')}
                     onChange={handleServicesChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500"
                     placeholder="Software Development, Cloud Solutions, IT Consulting"
                 />
-                <p className="mt-1 text-xs text-gray-500">Separate services with commas</p>
+
+                <p className="mt-1 text-xs text-gray-500">
+                    Separate services with commas
+                </p>
             </div>
 
-            {/* About Your Business Field */}
+            {/* About */}
             <div>
-                <label htmlFor="country" className="text-sm text-gray-700 mb-2">
+                <label htmlFor="about" className="text-sm text-gray-700 mb-2">
                     About Your Business<span className="text-red-500">*</span>
                 </label>
+
                 <textarea
                     id="about"
-                    value={editData.services.about}
+                    value={data.about}
                     onChange={handleAboutChange}
                     rows={6}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 resize-none"
-                    placeholder="Leading technology solutions provider with 15+ years of experience in enterprise software development."
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 resize-none"
+                    placeholder="Leading technology solutions provider with 15+ years of experience."
                 />
+
                 <p className="mt-1 text-xs text-gray-500">
-                    {editData.services.about.length} characters
+                    {data.about.length} characters
                 </p>
             </div>
         </div>
