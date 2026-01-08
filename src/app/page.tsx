@@ -4,31 +4,36 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Mail, LockKeyhole, Eye, EyeOff } from 'lucide-react';
 import { useState } from "react";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+// import { z } from "zod";
+// import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { FaArrowRight } from "react-icons/fa6";
 import axios from "axios";
 
-const SignInSchema = z.object({
-  emailAddress: z
-    .string()
-    .email("Incorrect Email")
-    .toLowerCase()
-    .trim(),
+// const SignInSchema = z.object({
+//   emailAddress: z
+//     .string()
+//     .email("Incorrect Email")
+//     .toLowerCase()
+//     .trim(),
 
-  password: z
-    .string()
-    .min(8, "Wrong Password")
-    .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-      "Password must contain at least one uppercase letter, one lowercase letter and one number"
-    ),
-});
+//   password: z
+//     .string()
+//     .min(8, "Wrong Password")
+//     .regex(
+//       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+//       "Password must contain at least one uppercase letter, one lowercase letter and one number"
+//     ),
+// });
 
 // Type inference from schema
-type SignInFormData = z.infer<typeof SignInSchema>;
+// type SignInFormData = z.infer<typeof SignInSchema>;
+
+type SignInFormData = {
+  emailAddress: string;
+  password: string;
+};
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -39,7 +44,7 @@ export default function SignIn() {
     formState: { errors, isSubmitting },
     setValue,
   } = useForm<SignInFormData>({ // Add type parameter here
-    resolver: zodResolver(SignInSchema),
+    // resolver: zodResolver(SignInSchema),
     mode: "onChange", // Add this for immediate validation
     defaultValues: {
       emailAddress: "",
@@ -48,8 +53,39 @@ export default function SignIn() {
   });
 
   const onSubmit = async (data: SignInFormData) => {
-    if (data.emailAddress === "admin@gmail.com" && data.password === "HelloFahim19")
-      router.push("/super-admin/dashboard");
+    try {
+      const response = await axios.post("https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/auth/login/",
+        JSON.stringify({
+          email: data.emailAddress,
+          password: data.password
+        }),
+        {
+          headers: { 'Content-Type': 'application/json' },
+          // withCredentials: true
+        }
+      );
+      console.log(JSON.stringify(response?.data));
+      //console.log(JSON.stringify(response));
+      const accessToken = response?.data?.accessToken;
+      // const roles = response?.data?.roles;
+      // setAuth({ user, pwd, roles, accessToken });
+      // setSuccess(true);
+    }
+    catch (err) {
+      // if (!err?.response) {
+      //   setErrMsg('No Server Response');
+      // } else if (err.response?.status === 400) {
+      //   setErrMsg('Missing Username or Password');
+      // } else if (err.response?.status === 401) {
+      //   setErrMsg('Unauthorized');
+      // } else {
+      //   setErrMsg('Login Failed');
+      // }
+      // errRef.current.focus();
+    }
+
+    // if (data.emailAddress === "admin@gmail.com" && data.password === "HelloFahim19")
+    //   router.push("/super-admin/dashboard");
     // const payload = {
     //   "email": "tusharimranme0@gmail.com",
     //   "password": "12345678"
