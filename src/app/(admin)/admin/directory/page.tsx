@@ -1,19 +1,23 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CardView from "./components/cardView";
 import { Search, Grid3x3, List } from "lucide-react";
 import ListView from "./components/listView";
+import api from '../../../api';
 
 export interface CompanyData {
-    headerImage?: string;
-    flagIcon?: string;
-    title?: string;
-    location?: string;
-    description?: string;
-    services?: string[];
-    website?: string;
-    country?: string;
-    phone?: string;
+    headerImage: string;
+    flagIcon: string;
+    title: string;
+    location: string;
+    description: string;
+    services: string[];
+    website: string;
+    country: string;
+    phone: string;
+    seenBy: number;
+    joined: string;
+
 }
 
 const page = () => {
@@ -40,131 +44,23 @@ const page = () => {
     ];
     const sortOptions = ["A-Z", "Z-A", "Most Recent", "Most Popular"];
 
-    const data = [
-        {
-            headerImage:
-                "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            title: "TradeConnect Logistics",
-            location: "United States",
-            seenBy:25,
-            joined: '2025-01-03T07:40:00Z',
-            description:
-                "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
-            services: [
-                "Technology",
-                "Healthcare",
-                "Finance",
-                "Education",
-                "Retail",
-            ],
-            country: 'UK',
-        },
-        {
-            headerImage:
-                "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            title: "TradeConnect Logistics",
-            location: "United States",
-            seenBy: 65,
-            joined: '2025-01-03T07:40:00Z',
-            description:
-                "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
-            services: [
-                "Technology",
-                "Healthcare",
-                "Finance",
-                "Education",
-                
-            ],
-            country: 'UK',
-        },
-        {
-            headerImage:
-                "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            title: "TradeConnect Logistics",
-            location: "United States",
-            seenBy: 25,
-            joined: '2025-01-02T07:40:00Z',
-            description:
-                "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
-            services: [
-                "Technology",
-                "Healthcare",
-                "Finance",
-                
-                "Retail",
-            ],
-            country: 'USA',
-        },
-        {
-            headerImage:
-                "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            title: "bradeConnect Logistics",
-            location: "Australia",
-            seenBy: 15,
-            joined: '2025-01-01T07:40:00Z',
-            description:
-                "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
-            services: [
-                "Technology",
-                "Healthcare",
-                
-                "Education",
-                "Retail",
-            ],
-            country: 'Australia',
-        },
-        {
-            headerImage:
-                "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            title: "TradeConnect Logistics",
-            location: "Australia",
-            seenBy: 45,
-            joined: '2025-01-05T07:40:00Z',
-            description:
-                "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
-            services: [
-                "Technology",
-                
-                "Finance",
-                "Education",
-                "Retail",
-            ],
-            country: 'Canada',
-        },
-        {
-            headerImage:
-                "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            title: "TradeConnect Logistics",
-            location: "Canada",
-            seenBy: 35,
-            joined: '2025-01-06T07:40:00Z',
-            description:
-                "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
-            services: [
-                "Healthcare",
-                "Finance",
-                "Education",
-                "Retail",
-            ],
-            country: 'UK',
-        },
-    ];
+    const [data, setData] = useState<CompanyData[]>([])
 
-    let temp=selectedService==='No Selection'?data:data.filter((item)=>item.services.includes(selectedService))
+    let temp=selectedService==='No Selection'?data:data?.filter((item)=>item?.services?.includes(selectedService))
     
     
-   temp=selectedCountry==='No Selection'?temp: temp.filter((item)=>item.location.toLowerCase()===selectedCountry.toLowerCase())
+   temp=selectedCountry==='No Selection'?temp: temp?.filter((item)=>item?.location?.toLowerCase()===selectedCountry.toLowerCase())
     
     
-       temp = searchTerm === '' ? temp : temp.filter((item)=>item.title.toLowerCase().startsWith(searchTerm.toLowerCase()))
+       temp = searchTerm === '' ? temp : temp?.filter((item)=>item?.title?.toLowerCase().startsWith(searchTerm.toLowerCase()))
 
-    temp = sortBy === 'A-Z' ? temp.sort((a, b) => a.title.localeCompare(b.title)) : sortBy === 'Z-A' ? temp.sort((a, b) => b.title.localeCompare(a.title)) : sortBy === 'Most Recent' ? temp.sort((a, b) => a.joined.localeCompare(b.joined)) : temp.sort((a, b) => a.seenBy - b.seenBy)
+    temp = sortBy === 'A-Z' ? temp?.sort((a, b) => a.title.localeCompare(b.title)) : sortBy === 'Z-A' ? temp?.sort((a, b) => b.title.localeCompare(a.title)) : sortBy === 'Most Recent' ? temp.sort((a, b) => a.joined.localeCompare(b.joined)) : temp.sort((a, b) => a.seenBy - b.seenBy)
+
+    useEffect(()=>{
+
+
+
+    }, [searchTerm,selectedCountry, selectedService, sortBy])
 
 const modifiedData=temp
 
