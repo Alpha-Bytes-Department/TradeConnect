@@ -126,13 +126,12 @@
   }
 }
 
-
 .fc{
   @apply flex justify-center items-center
 }
 
 .s{
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.30);
+  box-shadow: 0 0 10px rgba(122, 122, 122, 0.3);
 }
 
 .gl:hover{

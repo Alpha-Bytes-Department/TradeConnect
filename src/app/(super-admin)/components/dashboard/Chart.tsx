@@ -1,97 +1,38 @@
 // Fahim
-"use client"
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart"
+// Recharts graph component must be a client component.
+
+"use client";
+import { CartesianGrid, Line, LineChart, XAxis, YAxis, ResponsiveContainer, Tooltip, Legend }
+    from "recharts";
 
 const chartData = [
-    { date: "21 Dec", logins: 186, newBusinesses: 80 },
-    { date: "22 Dec", logins: 305, newBusinesses: 200 },
-    { date: "23 Dec", logins: 237, newBusinesses: 120 },
-    { date: "24 Dec", logins: 73, newBusinesses: 190 },
-    { date: "25 Dec", logins: 209, newBusinesses: 130 },
-    { date: "26 Dec", logins: 214, newBusinesses: 140 },
-    { date: "27 Dec", logins: 219, newBusinesses: 170 },
-]
+    { date: "21 Dec", Logins: 186, NewBusinesses: 80 },
+    { date: "22 Dec", Logins: 305, NewBusinesses: 200 },
+    { date: "23 Dec", Logins: 237, NewBusinesses: 120 },
+    { date: "24 Dec", Logins: 73, NewBusinesses: 190 },
+    { date: "25 Dec", Logins: 209, NewBusinesses: 130 },
+    { date: "26 Dec", Logins: 214, NewBusinesses: 140 },
+    { date: "27 Dec", Logins: 219, NewBusinesses: 170 },
+];
 
-const chartConfig = {
-    logins: {
-        label: "Logins",
-        color: "var(--chart-1)",
-    },
-    newBusinesses: {
-        label: "New Businesses",
-        color: "var(--chart-3)",
-    },
-} satisfies ChartConfig
-
-export function Chart() {
+export default function Chart() {
     return (
-        <Card>
-            <CardHeader>
-                <CardTitle>User Activity Over Time</CardTitle>
-                {/* <CardDescription>
-                    Showing total visitors for the last 6 months
-                </CardDescription> */}
-            </CardHeader>
-            <CardContent>
-                <ChartContainer config={chartConfig} className="w-full h-[350px]">
-                    <AreaChart
-                        accessibilityLayer
-                        data={chartData}
-                        margin={{
-                            left: 0,
-                            right: 0,
-                            top: 10,
-                            bottom: 0
-                        }}
-                    >
-                        <CartesianGrid vertical={false} />
-                        <XAxis
-                            dataKey="date"
-                            tickLine={false}
-                            axisLine={false}
-                            tickMargin={8}
-                            tickFormatter={(value) => value.slice(0, 6)}
-                        />
-                        <YAxis
-                            tickLine={false}
-                            axisLine={false}
-                            tickMargin={8}
-                            tickCount={3}
-                        />
-                        <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-                        <Area
-                            dataKey="logins"
-                            type="natural"
-                            fill="var(--color-logins)"
-                            fillOpacity={0.4}
-                            stroke="var(--color-logins)"
-                            stackId="a"
-                        />
-                        <Area
-                            dataKey="newBusinesses"
-                            type="natural"
-                            fill="var(--color-newBusinesses)"
-                            fillOpacity={0.4}
-                            stroke="var(--color-newBusinesses)"
-                            stackId="a"
-                        />
-                    </AreaChart>
-                </ChartContainer>
-            </CardContent>
-            {/* <CardFooter>
-                <div className="flex w-full items-start gap-2 text-sm">
-                    <div className="grid gap-2">
-                        <div className="flex items-center gap-2 leading-none font-medium">
-                            Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-                        </div>
-                        <div className="text-muted-foreground flex items-center gap-2 leading-none">
-                            January - June 2024
-                        </div>
-                    </div>
-                </div>
-            </CardFooter> */}
-        </Card>
-    )
+        <div className="max-w-[1600px] mx-auto h-[450px] border bg-white rounded-lg p-6">
+            <h1 className="font-poppins font-medium text-[#313131] mb-2">User Activity Over Time</h1>
+            <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={chartData}>
+                    <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
+                    <XAxis dataKey="date" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Line type="monotone" dataKey="Logins" stroke="#3B82F6" />
+                    <Line type="monotone" dataKey="NewBusinesses" stroke="#10B981" />
+                </LineChart>
+            </ResponsiveContainer>
+        </div>
+    );
 }
+
+
+
