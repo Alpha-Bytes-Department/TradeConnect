@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import CardView from "./components/cardView";
 import { Search, Grid3x3, List } from "lucide-react";
 import ListView from "./components/listView";
+import api from "@/app/api";
 
 export interface CompanyData {
     headerImage?: string;
