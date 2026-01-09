@@ -12,27 +12,7 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import Navbar from '../(admin)/admin/components/common/NavBar';
 import { ContactInfo, Award, LocationData,CompanyProfile,Service } from '@/app/(admin)/admin/interfaces';
 
-/*export interface Data{
-    basic:{
-        name:string,
-        country: string,
-        address: string
-    }
-    contact:{
-        email: string,
-        phone: string,
-        website: string,
-    }
-    services:{
-        services: string,
-        about: string,
-    }
-    images:{
-        logo: File | undefined,
-        banner: File | undefined,
-        gallery: File[],
-    }
-}*/
+
 
 type TabType = 'basic' | 'contact' | 'branches' | 'certification' | 'services' | 'images';
 
