@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import { ViewProvider } from "./(super-admin)/ListGridContext";
 
 const poppinsFont = Poppins({
   subsets: ["latin"],
@@ -24,7 +25,9 @@ export default function RootLayout({
       <body
         className={`${poppinsFont.variable} antialiased`}
       >
-        {children}
+        <ViewProvider>
+          {children}
+        </ViewProvider>
       </body>
     </html>
   );

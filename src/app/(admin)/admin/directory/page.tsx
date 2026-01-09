@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import CardView from "./components/cardView";
 import { Search, Grid3x3, List } from "lucide-react";
 import ListView from "./components/listView";
-import api from '../../../api';
+import api from "@/app/api";
 
 export interface CompanyData {
     headerImage: string;
@@ -15,9 +15,8 @@ export interface CompanyData {
     website: string;
     country: string;
     phone: string;
+    joined:string;
     seenBy: number;
-    joined: string;
-
 }
 
 const page = () => {
@@ -44,25 +43,196 @@ const page = () => {
     ];
     const sortOptions = ["A-Z", "Z-A", "Most Recent", "Most Popular"];
 
-    const [data, setData] = useState<CompanyData[]>([])
-
-    let temp=selectedService==='No Selection'?data:data?.filter((item)=>item?.services?.includes(selectedService))
+    const [data,setData]=useState<CompanyData[]>([])
     
     
-   temp=selectedCountry==='No Selection'?temp: temp?.filter((item)=>item?.location?.toLowerCase()===selectedCountry.toLowerCase())
     
-    
-       temp = searchTerm === '' ? temp : temp?.filter((item)=>item?.title?.toLowerCase().startsWith(searchTerm.toLowerCase()))
+    /*
+    [
+        {
+            headerImage:
+                "https://images.unsplash.com/photo-1497366216548-37526070297c",
+            flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
+            title: "TradeConnect Logistics",
+            location: "United States",
+            seenBy:25,
+            joined: '2025-01-03T07:40:00Z',
+            description:
+                "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
+            services: [
+                "Technology",
+                "Healthcare",
+                "Finance",
+                "Education",
+                "Retail",
+            ],
+            country: 'UK',
+        },
+        {
+            headerImage:
+                "https://images.unsplash.com/photo-1497366216548-37526070297c",
+            flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
+            title: "TradeConnect Logistics",
+            location: "United States",
+            seenBy: 65,
+            joined: '2025-01-03T07:40:00Z',
+            description:
+                "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
+            services: [
+                "Technology",
+                "Healthcare",
+                "Finance",
+                "Education",
+                
+            ],
+            country: 'UK',
+        },
+        {
+            headerImage:
+                "https://images.unsplash.com/photo-1497366216548-37526070297c",
+            flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
+            title: "TradeConnect Logistics",
+            location: "United States",
+            seenBy: 25,
+            joined: '2025-01-02T07:40:00Z',
+            description:
+                "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
+            services: [
+                "Technology",
+                "Healthcare",
+                "Finance",
+                
+                "Retail",
+            ],
+            country: 'USA',
+        },
+        {
+            headerImage:
+                "https://images.unsplash.com/photo-1497366216548-37526070297c",
+            flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
+            title: "bradeConnect Logistics",
+            location: "Australia",
+            seenBy: 15,
+            joined: '2025-01-01T07:40:00Z',
+            description:
+                "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
+            services: [
+                "Technology",
+                "Healthcare",
+                
+                "Education",
+                "Retail",
+            ],
+            country: 'Australia',
+        },
+        {
+            headerImage:
+                "https://images.unsplash.com/photo-1497366216548-37526070297c",
+            flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
+            title: "TradeConnect Logistics",
+            location: "Australia",
+            seenBy: 45,
+            joined: '2025-01-05T07:40:00Z',
+            description:
+                "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
+            services: [
+                "Technology",
+                
+                "Finance",
+                "Education",
+                "Retail",
+            ],
+            country: 'Canada',
+        },
+        {
+            headerImage:
+                "https://images.unsplash.com/photo-1497366216548-37526070297c",
+            flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
+            title: "TradeConnect Logistics",
+            location: "Canada",
+            seenBy: 35,
+            joined: '2025-01-06T07:40:00Z',
+            description:
+                "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
+            services: [
+                "Healthcare",
+                "Finance",
+                "Education",
+                "Retail",
+            ],
+            country: 'UK',
+        },
+    ];
+    */
 
-    temp = sortBy === 'A-Z' ? temp?.sort((a, b) => a.title.localeCompare(b.title)) : sortBy === 'Z-A' ? temp?.sort((a, b) => b.title.localeCompare(a.title)) : sortBy === 'Most Recent' ? temp.sort((a, b) => a.joined.localeCompare(b.joined)) : temp.sort((a, b) => a.seenBy - b.seenBy)
+    let temp: CompanyData[] = Array.isArray(data) ? [...data] : [];
 
-    useEffect(()=>{
+    // Filter by service
+    if (selectedService !== 'No Selection') {
+        temp = temp.filter(item =>
+            item?.services?.includes(selectedService)
+        );
+    }
+
+    // Filter by country
+    if (selectedCountry !== 'No Selection') {
+        temp = temp.filter(item =>
+            item.location?.toLowerCase() === selectedCountry.toLowerCase()
+        );
+    }
+
+    // Filter by search
+    if (searchTerm) {
+        temp = temp.filter(item =>
+            item.title?.toLowerCase().startsWith(searchTerm.toLowerCase())
+        );
+    }
+
+    // Sort (SAFE)
+    switch (sortBy) {
+        case 'A-Z':
+            temp.sort((a, b) => a.title.localeCompare(b.title));
+            break;
+
+        case 'Z-A':
+            temp.sort((a, b) => b.title.localeCompare(a.title));
+            break;
+
+        case 'Most Recent':
+            temp.sort(
+                (a, b) =>
+                    new Date(b.joined).getTime() -
+                    new Date(a.joined).getTime()
+            );
+            break;
+
+        default:
+            temp.sort((a, b) => a.seenBy - b.seenBy);
+    }
+
+    const modifiedData = temp;
 
 
 
-    }, [searchTerm,selectedCountry, selectedService, sortBy])
+useEffect(() => {
+    let controller=new AbortController()
 
-const modifiedData=temp
+    const fetchUsers = async () => {
+      try {
+        const res = await api.get(`/api/business/all/?country=${selectedCountry}&search=${searchTerm}&service=${selectedService}&page=${0}&sort_by=${sortBy}`);
+        if (controller) setData(res.data);
+      } catch (err: any) {
+        
+      } 
+    };
+
+    fetchUsers();
+
+    return () => {
+      controller.abort();
+    };
+  }, []);
+
 
     return (
         <div className="w-full bg-gray-50 min-h-screen">
