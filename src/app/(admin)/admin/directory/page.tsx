@@ -1,5 +1,5 @@
 "use client";
-import React, { useState,useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import CardView from "./components/cardView";
 import { Search, Grid3x3, List } from "lucide-react";
 import ListView from "./components/listView";
@@ -15,8 +15,8 @@ export interface CompanyData {
     website: string;
     country: string;
     phone: string;
-    joined: string;
-    seenBy:number;
+    joined:string;
+    seenBy: number;
 }
 
 const page = () => {
@@ -43,8 +43,8 @@ const page = () => {
     ];
     const sortOptions = ["A-Z", "Z-A", "Most Recent", "Most Popular"];
 
-    /*
-    const data = [
+
+    const dummyData = [
         {
             headerImage:
                 "https://images.unsplash.com/photo-1497366216548-37526070297c",
@@ -63,6 +63,9 @@ const page = () => {
                 "Retail",
             ],
             country: 'UK',
+            website: 'https://google.com',
+            phone: '5645345234534',
+            
         },
         {
             headerImage:
@@ -82,6 +85,8 @@ const page = () => {
                 
             ],
             country: 'UK',
+            website: 'https://google.com',
+            phone: '5645345234534',
         },
         {
             headerImage:
@@ -101,6 +106,8 @@ const page = () => {
                 "Retail",
             ],
             country: 'USA',
+            website: 'https://google.com',
+            phone: '5645345234534',
         },
         {
             headerImage:
@@ -120,6 +127,8 @@ const page = () => {
                 "Retail",
             ],
             country: 'Australia',
+            website: 'https://google.com',
+            phone: '5645345234534',
         },
         {
             headerImage:
@@ -139,6 +148,8 @@ const page = () => {
                 "Retail",
             ],
             country: 'Canada',
+            website: 'https://google.com',
+            phone: '5645345234534',
         },
         {
             headerImage:
@@ -157,60 +168,63 @@ const page = () => {
                 "Retail",
             ],
             country: 'UK',
+            website: 'https://google.com',
+            phone: '5645345234534',
         },
     ];
+    
 
-    */
+    const [data, setData] = useState<CompanyData[]>(dummyData)
 
 
-    const[data,setData]=useState<CompanyData[]>([])
 
     let temp: CompanyData[] = Array.isArray(data) ? [...data] : [];
 
-// Filter by service
-if (selectedService !== 'No Selection') {
-  temp = temp.filter(item =>
-    item?.services?.includes(selectedService)
-  );
-}
+    // Filter by service
+    if (selectedService !== 'No Selection') {
+        temp = temp.filter(item =>
+            item?.services?.includes(selectedService)
+        );
+    }
 
-// Filter by country
-if (selectedCountry !== 'No Selection') {
-  temp = temp.filter(item =>
-    item.location?.toLowerCase() === selectedCountry.toLowerCase()
-  );
-}
+    // Filter by country
+    if (selectedCountry !== 'No Selection') {
+        temp = temp.filter(item =>
+            item.location?.toLowerCase() === selectedCountry.toLowerCase()
+        );
+    }
 
-// Filter by search
-if (searchTerm) {
-  temp = temp.filter(item =>
-    item.title?.toLowerCase().startsWith(searchTerm.toLowerCase())
-  );
-}
+    // Filter by search
+    if (searchTerm) {
+        temp = temp.filter(item =>
+            item.title?.toLowerCase().startsWith(searchTerm.toLowerCase())
+        );
+    }
 
-// Sort (SAFE)
-switch (sortBy) {
-  case 'A-Z':
-    temp.sort((a, b) => a.title.localeCompare(b.title));
-    break;
+    // Sort (SAFE)
+    switch (sortBy) {
+        case 'A-Z':
+            temp.sort((a, b) => a.title.localeCompare(b.title));
+            break;
 
-  case 'Z-A':
-    temp.sort((a, b) => b.title.localeCompare(a.title));
-    break;
+        case 'Z-A':
+            temp.sort((a, b) => b.title.localeCompare(a.title));
+            break;
 
-  case 'Most Recent':
-    temp.sort(
-      (a, b) =>
-        new Date(b.joined).getTime() -
-        new Date(a.joined).getTime()
-    );
-    break;
+        case 'Most Recent':
+            temp.sort(
+                (a, b) =>
+                    new Date(b.joined).getTime() -
+                    new Date(a.joined).getTime()
+            );
+            break;
 
-  default:
-    temp.sort((a, b) => a.seenBy - b.seenBy);
-}
+        default:
+            temp.sort((a, b) => a.seenBy - b.seenBy);
+    }
 
-const modifiedData = temp
+    const modifiedData = temp;
+
 
 
 useEffect(() => {
@@ -218,7 +232,7 @@ useEffect(() => {
 
     const fetchUsers = async () => {
       try {
-        const res = await api.get(`/api/business/all/?country=${selectedCountry}&search=${searchTerm}&service=${selectedService}&page=${0}&sort_by=${sortBy}`);
+          const res = await api.get(`/api/business/all/?country=${selectedCountry === 'No Selection' ? '' : selectedCountry}&search=${searchTerm}&service=${selectedService === 'No Selection' ? '' : selectedService}&page=${0}&sort_by=${sortBy}`);
         if (controller) setData(res.data);
       } catch (err: any) {
         

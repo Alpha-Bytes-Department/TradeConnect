@@ -1,17 +1,18 @@
 // Fahim
 "use client"
 import {
-    Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu,
-    SidebarMenuButton, SidebarMenuItem, SidebarSeparator
+    Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader,
+    SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarSeparator
 } from "@/components/ui/sidebar";
-//import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
-//import { DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import Link from "next/link";
 import { LuBriefcaseBusiness, LuLayoutDashboard, LuSettings } from "react-icons/lu";
 import { FiPlusCircle } from "react-icons/fi";
-import { TbLogout } from "react-icons/tb";
+import { TbCategory, TbCategory2, TbCategoryFilled, TbCategoryPlus, TbLogout } from "react-icons/tb";
 import { usePathname } from "next/navigation";
+import { useView } from "../ListGridContext";
+import LogOutModal from "./LogOutModal";
+import { DotSquareIcon, Grid3x3Icon } from "lucide-react";
 import { BsGrid3X3Gap } from "react-icons/bs";
+import Image from "next/image";
 
 type SidebarItem = {
     title: string;
@@ -20,10 +21,11 @@ type SidebarItem = {
 };
 
 const items: SidebarItem[] = [
+    
     {
         title: "Directory",
         url: "/admin/directory",
-        icon: <BsGrid3X3Gap />,
+        icon: <BsGrid3X3Gap/>
     },
     {
         title: "Dashboard",
@@ -33,13 +35,18 @@ const items: SidebarItem[] = [
 ];
 
 export default function AppSidebar() {
+    // const [isLogoutOpen, setIsLogoutOpen] = useState(false);
     const pathname = usePathname();
+    const { isLogoutOpen, setIsLogoutOpen } = useView();
+
     return (
         <Sidebar collapsible="icon" side="left" className="font-poppins text-base">
-            <SidebarHeader className="py-4">
-                <div className="flex flex-col pl-3 transition-all group-data-[collapsible=icon]:hidden">
-                    <p className="font-poppins font-medium text-[#1C4589] text-xl">TradeConnect</p>
-                    <p className="text-[#626262]">Admin</p>
+            <SidebarHeader className=" h-21">
+                <div className="flex flex-col items-start pl-3 transition-all group-data-[collapsible=icon]:hidden">
+                    <div className="relative fc pl-3 ">
+                        <Image src={'/primaryLogo.png'} alt={'logo'} height={100} width={120} className="object-cover"/>
+                    </div>
+                    
                 </div>
             </SidebarHeader>
             <SidebarSeparator />
@@ -49,16 +56,24 @@ export default function AppSidebar() {
                     {/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {items.map((item) => (
-                                <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton asChild>
-                                        <a href={item.url}>
-                                            {item.icon}
-                                            <span>{item.title}</span>
-                                        </a>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
+                            {items.map((item) => {
+                                const isActive = pathname === item.url;
+                                // console.log(pathname);
+                                // console.log(isActive);
+                                return (
+                                    <SidebarMenuItem key={item.title}>
+                                        <SidebarMenuButton asChild
+                                            className={`${isActive ?
+                                                "bg-[#BFD7FD] text-[#2459B1] hover:bg-[#BFD7FD] hover:text-[#2459B1]" : "text-black"}`}>
+                                            <a href={item.url}>
+                                                {item.icon}
+                                                <span>{item.title}</span>
+                                            </a>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                )
+                            })
+                            }
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
@@ -67,12 +82,15 @@ export default function AppSidebar() {
             <SidebarFooter>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton className="text-red-600">
+                        <SidebarMenuButton className="text-red-600 hover:text-red-600 cursor-pointer
+                        flex items-center justify-center" onClick={() => setIsLogoutOpen(true)}>
                             <TbLogout />
                             Log Out
                         </SidebarMenuButton>
+                        {/* {isLogoutOpen && <LogOutModal />} */}
                     </SidebarMenuItem>
                 </SidebarMenu>
+                <LogOutModal />
             </SidebarFooter>
         </Sidebar>
     );
