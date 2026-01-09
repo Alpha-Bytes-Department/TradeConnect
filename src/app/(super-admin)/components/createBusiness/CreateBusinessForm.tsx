@@ -10,6 +10,8 @@ import { Eye, EyeOff, Upload, X } from "lucide-react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { TbCategoryPlus } from "react-icons/tb";
+import axios from "axios";
+import { useView } from "../../ListGridContext";
 
 const businessFormSchema = z.object({
     businessName: z.string().min(1, "Business name is required"),
@@ -28,10 +30,12 @@ const businessFormSchema = z.object({
 type BusinessFormData = z.infer<typeof businessFormSchema>;
 
 export default function CreateBusinessForm() {
+    console.log("hello");
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [error, setError] = useState<string>('');
+    const { auth, setAuth } = useView();
 
     // Initialize React Hook Form with Zod validation
     const {
@@ -88,9 +92,108 @@ export default function CreateBusinessForm() {
     };
 
     // Form submit handler
-    const onSubmit = (data: BusinessFormData) => {
+    const onSubmit = async (data: BusinessFormData) => {
         console.log("Form Data:", data);
-        // You can handle form submission here (e.g., API call)
+        console.log("token:", auth.accessToken);
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+            console.error("No access token found");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("business_name", data.businessName);
+        formData.append("email", data.emailAddress);
+        formData.append("phone_number", data.phoneNumber);
+        formData.append("password", data.password);
+        formData.append("country", data.country);
+        formData.append("full_address", data.fullAddress);
+        formData.append("website", data.websiteURL);
+        formData.append("services", data.servicesOffered);
+        formData.append("about_business", data.aboutBusiness);
+        formData.append("logo", data.bannerImage); // ✅ File
+
+        await axios.post(
+            "https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/create-with-user/",
+            formData,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`, // ✅ Correct
+                },
+            }
+        );
+
+        // if (token) {
+        //     setAuth({ accessToken: token });
+        // }
+
+        // // You can handle form submission here (e.g., API call)
+        // const response = await axios.post("https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/create-with-user/",
+        //     {
+        //         business_name: data.businessName,
+        //         email: data.emailAddress,
+        //         phone_number: data.phoneNumber,
+        //         password: data.password,
+        //         country: data.country,
+        //         full_address: data.fullAddress,
+        //         website: data.websiteURL,
+        //         services: data.servicesOffered,
+        //         about_business: data.aboutBusiness,
+        //         logo: data.bannerImage
+        //     },
+        //     {
+        //         headers: {
+        //             // Don't set Content-Type - let browser set it with boundary
+        //             'Authorization': `Bearer ${token}`,  // ✅ Correct way to add token
+        //         }
+        //         // headers: { 'Content-Type': 'multipart/form-data' },
+        //         // localStorage.getItem(accessToken)
+        //         //localStorage.setItem('accessToken', token);
+        //         // withCredentials: true
+        //     }
+        // );
+
+        // try {
+        //     // Create FormData object
+        //     const formData = new FormData();
+
+        //     // Append all fields to FormData
+        //     formData.append('business_name', data.businessName);
+        //     formData.append('email', data.emailAddress);
+        //     formData.append('phone_number', data.phoneNumber);
+        //     formData.append('password', data.password);
+        //     formData.append('country', data.country);
+        //     formData.append('full_address', data.fullAddress);
+        //     formData.append('website', data.websiteURL);
+        //     formData.append('services', data.servicesOffered);
+        //     formData.append('about_business', data.aboutBusiness);
+        //     formData.append('logo', data.bannerImage); // File object
+
+        //     // const response = await axios.post(
+        //     //     "https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/create-with-user/",
+        //     //     formData,
+        //     //    {
+        //     //     headers:{
+        //     //         'Authorization':'Bearer '
+        //     //     }
+        //     //    }
+        //     // );
+        //     const response = await axios.post(
+        //         "https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/create-with-user/",
+        //         formData,
+        //         {
+        //             headers: {
+        //                 "Authorization": "Bearer",
+        //             }
+        //         }
+        //     );
+        //     console.log('Business created successfully:', response.data);
+        //     // Handle success (e.g., show message, redirect, etc.)
+
+        // } catch (error) {
+        //     console.error('Error creating business:', error);
+        //     // Handle error (e.g., show error message)
+        // }
     };
 
     return (
