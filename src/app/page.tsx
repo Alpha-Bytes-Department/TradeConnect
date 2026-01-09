@@ -7,9 +7,10 @@ import { useState } from "react";
 // import { z } from "zod";
 // import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { FaArrowRight } from "react-icons/fa6";
 import axios from "axios";
+import { useView } from "./(super-admin)/ListGridContext";
 
 // const SignInSchema = z.object({
 //   emailAddress: z
@@ -37,6 +38,7 @@ type SignInFormData = {
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
+  const { auth, setAuth } = useView();
   const router = useRouter();
   const {
     register,
@@ -55,10 +57,10 @@ export default function SignIn() {
   const onSubmit = async (data: SignInFormData) => {
     try {
       const response = await axios.post("https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/auth/login/",
-        JSON.stringify({
+        {
           email: data.emailAddress,
           password: data.password
-        }),
+        },
         {
           headers: { 'Content-Type': 'application/json' },
           // withCredentials: true
@@ -66,19 +68,50 @@ export default function SignIn() {
       );
       console.log(JSON.stringify(response?.data));
       //console.log(JSON.stringify(response));
-      const accessToken = response?.data?.accessToken;
+      //const accessToken = response?.data?.accessToken;
       // const roles = response?.data?.roles;
       // setAuth({ user, pwd, roles, accessToken });
       // setSuccess(true);
+
+      // if (response?.data?.is_superuser === true) {
+      //   router.push("/super-admin/dashboard");
+      // }
+
+      // Check if we received a valid token
+      const token = response?.data?.tokens?.access;
+
+      if (!token) {
+        throw new Error("No authentication token received");
+      }
+
+      // Store the token
+      localStorage.setItem('accessToken', token);
+      setAuth({ accessToken: token });
+
+      // // Store user data if needed
+      // if (response.data.is_superuser !== undefined) {
+      //   localStorage.setItem('isSuperUser', response.data.is_superuser.toString());
+      // }
+
+      // Now redirect based on role
+      if (response.data.user.is_superuser === true) {
+        router.push("/super-admin/dashboard");
+      } else {
+        router.push("/admin/dashboard");
+      }
     }
-    catch (err) {
+    catch (err: any) {
       // if (!err?.response) {
       //   setErrMsg('No Server Response');
-      // } else if (err.response?.status === 400) {
-      //   setErrMsg('Missing Username or Password');
-      // } else if (err.response?.status === 401) {
-      //   setErrMsg('Unauthorized');
-      // } else {
+      // } 
+      if (err?.response?.status === 400) {
+        console.log('Missing Username or Password');
+        //setErrMsg('Missing Username or Password');
+      } else if (err?.response?.status === 401) {
+        console.log('Unauthorized');
+        // setErrMsg('Unauthorized');
+      }
+      // else {
       //   setErrMsg('Login Failed');
       // }
       // errRef.current.focus();
