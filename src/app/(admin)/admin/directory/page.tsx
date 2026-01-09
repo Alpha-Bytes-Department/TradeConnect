@@ -175,7 +175,7 @@ const page = () => {
     
 
     const [data, setData] = useState<CompanyData[]>(dummyData)
-
+    const [page, setPage] = useState<number>(0)
 
 
     let temp: CompanyData[] = Array.isArray(data) ? [...data] : [];
@@ -393,6 +393,38 @@ useEffect(() => {
                 <div className="fc">
                     {viewMode === 'grid' ? <CardView companies={modifiedData} />
                         : <ListView companies={modifiedData} />}
+                </div>
+
+                {/* pagination */}
+                <div className="flex items-center gap-2 fc">
+                    <button
+                        onClick={() => setPage(Math.max(1, page - 1))}
+                        disabled={page === 1}
+                        className="px-6 py-3 rounded-lg border-2 border-gray-300 text-gray-700 font-medium hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                        Previous
+                    </button>
+
+                    {[1, 2, 3].map((pageNum) => (
+                        <button
+                            key={pageNum}
+                            onClick={() => setPage(pageNum)}
+                            className={`w-14 h-14 rounded-xl font-semibold text-lg transition-colors ${page === pageNum
+                                    ? 'bg-blue-500 text-white'
+                                    : 'bg-blue-500/10 text-blue-500 hover:bg-blue-500/20'
+                                }`}
+                        >
+                            {pageNum}
+                        </button>
+                    ))}
+
+                    <button
+                        onClick={() => setPage(Math.min(3, page + 1))}
+                        disabled={page === 3}
+                        className="px-6 py-3 rounded-lg border-2 border-gray-300 text-gray-700 font-medium hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                        Next
+                    </button>
                 </div>
             </div>
         </div>

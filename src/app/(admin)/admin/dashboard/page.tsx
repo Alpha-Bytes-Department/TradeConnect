@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
     CheckSquare,
@@ -104,6 +104,26 @@ const recentlyViewedBusinesses = [
 export default function Dashboard() {
     const [hoveredAction, setHoveredAction] = useState<number | null>(0);
     const router=useRouter()
+
+    useEffect(() => {
+        let controller = new AbortController()
+
+        const fetchUsers = async () => {
+            /*try {
+                const res = await api.get(`/api/business/all/?country=${selectedCountry === 'No Selection' ? '' : selectedCountry}&search=${searchTerm}&service=${selectedService === 'No Selection' ? '' : selectedService}&page=${0}&sort_by=${sortBy}`);
+                if (controller) setData(res.data);
+            } catch (err: any) {
+
+            }*/
+        };
+
+        fetchUsers();
+
+        return () => {
+            controller.abort();
+        };
+    }, []);
+
 
     return (
         <div className="w-full fc flex-col justify-around  gap-4 md:gap-6 my-4 md:my-6">
