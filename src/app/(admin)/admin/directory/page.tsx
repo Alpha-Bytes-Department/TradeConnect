@@ -43,12 +43,8 @@ const page = () => {
     ];
     const sortOptions = ["A-Z", "Z-A", "Most Recent", "Most Popular"];
 
-    const [data,setData]=useState<CompanyData[]>([])
-    
-    
-    
-    /*
-    [
+
+    const dummyData = [
         {
             headerImage:
                 "https://images.unsplash.com/photo-1497366216548-37526070297c",
@@ -67,6 +63,9 @@ const page = () => {
                 "Retail",
             ],
             country: 'UK',
+            website: 'https://google.com',
+            phone: '5645345234534',
+            
         },
         {
             headerImage:
@@ -86,6 +85,8 @@ const page = () => {
                 
             ],
             country: 'UK',
+            website: 'https://google.com',
+            phone: '5645345234534',
         },
         {
             headerImage:
@@ -105,6 +106,8 @@ const page = () => {
                 "Retail",
             ],
             country: 'USA',
+            website: 'https://google.com',
+            phone: '5645345234534',
         },
         {
             headerImage:
@@ -124,6 +127,8 @@ const page = () => {
                 "Retail",
             ],
             country: 'Australia',
+            website: 'https://google.com',
+            phone: '5645345234534',
         },
         {
             headerImage:
@@ -143,6 +148,8 @@ const page = () => {
                 "Retail",
             ],
             country: 'Canada',
+            website: 'https://google.com',
+            phone: '5645345234534',
         },
         {
             headerImage:
@@ -161,9 +168,15 @@ const page = () => {
                 "Retail",
             ],
             country: 'UK',
+            website: 'https://google.com',
+            phone: '5645345234534',
         },
     ];
-    */
+    
+
+    const [data, setData] = useState<CompanyData[]>(dummyData)
+
+
 
     let temp: CompanyData[] = Array.isArray(data) ? [...data] : [];
 
@@ -219,7 +232,7 @@ useEffect(() => {
 
     const fetchUsers = async () => {
       try {
-        const res = await api.get(`/api/business/all/?country=${selectedCountry}&search=${searchTerm}&service=${selectedService}&page=${0}&sort_by=${sortBy}`);
+          const res = await api.get(`/api/business/all/?country=${selectedCountry === 'No Selection' ? '' : selectedCountry}&search=${searchTerm}&service=${selectedService === 'No Selection' ? '' : selectedService}&page=${0}&sort_by=${sortBy}`);
         if (controller) setData(res.data);
       } catch (err: any) {
         
