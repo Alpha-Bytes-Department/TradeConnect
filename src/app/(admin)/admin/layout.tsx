@@ -5,6 +5,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 // import { cookies } from "next/headers";
 import AppSidebar from "./components/common/AppSidebar";
 import Navbar from "./components/common/NavBar";
+import { ViewProvider } from "./components/ListGridContext";
 
 export const metadata: Metadata = {
     title: "Super Admin",
@@ -22,6 +23,7 @@ export default async function RootLayout({
     return (
         
                 <SidebarProvider>
+                    <ViewProvider>
                     <AppSidebar />
                     <main className="w-full">
                         <Navbar />
@@ -29,6 +31,7 @@ export default async function RootLayout({
                             {children}
                         </div>
                     </main>
+                    </ViewProvider>
                 </SidebarProvider>
             
     );
