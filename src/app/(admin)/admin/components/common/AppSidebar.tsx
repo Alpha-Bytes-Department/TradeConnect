@@ -6,10 +6,13 @@ import {
 } from "@/components/ui/sidebar";
 import { LuBriefcaseBusiness, LuLayoutDashboard, LuSettings } from "react-icons/lu";
 import { FiPlusCircle } from "react-icons/fi";
-import { TbLogout } from "react-icons/tb";
+import { TbCategory, TbCategory2, TbCategoryFilled, TbCategoryPlus, TbLogout } from "react-icons/tb";
 import { usePathname } from "next/navigation";
 import { useView } from "../ListGridContext";
 import LogOutModal from "./LogOutModal";
+import { DotSquareIcon, Grid3x3Icon } from "lucide-react";
+import { BsGrid3X3Gap } from "react-icons/bs";
+import Image from "next/image";
 
 type SidebarItem = {
     title: string;
@@ -18,25 +21,16 @@ type SidebarItem = {
 };
 
 const items: SidebarItem[] = [
+    
+    {
+        title: "Directory",
+        url: "/admin/directory",
+        icon: <BsGrid3X3Gap/>
+    },
     {
         title: "Dashboard",
-        url: "/super-admin/dashboard",
+        url: "/admin/dashboard",
         icon: <LuLayoutDashboard />,
-    },
-    {
-        title: "All Businesses",
-        url: "/super-admin/all-businesses",
-        icon: <LuBriefcaseBusiness />,
-    },
-    {
-        title: "Create Business",
-        url: "/super-admin/create-business",
-        icon: <FiPlusCircle />,
-    },
-    {
-        title: "Settings",
-        url: "/super-admin/settings",
-        icon: <LuSettings />,
     },
 ];
 
@@ -47,10 +41,12 @@ export default function AppSidebar() {
 
     return (
         <Sidebar collapsible="icon" side="left" className="font-poppins text-base">
-            <SidebarHeader className="py-4">
-                <div className="flex flex-col pl-3 transition-all group-data-[collapsible=icon]:hidden">
-                    <p className="font-poppins font-medium text-[#1C4589] text-xl">TradeConnect</p>
-                    <p className="text-[#626262]">Super Admin</p>
+            <SidebarHeader className=" h-21">
+                <div className="flex flex-col items-start pl-3 transition-all group-data-[collapsible=icon]:hidden">
+                    <div className="relative fc pl-3 ">
+                        <Image src={'/primaryLogo.png'} alt={'logo'} height={100} width={120} className="object-cover"/>
+                    </div>
+                    
                 </div>
             </SidebarHeader>
             <SidebarSeparator />
