@@ -165,17 +165,52 @@ const page = () => {
 
     const[data,setData]=useState<CompanyData[]>([])
 
-    let temp=selectedService==='No Selection'?data:data.filter((item)=>item?.services?.includes(selectedService))
-    
-    
-   temp=selectedCountry==='No Selection'?temp: temp.filter((item)=>item.location?.toLowerCase()===selectedCountry.toLowerCase())
-    
-    
-       temp = searchTerm === '' ? temp : temp.filter((item)=>item.title?.toLowerCase().startsWith(searchTerm.toLowerCase()))
+    let temp: CompanyData[] = Array.isArray(data) ? [...data] : [];
 
-    temp = sortBy === 'A-Z' ? temp.sort((a, b) => a.title.localeCompare(b.title)) : sortBy === 'Z-A' ? temp.sort((a, b) => b.title.localeCompare(a.title)) : sortBy === 'Most Recent' ? temp.sort((a, b) => a.joined.localeCompare(b.joined)) : temp.sort((a, b) => a.seenBy - b.seenBy)
+// Filter by service
+if (selectedService !== 'No Selection') {
+  temp = temp.filter(item =>
+    item?.services?.includes(selectedService)
+  );
+}
 
-const modifiedData=temp
+// Filter by country
+if (selectedCountry !== 'No Selection') {
+  temp = temp.filter(item =>
+    item.location?.toLowerCase() === selectedCountry.toLowerCase()
+  );
+}
+
+// Filter by search
+if (searchTerm) {
+  temp = temp.filter(item =>
+    item.title?.toLowerCase().startsWith(searchTerm.toLowerCase())
+  );
+}
+
+// Sort (SAFE)
+switch (sortBy) {
+  case 'A-Z':
+    temp.sort((a, b) => a.title.localeCompare(b.title));
+    break;
+
+  case 'Z-A':
+    temp.sort((a, b) => b.title.localeCompare(a.title));
+    break;
+
+  case 'Most Recent':
+    temp.sort(
+      (a, b) =>
+        new Date(b.joined).getTime() -
+        new Date(a.joined).getTime()
+    );
+    break;
+
+  default:
+    temp.sort((a, b) => a.seenBy - b.seenBy);
+}
+
+const modifiedData = temp
 
 
 useEffect(() => {
