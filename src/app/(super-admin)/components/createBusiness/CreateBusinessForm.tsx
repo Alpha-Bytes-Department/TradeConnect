@@ -102,15 +102,19 @@ export default function CreateBusinessForm() {
         }
 
         const formData = new FormData();
-        formData.append("business_name", data.businessName);
         formData.append("email", data.emailAddress);
-        formData.append("phone_number", data.phoneNumber);
         formData.append("password", data.password);
+
+        formData.append("business_name", data.businessName);
+        formData.append("phone_number", data.phoneNumber);
         formData.append("country", data.country);
         formData.append("full_address", data.fullAddress);
         formData.append("website", data.websiteURL);
-        formData.append("services", data.servicesOffered);
         formData.append("about_business", data.aboutBusiness);
+
+
+
+        formData.append("services", data.servicesOffered);
         formData.append("logo", data.bannerImage); // ✅ File
 
         await axios.post(

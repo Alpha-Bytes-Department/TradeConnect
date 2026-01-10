@@ -8,6 +8,7 @@ import { HiOutlineSearch } from "react-icons/hi";
 import { SlList } from "react-icons/sl";
 import { BsGrid3X3Gap } from "react-icons/bs";
 import { useView } from "../../ListGridContext";
+import axios from "axios";
 
 interface FilterFormData {
     search: string;
@@ -16,8 +17,56 @@ interface FilterFormData {
     sortBy: string;
 }
 
+
+// const fetchCountries = async () => {
+//   try {
+//     const response = await axios.get(
+//       'https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/core/countries/',
+//       {
+//         headers: {
+//           'ngrok-skip-browser-warning': 'true'
+//         }
+//       }
+//     );
+
+//     console.log("success");
+//     console.log(response.data.countries);
+//     return response.data.countries;
+
+//   } catch (error:any) {
+//     console.log("failed");
+//     console.error('Error fetching data:', error);
+//     // You can also check for specific error types
+//     if (error.response) {
+//       // Server responded with error status
+//       console.error('Response error:', error.response.data);
+//     } else if (error.request) {
+//       // Request made but no response
+//       console.error('No response received:', error.request);
+//     } else {
+//       // Something else happened
+//       console.error('Error:', error.message);
+//     }
+//   }
+// };
+
+// // Call the function
+// fetchCountries();
+
 export default function FilterBox() {
     const { list, grid, setList, setGrid } = useView();
+
+    const countryList = axios.get('https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/core/countries/')
+        .then(response => {
+            console.log("success");
+            // Handle the successful response
+            console.log(response); // The actual data payload from the server
+        })
+        .catch(error => {
+            console.log("failed");
+            // Handle the error
+            console.error('Error fetching data:', error); // Axios rejects promises for HTTP errors
+        });
 
     const { register, setValue, watch, handleSubmit } = useForm<FilterFormData>({
         defaultValues: {
