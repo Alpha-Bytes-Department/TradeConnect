@@ -74,7 +74,7 @@ const page = () => {
     // Filter by country
     if (selectedCountry !== 'No Selection') {
         temp = temp.filter(item =>
-            item.location?.toLowerCase() === selectedCountry.toLowerCase()
+            item.country?.toLowerCase() === selectedCountry.toLowerCase()
         );
     }
 
@@ -113,7 +113,7 @@ useEffect(() => {
 
     const fetchUsers = async () => {
       try {
-          const res = await api.get(`business/all/?country=${selectedCountry === 'No Selection' ? '' : selectedCountry}&search=${searchTerm}&service=${selectedService === 'No Selection' ? '' : selectedService}&page=${1}&sort_by=${sortBy}`);
+          const res = await api.get(`business/all/?country=${selectedCountry === 'No Selection' ? '' : selectedCountry}&search=${searchTerm}&service=${selectedService === 'No Selection' ? '' : selectedService}&page=${page}&sort_by=${sortBy}`);
         
           
         if (controller) {
@@ -153,7 +153,7 @@ useEffect(() => {
     return () => {
       controller.abort();
     };
-  }, []);
+}, [page, searchTerm, selectedCountry,selectedService, sortBy]);
 
 
     return (
@@ -305,7 +305,7 @@ useEffect(() => {
                 </div>
 
                 {/* pagination */}
-                <div className="flex items-center gap-2 fc">
+                <div className="flex items-center gap-2 mt-10 fc">
                     <button
                         onClick={() => setPage(Math.max(1, page - 1))}
                         disabled={page === 1}

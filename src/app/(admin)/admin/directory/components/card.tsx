@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
@@ -41,6 +40,7 @@ const Card: React.FC<CardProps> = ({ prop }) => {
         description,
         services,
         website,
+        country,
     } = prop;
     const displayedServices = services?.slice(0, 3);
     const remainingCount = services ? services.length - 3 : 0;
@@ -64,7 +64,7 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                     
                     <div className="flex-1 flex flex-col">
                         <h2 className="text-lg md:text-xl font-semibold text-gray-800 mb-1">
-                            {title}
+                            {title +', '+ country}
                         </h2>
                         <div className="flex items-center gap-2 text-gray-400">
                             <svg
@@ -105,7 +105,7 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                         {displayedServices?.map((service) => (
                             <span
                                 key={service.id}
-                                className="px-3 py-1 bg-blue-100 text-blue-900 text-base rounded-full shadow-md shadow-blue-200"
+                                className="px-3 py-1 bg-blue-100 text-blue-900 text-base rounded-full shadow-md shadow-blue-300"
                             >
                                 {service.title}
                             </span>
