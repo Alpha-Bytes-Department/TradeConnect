@@ -7,6 +7,11 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
+        protocol: "http",
+        hostname: "rihanna-preacquisitive-eleanore.ngrok-free.dev",
+        pathname: "/**",
+      },
+      {
         protocol: 'https',
         hostname: 'images.unsplash.com',
         port: '',
@@ -17,3 +22,5 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+   
+

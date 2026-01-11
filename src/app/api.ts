@@ -3,11 +3,11 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/",
+  baseURL:
+    "https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/",
   timeout: 15000,
   headers: {
-    "Content-Type": "application/json",
-    Accept: "application/json",
+    "ngrok-skip-browser-warning": "true",
   },
 });
 
@@ -22,7 +22,6 @@ api.interceptors.request.use(
         config.headers.Authorization = `Bearer ${token}`;
       }
     }
-    console.log('-------------------------------------------------------------------',config)
     return config;
   },
   (error) => {

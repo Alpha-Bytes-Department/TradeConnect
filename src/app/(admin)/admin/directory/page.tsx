@@ -5,18 +5,26 @@ import { Search, Grid3x3, List } from "lucide-react";
 import ListView from "./components/listView";
 import api from "@/app/api";
 
+
+export interface Service{
+    id: string,
+    title:string,
+}
+
+
 export interface CompanyData {
+    id: string,
     headerImage: string;
-    flagIcon: string;
+    flagIcon?: string;
     title: string;
     location: string;
     description: string;
-    services: string[];
+    services: Service[];
     website: string;
     country: string;
     phone: string;
     joined:string;
-    seenBy: number;
+    seenBy?: number;
 }
 
 const page = () => {
@@ -25,6 +33,7 @@ const page = () => {
     const [selectedService, setSelectedService] = useState('No Selection');
     const [sortBy, setSortBy] = useState("A-Z");
     const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+    const [total,setTotal]= useState<number>(0)
 
     const countries = [
         'No Selection',
@@ -41,140 +50,10 @@ const page = () => {
         "Education",
         "Retail",
     ];
-    const sortOptions = ["A-Z", "Z-A", "Most Recent", "Most Popular"];
+    const sortOptions = ["A-Z", "Z-A", "Most Recent"];
 
 
-    const dummyData = [
-        {
-            headerImage:
-                "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            title: "TradeConnect Logistics",
-            location: "United States",
-            seenBy:25,
-            joined: '2025-01-03T07:40:00Z',
-            description:
-                "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
-            services: [
-                "Technology",
-                "Healthcare",
-                "Finance",
-                "Education",
-                "Retail",
-            ],
-            country: 'UK',
-            website: 'https://google.com',
-            phone: '5645345234534',
-            
-        },
-        {
-            headerImage:
-                "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            title: "TradeConnect Logistics",
-            location: "United States",
-            seenBy: 65,
-            joined: '2025-01-03T07:40:00Z',
-            description:
-                "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
-            services: [
-                "Technology",
-                "Healthcare",
-                "Finance",
-                "Education",
-                
-            ],
-            country: 'UK',
-            website: 'https://google.com',
-            phone: '5645345234534',
-        },
-        {
-            headerImage:
-                "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            title: "TradeConnect Logistics",
-            location: "United States",
-            seenBy: 25,
-            joined: '2025-01-02T07:40:00Z',
-            description:
-                "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
-            services: [
-                "Technology",
-                "Healthcare",
-                "Finance",
-                
-                "Retail",
-            ],
-            country: 'USA',
-            website: 'https://google.com',
-            phone: '5645345234534',
-        },
-        {
-            headerImage:
-                "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            title: "bradeConnect Logistics",
-            location: "Australia",
-            seenBy: 15,
-            joined: '2025-01-01T07:40:00Z',
-            description:
-                "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
-            services: [
-                "Technology",
-                "Healthcare",
-                
-                "Education",
-                "Retail",
-            ],
-            country: 'Australia',
-            website: 'https://google.com',
-            phone: '5645345234534',
-        },
-        {
-            headerImage:
-                "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            title: "TradeConnect Logistics",
-            location: "Australia",
-            seenBy: 45,
-            joined: '2025-01-05T07:40:00Z',
-            description:
-                "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
-            services: [
-                "Technology",
-                
-                "Finance",
-                "Education",
-                "Retail",
-            ],
-            country: 'Canada',
-            website: 'https://google.com',
-            phone: '5645345234534',
-        },
-        {
-            headerImage:
-                "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            title: "TradeConnect Logistics",
-            location: "Canada",
-            seenBy: 35,
-            joined: '2025-01-06T07:40:00Z',
-            description:
-                "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
-            services: [
-                "Healthcare",
-                "Finance",
-                "Education",
-                "Retail",
-            ],
-            country: 'UK',
-            website: 'https://google.com',
-            phone: '5645345234534',
-        },
-    ];
-    
-
-    const [data, setData] = useState<CompanyData[]>(dummyData)
+    const [data, setData] = useState<CompanyData[]>([])
     const [page, setPage] = useState<number>(1)
 
 
@@ -183,9 +62,14 @@ const page = () => {
     // Filter by service
     if (selectedService !== 'No Selection') {
         temp = temp.filter(item =>
-            item?.services?.includes(selectedService)
+            item.services?.some(service =>
+                service.title
+                    .toLowerCase()
+                    .includes(selectedService.toLowerCase())
+            )
         );
     }
+
 
     // Filter by country
     if (selectedCountry !== 'No Selection') {
@@ -218,9 +102,6 @@ const page = () => {
                     new Date(a.joined).getTime()
             );
             break;
-
-        default:
-            temp.sort((a, b) => a.seenBy - b.seenBy);
     }
 
     const modifiedData = temp;
@@ -233,9 +114,35 @@ useEffect(() => {
     const fetchUsers = async () => {
       try {
           const res = await api.get(`business/all/?country=${selectedCountry === 'No Selection' ? '' : selectedCountry}&search=${searchTerm}&service=${selectedService === 'No Selection' ? '' : selectedService}&page=${1}&sort_by=${sortBy}`);
+        
+          
+        if (controller) {
 
-          console.log('******************************************************',res)
-        if (controller) setData(res.data);
+            const businesses: CompanyData[] = res.results.businesses.map((b: any) => ({
+                id:b.id,
+                headerImage: b.logo,
+                title: b.business_name,
+                location: b.full_address,
+                joined: b.created_at,
+                description: b.about_business,
+                services: b.services,
+                country: b.country_name,
+                website: b.website,
+                phone: b.phone,
+                seenBy: b.seen_by ?? 0,
+            }));
+
+            setData(businesses);
+
+            setTotal(res.results.count)
+
+            }
+
+            
+
+
+            
+        
       } catch (err: any) {
         
       } 
@@ -407,7 +314,7 @@ useEffect(() => {
                         Previous
                     </button>
 
-                    {[1, 2, 3].map((pageNum) => (
+                    {Array.from({ length: Math.ceil(total / 8) }, (_, i) => i + 1).map((pageNum) => (
                         <button
                             key={pageNum}
                             onClick={() => setPage(pageNum)}
@@ -421,13 +328,14 @@ useEffect(() => {
                     ))}
 
                     <button
-                        onClick={() => setPage(Math.min(3, page + 1))}
-                        disabled={page === 3}
+                        onClick={() => setPage(Math.min(Math.ceil(total /8), page + 1))}
+                        disabled={page === Math.ceil(total / 8)}
                         className="px-6 py-3 rounded-lg border-2 border-gray-300 text-gray-700 font-medium hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
                         Next
                     </button>
                 </div>
+
             </div>
         </div>
     );
