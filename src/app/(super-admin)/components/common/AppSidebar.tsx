@@ -11,6 +11,7 @@ import { usePathname } from "next/navigation";
 import { useView } from "../../ListGridContext";
 import LogOutModal from "./LogOutModal";
 import Image from "next/image";
+import Link from "next/link";
 
 type SidebarItem = {
     title: string;
@@ -69,10 +70,10 @@ export default function AppSidebar() {
                                         <SidebarMenuButton asChild
                                             className={`${isActive ?
                                                 "bg-[#BFD7FD] text-[#2459B1] hover:bg-[#BFD7FD] hover:text-[#2459B1]" : "text-black"}`}>
-                                            <a href={item.url}>
+                                            <Link href={item.url}>
                                                 {item.icon}
                                                 <span>{item.title}</span>
-                                            </a>
+                                            </Link>
                                         </SidebarMenuButton>
                                     </SidebarMenuItem>
                                 )
