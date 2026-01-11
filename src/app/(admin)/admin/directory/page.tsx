@@ -175,7 +175,7 @@ const page = () => {
     
 
     const [data, setData] = useState<CompanyData[]>(dummyData)
-    const [page, setPage] = useState<number>(0)
+    const [page, setPage] = useState<number>(1)
 
 
     let temp: CompanyData[] = Array.isArray(data) ? [...data] : [];
@@ -232,7 +232,9 @@ useEffect(() => {
 
     const fetchUsers = async () => {
       try {
-          const res = await api.get(`/api/business/all/?country=${selectedCountry === 'No Selection' ? '' : selectedCountry}&search=${searchTerm}&service=${selectedService === 'No Selection' ? '' : selectedService}&page=${0}&sort_by=${sortBy}`);
+          const res = await api.get(`business/all/?country=${selectedCountry === 'No Selection' ? '' : selectedCountry}&search=${searchTerm}&service=${selectedService === 'No Selection' ? '' : selectedService}&page=${1}&sort_by=${sortBy}`);
+
+          console.log('******************************************************',res)
         if (controller) setData(res.data);
       } catch (err: any) {
         
