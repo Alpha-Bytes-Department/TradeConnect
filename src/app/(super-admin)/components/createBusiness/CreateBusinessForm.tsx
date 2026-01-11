@@ -6,12 +6,15 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Textarea } from "@/components/ui/textarea";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, Upload, X } from "lucide-react";
+import { CalendarHeartIcon, Eye, EyeOff, Upload, X } from "lucide-react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { TbCategoryPlus } from "react-icons/tb";
 import axios from "axios";
 import { useView } from "../../ListGridContext";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 
 const businessFormSchema = z.object({
     businessName: z.string().min(1, "Business name is required"),
@@ -23,7 +26,8 @@ const businessFormSchema = z.object({
     websiteURL: z.string().url("Invalid URL").min(1, "Website URL is required"),
     servicesOffered: z.string().min(1, "Services offered is required"),
     aboutBusiness: z.string().min(1, "About business is required"),
-    bannerImage: z.instanceof(File, { message: "Banner image is required" })
+    bannerImage: z.instanceof(File, { message: "Banner image is required" }),
+    membershipValidTill: z.date({ message: "Membership date is required" })
 });
 
 // Define TypeScript type from Zod schema
@@ -36,6 +40,7 @@ export default function CreateBusinessForm() {
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [error, setError] = useState<string>('');
     const { auth, setAuth } = useView();
+    const [open, setOpen] = useState(false);
 
     // Initialize React Hook Form with Zod validation
     const {
@@ -111,7 +116,7 @@ export default function CreateBusinessForm() {
         formData.append("full_address", data.fullAddress);
         formData.append("website", data.websiteURL);
         formData.append("about_business", data.aboutBusiness);
-
+        formData.append("membership_valid_till", data.membershipValidTill.toISOString());
 
 
         formData.append("services", data.servicesOffered);
@@ -238,7 +243,7 @@ export default function CreateBusinessForm() {
             <div className="flex flex-col lg:flex-row gap-2 lg:gap-6">
                 <div className="w-full grid gap-2 items-center mt-4">
                     <label htmlFor="phoneNumber" className="font-poppins text-[#252525]">
-                        Phone Number*</label>
+                        Office Phone Number*</label>
                     <div className="w-full">
                         <Input type="text" id="phoneNumber" placeholder="Tech Solution Inc."
                             className="font-poppins bg-[#FFFFFF] text-[#3F3F3F] text-base"
@@ -326,22 +331,66 @@ export default function CreateBusinessForm() {
                     </p>
                 )}
             </div>
+
             <h1 className="font-poppins font-medium text-[#000000] mt-4">Business Details</h1>
-            <div className="w-full lg:w-1/2 grid gap-2 items-center mt-4">
-                <label htmlFor="websiteURL" className="font-poppins text-[#000000]">
-                    Website URL*</label>
-                <div className="w-full">
-                    <Input type="text" id="websiteURL" placeholder="example.com"
-                        className="font-poppins bg-[#FFFFFF] text-[#3F3F3F] text-base"
-                        {...register("websiteURL")}
-                    />
+            <div className="flex flex-col lg:flex-row gap-2 lg:gap-6">
+                <div className="w-full lg:w-1/2 grid gap-2 items-center mt-4">
+                    <label htmlFor="websiteURL" className="font-poppins text-[#000000]">
+                        Website URL*</label>
+                    <div className="w-full">
+                        <Input type="text" id="websiteURL" placeholder="example.com"
+                            className="font-poppins bg-[#FFFFFF] text-[#3F3F3F] text-base"
+                            {...register("websiteURL")}
+                        />
+                    </div>
+                    {errors.websiteURL && (
+                        <p className="text-red-500 text-sm font-poppins mt-1">
+                            {errors.websiteURL.message}
+                        </p>
+                    )}
                 </div>
-                {errors.websiteURL && (
-                    <p className="text-red-500 text-sm font-poppins mt-1">
-                        {errors.websiteURL.message}
-                    </p>
-                )}
+                <div className="w-full lg:w-1/2 grid gap-2 items-center mt-4">
+                    <label htmlFor="membership" className="font-poppins text-[#000000]">
+                        Membership Valid Till*</label>
+                    <div className="w-full">
+                        <Controller
+                            name="membershipValidTill"
+                            control={control}
+                            render={({ field }) => (
+                                <Popover open={open} onOpenChange={setOpen}>
+                                    <PopoverTrigger asChild>
+                                        <Button
+                                            variant="outline"
+                                            id="date"
+                                            className="w-full justify-between font-normal font-poppins 
+                                            text-[#313131] cursor-pointer">
+                                            {field.value ? field.value.toLocaleDateString() : "DD / MM / YYYY"}
+                                            <CalendarHeartIcon />
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+                                        <Calendar
+                                            mode="single"
+                                            selected={field.value}
+                                            captionLayout="dropdown"
+                                            onSelect={(selectedDate) => {
+                                                field.onChange(selectedDate)
+                                                setOpen(false)
+                                            }}
+                                        />
+                                    </PopoverContent>
+                                </Popover>
+                            )}
+                        />
+                    </div>
+                    {errors.membershipValidTill && (
+                        <p className="text-red-500 text-sm font-poppins mt-1">
+                            {errors.membershipValidTill.message}
+                        </p>
+                    )}
+                </div>
             </div>
+
             <div className="w-full grid gap-2 items-center mt-4">
                 <label htmlFor="servicesOffered" className="font-poppins text-[#000000]">
                     Services Offered*</label>
@@ -357,6 +406,7 @@ export default function CreateBusinessForm() {
                     </p>
                 )}
             </div>
+
             <div className="w-full grid gap-2 items-center mt-4">
                 <label htmlFor="aboutBusiness" className="font-poppins text-[#000000]">
                     About Business*</label>
