@@ -11,6 +11,7 @@ import { redirect, useRouter } from "next/navigation";
 import { FaArrowRight } from "react-icons/fa6";
 import axios from "axios";
 import { useView } from "./(super-admin)/ListGridContext";
+import Image from "next/image";
 
 // const SignInSchema = z.object({
 //   emailAddress: z
@@ -136,10 +137,14 @@ export default function SignIn() {
   };
 
   return (
-    <div className="w-full h-screen bg-[url(/log-in-images/login-image.jpg)] 
+    <div className="relative w-full h-screen bg-[url(/log-in-images/login-image.jpg)] 
     bg-cover bg-center flex items-center justify-center">
-      <div className="max-w-[480px] flex flex-col items-center justify-center gap-12">
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full p-3 bg-[#F6F6F6] 
+      <div className="absolute w-full h-full z-10 bg-[#15356999]" /> {/*Overlay*/}
+      <div className="hidden sm:block absolute top-7 left-12 w-28 h-28 z-40">
+        <Image src="/logos/Login_Logo.png" alt="login-logo" fill />
+      </div>
+      <div className="max-w-[480px] flex flex-col items-center justify-center gap-12 m-3 z-40">
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full p-6 bg-[#F6F6F6] 
         border rounded-lg">
           <div className="w-full flex flex-col gap-2">
             <h1 className="font-bold font-poppins text-[#0E0E0E] text-3xl">Welcome Back!</h1>
@@ -189,7 +194,7 @@ export default function SignIn() {
           <Link href="/forget-password" className="font-poppins text-[#2459B1] text-sm">Forgot password?</Link>
         </div> */}
 
-          <div className="w-full mt-5">
+          <div className="w-full mt-8">
             <Button type="submit" className="w-full font-poppins cursor-pointer bg-[#327EF9] text-base 
             text-[#E8E8E8] hover:scale-105 hover:shadow-lg" disabled={isSubmitting}>
               {isSubmitting ? "Signing In..." : "Sign In"}

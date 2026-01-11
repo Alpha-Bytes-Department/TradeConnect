@@ -45,14 +45,16 @@ export default function RootLayout({
 }
 
 
-export function NavbarWithoutTrigger() {
+function NavbarWithoutTrigger() {
     const { isLogoutOpen, setIsLogoutOpen } = useView();
     const router = useRouter();
     return (
         <div>
             <nav className="p-4 flex items-center justify-between">
                 {/*Left*/}
-                <p className="font-semibold font-poppins text-[#1C4589] text-3xl">TradeConnect</p>
+                <div className="w-44 h-16 relative">
+                    <Image src="/logos/Primary_Logo.png" alt="main-logo" fill />
+                </div>
 
                 {/*Right*/}
                 <div className="flex justify-end items-center gap-3">

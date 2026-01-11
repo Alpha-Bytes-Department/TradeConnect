@@ -1,12 +1,15 @@
 // Fahim
 "use client"
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue }
     from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Divide, Eye, EyeOff, LockKeyhole, Save, Trash2, Upload, X } from "lucide-react";
+import { CalendarHeartIcon, Divide, Eye, EyeOff, LockKeyhole, MoveLeft, Save, Trash2, Upload, X }
+    from "lucide-react";
 import { useState } from "react";
-import { Controller } from "react-hook-form";
 
 interface GalleryImage {
     file: File;
@@ -26,6 +29,8 @@ export default function EditBusiness() {
     const [errors, setErrors] = useState<Errors>({ banner: '', gallery: '' });
     const [showPassword1, setShowPassword1] = useState(false);
     const [showPassword2, setShowPassword2] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [date, setDate] = useState<Date | undefined>(undefined);
 
     // Type annotation for validation function
     const validateFile = (file: File): string | null => {
@@ -115,7 +120,12 @@ export default function EditBusiness() {
 
     return (
         <div className="max-w-[1300px] mx-auto">
-            <h1 className="font-medium font-poppins text-[#0B0B0B] text-2xl mt-6">Edit Profile</h1>
+            <button className="flex items-center gap-2 px-4 py-1 bg-[#BFD7FDB8] rounded-lg 
+            font-poppins text-[#153569] mt-4 cursor-pointer">
+                <MoveLeft />
+                Back
+            </button>
+            <h1 className="font-medium font-poppins text-[#0B0B0B] text-2xl mt-5">Edit Profile</h1>
             <p className="font-poppins text-[#626262]">Update your business information and images</p>
             <div className="bg-white rounded-lg shadow-md border mt-6">
                 <div className="flex justify-around border-b">
@@ -174,7 +184,7 @@ export default function EditBusiness() {
                 {activeTab === 'basic' &&
                     <div className="p-3">
                         <div className="flex flex-col lg:flex-row gap-2 lg:gap-6">
-                            <div className="w-full grid gap-2 items-center mt-4">
+                            <div className="w-full lg:w-1/2 grid gap-2 items-center mt-4">
                                 <label htmlFor="businessName" className="font-poppins text-[#252525]">
                                     Business Name*</label>
                                 <div className="w-full">
@@ -239,21 +249,59 @@ export default function EditBusiness() {
                                 </div>
                             </div>
                         </div>
-                        <div className="w-full grid gap-2 items-center mt-4">
-                            <label htmlFor="fullAddress" className="font-poppins text-[#000000]">
-                                Full Address*</label>
-                            <div className="w-full">
-                                <Input type="text" id="fullAddress"
-                                    placeholder="123 Tech street, san Francisco, CA 94105"
-                                    className="font-poppins bg-[#FFFFFF] text-[#3F3F3F] text-base"
-                                // {...register("fullAddress")}
-                                />
-                            </div>
-                            {/* {errors.fullAddress && (
+
+                        <div className="flex flex-col lg:flex-row gap-2 lg:gap-6">
+                            <div className="w-full lg:w-1/2 grid gap-2 items-center mt-4">
+                                <label htmlFor="fullAddress" className="font-poppins text-[#000000]">
+                                    Full Address*</label>
+                                <div className="w-full">
+                                    <Input type="text" id="fullAddress"
+                                        placeholder="123 Tech street, san Francisco, CA 94105"
+                                        className="font-poppins bg-[#FFFFFF] text-[#3F3F3F] text-base"
+                                    // {...register("fullAddress")}
+                                    />
+                                </div>
+                                {/* {errors.fullAddress && (
                                 <p className="text-red-500 text-sm font-poppins mt-1">
                                     {errors.fullAddress.message}
                                 </p>
                             )} */}
+                            </div>
+                            <div className="w-full lg:w-1/2 grid gap-2 items-center mt-4">
+                                <label htmlFor="membership" className="font-poppins text-[#000000]">
+                                    Membership Valid Till*</label>
+                                <div className="w-full">
+                                    <Popover open={open} onOpenChange={setOpen}>
+                                        <PopoverTrigger asChild>
+                                            <Button
+                                                variant="outline"
+                                                id="date"
+                                                className="w-full justify-between font-normal font-poppins 
+                                    text-[#313131] cursor-pointer"
+                                            >
+                                                {date ? date.toLocaleDateString() : "DD / MM / YYYY"}
+                                                <CalendarHeartIcon />
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+                                            <Calendar
+                                                mode="single"
+                                                selected={date}
+                                                captionLayout="dropdown"
+                                                onSelect={(date) => {
+                                                    setDate(date)
+                                                    setOpen(false)
+                                                }}
+                                            />
+                                        </PopoverContent>
+                                    </Popover>
+                                </div>
+                                {/* {errors.websiteURL && (
+                                <p className="text-red-500 text-sm font-poppins mt-1">
+                                    {errors.websiteURL.message}
+                                </p>
+                            )} */}
+                            </div>
                         </div>
                     </div>
                 }

@@ -10,6 +10,8 @@ import { TbLogout } from "react-icons/tb";
 import { usePathname } from "next/navigation";
 import { useView } from "../../ListGridContext";
 import LogOutModal from "./LogOutModal";
+import Image from "next/image";
+import Link from "next/link";
 
 type SidebarItem = {
     title: string;
@@ -47,15 +49,14 @@ export default function AppSidebar() {
 
     return (
         <Sidebar collapsible="icon" side="left" className="font-poppins text-base">
-            <SidebarHeader className="py-4">
-                <div className="flex flex-col pl-3 transition-all group-data-[collapsible=icon]:hidden">
-                    <p className="font-poppins font-medium text-[#1C4589] text-xl">TradeConnect</p>
-                    <p className="text-[#626262]">Super Admin</p>
+            <SidebarHeader className="h-20 py-1 flex items-center justify-center">
+                <div className="w-44 h-16 relative transition-all group-data-[collapsible=icon]:hidden">
+                    <Image src="/logos/Primary_Logo.png" alt="main-logo" fill />
                 </div>
             </SidebarHeader>
             <SidebarSeparator />
 
-            <SidebarContent>
+            <SidebarContent className="mt-1">
                 <SidebarGroup>
                     {/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
                     <SidebarGroupContent>
@@ -69,10 +70,10 @@ export default function AppSidebar() {
                                         <SidebarMenuButton asChild
                                             className={`${isActive ?
                                                 "bg-[#BFD7FD] text-[#2459B1] hover:bg-[#BFD7FD] hover:text-[#2459B1]" : "text-black"}`}>
-                                            <a href={item.url}>
+                                            <Link href={item.url}>
                                                 {item.icon}
                                                 <span>{item.title}</span>
-                                            </a>
+                                            </Link>
                                         </SidebarMenuButton>
                                     </SidebarMenuItem>
                                 )
