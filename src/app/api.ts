@@ -1,37 +1,59 @@
-'use client'
+"use client";
+
 import axios from "axios";
 
-export const baseConfig = {
-  baseURL: 'https://rihanna-preacquisitive-eleanore.ngrok-free.dev',
+const api = axios.create({
+  baseURL:
+    "https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/",
   timeout: 15000,
   headers: {
-    "Content-Type": "application/json",
+    "ngrok-skip-browser-warning": "true",
   },
-};
-
-export const createAxios = () => axios.create(baseConfig);
-
-const api = createAxios();
-
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("accessToken");
-
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-
-  return config;
 });
 
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      console.warn("Unauthorized – redirect to login");
-      //window.location.href = "/login";
+/* ---------------- Request Interceptor ---------------- */
+
+api.interceptors.request.use(
+  (config) => {
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("accessToken");
+
+      if (token) {
+        config.headers = config.headers ?? {};
+        config.headers.Authorization = `Bearer ${token}`;
+
+      }
     }
+    return config;
+  },
+  (error) => {
+    console.error("Request Interceptor Error:", error);
     return Promise.reject(error);
   }
 );
+
+/* ---------------- Response Interceptor ---------------- */
+
+api.interceptors.response.use(
+  (response) => response.data,
+  (error) => {
+    if (axios.isCancel(error)) {
+      return Promise.reject({ canceled: true });
+    }
+
+    if (error.response?.status === 401) {
+      console.warn("Unauthorized – redirect to login");
+    }
+
+    return Promise.reject({
+      status: error.response?.status ?? 0,
+      message:
+        error.response?.data?.message ||
+        error.message ||
+        "Network error. Please try again.",
+    });
+  }
+);
+
 
 export default api;

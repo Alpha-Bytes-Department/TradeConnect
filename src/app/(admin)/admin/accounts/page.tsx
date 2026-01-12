@@ -332,47 +332,13 @@ export default function AccountPage() {
                                 </h2>
 
                                 <div className="space-y-3">
-                                    {companyData.location.map((location, index) => (
-                                        <div
+                                    {companyData.location?.map((loc, index) => (
+                                        <span
                                             key={index}
-                                            className="hover:bg-blue-50 active:bg-blue-50 rounded-lg p-4 border border-blue-300"
+                                            className="px-3 py-1 bg-[#FEF3EB] font-semibold text-[#279300] text-base rounded-full shadow-md shadow-[#FEF3EB] "
                                         >
-                                            {/* Office Name with Icon */}
-                                            <div className="flex items-center gap-2 mb-3">
-                                                <Building2 className="w-4 h-4 text-orange-400" />
-                                                <h3 className="text-md font-semibold text-blue-600">
-                                                    {location.name}
-                                                </h3>
-                                            </div>
-
-                                            {/* Address */}
-                                            <div className="text-md text-gray-600 mb-3 leading-relaxed">
-                                                <div>{location.address}</div>
-                                                <div>{location.city}</div>
-                                            </div>
-
-                                            {/* Email */}
-                                            <div className="flex items-center gap-2 mb-2">
-                                                <Mail className="w-4 h-4 text-blue-600" />
-                                                <a
-                                                    href={`mailto:${location.email}`}
-                                                    className="fc text-md text-blue-600 hover:text-blue-700 hover:underline"
-                                                >
-                                                    {location.email}
-                                                </a>
-                                            </div>
-
-                                            {/* Phone */}
-                                            <div className="flex items-center gap-2">
-                                                <Phone className="w-4 h-4 text-blue-600" />
-                                                <a
-                                                    href={`tel:${location.phone}`}
-                                                    className="fc text-md text-blue-600 hover:text-blue-700 hover:underline"
-                                                >
-                                                    {location.phone}
-                                                </a>
-                                            </div>
-                                        </div>
+                                            {loc.name}
+                                        </span>
                                     ))}
                                 </div>
                             </div>

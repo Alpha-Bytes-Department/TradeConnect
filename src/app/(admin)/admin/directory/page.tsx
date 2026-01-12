@@ -5,192 +5,63 @@ import { Search, Grid3x3, List } from "lucide-react";
 import ListView from "./components/listView";
 import api from "@/app/api";
 
+
+export interface Service{
+    id: string,
+    title:string,
+}
+
+
 export interface CompanyData {
+    id: string,
     headerImage: string;
-    flagIcon: string;
+    flagIcon?: string;
     title: string;
     location: string;
     description: string;
-    services: string[];
+    services: Service[];
     website: string;
     country: string;
     phone: string;
     joined:string;
-    seenBy: number;
+    seenBy?: number;
 }
 
 const page = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [selectedCountry, setSelectedCountry] = useState('No Selection');
-    const [selectedService, setSelectedService] = useState('No Selection');
+    const [selectedCountry, setSelectedCountry] = useState('');
+    const [selectedService, setSelectedService] = useState('');
     const [sortBy, setSortBy] = useState("A-Z");
     const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+    const [total,setTotal]= useState<number>(0)
 
-    const countries = [
-        'No Selection',
-        "United States",
-        "United Kingdom",
-        "Canada",
-        "Australia",
-    ];
-    const services = [
-        'No Selection',
-        "Technology",
-        "Healthcare",
-        "Finance",
-        "Education",
-        "Retail",
-    ];
-    const sortOptions = ["A-Z", "Z-A", "Most Recent", "Most Popular"];
+    const [countries, setCountries] = useState<{ id: string, name: string,flag: string }[]>([{ id: '', name: 'No Selection',flag:'' }]);
+    const [services, setServices] = useState<{ id: string, title: string }[]>([{ id:'', title:'No Selection'}]);
+    const sortOptions = ["A-Z", "Z-A", "Most Recent"];
 
 
-    const dummyData = [
-        {
-            headerImage:
-                "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            title: "TradeConnect Logistics",
-            location: "United States",
-            seenBy:25,
-            joined: '2025-01-03T07:40:00Z',
-            description:
-                "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
-            services: [
-                "Technology",
-                "Healthcare",
-                "Finance",
-                "Education",
-                "Retail",
-            ],
-            country: 'UK',
-            website: 'https://google.com',
-            phone: '5645345234534',
-            
-        },
-        {
-            headerImage:
-                "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            title: "TradeConnect Logistics",
-            location: "United States",
-            seenBy: 65,
-            joined: '2025-01-03T07:40:00Z',
-            description:
-                "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
-            services: [
-                "Technology",
-                "Healthcare",
-                "Finance",
-                "Education",
-                
-            ],
-            country: 'UK',
-            website: 'https://google.com',
-            phone: '5645345234534',
-        },
-        {
-            headerImage:
-                "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            title: "TradeConnect Logistics",
-            location: "United States",
-            seenBy: 25,
-            joined: '2025-01-02T07:40:00Z',
-            description:
-                "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
-            services: [
-                "Technology",
-                "Healthcare",
-                "Finance",
-                
-                "Retail",
-            ],
-            country: 'USA',
-            website: 'https://google.com',
-            phone: '5645345234534',
-        },
-        {
-            headerImage:
-                "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            title: "bradeConnect Logistics",
-            location: "Australia",
-            seenBy: 15,
-            joined: '2025-01-01T07:40:00Z',
-            description:
-                "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
-            services: [
-                "Technology",
-                "Healthcare",
-                
-                "Education",
-                "Retail",
-            ],
-            country: 'Australia',
-            website: 'https://google.com',
-            phone: '5645345234534',
-        },
-        {
-            headerImage:
-                "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            title: "TradeConnect Logistics",
-            location: "Australia",
-            seenBy: 45,
-            joined: '2025-01-05T07:40:00Z',
-            description:
-                "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
-            services: [
-                "Technology",
-                
-                "Finance",
-                "Education",
-                "Retail",
-            ],
-            country: 'Canada',
-            website: 'https://google.com',
-            phone: '5645345234534',
-        },
-        {
-            headerImage:
-                "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            flagIcon: "https://images.unsplash.com/photo-1497366216548-37526070297c",
-            title: "TradeConnect Logistics",
-            location: "Canada",
-            seenBy: 35,
-            joined: '2025-01-06T07:40:00Z',
-            description:
-                "A leading provider of global supply chain solutions, specializing in sustainable shipping and real-time inventory tracking for modern businesses.",
-            services: [
-                "Healthcare",
-                "Finance",
-                "Education",
-                "Retail",
-            ],
-            country: 'UK',
-            website: 'https://google.com',
-            phone: '5645345234534',
-        },
-    ];
-    
-
-    const [data, setData] = useState<CompanyData[]>(dummyData)
-
+    const [data, setData] = useState<CompanyData[]>([])
+    const [page, setPage] = useState<number>(1)
 
 
     let temp: CompanyData[] = Array.isArray(data) ? [...data] : [];
 
-    // Filter by service
+   /* // Filter by service
     if (selectedService !== 'No Selection') {
         temp = temp.filter(item =>
-            item?.services?.includes(selectedService)
+            item.services?.some(service =>
+                service.title
+                    .toLowerCase()
+                    .includes(selectedService.toLowerCase())
+            )
         );
     }
+
 
     // Filter by country
     if (selectedCountry !== 'No Selection') {
         temp = temp.filter(item =>
-            item.location?.toLowerCase() === selectedCountry.toLowerCase()
+            item.country?.toLowerCase() === selectedCountry.toLowerCase()
         );
     }
 
@@ -218,10 +89,8 @@ const page = () => {
                     new Date(a.joined).getTime()
             );
             break;
-
-        default:
-            temp.sort((a, b) => a.seenBy - b.seenBy);
     }
+    */
 
     const modifiedData = temp;
 
@@ -232,8 +101,45 @@ useEffect(() => {
 
     const fetchUsers = async () => {
       try {
-          const res = await api.get(`/api/business/all/?country=${selectedCountry === 'No Selection' ? '' : selectedCountry}&search=${searchTerm}&service=${selectedService === 'No Selection' ? '' : selectedService}&page=${0}&sort_by=${sortBy}`);
-        if (controller) setData(res.data);
+          const res: any = await api.get(`business/all/?country=${selectedCountry}&search=${searchTerm}&service=${selectedService}&page=${page}&sort_by=${sortBy}`, { signal: controller.signal });
+        
+          
+        if (controller) {
+
+            const businesses: CompanyData[] = res.results.businesses.map((b: any) => ({
+                id:b.id,
+                headerImage: b.logo,
+                title: b.business_name,
+                location: b.full_address,
+                joined: b.created_at,
+                description: b.about_business,
+                services: b.services,
+                country: b.country_name,
+                website: b.website,
+                phone: b.phone,
+                seenBy: b.seen_by ?? 0,
+            }));
+
+            setData(businesses);
+
+            setTotal(res.results.count)
+
+            
+            const countr:any = await api.get(`core/countries/`, { signal: controller.signal });
+            const serv: any = await api.get(`core/services/`, { signal: controller.signal });
+
+            setCountries([{ id: '', name: 'No Selection', flag: '' },...countr.countries])
+            setServices([{ id: '', title: 'No Selection' },...serv.services, ])
+
+
+
+            }
+
+            
+
+
+            
+        
       } catch (err: any) {
         
       } 
@@ -244,7 +150,7 @@ useEffect(() => {
     return () => {
       controller.abort();
     };
-  }, []);
+}, [page, searchTerm, selectedCountry,selectedService, sortBy]);
 
 
     return (
@@ -280,7 +186,7 @@ useEffect(() => {
                         <div className="w-full lg:w-56">
                             <select
                                 value={selectedCountry}
-                                onChange={(e) => setSelectedCountry(e.target.value)}
+                                onChange={(e) => setSelectedCountry(e.target.value==='No Selection'?'':e.target.value)}
                                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white cursor-pointer"
                                 style={{
                                     backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
@@ -289,9 +195,13 @@ useEffect(() => {
                                     backgroundSize: "1.25rem",
                                 }}
                             >
+                                <option value="" disabled hidden>
+                                    Select a country
+                                </option>
                                 {countries.map((country) => (
-                                    <option key={country} value={country}>
-                                        {country}
+                                    
+                                    <option key={country.id} value={country.name}>
+                                        {country.name}
                                     </option>
                                 ))}
                             </select>
@@ -300,8 +210,9 @@ useEffect(() => {
                         {/* Services Dropdown */}
                         <div className="w-full lg:w-56">
                             <select
+                                
                                 value={selectedService}
-                                onChange={(e) => setSelectedService(e.target.value)}
+                                onChange={(e) => setSelectedService(e.target.value === 'No Selection' ? '' : e.target.value)}
                                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white cursor-pointer"
                                 style={{
                                     backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
@@ -309,12 +220,17 @@ useEffect(() => {
                                     backgroundPosition: "right 0.75rem center",
                                     backgroundSize: "1.25rem",
                                 }}
+                                
                             >
+                                <option value="" disabled hidden>
+                                    Select a Service
+                                </option>
                                 {services.map((service) => (
-                                    <option key={service} value={service}>
-                                        {service}
+                                    <option key={service.id} value={service.title}>
+                                        {service.title}
                                     </option>
                                 ))}
+                                
                             </select>
                         </div>
                     </div>
@@ -394,6 +310,39 @@ useEffect(() => {
                     {viewMode === 'grid' ? <CardView companies={modifiedData} />
                         : <ListView companies={modifiedData} />}
                 </div>
+
+                {/* pagination */}
+                <div className="flex items-center gap-2 mt-10 fc">
+                    <button
+                        onClick={() => setPage(Math.max(1, page - 1))}
+                        disabled={page === 1}
+                        className="px-6 py-3 rounded-lg border-2 border-gray-300 text-gray-700 font-medium hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                        Previous
+                    </button>
+
+                    {Array.from({ length: Math.ceil(total / 8) }, (_, i) => i + 1).map((pageNum) => (
+                        <button
+                            key={pageNum}
+                            onClick={() => setPage(pageNum)}
+                            className={`w-14 h-14 rounded-xl font-semibold text-lg transition-colors ${page === pageNum
+                                    ? 'bg-blue-500 text-white'
+                                    : 'bg-blue-500/10 text-blue-500 hover:bg-blue-500/20'
+                                }`}
+                        >
+                            {pageNum}
+                        </button>
+                    ))}
+
+                    <button
+                        onClick={() => setPage(Math.min(Math.ceil(total /8), page + 1))}
+                        disabled={page === Math.ceil(total / 8)}
+                        className="px-6 py-3 rounded-lg border-2 border-gray-300 text-gray-700 font-medium hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                        Next
+                    </button>
+                </div>
+
             </div>
         </div>
     );

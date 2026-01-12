@@ -1,20 +1,28 @@
 import React from "react";
 import Image from "next/image";
-
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 
+export interface Service {
+    id: string,
+    title: string,
+}
+
+
 export interface CompanyData {
-    headerImage?: string;
+    id: string,
+    headerImage: string;
     flagIcon?: string;
-    title?: string;
-    location?: string;
-    description?: string;
-    services?: string[];
-    website?: string;
-    country?: string;
-    phone?: string;
+    title: string;
+    location: string;
+    description: string;
+    services: Service[];
+    website: string;
+    country: string;
+    phone: string;
+    joined: string;
+    seenBy?: number;
 }
 
 interface CardProps {
@@ -32,12 +40,13 @@ const Card: React.FC<CardProps> = ({ prop }) => {
         description,
         services,
         website,
+        country,
     } = prop;
     const displayedServices = services?.slice(0, 3);
     const remainingCount = services ? services.length - 3 : 0;
 
     return (
-        <div className="col-span-4 md:col-span-1 w-full bg-white rounded-2xl shadow-lg overflow-hidden border">
+        <div className="flex flex-col h-full col-span-4 md:col-span-1 w-full bg-white rounded-2xl shadow-lg overflow-hidden border ">
             {/* Header Image */}
             <div className="relative w-full h-[143px]">
                 <Image
@@ -49,13 +58,13 @@ const Card: React.FC<CardProps> = ({ prop }) => {
             </div>
 
             {/* Content */}
-            <div className="p-4">
+            <div className="p-4 flex flex-col flex-1 ">
                 {/* Title Section */}
                 <div className="fc items-start gap-4 mb-4">
                     
                     <div className="flex-1 flex flex-col">
                         <h2 className="text-lg md:text-xl font-semibold text-gray-800 mb-1">
-                            {title}
+                            {title +', '+ country}
                         </h2>
                         <div className="flex items-center gap-2 text-gray-400">
                             <svg
@@ -83,22 +92,22 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                 </div>
 
                 {/* Description */}
-                <div className="h-20 overflow-y-auto custom-scrollbar mb-2">
+                <div className="max-h-20 overflow-y-auto custom-scrollbar mb-2">
                     <p className="text-gray-700 text-md leading-relaxed line-clamp-3">
                         {description}
                     </p>
                 </div>
 
                 {/* Services */}
-                <div className="mb-4">
+                {services.length >0 && (<div className="mb-4 ">
                     <h3 className="text-gray-700 text-lg font-medium mb-2">Services:</h3>
                     <div className="flex flex-wrap gap-3">
-                        {displayedServices?.map((service, index) => (
+                        {displayedServices?.map((service) => (
                             <span
-                                key={index}
-                                className="px-3 py-1 bg-blue-100 text-blue-900 text-base rounded-full shadow-md shadow-blue-200"
+                                key={service.id}
+                                className="px-3 py-1 bg-blue-100 text-blue-900 text-base rounded-full shadow-md shadow-blue-300"
                             >
-                                {service}
+                                {service.title}
                             </span>
                         ))}
                         {remainingCount > 0 && (
@@ -107,10 +116,10 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                             </span>
                         )}
                     </div>
-                </div>
+                </div>)}
 
                 {/* Action Buttons */}
-                <div className="flex items-center gap-3">
+                <div className="mt-auto flex items-center gap-3">
                     <Button
                         onClick={()=>router.push('/accounts')}
                         className="fc flex-1 bg-blue-600 hover:bg-blue-700 text-white text-lg font-medium py-1 rounded-xl transition-colors"

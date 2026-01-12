@@ -187,7 +187,7 @@ export default function AccountPage() {
                 id: '1',
                 name: "Paris Office",
                 address: "123 Tech Street, San Francisco, CA 94105",
-                city: "San Francisco",
+                city: "Paris",
                 country: "United States",
                 email: "paris@gmail.com",
                 phone: "+1 555-0123"
@@ -195,7 +195,7 @@ export default function AccountPage() {
             {
                 id: '2', 
                 name: "USA Office",
-                address: "123 Tech Street, San Francisco, CA 94105",
+                address: "123 Tech Street, Paris, CA 94105",
                 city: "San Francisco",
                 country: "United States",
                 email: "paris@gmail.com",
@@ -264,8 +264,8 @@ export default function AccountPage() {
                     </div>
 
                     {/* Top Row: About, Contact, Activity */}
-                    <div className="flex flex-col mb-6 md:flex-row gap-6">
-                        <div className="flex-1 md:h-[100%] w-full flex flex-col gap-6">
+                    <div className="flex flex-col mb-6 md:flex-row gap-6 items-stretch">
+                        <div className="flex-1 w-full flex flex-col gap-6">
                             {/* About */}
                             <div className="flex-1 backdrop-blur-sm rounded-md p-4 md:p-6 s hover:s transition-all duration-300 animate-fade-in-up border border-[#d6d6d6]">
                                 <h2 className="text-lg font-semibold mb-4 text-gray-900">
@@ -326,53 +326,19 @@ export default function AccountPage() {
                             
                             {/* Locations */}
 
-                            <div className="w-full rounded-md p-4 md:p-6 s transition-all duration-300 animate-fade-in-up stagger-4 border border-[#d6d6d6]">
+                            <div className="flex-1 w-full rounded-md p-4 md:p-6 s transition-all duration-300 animate-fade-in-up stagger-4 border border-[#d6d6d6]">
                                 <h2 className="text-lg font-semibold text-gray-800 mb-4">
                                     Branch Locations
                                 </h2>
 
-                                <div className="space-y-3">
-                                    {companyData.location.map((location, index) => (
-                                        <div
+                                <div className="flex flex-wrap overflow-auto gap-3 pl-4 pb-4">
+                                    {companyData.location?.map((loc, index) => (
+                                        <span
                                             key={index}
-                                            className="hover:bg-blue-50 active:bg-blue-50 rounded-lg p-4 border border-blue-300"
+                                            className="px-3 py-1 bg-[#FEF3EB] font-semibold text-[#917057] text-base rounded-full shadow-md shadow-[#e3d1c3] "
                                         >
-                                            {/* Office Name with Icon */}
-                                            <div className="flex items-center gap-2 mb-3">
-                                                <Building2 className="w-4 h-4 text-orange-400" />
-                                                <h3 className="text-md font-semibold text-blue-600">
-                                                    {location.name}
-                                                </h3>
-                                            </div>
-
-                                            {/* Address */}
-                                            <div className="text-md text-gray-600 mb-3 leading-relaxed">
-                                                <div>{location.address}</div>
-                                                <div>{location.city}</div>
-                                            </div>
-
-                                            {/* Email */}
-                                            <div className="flex items-center gap-2 mb-2">
-                                                <Mail className="w-4 h-4 text-blue-600" />
-                                                <a
-                                                    href={`mailto:${location.email}`}
-                                                    className="fc text-md text-blue-600 hover:text-blue-700 hover:underline"
-                                                >
-                                                    {location.email}
-                                                </a>
-                                            </div>
-
-                                            {/* Phone */}
-                                            <div className="flex items-center gap-2">
-                                                <Phone className="w-4 h-4 text-blue-600" />
-                                                <a
-                                                    href={`tel:${location.phone}`}
-                                                    className="fc text-md text-blue-600 hover:text-blue-700 hover:underline"
-                                                >
-                                                    {location.phone}
-                                                </a>
-                                            </div>
-                                        </div>
+                                            {loc.name}
+                                        </span>
                                     ))}
                                 </div>
                             </div>
