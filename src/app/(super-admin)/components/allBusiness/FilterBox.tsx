@@ -9,6 +9,7 @@ import { SlList } from "react-icons/sl";
 import { BsGrid3X3Gap } from "react-icons/bs";
 import { useView } from "../../ListGridContext";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 interface FilterFormData {
     search: string;
@@ -17,56 +18,41 @@ interface FilterFormData {
     sortBy: string;
 }
 
+// Country type definition
+type Country = {
+    id: string;
+    name: string;
+    flag: string;
+};
 
-// const fetchCountries = async () => {
-//   try {
-//     const response = await axios.get(
-//       'https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/core/countries/',
-//       {
-//         headers: {
-//           'ngrok-skip-browser-warning': 'true'
-//         }
-//       }
-//     );
 
-//     console.log("success");
-//     console.log(response.data.countries);
-//     return response.data.countries;
-
-//   } catch (error:any) {
-//     console.log("failed");
-//     console.error('Error fetching data:', error);
-//     // You can also check for specific error types
-//     if (error.response) {
-//       // Server responded with error status
-//       console.error('Response error:', error.response.data);
-//     } else if (error.request) {
-//       // Request made but no response
-//       console.error('No response received:', error.request);
-//     } else {
-//       // Something else happened
-//       console.error('Error:', error.message);
-//     }
-//   }
-// };
-
-// // Call the function
-// fetchCountries();
 
 export default function FilterBox() {
     const { list, grid, setList, setGrid } = useView();
 
-    const countryList = axios.get('https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/core/countries/')
-        .then(response => {
-            console.log("success");
-            // Handle the successful response
-            console.log(response); // The actual data payload from the server
-        })
-        .catch(error => {
-            console.log("failed");
-            // Handle the error
-            console.error('Error fetching data:', error); // Axios rejects promises for HTTP errors
-        });
+    const [countries, setCountries] = useState<Country[]>([]);
+
+    useEffect(() => {
+        axios.get("https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/core/countries/",
+            {
+                headers: { "ngrok-skip-browser-warning": "true" },
+            }
+        )
+            .then(response => {
+                setCountries(response?.data?.countries || []);
+                // console.log("success");
+                // Handle the successful response
+                // return response?.data?.countries;
+                // console.log(response.data); // The actual data payload from the server
+            })
+            .catch(error => {
+                console.log("failed");
+                console.log(error); // Axios rejects promises for HTTP errors
+                // Handle the error
+                console.error('Error fetching data:', error.status);
+            });
+    }, []);
+
 
     const { register, setValue, watch, handleSubmit } = useForm<FilterFormData>({
         defaultValues: {
@@ -103,6 +89,16 @@ export default function FilterBox() {
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>
+                                <SelectLabel>All Countries</SelectLabel>
+                                {countries.map(item => (
+                                    <SelectItem key={item.id} value={item.name}>
+                                        {item.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectGroup>
+                        </SelectContent>
+                        {/* <SelectContent>
+                            <SelectGroup>
                                 <SelectLabel>Countries</SelectLabel>
                                 <SelectItem value="Bangladesh">Bangladesh</SelectItem>
                                 <SelectItem value="Germany">Germany</SelectItem>
@@ -110,7 +106,7 @@ export default function FilterBox() {
                                 <SelectItem value="Taiwan">Taiwan</SelectItem>
                                 <SelectItem value="China">China</SelectItem>
                             </SelectGroup>
-                        </SelectContent>
+                        </SelectContent> */}
                     </Select>
                 </div>
 
