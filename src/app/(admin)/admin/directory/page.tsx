@@ -101,7 +101,7 @@ useEffect(() => {
 
     const fetchUsers = async () => {
       try {
-          const res = await api.get(`business/all/?country=${selectedCountry === '' ? '' : selectedCountry}&search=${searchTerm}&service=${selectedService === '' ? '' : selectedService}&page=${page}&sort_by=${sortBy}`, { signal: controller.signal });
+          const res: any = await api.get(`business/all/?country=${selectedCountry}&search=${searchTerm}&service=${selectedService}&page=${page}&sort_by=${sortBy}`, { signal: controller.signal });
         
           
         if (controller) {
@@ -125,11 +125,11 @@ useEffect(() => {
             setTotal(res.results.count)
 
             
-            const countr = await api.get(`core/countries/`, { signal: controller.signal });
-            const serv = await api.get(`core/services/`, { signal: controller.signal });
+            const countr:any = await api.get(`core/countries/`, { signal: controller.signal });
+            const serv: any = await api.get(`core/services/`, { signal: controller.signal });
 
-            setCountries([ ...countries,...countr.countries])
-            setServices([...services,...serv.services, ])
+            setCountries([{ id: '', name: 'No Selection', flag: '' },...countr.countries])
+            setServices([{ id: '', title: 'No Selection' },...serv.services, ])
 
 
 
@@ -186,7 +186,7 @@ useEffect(() => {
                         <div className="w-full lg:w-56">
                             <select
                                 value={selectedCountry}
-                                onChange={(e) => setSelectedCountry(e.target.value)}
+                                onChange={(e) => setSelectedCountry(e.target.value==='No Selection'?'':e.target.value)}
                                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white cursor-pointer"
                                 style={{
                                     backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
@@ -211,8 +211,8 @@ useEffect(() => {
                         <div className="w-full lg:w-56">
                             <select
                                 
-                                value={selectedService === "No Selection" ? 'Select a Service' : selectedService}
-                                onChange={(e) => setSelectedService(e.target.value)}
+                                value={selectedService}
+                                onChange={(e) => setSelectedService(e.target.value === 'No Selection' ? '' : e.target.value)}
                                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white cursor-pointer"
                                 style={{
                                     backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
