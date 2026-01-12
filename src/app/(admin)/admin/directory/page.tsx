@@ -29,27 +29,14 @@ export interface CompanyData {
 
 const page = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [selectedCountry, setSelectedCountry] = useState('No Selection');
-    const [selectedService, setSelectedService] = useState('No Selection');
+    const [selectedCountry, setSelectedCountry] = useState('');
+    const [selectedService, setSelectedService] = useState('');
     const [sortBy, setSortBy] = useState("A-Z");
     const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
     const [total,setTotal]= useState<number>(0)
 
-    const countries = [
-        'No Selection',
-        "United States",
-        "United Kingdom",
-        "Canada",
-        "Australia",
-    ];
-    const services = [
-        'No Selection',
-        "Technology",
-        "Healthcare",
-        "Finance",
-        "Education",
-        "Retail",
-    ];
+    const [countries, setCountries] = useState<{ id: string, name: string,flag: string }[]>([{ id: '', name: 'No Selection',flag:'' }]);
+    const [services, setServices] = useState<{ id: string, title: string }[]>([{ id:'', title:'No Selection'}]);
     const sortOptions = ["A-Z", "Z-A", "Most Recent"];
 
 
@@ -59,7 +46,7 @@ const page = () => {
 
     let temp: CompanyData[] = Array.isArray(data) ? [...data] : [];
 
-    // Filter by service
+   /* // Filter by service
     if (selectedService !== 'No Selection') {
         temp = temp.filter(item =>
             item.services?.some(service =>
@@ -103,6 +90,7 @@ const page = () => {
             );
             break;
     }
+    */
 
     const modifiedData = temp;
 
@@ -113,7 +101,7 @@ useEffect(() => {
 
     const fetchUsers = async () => {
       try {
-          const res = await api.get(`business/all/?country=${selectedCountry === 'No Selection' ? '' : selectedCountry}&search=${searchTerm}&service=${selectedService === 'No Selection' ? '' : selectedService}&page=${page}&sort_by=${sortBy}`);
+          const res = await api.get(`business/all/?country=${selectedCountry === '' ? '' : selectedCountry}&search=${searchTerm}&service=${selectedService === '' ? '' : selectedService}&page=${page}&sort_by=${sortBy}`, { signal: controller.signal });
         
           
         if (controller) {
@@ -135,6 +123,15 @@ useEffect(() => {
             setData(businesses);
 
             setTotal(res.results.count)
+
+            
+            const countr = await api.get(`core/countries/`, { signal: controller.signal });
+            const serv = await api.get(`core/services/`, { signal: controller.signal });
+
+            setCountries([ ...countries,...countr.countries])
+            setServices([...services,...serv.services, ])
+
+
 
             }
 
@@ -198,9 +195,13 @@ useEffect(() => {
                                     backgroundSize: "1.25rem",
                                 }}
                             >
+                                <option value="" disabled hidden>
+                                    Select a country
+                                </option>
                                 {countries.map((country) => (
-                                    <option key={country} value={country}>
-                                        {country}
+                                    
+                                    <option key={country.id} value={country.name}>
+                                        {country.name}
                                     </option>
                                 ))}
                             </select>
@@ -209,7 +210,8 @@ useEffect(() => {
                         {/* Services Dropdown */}
                         <div className="w-full lg:w-56">
                             <select
-                                value={selectedService}
+                                
+                                value={selectedService === "No Selection" ? 'Select a Service' : selectedService}
                                 onChange={(e) => setSelectedService(e.target.value)}
                                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white cursor-pointer"
                                 style={{
@@ -218,12 +220,17 @@ useEffect(() => {
                                     backgroundPosition: "right 0.75rem center",
                                     backgroundSize: "1.25rem",
                                 }}
+                                
                             >
+                                <option value="" disabled hidden>
+                                    Select a Service
+                                </option>
                                 {services.map((service) => (
-                                    <option key={service} value={service}>
-                                        {service}
+                                    <option key={service.id} value={service.title}>
+                                        {service.title}
                                     </option>
                                 ))}
+                                
                             </select>
                         </div>
                     </div>

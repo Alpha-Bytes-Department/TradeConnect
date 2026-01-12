@@ -19,7 +19,9 @@ api.interceptors.request.use(
       const token = localStorage.getItem("accessToken");
 
       if (token) {
+        config.headers = config.headers ?? {};
         config.headers.Authorization = `Bearer ${token}`;
+
       }
     }
     return config;
@@ -35,17 +37,23 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
+    if (axios.isCancel(error)) {
+      return Promise.reject({ canceled: true });
+    }
+
     if (error.response?.status === 401) {
       console.warn("Unauthorized – redirect to login");
-      // window.location.href = '/login';
     }
 
     return Promise.reject({
-      status: error.response?.status,
+      status: error.response?.status ?? 0,
       message:
-        error.response?.data?.message || "Network error. Please try again.",
+        error.response?.data?.message ||
+        error.message ||
+        "Network error. Please try again.",
     });
   }
 );
+
 
 export default api;
