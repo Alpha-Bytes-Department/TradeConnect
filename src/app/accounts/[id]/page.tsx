@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import {
     Mail,
     Phone,
@@ -23,7 +23,8 @@ import {
 import { PiX } from "react-icons/pi";
 import { redirect } from "next/navigation";
 import Image from "next/image";
-
+import api from "../../api";
+/*
 export interface Service {
     name: string;
 }
@@ -78,131 +79,118 @@ export interface CompanyProfile {
     awards: Award[];
     location: LocationData[];
     banner: string,
-    gallery: string [],
+    gallery: string[],
+}*/
+
+export interface ApiService {
+    id: string;
+    title: string;
+    description?: string;
 }
 
+export interface ApiBranch {
+    id: string;
+    name: string;
+    full_address: string;
+    city?: string;
+    country?: string;
+}
 
+export interface ApiContact {
+    id: string;
+    full_name: string;
+    position: string;
+    email: string;
+    phone: string;
+    is_primary: boolean;
+}
 
-export default function AccountPage() {
+export interface ApiCertification {
+    id: string;
+    name: string;
+    issued_by?: string;
+}
+
+export interface BusinessProfile {
+    id: string;
+    business_name: string;
+    about_business: string;
+    full_address: string;
+    phone_number: string;
+    user_full_name: string;
+    user_email: string;
+    website: string | null;
+    country: string | null;
+    logo: string | null;
+    is_locked: boolean;
+    created_at: string;
+    updated_at: string;
+
+    // Nested Data Arrays
+    services: ApiService[];
+    branches: ApiBranch[];
+    contacts: ApiContact[];
+    certifications: ApiCertification[];
+    gallery: string[];
+}
+
+export default function AccountPage({
+    params,
+}: {
+    params: Promise<{ id: string }>;
+}) {
     const [activeService, setActiveService] = useState<string | null>(null);
     const [modal, setModal] = useState<number | undefined>(undefined);
+    const {id} = use(params)
+    
 
-    const activities:Activity= {
+    const activities = {
         active: true,
         activeFor: 23,
         lastUpdated: new Date().toISOString(),
     }
 
-    const companyData: CompanyProfile = {
-        name: "Construction Partners",
-        address: "989 Builder Road, Dubai, UAE",
-        country: 'UAE',
-        banner:"https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=400&fit=crop",
-        about:
-            "We are a trusted construction company dedicated to delivering high-quality projects on time and within budget. From residential buildings to commercial developments, we focus on safety, durability, and customer satisfaction at every step.",
-        contact: {
-            office: {
-                phone: "5656565494555",
-                email: "mmislam272@gmail.com",
-                website: "dtrhfgg",
-            },
-            contacts: [
-                {
-                    id: "1",
-                    name: "Sample Name",
-                    position: "CEO",
-                    phone: "5656565494555",
-                    email: "mmislam272@gmail.com",
-                    isPrimary: true,
-                },
-                {
-                    id: "2",
-                    name: "Sample Name",
-                    position: "CEO",
-                    phone: "5656565494555",
-                    email: "mmislam272@gmail.com",
-                    isPrimary: false,
-                },
-                {
-                    id: "3",
-                    name: "Sample Name",
-                    position: "CEO",
-                    phone: "5656565494555",
-                    email: "mmislam272@gmail.com",
-                    isPrimary: false,
-                },
-            ],
-        },
-        services: [
-            {  name: "Commercial Construction" },
-            {  name: "Project Management" },
-            { name: "Renovation" },
-            { name: "Infrastructure" },
-            { name: "Commercial Construction" },
-            { name: "Project Management" },
-            { name: "Renovation" },
-            { name: "Infrastructure" },
-            { name: "Commercial Construction" },
-            { name: "Commercial Construction" },
-            { name: "Project Management" },
-            { name: "Renovation" },
-            { name: "Infrastructure" },
-            { name: "Commercial Construction" },
-            { name: "Project Management" },
-            { name: "Renovation" },
-            { name: "Infrastructure" },
-            { name: "Commercial Construction" },
-        ],
-        awards: [
-            { id: "1", name: "Commercial Construction" },
-            { id: "2", name: "Project Management" },
-            { id: "3", name: "Renovation" },
-            { id: "4", name: "Infrastructure" },
-            { id: "11", name: "Commercial Construction" },
-            { id: "21", name: "Project Management" },
-            { id: "31", name: "Renovation" },
-            { id: "41", name: "Infrastructure" },
-            { id: "51", name: "Commercial Construction" },
-            { id: "x1", name: "Commercial Construction" },
-            { id: "x2", name: "Project Management" },
-            { id: "x3", name: "Renovation" },
-            { id: "x4", name: "Infrastructure" },
-            { id: "x11", name: "Commercial Construction" },
-            { id: "x21", name: "Project Management" },
-            { id: "x31", name: "Renovation" },
-            { id: "xx1", name: "Infrastructure" },
-            { id: "x51", name: "Commercial Construction" },
-        ],
-        
-        gallery: [
-            "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=400&h=300&fit=crop",
-            "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop",
-            "https://images.unsplash.com/photo-1535732759880-bbd5c7265e3f?w=400&h=300&fit=crop",
-            "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=400&h=300&fit=crop",
-            "https://images.unsplash.com/photo-1541976590-713941681591?w=400&h=300&fit=crop",
-            "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=400&h=300&fit=crop",
-        ],
-        location: [
-            {   
-                id: '1',
-                name: "Paris Office",
-                address: "123 Tech Street, San Francisco, CA 94105",
-                city: "Paris",
-                country: "United States",
-                email: "paris@gmail.com",
-                phone: "+1 555-0123"
-            },
-            {
-                id: '2', 
-                name: "USA Office",
-                address: "123 Tech Street, Paris, CA 94105",
-                city: "San Francisco",
-                country: "United States",
-                email: "paris@gmail.com",
-                phone: "+1 555-0123"
+    
+
+    const [businesses, setBusinesses] = useState<BusinessProfile>();
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const controller = new AbortController();
+
+        const fetchBusinesses = async () => {
+            if (!id) return;
+
+            try {
+                setLoading(true);
+                setError(null);
+
+                const response:any = await api.get(`business/all/`, {
+                    signal: controller.signal
+                });
+
+               
+
+                const data = response.results.businesses.find((b: any) => b.id === id) || [];
+                setBusinesses(data);
+
+            } catch (err: any) {
+                if (err.name !== 'CanceledError') {
+                    setError("Failed to load services. Please try again later.");
+                    console.error("API Error:", err);
+                }
+            } finally {
+                setLoading(false);
             }
-        ],
-    };
+        };
+
+        fetchBusinesses();
+
+        return () => controller.abort();
+    }, []); 
+
+     console.log('****************************************************',businesses)
 
     return (
         <div className="w-full min-h-screen ">
@@ -240,12 +228,12 @@ export default function AccountPage() {
                         */}
 
                         <h1 className="text-3xl font-semibold mb-4 tracking-tight">
-                            <span className=" text-black">{companyData.name}</span>
+                            <span className=" text-black">{businesses?.business_name}</span>
                         </h1>
 
                         <div className="flex items-center justify-center gap-2 text-[#909090] mb-4">
                             <MapPin className="w-4 h-4" />
-                            <span className="text-sm font-medium">{companyData.address}</span>
+                            <span className="text-sm font-medium">{businesses?.full_address}</span>
                         </div>
 
 
@@ -272,7 +260,7 @@ export default function AccountPage() {
                                     About
                                 </h2>
                                 <p className="text-[stone-600] h-23 leading-relaxed overflow-auto ">
-                                    {companyData.about}
+                                    {businesses?.about_business}
                                 </p>
                             </div>
 
@@ -283,12 +271,12 @@ export default function AccountPage() {
                                 </h2>
 
                                 <div className="flex max-h-22 flex-wrap overflow-auto gap-3 pl-4 pb-4">
-                                    {companyData.services?.map((service, index) => (
+                                    {businesses?.services?.map((service, index) => (
                                         <span
-                                            key={index}
+                                            key={service.id}
                                             className="px-3 py-1 bg-blue-100 font-semibold text-blue-800 text-base rounded-full shadow-md shadow-blue-200"
                                         >
-                                            {service.name}
+                                            {service.title}
                                         </span>
                                     ))}
                                     {/*(companyData.services.length -5) > 0 && (
@@ -307,9 +295,9 @@ export default function AccountPage() {
                                 </h2>
 
                                 <div className="flex max-h-22 flex-wrap overflow-auto gap-3 pl-4 pb-4">
-                                    {companyData.awards?.map((award, index) => (
+                                    {businesses?.certifications?.map((award, index) => (
                                         <span
-                                            key={index}
+                                            key={award.id}
                                             className="px-3 py-1 bg-[#27930033] font-semibold text-[#279300] text-base rounded-full shadow-md shadow-[#27930055] "
                                         >
                                             {award.name}
@@ -323,7 +311,7 @@ export default function AccountPage() {
                                 </div>
                             </div>
 
-                            
+
                             {/* Locations */}
 
                             <div className="flex-1 w-full rounded-md p-4 md:p-6 s transition-all duration-300 animate-fade-in-up stagger-4 border border-[#d6d6d6]">
@@ -332,9 +320,9 @@ export default function AccountPage() {
                                 </h2>
 
                                 <div className="flex flex-wrap overflow-auto gap-3 pl-4 pb-4">
-                                    {companyData.location?.map((loc, index) => (
+                                    {businesses?.branches?.map((loc, index) => (
                                         <span
-                                            key={index}
+                                            key={loc.id}
                                             className="px-3 py-1 bg-[#FEF3EB] font-semibold text-[#917057] text-base rounded-full shadow-md shadow-[#e3d1c3] "
                                         >
                                             {loc.name}
@@ -359,7 +347,7 @@ export default function AccountPage() {
                                             Office Number
                                         </p>
                                         <span className="text-[#327EF9] hover:text-blue-700 font-medium transition-colors">
-                                            {companyData.contact.office.phone}
+                                            {businesses?.phone_number}
                                         </span>
                                     </div>
                                     <div>
@@ -367,10 +355,10 @@ export default function AccountPage() {
                                             Email
                                         </p>
                                         <a
-                                            href={`mailto:${companyData.contact.office.email}`}
+                                            href={`mailto:${businesses?.user_email}`}
                                             className="text-[#327EF9] hover:text-blue-700 font-medium transition-colors"
                                         >
-                                            {companyData.contact.office.email}
+                                            {businesses?.user_email}
                                         </a>
                                     </div>
                                 </div>
@@ -379,14 +367,14 @@ export default function AccountPage() {
                                     Contact Persons
                                 </h3>
 
-                                {companyData.contact.contacts.map((item, index) => (
+                                {businesses?.contacts.map((item, index) => (
                                     <div
                                         key={index}
                                         className="border border-[#327EF9] hover:bg-[#327EF922] px-4 p-2 mb-2 rounded-lg"
                                     >
                                         <div>
                                             <span className="flex flex-row items-center gap-2 text-[#000000] text-lg font-medium transition-colors">
-                                                {item.name}
+                                                {item.full_name}
                                             </span>
                                         </div>
                                         <div>
@@ -464,14 +452,14 @@ export default function AccountPage() {
                                 Gallery{modal}
                             </h2>
                             <div className="grid grid-cols-1 md:grid-cols-4 gap-2 md:gap-6 overflow-y-scroll scrollbar-hide max-h-88">
-                                {companyData.gallery.map((image, index) => (
+                                {businesses?.gallery.map((image, index) => (
                                     <button
                                         key={index}
                                         onClick={() => setModal(index + 1)}
                                         className="fc col-span-1 overflow-hidden bg-black aspect-[16/9] rounded-sm"
                                     >
                                         <img
-                                            src={image?image:''}
+                                            src={image ? image : ''}
                                             alt="image"
                                             className="w-full h-full object-cover"
                                         />
@@ -492,7 +480,7 @@ export default function AccountPage() {
                             <X />
                         </button>
                         <Image
-                            src={`${companyData.gallery[modal - 1]}`}
+                            src={`${businesses?.gallery[modal - 1]}`}
                             alt="Image Enlarged"
                             fill
                             className="object-cover rounded-lg"
