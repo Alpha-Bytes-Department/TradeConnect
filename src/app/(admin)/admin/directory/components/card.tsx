@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
+import Flag from "@/app/flag/page";
 
 export interface Service {
     id: string,
@@ -33,6 +34,7 @@ const Card: React.FC<CardProps> = ({ prop }) => {
     const router=useRouter()
     // Display first 3 services, and show "+N" for remaining
     const {
+        id,
         headerImage,
         flagIcon,
         title,
@@ -63,9 +65,13 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                 <div className="fc items-start gap-4 mb-4">
                     
                     <div className="flex-1 flex flex-col">
-                        <h2 className="text-lg md:text-xl font-semibold text-gray-800 mb-1">
-                            {title +', '+ country}
-                        </h2>
+                        <div className="flex flex-row items-center gap-2">
+                            <h2 className="text-lg md:text-xl font-semibold text-gray-800 mb-1">
+                            {title}
+                            </h2>
+                            <Flag id={country} h={16} w={16}/>
+                        </div>
+                        
                         <div className="flex items-center gap-2 text-gray-400">
                             <svg
                                 className="w-5 h-5"
@@ -121,14 +127,14 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                 {/* Action Buttons */}
                 <div className="mt-auto flex items-center gap-3">
                     <Button
-                        onClick={()=>router.push('/accounts')}
+                        onClick={()=>router.push(`/accounts/${id}`)}
                         className="fc flex-1 bg-blue-600 hover:bg-blue-700 text-white text-lg font-medium py-1 rounded-xl transition-colors"
                     >
                         View Profile
                     </Button>
 
                     <Link
-                        href="/accounts"
+                        href={website?website:''}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="w-10 h-10 border-2 border-gray-300 hover:border-blue-600 rounded-xl flex items-center justify-center transition-colors group"

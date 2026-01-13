@@ -3,28 +3,64 @@ import Card from "./card";
 
 import Link from "next/link";
 
-export interface Service {
-  id: string,
-  title: string,
+interface Service {
+  id: string;
+  title: string;
 }
 
-
-export interface CompanyData {
+interface LocationData {
   id: string,
-  headerImage: string;
-  flagIcon?: string;
-  title: string;
-  location: string;
-  description: string;
-  services: Service[];
-  website: string;
+  name: string;
+  address: string;
+  city: string;
   country: string;
+  email: string;
   phone: string;
-  joined: string;
-  seenBy?: number;
+}
+interface Award {
+  id: string;
+  name: string;
+}
+interface Activity {
+  active: boolean;
+  activeFor: number;
+  lastUpdated: string;
+}
+
+interface Contact {
+  id: string;
+  name: string;
+  position: string;
+  email: string;
+  phone: string;
+  isPrimary: boolean;
+}
+
+interface ContactInfo {
+  office: {
+    phone: string;
+    email: string;
+    website: string;
+  };
+  contacts: Contact[];
+}
+
+interface CompanyProfile {
+  id: string,
+      headerImage: string;
+      flagIcon?: string;
+      title: string;
+      location: string;
+      description: string;
+      services: Service[];
+      website: string;
+      country: string;
+      phone: string;
+      joined: string;
+      seenBy?: number;
 }
 interface CardView {
-  companies: CompanyData[];
+  companies: CompanyProfile[];
 }
 
 const cardView: React.FC<CardView> = ({ companies }) => {

@@ -3,13 +3,49 @@ import { ExternalLink } from 'lucide-react';
 
 import Link from 'next/link';
 
-export interface Service {
-    id: string,
-    title: string,
+interface Service {
+    id: string;
+    title: string;
 }
 
+interface LocationData {
+    id: string,
+    name: string;
+    address: string;
+    city: string;
+    country: string;
+    email: string;
+    phone: string;
+}
+interface Award {
+    id: string;
+    name: string;
+}
+interface Activity {
+    active: boolean;
+    activeFor: number;
+    lastUpdated: string;
+}
 
-export interface CompanyData {
+interface Contact {
+    id: string;
+    name: string;
+    position: string;
+    email: string;
+    phone: string;
+    isPrimary: boolean;
+}
+
+interface ContactInfo {
+    office: {
+        phone: string;
+        email: string;
+        website: string;
+    };
+    contacts: Contact[];
+}
+
+interface CompanyProfile {
     id: string,
     headerImage: string;
     flagIcon?: string;
@@ -25,10 +61,12 @@ export interface CompanyData {
 }
 
 interface DirectoryListProps {
-    companies: CompanyData[];
+    companies: CompanyProfile[];
 }
 
 const ListView: React.FC<DirectoryListProps> = ({ companies }) => {
+
+    console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', companies)
     return (
         <div className="w-full bg-gradient-to-br from-slate-50 to-slate-100 px-8 min-h-screen">
             <div className=" mx-auto">
@@ -47,14 +85,14 @@ const ListView: React.FC<DirectoryListProps> = ({ companies }) => {
                     <div className="divide-y divide-slate-100">
                         {companies.map((item, index) => (
                             <div
-                                key={index}
+                                key={item.id}
                                 className="grid grid-cols-[2fr_1.2fr_1.5fr_1.5fr_0.8fr] gap-6 px-8 py-6 hover:bg-slate-50 transition-all duration-300 group"
                             >
                                 {/* Business Column */}
                                 <div className="flex items-center gap-4">
                                     <div className="relative w-16 h-16 rounded-xl overflow-hidden shadow-md flex-shrink-0 group-hover:shadow-lg transition-shadow duration-300">
                                         <img
-                                            src={item.headerImage}
+                                            src={item?.headerImage}
                                             alt={item.title}
                                             className="w-full h-full object-cover"
                                         />
@@ -77,7 +115,7 @@ const ListView: React.FC<DirectoryListProps> = ({ companies }) => {
                                     <div className="space-y-1">
                                         {item.services?.slice(0, 2).map((service, idx) => (
                                             <p key={idx} className="text-sm font-semibold text-slate-700">
-                                                {service.title}
+                                                {service?.title}
                                             </p>
                                         ))}
                                         {item.services && item.services.length > 2 && (
@@ -92,7 +130,7 @@ const ListView: React.FC<DirectoryListProps> = ({ companies }) => {
                                 <div className="flex items-center">
                                     <div className="space-y-1">
                                         <p className="text-md font-semibold text-slate-700">
-                                            {item.website || 'info@company.com'}
+                                            {item?.website || 'info@company.com'}
                                         </p>
                                         <p className="text-md font-semibold text-slate-500">
                                             {item.phone || '+971 544 4546 4641'}
