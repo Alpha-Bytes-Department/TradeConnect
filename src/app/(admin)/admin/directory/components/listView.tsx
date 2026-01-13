@@ -3,16 +3,25 @@ import { ExternalLink } from 'lucide-react';
 
 import Link from 'next/link';
 
-interface CompanyData {
-    headerImage?: string;
+export interface Service {
+    id: string,
+    title: string,
+}
+
+
+export interface CompanyData {
+    id: string,
+    headerImage: string;
     flagIcon?: string;
-    title?: string;
-    location?: string;
-    description?: string;
-    services?: string[];
-    website?: string;
-    country?: string;
-    phone?: string;
+    title: string;
+    location: string;
+    description: string;
+    services: Service[];
+    website: string;
+    country: string;
+    phone: string;
+    joined: string;
+    seenBy?: number;
 }
 
 interface DirectoryListProps {
@@ -68,7 +77,7 @@ const ListView: React.FC<DirectoryListProps> = ({ companies }) => {
                                     <div className="space-y-1">
                                         {item.services?.slice(0, 2).map((service, idx) => (
                                             <p key={idx} className="text-sm font-semibold text-slate-700">
-                                                {service}
+                                                {service.title}
                                             </p>
                                         ))}
                                         {item.services && item.services.length > 2 && (
