@@ -1,9 +1,11 @@
 // Fahim
 "use client"
 import Modal from "@/components/ui/modal";
+import axios from "axios";
 import { Globe, Landmark, Mail, MapPin, Phone } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { IoInformationCircleOutline } from "react-icons/io5";
 
 export default function BusinessDetails() {
@@ -25,10 +27,34 @@ export default function BusinessDetails() {
         setActiveModal(null);
     };
 
+    const { id } = useParams(); // Extract id from URL
+    const [data, setData] = useState<any>(null);
+
+    useEffect(() => {
+        const fetchBusinessDatas = async () => {
+            const token = localStorage.getItem("accessToken");
+            if (!token) return;
+
+            const response = await axios.get(
+                `https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/${id}`,
+                {
+                    headers: {
+                        "ngrok-skip-browser-warning": "true",
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            setData(response?.data?.business);
+            // console.log("response =", response?.data?.business);
+            // console.log(data);
+        };
+        fetchBusinessDatas();
+    }, [id]);
+
     return (
         <div className="max-w-[1300px] mx-auto p-3">
             <div className="relative w-full h-[350px] px-4 flex items-center justify-center">
-                <Image src="/all-business-card-banners/3.jpg" alt="" fill
+                <Image src={data?.logo} alt={data?.logo} fill
                     className="object-cover object-center" />
             </div>
             {/* <div className="max-w-[300px] h-[150px] mx-auto -mt-16 relative">
@@ -39,14 +65,14 @@ export default function BusinessDetails() {
 
             <div className="flex flex-col items-center justify-center gap-2 mt-12">
                 <h1 className="font-poppins font-semibold text-[#141414] 
-                text-2xl">Construction Partners</h1>
+                text-2xl">{data?.business_name}</h1>
                 <div className="flex items-center gap-2">
                     <MapPin className="text-[#909090] text-sm" />
                     <p className="font-poppins text-[#909090] text-sm">
-                        987 Builder Road, Dubai, UAE</p>
+                        {data?.full_address}</p>
                 </div>
-                <p className="bg-[#FBC8A2] text-[#153569] px-2 py-0.5
-                rounded-full">Construction</p>
+                {/* <p className="bg-[#FBC8A2] text-[#153569] px-2 py-0.5
+                rounded-full">Construction</p> */}
                 <div className="flex flex-col md:flex-row gap-8 mt-2">
                     <button className="bg-[#327EF9] text-[#EBF2FE] flex 
                 items-center gap-3 px-8 py-2 rounded-sm cursor-pointer
@@ -69,62 +95,60 @@ export default function BusinessDetails() {
                     <div className="lg:h-[240px] p-4 border rounded-lg bg-[#FFFFFF] shadow-lg">
                         <h1 className="font-poppins font-semibold 
                         text-[#121212] text-xl">About</h1>
-                        <p className="font-poppins text-[#3F3F3F] text-sm">
-                            We are a trusted construction company dedicated
-                            to delivering high-quality projects on time and
-                            within budget. From residential buildings to
-                            commercial developments, we focus on safety,
-                            durability, and customer satisfaction at every
-                            step.</p>
+                        <p className="font-poppins text-[#3F3F3F] text-sm">{data?.about_business}</p>
                     </div>
 
                     {/* Services */}
                     <div className="lg:h-[240px] p-4 border rounded-lg bg-[#FFFFFF] shadow-lg">
                         <h1 className="font-poppins font-semibold 
                         text-[#121212] text-xl">Services</h1>
-                        <p className="bg-[#BFD7FD] inline-block px-2 py-1 mt-1 font-poppins 
-                                text-[#153569] text-xs rounded-full">Commercial Construction</p>
-                        <p className="bg-[#BFD7FD] inline-block px-2 py-1 mt-1 font-poppins 
-                                text-[#153569] text-xs rounded-full">Project Management</p>
-                        <p className="bg-[#BFD7FD] inline-block px-2 py-1 mt-1 font-poppins 
-                                text-[#153569] text-xs rounded-full">Course Development</p>
-                        <p className="bg-[#BFD7FD] inline-block px-2 py-1 mt-1 font-poppins 
-                                text-[#153569] text-xs rounded-full">Commercial Construction</p>
-                        <p className="bg-[#BFD7FD] inline-block px-2 py-1 mt-1 font-poppins 
-                                text-[#153569] text-xs rounded-full">Course Development</p>
-                        <p className="bg-[#BFD7FD] inline-block px-2 py-1 mt-1 font-poppins 
-                                text-[#153569] text-xs rounded-full">Commercial Construction</p>
+                        <div className="flex flex-wrap gap-2 mt-1">
+                            {data?.services?.map(
+                                (service: { id: string; title: string }, index: number) => (
+                                    <p key={service?.id}
+                                        className="bg-[#BFD7FD] inline-block px-2 py-1 mr-1 mt-1 
+                                    font-poppins text-[#153569] text-sm rounded-full"
+                                    >
+                                        {service?.title}
+                                    </p>
+                                )
+                            )}
+                        </div>
                     </div>
 
                     {/* Certifications */}
                     <div className="lg:h-[240px] p-4 border rounded-lg bg-[#FFFFFF] shadow-lg">
                         <h1 className="font-poppins font-semibold 
                         text-[#121212] text-xl">Certifications</h1>
-                        <p className="bg-[#27930029] inline-block px-2 py-1 mt-1 font-poppins 
-                        text-[#279300] text-xs rounded-full">Commercial Construction</p>
-                        <p className="bg-[#27930029] inline-block px-2 py-1 mt-1 font-poppins 
-                        text-[#279300] text-xs rounded-full">Local Freight Association</p>
+                        <div className="flex flex-wrap gap-2 mt-1">
+                            {data?.certifications?.map(
+                                (certificate: { id: string; name: string }, index: number) => (
+                                    <p key={certificate?.id}
+                                        className="bg-[#27930029] inline-block px-2 py-1 mr-1 mt-1 
+                                    font-poppins text-[#279300] text-sm rounded-full"
+                                    >
+                                        {certificate?.name}
+                                    </p>
+                                )
+                            )}
+                        </div>
                     </div>
 
                     {/* Branch Locations */}
                     <div className="lg:h-[240px] p-4 border rounded-lg bg-[#FFFFFF] shadow-lg">
                         <h1 className="font-poppins font-semibold 
                         text-[#121212] text-xl">Branch Locations</h1>
-                        <div className="bg-[#FEF3EB] rounded-full flex gap-1 inline-flex mt-2 mr-1">
-                            <p className="font-poppins text-[#153569] px-4 py-1 inline-block">
-                                Paris, France</p>
-                        </div>
-                        <div className="bg-[#FEF3EB] rounded-full flex gap-1 inline-flex mt-2 mr-1">
-                            <p className="font-poppins text-[#153569] px-4 py-1 inline-block">
-                                San Francisco, USA</p>
-                        </div>
-                        <div className="bg-[#FEF3EB] rounded-full flex gap-1 inline-flex mt-2 mr-1">
-                            <p className="font-poppins text-[#153569] px-4 py-1 inline-block">
-                                London, UK</p>
-                        </div>
-                        <div className="bg-[#FEF3EB] rounded-full flex gap-1 inline-flex mt-2 mr-1">
-                            <p className="font-poppins text-[#153569] px-4 py-1 inline-block">Sydney,
-                                Australia</p>
+                        <div className="flex flex-wrap gap-2 mt-1">
+                            {data?.branches?.map(
+                                (branch: { id: string; city: string, country: string }) => (
+                                    <p key={branch?.id}
+                                        className="bg-[#FEF3EB] inline-block px-2 py-1 mr-1 mt-1 
+                                    font-poppins text-[#153569] text-sm rounded-full"
+                                    >
+                                        {branch?.city + ", " + branch?.country}
+                                    </p>
+                                )
+                            )}
                         </div>
                     </div>
                 </div>
@@ -137,30 +161,42 @@ export default function BusinessDetails() {
                         text-[#121212] text-xl">Contact Information</h1>
                         <div className="mt-3">
                             <p className="font-poppins text-[#595959] text-sm">Office number</p>
-                            <p className="font-poppins text-[#327EF9] text-sm">+971 245 54 5 643</p>
+                            <p className="font-poppins text-[#327EF9] text-sm">{data?.phone_number}</p>
                         </div>
                         <div>
                             <p className="font-poppins text-[#595959] text-sm">Office Email</p>
-                            <p className="font-poppins text-[#327EF9] text-sm">asksaha9@gmail.com</p>
+                            <p className="font-poppins text-[#327EF9] text-sm">{data?.user_email}</p>
                         </div>
                         <div className="w-full h-[1px] bg-gray-300 mt-3" />
+
                         <p className="font-poppins text-[#595959] text-sm">Contact Persons</p>
-                        <div className="p-2 border rounded-lg">
-                            <p className="font-medium font-poppins">Sarah Johnson</p>
-                            <p className="font-poppins text-[#909090]">CEO</p>
-                            <div className="flex items-center gap-2 mt-2">
-                                <Mail className="w-5 h-5 text-[#327EF9]" />
-                                <p className="font-poppins text-[#327EF9]">
-                                    sarah@gmail.com
-                                </p>
-                            </div>
-                            <div className="flex items-center gap-2 mt-2">
-                                <Phone className="w-5 h-5 text-[#327EF9]" />
-                                <p className="font-poppins text-[#327EF9]">
-                                    +1 555-0125
-                                </p>
-                            </div>
-                        </div>
+                        {data?.contacts?.map(
+                            (contact: {
+                                id: string; full_name: string; role: string; email: string;
+                                phone_number: string; is_primary: boolean
+                            }) => (
+                                <div key={contact.id} className="p-2 border rounded-lg"
+                                    style={{
+                                        backgroundColor: contact.is_primary === true ? '#EBF2FE' : '#FFFFFF'
+                                    }}>
+                                    <p className="font-medium font-poppins">{contact?.full_name}</p>
+                                    <p className="font-poppins text-[#909090]">{contact?.role}</p>
+                                    <div className="flex items-center gap-2 mt-2">
+                                        <Mail className="w-5 h-5 text-[#327EF9]" />
+                                        <p className="font-poppins text-[#327EF9]">
+                                            {contact?.email}
+                                        </p>
+                                    </div>
+                                    <div className="flex items-center gap-2 mt-2">
+                                        <Phone className="w-5 h-5 text-[#327EF9]" />
+                                        <p className="font-poppins text-[#327EF9]">
+                                            {contact?.phone_number}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+
+                        {/*
                         <div className="p-2 border rounded-lg mt-3">
                             <p className="font-medium font-poppins">Sarah Johnson</p>
                             <p className="font-poppins text-[#909090]">Managing Director</p>
@@ -177,22 +213,7 @@ export default function BusinessDetails() {
                                 </p>
                             </div>
                         </div>
-                        <div className="p-2 border rounded-lg mt-3">
-                            <p className="font-medium font-poppins">Sarah Johnson</p>
-                            <p className="font-poppins text-[#909090]">Sales Manager</p>
-                            <div className="flex items-center gap-2 mt-2">
-                                <Mail className="w-5 h-5 text-[#327EF9]" />
-                                <p className="font-poppins text-[#327EF9]">
-                                    sarah@gmail.com
-                                </p>
-                            </div>
-                            <div className="flex items-center gap-2 mt-2">
-                                <Phone className="w-5 h-5 text-[#327EF9]" />
-                                <p className="font-poppins text-[#327EF9]">
-                                    +1 555-0125
-                                </p>
-                            </div>
-                        </div>
+                        */}
                     </div>
 
                     {/* Activity */}
@@ -207,7 +228,7 @@ export default function BusinessDetails() {
                             <div>
                                 <h1 className="font-poppins font-medium text-[#595959]">
                                     Connected Since:</h1>
-                                <p className="font-poppins text-[#2E73E3]">23 January 2026</p>
+                                <p className="font-poppins text-[#2E73E3]">{data.created_at}</p>
                             </div>
                         </div>
                         <div className="flex items-center gap-3 mt-3">
@@ -217,7 +238,7 @@ export default function BusinessDetails() {
                             </div>
                             <div>
                                 <h1 className="font-poppins font-medium text-[#595959]">
-                                    Membership Valid Until:</h1>
+                                    Membership Valid Till:</h1>
                                 <p className="font-poppins text-[#327EF9]">22 June 2026</p>
                             </div>
                         </div>
