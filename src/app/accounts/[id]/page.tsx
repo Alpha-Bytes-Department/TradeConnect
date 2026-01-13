@@ -24,6 +24,8 @@ import { PiX } from "react-icons/pi";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import api from "../../api";
+import Flag from "@/app/flag/page";
+
 /*
 export interface Service {
     name: string;
@@ -90,10 +92,13 @@ export interface ApiService {
 
 export interface ApiBranch {
     id: string;
-    name: string;
+    full_name: string;
     full_address: string;
     city?: string;
-    country?: string;
+    country?: {id:string;
+        name: string;
+        file:string;
+    };
 }
 
 export interface ApiContact {
@@ -120,7 +125,12 @@ export interface BusinessProfile {
     user_full_name: string;
     user_email: string;
     website: string | null;
-    country: string | null;
+    country: {
+        id: string;
+        name: string;
+        file: string;
+    };
+    country_name?: string;
     logo: string | null;
     is_locked: boolean;
     created_at: string;
@@ -153,8 +163,40 @@ export default function AccountPage({
     
 
     const [businesses, setBusinesses] = useState<BusinessProfile>();
+    
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+
+    function getActiveMonths(): number {
+        const createdAt = new Date(businesses?businesses.created_at:'');
+        const now = new Date();
+
+        let months =
+            (now.getFullYear() - createdAt.getFullYear()) * 12 +
+            (now.getMonth() - createdAt.getMonth());
+
+        // adjust if current day is before created day
+        if (now.getDate() < createdAt.getDate()) {
+            months -= 1;
+        }
+
+        return Math.max(months, 0);
+    }
+
+
+    function getLastUpdated() {
+        const date = businesses ? businesses.created_at : ''
+
+        const formattedDate = date.slice(0, 10);
+        const formattedTime = date.slice(11, 16); 
+
+        return {
+            date: formattedDate,
+            time: formattedTime,
+        };
+    }
+
+
 
     useEffect(() => {
         const controller = new AbortController();
@@ -172,25 +214,29 @@ export default function AccountPage({
 
                
 
-                const data = response.results.businesses.find((b: any) => b.id === id) || [];
+                const data = response.results.businesses.find((b: any) => b.id === id);
                 setBusinesses(data);
 
             } catch (err: any) {
                 if (err.name !== 'CanceledError') {
                     setError("Failed to load services. Please try again later.");
-                    console.error("API Error:", err);
+                    
                 }
             } finally {
                 setLoading(false);
             }
         };
 
+
+        
+
         fetchBusinesses();
+        
 
         return () => controller.abort();
     }, []); 
 
-     console.log('****************************************************',businesses)
+console.log('****************************************************',businesses)
 
     return (
         <div className="w-full min-h-screen ">
@@ -227,27 +273,40 @@ export default function AccountPage({
                         </div>
                         */}
 
-                        <h1 className="text-3xl font-semibold mb-4 tracking-tight">
-                            <span className=" text-black">{businesses?.business_name}</span>
+                        <h1 className="text-3xl fc gap-3 font-semibold mb-2 tracking-tight">
+                            <span className=" text-black">
+                                {businesses?.business_name}
+                            </span>
+                            <Flag id={businesses?.country.id} h={28} w={28}/>
                         </h1>
 
                         <div className="flex items-center justify-center gap-2 text-[#909090] mb-4">
                             <MapPin className="w-4 h-4" />
-                            <span className="text-sm font-medium">{businesses?.full_address}</span>
+                            <span className="text-md font-medium">{businesses?.full_address}</span>
                         </div>
 
 
                         {/* Action Buttons */}
-                        <div className="flex justify-center md:gap-10 items-center w-full md:w-[33vw] mt-8 flex-col md:flex-row">
-                            <button className="group w-full max-w-40 fc px-4 md:px-8 text-[#153569] py-2 bg-white hover:bg-blue-500 hover:text-white rounded-sm font-medium gl transition-all border border-[#153569] hover:border-blue-500 duration-300 hover:-translate-y-0.5 flex items-center gap-2 mt-4">
+                        <div className="flex justify-center md:gap-6 items-center w-full md:w-[33vw] mt-4 flex-col md:flex-row">
+                            {/* Email Link */}
+                            <a
+                                href={`mailto:${businesses?.user_email}`}
+                                className="group w-full max-w-40 fc px-4 md:px-8 text-[#153569] py-2 bg-white hover:bg-blue-500 hover:text-white rounded-sm font-medium transition-all border border-[#153569] hover:border-blue-500 duration-300 hover:-translate-y-0.5 flex items-center gap-2 mt-4"
+                            >
                                 <Mail className="w-4 h-4 group-hover:rotate-12 transition-transform" />
                                 Email
-                            </button>
+                            </a>
 
-                            <button className=" w-full hover:text-white hover:bg-blue-500 gl hover:border-blue-500 max-w-40 fc px-4 md:px-8 py-2 bg-white text-[#153569] rounded-sm font-medium transition-all duration-300 hover:-translate-y-0.5 border border-[#153569] flex items-center gap-2 mt-4 group">
+                            {/* Website Link */}
+                            <a
+                                href={businesses?.website || "#"}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full hover:text-white hover:bg-blue-500 hover:border-blue-500 max-w-40 fc px-4 md:px-8 py-2 bg-white text-[#153569] rounded-sm font-medium transition-all duration-300 hover:-translate-y-0.5 border border-[#153569] flex items-center gap-2 mt-4 group"
+                            >
                                 <Globe className="w-4 h-4 group-hover:rotate-12 transition-transform" />
                                 Website
-                            </button>
+                            </a>
                         </div>
                     </div>
 
@@ -323,9 +382,10 @@ export default function AccountPage({
                                     {businesses?.branches?.map((loc, index) => (
                                         <span
                                             key={loc.id}
-                                            className="px-3 py-1 bg-[#FEF3EB] font-semibold text-[#917057] text-base rounded-full shadow-md shadow-[#e3d1c3] "
+                                            className="fc gap-2 px-3 py-1 bg-[#FEF3EB] font-semibold text-[#917057] text-base rounded-full shadow-md shadow-[#e3d1c3] "
                                         >
-                                            {loc.name}
+                                            <Flag id={loc?.country?.id} h={18} w={18} />
+                                            <p>{loc.city}, {loc?.country?.name}</p>
                                         </span>
                                     ))}
                                 </div>
@@ -418,7 +478,7 @@ export default function AccountPage({
                                             <div className="flex flex-col items-left justify-center ml-2">
                                                 <p className="text-sm text-gray-500">Active for</p>
                                                 <p className="text-sm text-[#327EF9]">
-                                                    {activities.activeFor} Months
+                                                    {getActiveMonths()} Months
                                                 </p>
                                             </div>
                                         </div>
@@ -430,10 +490,10 @@ export default function AccountPage({
                                                 <p className="text-sm text-gray-500">Last Updated</p>
                                                 <div className="flex flex-row items-left justify-center gap-6">
                                                     <p className="text-sm text-[#327EF9]">
-                                                        {activities.lastUpdated.slice(0, 10)}
+                                                        {getLastUpdated().date}
                                                     </p>
                                                     <p className="text-sm text-[#327EF9]">
-                                                        {activities.lastUpdated.slice(11, 16)}
+                                                        {getLastUpdated().time}
                                                     </p>
                                                 </div>
                                             </div>
@@ -452,14 +512,14 @@ export default function AccountPage({
                                 Gallery{modal}
                             </h2>
                             <div className="grid grid-cols-1 md:grid-cols-4 gap-2 md:gap-6 overflow-y-scroll scrollbar-hide max-h-88">
-                                {businesses?.gallery.map((image, index) => (
+                                {businesses?.gallery.map((item:any,index) => (
                                     <button
-                                        key={index}
-                                        onClick={() => setModal(index + 1)}
+                                        key={item.id}
+                                        onClick={() => setModal(index+ 1)}
                                         className="fc col-span-1 overflow-hidden bg-black aspect-[16/9] rounded-sm"
                                     >
                                         <img
-                                            src={image ? image : ''}
+                                            src={item ? item?.image : ''}
                                             alt="image"
                                             className="w-full h-full object-cover"
                                         />
@@ -480,7 +540,7 @@ export default function AccountPage({
                             <X />
                         </button>
                         <Image
-                            src={`${businesses?.gallery[modal - 1]}`}
+                            src={`${businesses?.gallery[modal - 1]?.image}`}
                             alt="Image Enlarged"
                             fill
                             className="object-cover rounded-lg"
