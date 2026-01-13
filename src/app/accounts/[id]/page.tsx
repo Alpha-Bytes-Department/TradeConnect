@@ -19,6 +19,7 @@ import {
     MailIcon,
     PhoneIcon,
     Building2,
+    AwardIcon,
 } from "lucide-react";
 import { PiX } from "react-icons/pi";
 import { redirect } from "next/navigation";
@@ -106,7 +107,7 @@ export interface ApiContact {
     full_name: string;
     position: string;
     email: string;
-    phone: string;
+    phone_number: string;
     is_primary: boolean;
 }
 
@@ -141,7 +142,9 @@ export interface BusinessProfile {
     branches: ApiBranch[];
     contacts: ApiContact[];
     certifications: ApiCertification[];
-    gallery: string[];
+    gallery: {id:string,
+        image:string,
+    }[];
 }
 
 export default function AccountPage({
@@ -234,7 +237,7 @@ export default function AccountPage({
         
 
         return () => controller.abort();
-    }, []); 
+    }, [id]); 
 
 console.log('****************************************************',businesses)
 
@@ -277,7 +280,7 @@ console.log('****************************************************',businesses)
                             <span className=" text-black">
                                 {businesses?.business_name}
                             </span>
-                            <Flag id={businesses?.country.id} h={28} w={28}/>
+                            <Flag id={businesses?.country?.id} h={28} w={28}/>
                         </h1>
 
                         <div className="flex items-center justify-center gap-2 text-[#909090] mb-4">
@@ -355,11 +358,12 @@ console.log('****************************************************',businesses)
 
                                 <div className="flex max-h-22 flex-wrap overflow-auto gap-3 pl-4 pb-4">
                                     {businesses?.certifications?.map((award, index) => (
+                                        
                                         <span
                                             key={award.id}
-                                            className="px-3 py-1 bg-[#27930033] font-semibold text-[#279300] text-base rounded-full shadow-md shadow-[#27930055] "
+                                            className="fc gap-1 px-3 py-1 bg-[#27930033] font-semibold text-[#279300] text-base rounded-full shadow-md shadow-[#27930055] "
                                         >
-                                            {award.name}
+                                            <AwardIcon size={16}/>{award.name}
                                         </span>
                                     ))}
                                     {/*(companyData.services.length -5) > 0 && (
@@ -445,7 +449,7 @@ console.log('****************************************************',businesses)
                                         <div>
                                             <span className="flex flex-row items-center gap-2 text-[#327EF9] hover:text-blue-700  text-md font-semibold transition-colors">
                                                 <PhoneIcon color={"#327EF9"} size={16} />
-                                                {item.phone}
+                                                {item.phone_number}
                                             </span>
                                         </div>
                                         <div>

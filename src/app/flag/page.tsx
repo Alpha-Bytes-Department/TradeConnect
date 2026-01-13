@@ -5,13 +5,13 @@ import Image from 'next/image';
 import api from '../api';
 
 interface FlagProps {
-    id: string;          // country id or name
+    id: string|undefined;          // country id or name
     h?: number;          // height (optional)
     w?: number;          // width (optional)
 }
 
 export default function Flag({ id, h = 28, w = 28 }: FlagProps) {
-    const [flag, setFlag] = useState<string | null>(null);
+    const [flag, setFlag] = useState<string | ''>('');
 
     useEffect(() => {
         if (!id) return;
