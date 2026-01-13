@@ -8,6 +8,7 @@ import { Pagination } from "antd";
 import { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 // const getFlagEmoji = (countryCode: string) => {
 //     console.log("Country code:", countryCode); // Debug
@@ -45,6 +46,8 @@ export default function GridView() {
             );
             setDatas(response?.data?.results?.businesses);
             setTotal(response?.data?.count);
+            // console.log("all business data:",response.data);
+            // console.log("datas:",datas);
         };
         fetchBusinessDatas();
     }, [currentPage]);
@@ -60,6 +63,7 @@ export default function GridView() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
     const { grid } = useView();
+    const router = useRouter();
 
     return (
         <div>
@@ -109,7 +113,7 @@ export default function GridView() {
                                     <p className="font-poppins text-[#595959] text-xs mt-4">Services:</p>
                                     <div className="flex flex-wrap gap-2 mt-1">
                                         {item.services.slice(0, 2).map(
-                                            (service: { id: string; title: string }, index: number) => (
+                                            (service: { id: string; title: string }) => (
                                                 <p
                                                     key={service.id}
                                                     className="bg-[#BFD7FD] inline-block px-2 py-1 
@@ -132,14 +136,14 @@ export default function GridView() {
                                         <div className="col-span-3">
                                             <button className="w-full py-2 bg-[#BFD7FD] font-poppins 
                                         font-medium text-[#2459B1] text-center rounded-lg cursor-pointer"
-                                                onClick={() => { redirect("/super-admin/business-details") }}>
+                                                onClick={() => router.push(`/super-admin/business-details/${item.id}`)}>
                                                 View Profile</button>
                                         </div>
                                         <div className="">
                                             <button className="w-full py-2 bg-[#FFFFFF] font-poppins 
                                         font-medium text-[#2459B1] text-center rounded-lg cursor-pointer 
                                         border border-[#1C4589]"
-                                                onClick={() => { redirect("/super-admin/edit-business") }}>
+                                                onClick={() => { router.push("/super-admin/edit-business") }}>
                                                 Edit</button>
                                         </div>
                                     </div>
