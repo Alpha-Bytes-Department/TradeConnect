@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import {
     Mail,
     Phone,
@@ -83,9 +83,16 @@ export interface CompanyProfile {
 
 
 
-export default function AccountPage() {
+export default function AccountPage({
+    params,
+}: {
+    params: Promise<{ id: string }>;
+}) {
     const [activeService, setActiveService] = useState<string | null>(null);
     const [modal, setModal] = useState<number | undefined>(undefined);
+    const {id} = use(params)
+
+    console.log('******************************************************************',id)
 
     const activities:Activity= {
         active: true,
@@ -134,8 +141,8 @@ export default function AccountPage() {
             ],
         },
         services: [
-            {  name: "Commercial Construction" },
-            {  name: "Project Management" },
+            { name: "Commercial Construction" },
+            { name: "Project Management" },
             { name: "Renovation" },
             { name: "Infrastructure" },
             { name: "Commercial Construction" },
@@ -203,6 +210,12 @@ export default function AccountPage() {
             }
         ],
     };
+
+    useEffect(()=>{
+
+
+
+    },[])
 
     return (
         <div className="w-full min-h-screen ">
