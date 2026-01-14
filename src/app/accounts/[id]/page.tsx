@@ -22,7 +22,7 @@ import {
     AwardIcon,
 } from "lucide-react";
 import { PiX } from "react-icons/pi";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import Image from "next/image";
 import api from "../../api";
 import Flag from "@/app/flag/page";
@@ -155,6 +155,7 @@ export default function AccountPage({
     const [activeService, setActiveService] = useState<string | null>(null);
     const [modal, setModal] = useState<number | undefined>(undefined);
     const {id} = use(params)
+    const router = useRouter()
     
 
     const activities = {
@@ -239,14 +240,14 @@ export default function AccountPage({
         return () => controller.abort();
     }, [id]); 
 
-console.log('****************************************************',businesses?.user_email)
+
 
     return (
         <div className="w-full min-h-screen ">
             <div className="relative w-full min-h-screen">
                 <div className="fc h-[50vw] md:h-[22vw] w-[100%] m-auto overflow-hidden ">
                     <img
-                        src=".././././accountsBanner.png"
+                        src={`${businesses?.logo}`}
                         alt="accounts"
                         className="w-[170%] "
                     ></img>
@@ -254,12 +255,12 @@ console.log('****************************************************',businesses?.u
                 <button
                     className="absolute top-[2vw] left-[2vw] fc h-10 p-4 bg-blue-200 border-blue-400 rounded-lg gap-2"
                     onClick={() => {
-                        redirect("/admin/directory");
+                        router.back();
                     }}
                 >
                     <ArrowLeft color={"#001a81ff"} />
                     <p className="text-blue-900 text-md font-semibold">
-                        Back to Directory
+                        Back 
                     </p>
                 </button>
 

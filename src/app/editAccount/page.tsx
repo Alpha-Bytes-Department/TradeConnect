@@ -7,10 +7,11 @@ import Services from './components/services';
 import Images from './components/image';
 import Branches from './components/branches';
 import Certifications from './components/certifications';
-import { Save } from 'lucide-react';
+import { ArrowLeft, Save } from 'lucide-react';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import Navbar from '../(admin)/admin/components/common/NavBar';
 import { ContactInfo, Award, LocationData,CompanyProfile,Service } from '@/app/(admin)/admin/interfaces';
+import { useRouter } from 'next/navigation';
 
 
 
@@ -20,7 +21,7 @@ type TabType = 'basic' | 'contact' | 'branches' | 'certification' | 'services' |
 const ProfileLayout: React.FC = () => {
     // Note: State (contactInfo) and handleInputChange removed to make this a layout
 
-
+const router = useRouter();
 
     const tabs: { id: TabType; label: string }[] = [
         { id: 'basic', label: 'Basic Information' },
@@ -224,9 +225,22 @@ const ProfileLayout: React.FC = () => {
             <SidebarProvider>
                 <div className="w-full ">
                     <Navbar/>
-                    <div className="max-w-7xl mx-auto mt-12">
+                    <div className="max-w-full px-24 mx-auto mt-4">
+
+                       
                         {/* Header */}
                         <div className="mb-8">
+                             <button
+                            className="fc h-10 p-4 bg-blue-200 border-blue-400 rounded-lg gap-2 mb-10"
+                            onClick={() => {
+                                router.back();
+                            }}
+                        >
+                            <ArrowLeft color={"#001a81ff"} />
+                            <p className="text-blue-900 text-md font-semibold">
+                                Back
+                            </p>
+                        </button>
                             <h1 className="text-4xl font-semibold text-gray-900 mb-2">Edit Profile</h1>
                             <p className="text-lg text-gray-600">Update your business information and images</p>
                         </div>
