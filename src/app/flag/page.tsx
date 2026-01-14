@@ -32,9 +32,7 @@ export default function Flag({ id, h = 28, w = 28 }: FlagProps) {
                     setFlag(country.flag);
                 }
             } catch (err: any) {
-                if (err.name !== 'CanceledError') {
-                    console.error('API Error:', err);
-                }
+                
             }
         };
 
