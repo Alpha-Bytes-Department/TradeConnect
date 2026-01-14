@@ -2,7 +2,7 @@
 "use client"
 import Modal from "@/components/ui/modal";
 import axios from "axios";
-import { Globe, Landmark, Mail, MapPin, Phone } from "lucide-react";
+import { Globe, Mail, MapPin, Phone } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -10,6 +10,8 @@ import { IoInformationCircleOutline } from "react-icons/io5";
 
 export default function BusinessDetails() {
     const [activeModal, setActiveModal] = useState<string | null>(null);
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
     const animations = [
         {
             type: "fade" as const,
@@ -19,8 +21,9 @@ export default function BusinessDetails() {
         },
     ];
 
-    const openModal = (type: string) => {
+    const openModal = (type: string, selectedImageUrl: string) => {
         setActiveModal(type);
+        setSelectedImage(selectedImageUrl);
     };
 
     const closeModal = () => {
@@ -64,15 +67,20 @@ export default function BusinessDetails() {
             </div> */}
 
             <div className="flex flex-col items-center justify-center gap-2 mt-12">
-                <h1 className="font-poppins font-semibold text-[#141414] 
-                text-2xl">{data?.business_name}</h1>
+                <div className="flex items-center gap-2">
+                    <h1 className="font-poppins font-semibold text-[#141414] 
+                        text-2xl">{data?.business_name}</h1>
+                    {data?.country?.flag &&
+                        <Image src={data?.country?.flag} alt={data?.country?.name}
+                            width={24} height={24} />
+                    }
+                </div>
                 <div className="flex items-center gap-2">
                     <MapPin className="text-[#909090] text-sm" />
                     <p className="font-poppins text-[#909090] text-sm">
-                        {data?.full_address}</p>
+                        {data?.country?.name}</p>
                 </div>
-                {/* <p className="bg-[#FBC8A2] text-[#153569] px-2 py-0.5
-                rounded-full">Construction</p> */}
+
                 <div className="flex flex-col md:flex-row gap-8 mt-2">
                     <button className="bg-[#327EF9] text-[#EBF2FE] flex 
                 items-center gap-3 px-8 py-2 rounded-sm cursor-pointer
@@ -104,7 +112,7 @@ export default function BusinessDetails() {
                         text-[#121212] text-xl">Services</h1>
                         <div className="flex flex-wrap gap-2 mt-1">
                             {data?.services?.map(
-                                (service: { id: string; title: string }, index: number) => (
+                                (service: { id: string; title: string }) => (
                                     <p key={service?.id}
                                         className="bg-[#BFD7FD] inline-block px-2 py-1 mr-1 mt-1 
                                     font-poppins text-[#153569] text-sm rounded-full"
@@ -122,7 +130,7 @@ export default function BusinessDetails() {
                         text-[#121212] text-xl">Certifications</h1>
                         <div className="flex flex-wrap gap-2 mt-1">
                             {data?.certifications?.map(
-                                (certificate: { id: string; name: string }, index: number) => (
+                                (certificate: { id: string; name: string }) => (
                                     <p key={certificate?.id}
                                         className="bg-[#27930029] inline-block px-2 py-1 mr-1 mt-1 
                                     font-poppins text-[#279300] text-sm rounded-full"
@@ -135,18 +143,27 @@ export default function BusinessDetails() {
                     </div>
 
                     {/* Branch Locations */}
-                    <div className="lg:h-[240px] p-4 border rounded-lg bg-[#FFFFFF] shadow-lg">
+                    <div className="lg:h-[240px] p-4 border rounded-lg bg-[#FFFFFF] shadow-lg
+                    overflow-y-auto">
                         <h1 className="font-poppins font-semibold 
                         text-[#121212] text-xl">Branch Locations</h1>
                         <div className="flex flex-wrap gap-2 mt-1">
                             {data?.branches?.map(
-                                (branch: { id: string; city: string, country: string }) => (
-                                    <p key={branch?.id}
-                                        className="bg-[#FEF3EB] inline-block px-2 py-1 mr-1 mt-1 
-                                    font-poppins text-[#153569] text-sm rounded-full"
+                                (branch: {
+                                    id: string; city: string,
+                                    country: { id: string; name: string; flag: string | null }
+                                }) => (
+                                    <div key={branch?.id}
+                                        className="bg-[#FEF3EB] px-4 py-1 mr-1 mt-1 rounded-full 
+                                        flex gap-2"
                                     >
-                                        {branch?.city + ", " + branch?.country}
-                                    </p>
+                                        {branch?.country?.flag &&
+                                            <Image src={branch?.country?.flag} alt={branch?.country?.name}
+                                                width={24} height={24} />
+                                        }
+                                        <p className="font-poppins text-[#153569]">
+                                            {branch?.city + " , " + branch?.country?.name}</p>
+                                    </div>
                                 )
                             )}
                         </div>
@@ -156,7 +173,8 @@ export default function BusinessDetails() {
 
                 <div className="w-full lg:w-1/2 h-full flex flex-col gap-3">
                     {/* Contact Information */}
-                    <div className="flex flex-col gap-3 p-4 border rounded-lg bg-[#FFFFFF] shadow-lg">
+                    <div className="lg:h-[690px] flex flex-col gap-3 p-4 border rounded-lg 
+                    bg-[#FFFFFF] shadow-lg overflow-y-auto">
                         <h1 className="font-poppins font-semibold 
                         text-[#121212] text-xl">Contact Information</h1>
                         <div className="mt-3">
@@ -195,29 +213,10 @@ export default function BusinessDetails() {
                                     </div>
                                 </div>
                             ))}
-
-                        {/*
-                        <div className="p-2 border rounded-lg mt-3">
-                            <p className="font-medium font-poppins">Sarah Johnson</p>
-                            <p className="font-poppins text-[#909090]">Managing Director</p>
-                            <div className="flex items-center gap-2 mt-2">
-                                <Mail className="w-5 h-5 text-[#327EF9]" />
-                                <p className="font-poppins text-[#327EF9]">
-                                    sarah@gmail.com
-                                </p>
-                            </div>
-                            <div className="flex items-center gap-2 mt-2">
-                                <Phone className="w-5 h-5 text-[#327EF9]" />
-                                <p className="font-poppins text-[#327EF9]">
-                                    +1 555-0125
-                                </p>
-                            </div>
-                        </div>
-                        */}
                     </div>
 
                     {/* Activity */}
-                    <div className="h-full p-4 border rounded-lg bg-[#FFFFFF] shadow-lg">
+                    <div className="lg:h-[200px] p-4 border rounded-lg bg-[#FFFFFF] shadow-lg">
                         <h1 className="font-poppins font-semibold 
                         text-[#121212] text-xl">Verified Member</h1>
                         <div className="flex items-center gap-3 mt-3">
@@ -228,7 +227,7 @@ export default function BusinessDetails() {
                             <div>
                                 <h1 className="font-poppins font-medium text-[#595959]">
                                     Connected Since:</h1>
-                                <p className="font-poppins text-[#2E73E3]">{data.created_at}</p>
+                                <p className="font-poppins text-[#2E73E3]">{data?.created_at}</p>
                             </div>
                         </div>
                         <div className="flex items-center gap-3 mt-3">
@@ -247,13 +246,19 @@ export default function BusinessDetails() {
             </div>
 
 
+            {/* Gallery */}
             <div className="p-4 rounded-lg border shadow-lg bg-[#FFFFFF] mt-16 mb-16">
                 <h1 className="font-medium font-poppins text-[#121212]">Gallery</h1>
-                <div className="grid grid-cols-4 gap-6 mt-3">
-                    <div className="relative h-[160px]" onClick={() => openModal(animations[0].type)}>
-                        <Image src="/all-business-card-banners/1.jpg" alt="" fill
-                            className="object-cover object-center rounded-lg cursor-pointer" />
-                    </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-3">
+                    {data?.gallery?.map((item) =>
+                        <div key={item?.id} className="relative h-[160px]"
+                            onClick={() => openModal(animations[0]?.type, item?.image)}
+                        >
+                            <Image src={item?.image} alt="" fill
+                                className="object-cover object-center rounded-lg cursor-pointer" />
+                        </div>
+                    )}
+
                     {activeModal &&
                         <Modal
                             isOpen={activeModal === "fade"}
@@ -263,39 +268,11 @@ export default function BusinessDetails() {
                             size="md"
                         >
                             <div className="max-w-[500px] h-[300px] relative">
-                                <Image src="/all-business-card-banners/2.jpg" alt="" fill
+                                <Image src={selectedImage} alt={selectedImage} fill
                                     className="object-cover rounded-lg cursor-pointer" />
                             </div>
                         </Modal>
                     }
-                    <div className="relative h-[160px]">
-                        <Image src="/all-business-card-banners/2.jpg" alt="" fill
-                            className="object-cover object-center rounded-lg cursor-pointer" />
-                    </div>
-                    <div className="relative h-[160px]">
-                        <Image src="/all-business-card-banners/3.jpg" alt="" fill
-                            className="object-cover object-center rounded-lg cursor-pointer" />
-                    </div>
-                    <div className="relative h-[160px]">
-                        <Image src="/all-business-card-banners/4.jpg" alt="" fill
-                            className="object-cover object-center rounded-lg cursor-pointer" />
-                    </div>
-                    <div className="relative h-[160px]">
-                        <Image src="/all-business-card-banners/5.jpg" alt="" fill
-                            className="object-cover object-center rounded-lg cursor-pointer" />
-                    </div>
-                    <div className="relative h-[160px]">
-                        <Image src="/all-business-card-banners/6.jpg" alt="" fill
-                            className="object-cover object-center rounded-lg cursor-pointer" />
-                    </div>
-                    <div className="relative h-[160px]">
-                        <Image src="/all-business-card-banners/1.jpg" alt="" fill
-                            className="object-cover object-center rounded-lg cursor-pointer" />
-                    </div>
-                    <div className="relative h-[160px]">
-                        <Image src="/all-business-card-banners/2.jpg" alt="" fill
-                            className="object-cover object-center rounded-lg cursor-pointer" />
-                    </div>
                 </div>
             </div>
         </div>
