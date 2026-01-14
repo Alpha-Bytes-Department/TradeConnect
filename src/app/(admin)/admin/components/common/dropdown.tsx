@@ -20,14 +20,14 @@ export default function AccountDropdown() {
     }, []);
 
     const handleEditAccount = () => {
-        router.push('/admin/editAccount');
+        router.push('/editAccount');
         setIsOpen(false);
     };
 
     const handleLogOut = () => {
-        
+        localStorage.removeItem('accessToken')
         setIsOpen(false);
-        router.push('/admin/dashboard');
+        router.push('/');
     };
 
     return (

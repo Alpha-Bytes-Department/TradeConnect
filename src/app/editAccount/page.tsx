@@ -1,16 +1,18 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Basic from './components/basic';
 import Contacts from './components/contacts';
 import Services from './components/services';
 import Images from './components/image';
 import Branches from './components/branches';
 import Certifications from './components/certifications';
-import { Save } from 'lucide-react';
+import { ArrowLeft, Save } from 'lucide-react';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import Navbar from '../(admin)/admin/components/common/NavBar';
 import { ContactInfo, Award, LocationData,CompanyProfile,Service } from '@/app/(admin)/admin/interfaces';
+import { useRouter } from 'next/navigation';
+import api from '../api';
 
 
 
@@ -21,6 +23,74 @@ const ProfileLayout: React.FC = () => {
     // Note: State (contactInfo) and handleInputChange removed to make this a layout
 
 
+    interface Service {
+        id: string;
+        title: string;
+    }
+
+    interface LocationData {
+        id: string,
+        name: string;
+        address: string;
+        city: string;
+        country: string;
+        email: string;
+        phone: string;
+    }
+
+
+    interface Award {
+        id: string;
+        name: string;
+    }
+    interface Activity {
+        active: boolean;
+        activeFor: number;
+        lastUpdated: string;
+    }
+
+    interface Contact {
+        id: string;
+        name: string;
+        position: string;
+        email: string;
+        phone: string;
+        isPrimary: boolean;
+    }
+
+    interface ContactInfo {
+        office: {
+            phone: string;
+            email: string;
+            website: string;
+        };
+        contacts: Contact[];
+    }
+
+    interface CompanyProfile {
+        id: string,
+        headerImage: string;
+        flagIcon?: string;
+        title: string;
+        location: string;
+        description: string;
+        services: Service[];
+        website: string;
+        country: string;
+        phone: string;
+        joined: string;
+        seenBy?: number;
+        email:string;
+        contacts:Contact[];
+        branch_locations:LocationData[];
+        certifications:Award[];
+        gallery:{id: string;
+            image: string;
+        }[];
+    }
+
+const router = useRouter();
+    const id = localStorage.getItem('n1X_ang@xinl23446')
 
     const tabs: { id: TabType; label: string }[] = [
         { id: 'basic', label: 'Basic Information' },
@@ -37,131 +107,58 @@ const ProfileLayout: React.FC = () => {
 
 
     const [activeTab, setActiveTab] = useState<'basic' | 'contact' | 'branches' | 'certification' | 'services' | 'images'>('basic')
-    const [data, setData] = useState<CompanyProfile>({
-        name: "Construction Partners",
-        address: "989 Builder Road, Dubai, UAE",
-        country: 'UAE',
-        banner: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=400&h=300&fit=crop" ,
-        about:
-            "We are a trusted construction company dedicated to delivering high-quality projects on time and within budget. From residential buildings to commercial developments, we focus on safety, durability, and customer satisfaction at every step.",
-        contact: {
-            office: {
-                phone: "5656565494555",
-                email: "mmislam272@gmail.com",
-                website: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=400&fit=crop",
-            },
-            contacts: [
-                {
-                    id: "1",
-                    name: "Sample Name",
-                    position: "CEO",
-                    phone: "5656565494555",
-                    email: "mmislam272@gmail.com",
-                    isPrimary: true,
-                },
-                {
-                    id: "2",
-                    name: "Sample Name",
-                    position: "CEO",
-                    phone: "5656565494555",
-                    email: "mmislam272@gmail.com",
-                    isPrimary: false,
-                },
-                {
-                    id: "3",
-                    name: "Sample Name",
-                    position: "CEO",
-                    phone: "5656565494555",
-                    email: "mmislam272@gmail.com",
-                    isPrimary: false,
-                },
-            ],
-        },
-        services: [
-            { name: "Commercial Construction" },
-            { name: "Project Management" },
-            {  name: "Renovation" },
-            {  name: "Infrastructure" },
-            { name: "Commercial Construction" },
-            { name: "Project Management" },
-            { name: "Renovation" },
-            { name: "Infrastructure" },
-            { name: "Commercial Construction" },
-            { name: "Commercial Construction" },
-            { name: "Project Management" },
-            { name: "Renovation" },
-            { name: "Infrastructure" },
-            { name: "Commercial Construction" },
-            { name: "Project Management" },
-            { name: "Renovation" },
-            { name: "Infrastructure" },
-            { name: "Commercial Construction" },
-        ],
-        awards: [
-            { id: "1", name: "Commercial Construction" },
-            { id: "2", name: "Project Management" },
-            { id: "3", name: "Renovation" },
-            { id: "4", name: "Infrastructure" },
-            { id: "11", name: "Commercial Construction" },
-            { id: "21", name: "Project Management" },
-            { id: "31", name: "Renovation" },
-            { id: "41", name: "Infrastructure" },
-            { id: "51", name: "Commercial Construction" },
-            { id: "x1", name: "Commercial Construction" },
-            { id: "x2", name: "Project Management" },
-            { id: "x3", name: "Renovation" },
-            { id: "x4", name: "Infrastructure" },
-            { id: "x11", name: "Commercial Construction" },
-            { id: "x21", name: "Project Management" },
-            { id: "x31", name: "Renovation" },
-            { id: "xx1", name: "Infrastructure" },
-            { id: "x51", name: "Commercial Construction" },
-        ],
-        gallery: [
-            "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=400&h=300&fit=crop",
-            "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop",
-            "https://images.unsplash.com/photo-1535732759880-bbd5c7265e3f?w=400&h=300&fit=crop",
-            "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=400&h=300&fit=crop",
-            "https://images.unsplash.com/photo-1541976590-713941681591?w=400&h=300&fit=crop",
-            "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=400&h=300&fit=crop",
-],
-        location: [
-            {
-                id: '1',
-                name: "Paris Office",
-                address: "123 Tech Street, San Francisco, CA 94105",
-                city: "San Francisco",
-                country: "United States",
-                email: "paris@gmail.com",
-                phone: "+1 555-0123"
-            },
-            {
-                id: '2', 
-                name: "USA Office",
-                address: "123 Tech Street, San Francisco, CA 94105",
-                city: "San Francisco",
-                country: "United States",
-                email: "paris@gmail.com",
-                phone: "+1 555-0123"
+    const [data, setData] = useState<CompanyProfile>()
+
+
+
+
+
+    useEffect(() => {
+        const controller = new AbortController();
+
+        const fetchData = async () => {
+            if (!id) return;
+
+            try {
+               
+                const response: any = await api.get(`business/all/`, {
+                    signal: controller.signal
+                });
+
+
+
+                const data = response.results.businesses.find((b: any) => b.id === id);
+                setData(data);
+
+            } catch (err: any) {
+                if (err.name !== 'CanceledError') {
+                   
+
+                }
             }
-        ],
-    })
+        };
+
+        fetchData();
 
 
+        return () => controller.abort();
+    }, [id]); 
+
+ console.log('**************************************************************',id)
     
-    const [basic, setBasic] = useState<{ name: string, address: string, country: string }>({name:data.name,address:data.address,country:data.country})
-    const [contact, setContact] = useState<ContactInfo>({
+    const [basic, setBasic] = useState<{ name?: string, address?: string, country?: string }>({ name: data?.title,address:data?.location,country:data?.country})
+    const [contact, setContact] = useState<any>({
         office: {
-            phone: data.contact.office.phone,
-            email: data.contact.office.email,
-            website: data.contact.office.website,
+            phone: data?.phone,
+            email: data?.email,
+            website: data?.website,
         },
-        contacts: data.contact.contacts,
+        contacts: data?.contacts,
     })
-    const [branch, setBranch] = useState<LocationData[]>(data.location)
-    const [certification, setCertification] = useState<Award[]>(data.awards)
-    const [services, setServices] = useState<{about:string,services:Service[]}>({about:data.about,services:data.services})
-    const [images, setImages] = useState<{ banner:string, gallery: string[] }>({ banner: data.banner, gallery: data.gallery })
+    const [branch, setBranch] = useState<any>(data?.branch_locations)
+    const [certification, setCertification] = useState(data?.certifications)
+    const [services, setServices] = useState({about:data?.description,services:data?.services})
+    const [images, setImages] = useState({ banner: data?.headerImage, gallery: data?.gallery })
 
 
     
@@ -224,9 +221,22 @@ const ProfileLayout: React.FC = () => {
             <SidebarProvider>
                 <div className="w-full ">
                     <Navbar/>
-                    <div className="max-w-7xl mx-auto mt-12">
+                    <div className="max-w-full px-24 mx-auto mt-4">
+
+                       
                         {/* Header */}
                         <div className="mb-8">
+                             <button
+                            className="fc h-10 p-4 bg-blue-200 border-blue-400 rounded-lg gap-2 mb-10"
+                            onClick={() => {
+                                router.back();
+                            }}
+                        >
+                            <ArrowLeft color={"#001a81ff"} />
+                            <p className="text-blue-900 text-md font-semibold">
+                                Back
+                            </p>
+                        </button>
                             <h1 className="text-4xl font-semibold text-gray-900 mb-2">Edit Profile</h1>
                             <p className="text-lg text-gray-600">Update your business information and images</p>
                         </div>

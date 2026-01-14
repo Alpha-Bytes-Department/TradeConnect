@@ -141,7 +141,7 @@ const ListView: React.FC<DirectoryListProps> = ({ companies }) => {
                                 {/* Action Column */}
                                 <div className="flex items-center justify-start">
                                     <Link
-                                        href="https://google.com"
+                                        href={`/accounts/${item.id}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="fc gap-3 bg-blue-100 hover:bg-blue-700 text-blue-700 hover:text-white text-md  font-semibold py-2 px-4 rounded-xl transition-colors border border-blue-600 "

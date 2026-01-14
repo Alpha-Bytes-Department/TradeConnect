@@ -22,7 +22,7 @@ import {
     AwardIcon,
 } from "lucide-react";
 import { PiX } from "react-icons/pi";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import Image from "next/image";
 import api from "../../api";
 import Flag from "@/app/flag/page";
@@ -155,6 +155,7 @@ export default function AccountPage({
     const [activeService, setActiveService] = useState<string | null>(null);
     const [modal, setModal] = useState<number | undefined>(undefined);
     const {id} = use(params)
+    const router = useRouter()
     
 
     const activities = {
@@ -239,14 +240,14 @@ export default function AccountPage({
         return () => controller.abort();
     }, [id]); 
 
-console.log('****************************************************',businesses)
+
 
     return (
         <div className="w-full min-h-screen ">
             <div className="relative w-full min-h-screen">
                 <div className="fc h-[50vw] md:h-[22vw] w-[100%] m-auto overflow-hidden ">
                     <img
-                        src=".././././accountsBanner.png"
+                        src={`${businesses?.logo}`}
                         alt="accounts"
                         className="w-[170%] "
                     ></img>
@@ -254,12 +255,12 @@ console.log('****************************************************',businesses)
                 <button
                     className="absolute top-[2vw] left-[2vw] fc h-10 p-4 bg-blue-200 border-blue-400 rounded-lg gap-2"
                     onClick={() => {
-                        redirect("/admin/directory");
+                        router.back();
                     }}
                 >
                     <ArrowLeft color={"#001a81ff"} />
                     <p className="text-blue-900 text-md font-semibold">
-                        Back to Directory
+                        Back 
                     </p>
                 </button>
 
@@ -294,7 +295,7 @@ console.log('****************************************************',businesses)
                             {/* Email Link */}
                             <a
                                 href={`mailto:${businesses?.user_email}`}
-                                className="group w-full max-w-40 fc px-4 md:px-8 text-[#153569] py-2 bg-white hover:bg-blue-500 hover:text-white rounded-sm font-medium transition-all border border-[#153569] hover:border-blue-500 duration-300 hover:-translate-y-0.5 flex items-center gap-2 mt-4"
+                                className="z-50 group w-full max-w-40 fc px-4 md:px-8 text-[#153569] py-2 bg-white hover:bg-blue-500 hover:text-white rounded-sm font-medium transition-all border border-[#153569] hover:border-blue-500 duration-300 hover:-translate-y-0.5 flex items-center gap-2 mt-4"
                             >
                                 <Mail className="w-4 h-4 group-hover:rotate-12 transition-transform" />
                                 Email
@@ -336,7 +337,7 @@ console.log('****************************************************',businesses)
                                     {businesses?.services?.map((service, index) => (
                                         <span
                                             key={service.id}
-                                            className="px-3 py-1 bg-blue-100 font-semibold text-blue-800 text-base rounded-full shadow-md shadow-blue-200"
+                                            className="px-3 py-1 bg-blue-100 font-semibold text-blue-800 text-base rounded-full shadow-md shadow-blue-300"
                                         >
                                             {service.title}
                                         </span>
@@ -353,7 +354,7 @@ console.log('****************************************************',businesses)
                             {/*Awards*/}
                             <div className="w-full rounded-md p-4 md:p-6 s transition-all duration-300 animate-fade-in-up stagger-4 border border-[#d6d6d6]">
                                 <h2 className="text-lg font-semibold mb-4 text-gray-900">
-                                    Awards
+                                    Certifications
                                 </h2>
 
                                 <div className="flex max-h-22 flex-wrap overflow-auto gap-3 pl-4 pb-4">
@@ -361,7 +362,7 @@ console.log('****************************************************',businesses)
                                         
                                         <span
                                             key={award.id}
-                                            className="fc gap-1 px-3 py-1 bg-[#27930033] font-semibold text-[#279300] text-base rounded-full shadow-md shadow-[#27930055] "
+                                            className="fc gap-1 px-3 py-1 bg-[#27930033] font-semibold text-[#279300] text-base rounded-full shadow-md shadow-[#27930088] "
                                         >
                                             <AwardIcon size={16}/>{award.name}
                                         </span>
@@ -386,7 +387,7 @@ console.log('****************************************************',businesses)
                                     {businesses?.branches?.map((loc, index) => (
                                         <span
                                             key={loc.id}
-                                            className="fc gap-2 px-3 py-1 bg-[#FEF3EB] font-semibold text-[#917057] text-base rounded-full shadow-md shadow-[#e3d1c3] "
+                                            className="fc gap-2 px-3 py-1 bg-[#FEF3EB] font-semibold text-[#917057] text-base rounded-full shadow-md shadow-[#d3c1b3] "
                                         >
                                             <Flag id={loc?.country?.id} h={18} w={18} />
                                             <p>{loc.city}, {loc?.country?.name}</p>
