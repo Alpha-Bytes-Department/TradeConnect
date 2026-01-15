@@ -6,25 +6,65 @@ import ListView from "./components/listView";
 import api from "@/app/api";
 
 
-export interface Service{
+
+
+interface Service {
+    id: string;
+    title: string;
+}
+
+interface LocationData {
     id: string,
-    title:string,
+    name: string;
+    address: string;
+    city: string;
+    country: string;
+    email: string;
+    phone: string;
 }
 
 
-export interface CompanyData {
-    id: string,
-    headerImage: string;
-    flagIcon?: string;
-    title: string;
-    location: string;
-    description: string;
-    services: Service[];
-    website: string;
-    country: string;
+interface Award {
+    id: string;
+    name: string;
+}
+interface Activity {
+    active: boolean;
+    activeFor: number;
+    lastUpdated: string;
+}
+
+interface Contact {
+    id: string;
+    name: string;
+    position: string;
+    email: string;
     phone: string;
-    joined:string;
-    seenBy?: number;
+    isPrimary: boolean;
+}
+
+interface ContactInfo {
+    office: {
+        phone: string;
+        email: string;
+        website: string;
+    };
+    contacts: Contact[];
+}
+
+interface CompanyProfile {
+    id: string,
+        headerImage: string;
+        flagIcon?: string;
+        title: string;
+        location: string;
+        description: string;
+        services: Service[];
+        website: string;
+        country: string;
+        phone: string;
+        joined: string;
+        seenBy?: number;
 }
 
 const page = () => {
@@ -37,14 +77,18 @@ const page = () => {
 
     const [countries, setCountries] = useState<{ id: string, name: string,flag: string }[]>([{ id: '', name: 'No Selection',flag:'' }]);
     const [services, setServices] = useState<{ id: string, title: string }[]>([{ id:'', title:'No Selection'}]);
-    const sortOptions = ["A-Z", "Z-A", "Most Recent"];
+    const sortOptions = ["A-Z", "Newest"];
 
 
-    const [data, setData] = useState<CompanyData[]>([])
+    const [data, setData] = useState<CompanyProfile[]>([])
     const [page, setPage] = useState<number>(1)
 
 
-    let temp: CompanyData[] = Array.isArray(data) ? [...data] : [];
+
+
+
+
+    let temp: CompanyProfile[] = Array.isArray(data) ? [...data] : [];
 
    /* // Filter by service
     if (selectedService !== 'No Selection') {
@@ -105,8 +149,8 @@ useEffect(() => {
         
           
         if (controller) {
-
-            const businesses: CompanyData[] = res.results.businesses.map((b: any) => ({
+            
+            const businesses: CompanyProfile[] = res.results.businesses.map((b: any) => ({
                 id:b.id,
                 headerImage: b.logo,
                 title: b.business_name,
@@ -114,9 +158,9 @@ useEffect(() => {
                 joined: b.created_at,
                 description: b.about_business,
                 services: b.services,
-                country: b.country_name,
+                country: b.country?.name,
                 website: b.website,
-                phone: b.phone,
+                phone: b.phone_number,
                 seenBy: b.seen_by ?? 0,
             }));
 
@@ -134,11 +178,6 @@ useEffect(() => {
 
 
             }
-
-            
-
-
-            
         
       } catch (err: any) {
         
@@ -152,7 +191,7 @@ useEffect(() => {
     };
 }, [page, searchTerm, selectedCountry,selectedService, sortBy]);
 
-
+//console.log('************************************************',data)
     return (
         <div className="w-full bg-gray-50 min-h-screen">
             <div className=" mx-auto px-4 py-8">

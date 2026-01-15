@@ -87,6 +87,8 @@ export default function SignIn() {
 
       // Store the token
       localStorage.setItem('accessToken', token);
+      localStorage.setItem('n1X_ang@xinl23446', response.data.user.id);
+      localStorage.setItem('user', response.data.user);
       setAuth({ accessToken: token });
 
       // // Store user data if needed

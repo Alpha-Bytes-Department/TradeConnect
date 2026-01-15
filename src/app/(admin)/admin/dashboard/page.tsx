@@ -291,8 +291,8 @@ export default function Dashboard() {
 
                         {/* Public View Button */}
                         <div className="flex-shrink-0 lg:self-end">
-                            <button
-                                onClick={() => router.push('/accounts')}
+                            <button 
+                                onClick={() => router.push(`/accounts/${localStorage.getItem('n1X_ang@xinl23446') ? localStorage.getItem('n1X_ang@xinl23446') :''}`)}
                                 className="w-full m-1 sm:w-auto bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
                             >
                                 <Eye className="w-5 h-5" />
