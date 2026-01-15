@@ -23,74 +23,75 @@ const ProfileLayout: React.FC = () => {
     // Note: State (contactInfo) and handleInputChange removed to make this a layout
 
 
+    interface Country {
+        id: string;
+        name: string;
+        flag: string;
+    }
+
     interface Service {
         id: string;
         title: string;
     }
 
-    interface LocationData {
-        id: string,
-        name: string;
+    interface Branch {
+        id: string;
+        full_name: string;
         address: string;
         city: string;
-        country: string;
-        email: string;
-        phone: string;
-    }
-
-
-    interface Award {
-        id: string;
-        name: string;
-    }
-    interface Activity {
-        active: boolean;
-        activeFor: number;
-        lastUpdated: string;
+        country: Country;
+        phone_number: string;
     }
 
     interface Contact {
         id: string;
-        name: string;
-        position: string;
+        full_name: string;
         email: string;
-        phone: string;
-        isPrimary: boolean;
+        phone_number: string;
+        role: string;
+        custom_role: string | null;
+        is_primary: boolean;
     }
 
-    interface ContactInfo {
-        office: {
-            phone: string;
-            email: string;
-            website: string;
-        };
-        contacts: Contact[];
+    interface Certification {
+        id: string;
+        name: string;
     }
 
-    interface CompanyProfile {
-        id: string,
-        headerImage: string;
-        flagIcon?: string;
-        title: string;
-        location: string;
-        description: string;
-        services: Service[];
+    interface GalleryItem {
+        id: string;
+        image: string;
+    }
+
+    interface Business {
+        id: string;
+        user_email: string;
+        user_full_name: string;
+        business_name: string;
+        phone_number: string;
+        country: Country;
+        full_address: string;
         website: string;
-        country: string;
-        phone: string;
-        joined: string;
-        seenBy?: number;
-        email:string;
-        contacts:Contact[];
-        branch_locations:LocationData[];
-        certifications:Award[];
-        gallery:{id: string;
-            image: string;
-        }[];
+        membership_valid_till: string; // ISO date string
+        services: Service[];
+        branches: Branch[];
+        contacts: Contact[];
+        certifications: Certification[];
+        about_business: string;
+        logo: string;
+        gallery: GalleryItem[];
+        is_locked: boolean;
+        created_at: string; // ISO date string
+        updated_at: string; // ISO date string
+    }
+
+    interface ApiResponse {
+        success: boolean;
+        business: Business;
     }
 
 const router = useRouter();
-    const id = localStorage.getItem('n1X_ang@xinl23446')
+    //const id = localStorage.getItem('n1X_ang@xinl23446')
 
     const tabs: { id: TabType; label: string }[] = [
         { id: 'basic', label: 'Basic Information' },
@@ -107,58 +108,56 @@ const router = useRouter();
 
 
     const [activeTab, setActiveTab] = useState<'basic' | 'contact' | 'branches' | 'certification' | 'services' | 'images'>('basic')
-    const [data, setData] = useState<CompanyProfile>()
+    const [data, setData] = useState<Business>()
 
+
+
+ 
+    
+    const [basic, setBasic] = useState<any>({ business_name: data?.business_name || '', full_address: data?.full_address || '', country: data?.country || {} })
+    const [contact, setContact] = useState<any>({
+        office: {
+            phone: data?.phone_number,
+            email: data?.user_email,
+            website: data?.website,
+        },
+        contacts: data?.contacts,
+    })
+    const [branch, setBranch] = useState<any>([data?.branches.map((item)=>({city:item.city, country:item.country}))])
+    const [certification, setCertification] = useState(data?.certifications)
+    const [services, setServices] = useState({ about_business:data?.about_business,services:data?.services})
+    const [images, setImages] = useState({ logo: data?.logo, gallery: data?.gallery })
 
 
 
 
     useEffect(() => {
-        const controller = new AbortController();
-
-        const fetchData = async () => {
-            if (!id) return;
-
-            try {
-               
-                const response: any = await api.get(`business/all/`, {
-                    signal: controller.signal
-                });
-
-
-
-                const data = response.results.businesses.find((b: any) => b.id === id);
-                setData(data);
-
-            } catch (err: any) {
-                if (err.name !== 'CanceledError') {
-                   
-
-                }
-            }
-        };
-
-        fetchData();
-
-
-        return () => controller.abort();
-    }, [id]); 
-
- console.log('**************************************************************',id)
-    
-    const [basic, setBasic] = useState<{ name?: string, address?: string, country?: string }>({ name: data?.title,address:data?.location,country:data?.country})
-    const [contact, setContact] = useState<any>({
-        office: {
-            phone: data?.phone,
-            email: data?.email,
-            website: data?.website,
-        },
-        contacts: data?.contacts,
-    })
-    const [branch, setBranch] = useState<any>(data?.branch_locations)
-    const [certification, setCertification] = useState(data?.certifications)
-    const [services, setServices] = useState({about:data?.description,services:data?.services})
-    const [images, setImages] = useState({ banner: data?.headerImage, gallery: data?.gallery })
+        if (data) {
+            setBasic({
+                business_name: data.business_name,
+                full_address: data.full_address,
+                country: data.country
+            });
+            setContact({
+                office: {
+                    phone: data.phone_number,
+                    email: data.user_email,
+                    website: data.website,
+                },
+                contacts: data.contacts,
+            });
+            setBranch(data.branches);
+            setCertification(data.certifications);
+            setServices({
+                about_business: data.about_business,
+                services: data.services
+            });
+            setImages({
+                logo: data.logo,
+                gallery: data.gallery
+            });
+        }
+    }, [data]); 
 
 
     
@@ -167,19 +166,19 @@ const router = useRouter();
     }
     const handleSave = () => {
         setData({...data,
-        name:basic.name,
-        address:basic.address,
+            business_name:basic.business_name,
+            full_address: basic.full_address,
         country:basic.country,
         
-        contact:contact,
+        contacts:contact,
 
-        location:branch,
+        branches:branch,
 
-        about:services.about,
-        services:services.services,
+        about_business: services.about_business || '',
+        services:services.services || [],
 
-        banner:images.banner,
-        gallery: images.gallery,
+        logo:images.logo ,
+        gallery: images.gallery || [],
 
 
         })
@@ -214,6 +213,37 @@ const router = useRouter();
         }
     };
 
+
+    useEffect(() => {
+        let controller = new AbortController()
+
+        const fetchUsers = async () => {
+            try {
+                
+
+                if (controller) {
+                    
+                    const res: any = await api.get(`business/my/`, { signal: controller.signal });
+
+                    setData(res.business)
+
+
+                    
+                }
+
+            } catch (err: any) {
+
+            }
+        };
+
+        fetchUsers();
+
+        return () => {
+            controller.abort();
+        };
+    }, []);
+
+    console.log('**************************************************************', data)
 
 
     return (

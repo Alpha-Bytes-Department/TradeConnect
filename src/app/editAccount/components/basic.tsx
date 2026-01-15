@@ -1,9 +1,16 @@
 import React from 'react';
 
+
+interface Country {
+    id: string;
+    name: string;
+    flag: string;
+}
+
 interface Basic{
- name: string,
-address: string,
-country: string 
+ business_name: string,
+full_address: string,
+country: Country,
 }
 
 interface BasicProps {
@@ -23,18 +30,18 @@ const Basic: React.FC<BasicProps> = ({ data, setData }) => {
     const countries = ['United States', 'Canada', 'Singapore', 'France', 'Dubai', 'Argentina', 'Germany', 'Nepal', 'Finland']
     return (
         <div className="w-full space-y-6">
-            {/* Business Name and Country Row */}
+            {/* Business business_name and Country Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Business Name */}
+                {/* Business business_name */}
                 <div className="flex flex-col">
-                    <label htmlFor="business-name" className="text-sm text-gray-700 mb-2">
-                        Business Name<span className="text-red-500">*</span>
+                    <label htmlFor="business-business_name" className="text-sm text-gray-700 mb-2">
+                        Business business_name<span className="text-red-500">*</span>
                     </label>
                     <input
-                        id="business-name"
+                        id="business-business_name"
                         type="text"
-                        value={data.name}
-                        onChange={(e) => handleInputChange('name', e.target.value)}
+                        value={data.business_name}
+                        onChange={(e) => handleInputChange('business_name', e.target.value)}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                         placeholder="Tech Solution Inc."
                     />
@@ -47,7 +54,7 @@ const Basic: React.FC<BasicProps> = ({ data, setData }) => {
                     </label>
                     <select
                         id="country"
-                        value={data.country}
+                        value={data?.country?.name}
                         onChange={(e) => handleInputChange('country', e.target.value)}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 appearance-none bg-white cursor-pointer"
                         style={{
@@ -74,8 +81,8 @@ const Basic: React.FC<BasicProps> = ({ data, setData }) => {
                 <input
                     id="address"
                     type="text"
-                    value={data.address}
-                    onChange={(e) => handleInputChange('address', e.target.value)}
+                    value={data.full_address}
+                    onChange={(e) => handleInputChange('full_address', e.target.value)}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                     placeholder="123 Tech street, san Francisco, CA 94105"
                 />

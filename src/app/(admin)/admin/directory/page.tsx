@@ -191,7 +191,7 @@ useEffect(() => {
     };
 }, [page, searchTerm, selectedCountry,selectedService, sortBy]);
 
-console.log('************************************************',data)
+//console.log('************************************************',data)
     return (
         <div className="w-full bg-gray-50 min-h-screen">
             <div className=" mx-auto px-4 py-8">
