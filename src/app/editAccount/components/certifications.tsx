@@ -18,6 +18,9 @@ const availableCertifications: Award[] = [
     { id: 'fmc', name: 'FMC Registration' },
 ];
 
+
+
+
 const Certifications: React.FC<BusinessCertificationsProps> = ({
     data,
     setData,
@@ -35,6 +38,9 @@ const Certifications: React.FC<BusinessCertificationsProps> = ({
     const isSelected = (id: string) => {
         return data.some((cert) => cert.id === id);
     };
+
+
+    //useEffect(()=>)
 
     return (
         <div className="w-full ">

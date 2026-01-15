@@ -51,7 +51,18 @@ const AddBranchModal: React.FC<AddBranchModalProps> = ({
       country: selectedCountry,
     };
 
-    isData?setData(data.filter((item)=>{item.id!==selectedCountry.id}).concat(newBranch)):setData([...data, newBranch]);
+    isData ? setData(data.map((item: Branch) => {
+      if (item.country.id === isData.country.id) {
+        // Return a NEW object with updated city and country
+        return {
+          ...item,
+          city: city.trim(),
+          country: selectedCountry
+        };
+      }
+      // Return unchanged item for others
+      return item;
+    })):setData([...data, newBranch]);
     handleClose();
   };
 
@@ -112,7 +123,7 @@ const AddBranchModal: React.FC<AddBranchModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black bg-opacity-90"
+        className="absolute inset-0 bg-black/40"
         onClick={handleClose}
       />
 
@@ -182,7 +193,7 @@ const AddBranchModal: React.FC<AddBranchModalProps> = ({
                 value={(selectedCountry?.id) || ''}
                 onChange={(e) => {
                   const country = countries.find(
-                    (c) => c.id === e.target.value
+                    (c:Country) => c.id === e.target.value
                   );
                   setSelectedCountry(country || null);
                 }}
