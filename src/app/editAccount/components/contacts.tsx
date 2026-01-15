@@ -2,8 +2,27 @@ import React,{useState} from 'react';
 
 import AddContactModal from './contactsModal';
 import { Mail, Pencil, Phone, Plus, Star, Trash2 } from 'lucide-react';
-import { ContactInfo, Contact } from '@/app/(admin)/admin/interfaces';
 import EditContactModal from './contactsUpdateModal';
+
+
+interface Contact {
+    id: string;
+    full_name: string;
+    email: string;
+    phone_number: string;
+    role: string;
+    custom_role: string | null;
+    is_primary: boolean;
+}
+
+interface ContactInfo {
+    office: {
+        phone: string;
+        email: string;
+        website: string;
+    };
+    contacts: Contact[];
+}
 
 interface ContactsProps {
     data: ContactInfo;
@@ -37,28 +56,31 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
         contacts: [
             {
                 id: '1',
-                name: 'Sample Name',
-                position: 'CEO',
-                phone: '5656565494555',
+                full_name: 'Sample Name',
+                role: 'CEO',
+                custom_role: null,
+                phone_number: '5656565494555',
                 email: 'mmislam272@gmail.com',
-                isPrimary: true,
+                is_primary: true,
             },
             {
                 
                 id: '2',
-                name: 'Sample Name',
-                position: 'CEO',
-                phone: '5656565494555',
+                full_name: 'Sample Name',
+                role: 'CEO',
+                custom_role: null,
+                phone_number: '5656565494555',
                 email: 'mmislam272@gmail.com',
-                isPrimary: false,
+                is_primary: false,
             },
             {
                 id: '3', 
-                name: 'Sample Name',
-                position: 'CEO',
-                phone: '5656565494555',
+                full_name: 'Sample Name',
+                role: 'CEO',
+                custom_role: null,
+                phone_number: '5656565494555',
                 email: 'mmislam272@gmail.com',
-                isPrimary: false,
+                is_primary: false,
             },
         ]
     }
@@ -66,11 +88,11 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
-    const [contact, setContact] = useState<ContactInfo>(sampleContact);
+    const [contact, setContact] = useState<ContactInfo>(data);
     const [idToEdit, setIdToEdit] = useState<string>('');
 
     const handleAddContact = (data: Omit<Contact, 'id'>) => {
-        console.log(data)
+        
         const newContacts: Contact = {
             ...data,
             id: Date.now().toString(),
@@ -85,7 +107,7 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
 
 
     const handleEditContact = (data:Contact) => {
-
+console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',data)
         setContact({...contact,contacts:contact.contacts.map((item)=>{
             if(item.id===data.id){
                 return data
@@ -201,9 +223,9 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
                                     {/* Name and Primary Badge */}
                                     <div className="flex items-center gap-2 mb-2">
                                         <h3 className="text-base font-medium text-gray-900 mb-2">
-                                            {contact.name}
+                                            {contact.full_name}
                                         </h3>
-                                        {contact.isPrimary && (
+                                        {contact.is_primary && (
                                             <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-orange-100 text-orange-400 border border-orange-400 rounded-full text-xs font-medium">
                                                 <Star className="w-3 h-3 fill-orange-400" />
                                                 Primary
@@ -212,7 +234,7 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
                                     </div>
 
                                     {/* Role */}
-                                    <p className="text-sm text-gray-600 mb-3">{contact.position}</p>
+                                    <p className="text-sm text-gray-600 mb-3">{contact.role}</p>
 
                                     {/* Contact Info */}
                                     <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-600">
@@ -222,7 +244,7 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <Phone className="w-4 h-4 text-gray-400" />
-                                            <span>{contact.phone}</span>
+                                            <span>{contact.phone_number}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -262,7 +284,7 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
                 isOpen={isEditModalOpen}
                 onClose={() => setIsEditModalOpen(false)}
                 onSubmit={handleEditContact}
-                contact={contact.contacts.find((item) => item.id === idToEdit)!}
+                contact={data.contacts.find((item) => item.id === idToEdit)!}
             />)
             }
 
