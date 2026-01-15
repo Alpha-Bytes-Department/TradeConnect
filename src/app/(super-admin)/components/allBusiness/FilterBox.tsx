@@ -26,7 +26,6 @@ type Country = {
 };
 
 
-
 export default function FilterBox() {
     const { list, grid, setList, setGrid } = useView();
 
