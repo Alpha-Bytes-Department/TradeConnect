@@ -2,8 +2,9 @@
 "use client"
 import { type ColumnDef } from "@tanstack/react-table"
 import { cn } from "@/lib/utils";
-import { LockKeyhole, SquarePen, Trash2 } from "lucide-react";
+import { LockKeyhole, LockOpen, SquarePen, Trash2 } from "lucide-react";
 import { redirect } from "next/navigation";
+import axios from "axios";
 
 // This type is used to define the shape of our data.
 // We can use a Zod schema here if we want.
@@ -81,12 +82,47 @@ export const columns: ColumnDef<allBusinessesTable>[] = [
                 console.log("Edit business:", business.id);
             };
 
-            const handleDelete = () => {
-                console.log("Delete business:", business.id);
+            const handleDelete = async () => {
+                const token = localStorage.getItem("accessToken");
+                if (!token) return;
+                try {
+                    const response = await axios.delete(
+                        `https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/${business.id}/delete/`,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        }
+                    );
+                    console.log("Business Deleted", response.data);
+                    // We may want to refresh the table data here or use a state management solution
+                    // to update the UI immediately
+                } catch (error) {
+                    console.error("Error deleting", error);
+                }
             };
 
-            const handleLock = () => {
-                console.log("Lock business:", business.id);
+            const handleLock = async () => {
+                const token = localStorage.getItem("accessToken");
+                if (!token) return;
+                try {
+                    const response = await axios.patch(
+                        `https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/${business.id}/update/`,
+                        {
+                            is_locked: !business.is_locked
+                        },
+                        {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        }
+                    );
+                    console.log("Lock status updated:", response.data);
+                    // We may want to refresh the table data here or use a state management solution
+                    // to update the UI immediately
+                } catch (error) {
+                    console.error("Error updating lock status:", error);
+                }
             };
 
             return (
@@ -111,7 +147,10 @@ export const columns: ColumnDef<allBusinessesTable>[] = [
                         className="h-8 w-8 flex items-center justify-center rounded-sm 
                         hover:bg-gray-400 hover:text-white transition-colors cursor-pointer"
                     >
-                        <LockKeyhole className="h-4 w-4" />
+                        {business.is_locked ? (<LockOpen className="h-4 w-4" />) :
+                            (
+                                <LockKeyhole className="h-4 w-4" />
+                            )}
                     </button>
                 </div>
             );
