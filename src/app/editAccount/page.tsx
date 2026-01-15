@@ -170,7 +170,7 @@ const router = useRouter();
             full_address: basic.full_address,
         country:basic.country,
         
-        contacts:contact,
+        contacts:contact.contacts,
 
         branches:branch,
 
@@ -179,6 +179,11 @@ const router = useRouter();
 
         logo:images.logo ,
         gallery: images.gallery || [],
+
+
+        phone_number:contact.office.phone,
+            user_email: contact.office.email,
+            website: contact.office.website,
 
 
         })
