@@ -39,7 +39,7 @@ const roles = [
     'Sales Manager',
     'Marketing Manager',
     'Operations Manager',
-    'Other',
+    'other',
 ];
 
 export default function EditContactModal({ isOpen, onClose, onSubmit, contact }: updateContactModalProps) {
@@ -66,7 +66,8 @@ export default function EditContactModal({ isOpen, onClose, onSubmit, contact }:
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        formData.role === 'Other' ? onSubmit({ ...formData, role: otherPosition }) : onSubmit(formData)
+        formData.role === 'other' ? onSubmit({ ...formData, custom_role: otherPosition }) : onSubmit(formData)
+        setOtherPosition('')
         onClose();
     };
 
@@ -176,7 +177,7 @@ export default function EditContactModal({ isOpen, onClose, onSubmit, contact }:
 
 
                                 {
-                                    (formData.role === 'Other') && (
+                                    (formData.role === 'other') && (
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 my-2">
                                                 Add Position<span className="text-red-500">*</span>

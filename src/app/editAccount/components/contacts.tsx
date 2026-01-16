@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 
 import AddContactModal from './contactsModal';
 import { Mail, Pencil, Phone, Plus, Star, Trash2 } from 'lucide-react';
@@ -107,7 +107,7 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
 
 
     const handleEditContact = (data:Contact) => {
-console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',data)
+
         setContact({...contact,contacts:contact.contacts.map((item)=>{
             if(item.id===data.id){
                 return data
@@ -135,7 +135,12 @@ console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',data)
     }
 
 
-    console.log(contact)
+
+console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',contact)
+
+    useEffect(()=>{
+        setData(contact)
+    },[contact])
 
 
 
@@ -215,7 +220,7 @@ console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',data)
                 <div className="space-y-4">
                     {contact.contacts.map((contact,index) => (
                         <div
-                            key={index}
+                            key={contact.id}
                             className="bg-gray-50 border border-blue-400 hover:bg-blue-100 rounded-lg p-4"
                         >
                             <div className="flex items-start justify-between">
@@ -234,7 +239,7 @@ console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',data)
                                     </div>
 
                                     {/* Role */}
-                                    <p className="text-sm text-gray-600 mb-3">{contact.role}</p>
+                                    <p className="text-sm text-gray-600 mb-3">{contact.custom_role ? contact.custom_role:contact.role}</p>
 
                                     {/* Contact Info */}
                                     <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-600">
