@@ -1,15 +1,18 @@
 'use client';
 import React from 'react';
-import { Service } from '@/app/(admin)/admin/interfaces';
 
+interface Service {
+    id: string | undefined;
+    title: string|undefined;
+}
 interface ServicesData {
-    about: string;
-    services: Service[];
+    about_business?: string|undefined;
+    services?: Service[]|[];
 }
 
 interface ContactsProps {
-    data: ServicesData;
-    setData: React.Dispatch<React.SetStateAction<ServicesData>>;
+    data: ServicesData|undefined;
+    setData: React.Dispatch<React.SetStateAction<ServicesData | undefined>>;
 }
 
 const Services: React.FC<ContactsProps> = ({ data, setData }) => {
@@ -23,7 +26,10 @@ const Services: React.FC<ContactsProps> = ({ data, setData }) => {
             .split(',')
             .map(item => item.trim())
             .filter(Boolean)
-            .map(name => ({ name }));
+            .map((name, index) => ({
+                id: `${crypto.randomUUID() }-${index}`,
+                title: name
+            }));
 
         setData(prev => ({
             ...prev,
@@ -36,9 +42,10 @@ const Services: React.FC<ContactsProps> = ({ data, setData }) => {
     ) => {
         setData(prev => ({
             ...prev,
-            about: e.target.value
+            about_business: e.target?.value
         }));
     };
+    console.log('**************************************************************', data)
 
     return (
         <div className="space-y-6">
@@ -51,7 +58,7 @@ const Services: React.FC<ContactsProps> = ({ data, setData }) => {
                 <textarea
                     id="services"
                     rows={6}
-                    value={data.services.map(s => s.name).join(', ')}
+                    value={data?.services?.map(s => s.title).join(', ')}
                     onChange={handleServicesChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500"
                     placeholder="Software Development, Cloud Solutions, IT Consulting"
@@ -70,7 +77,7 @@ const Services: React.FC<ContactsProps> = ({ data, setData }) => {
 
                 <textarea
                     id="about"
-                    value={data.about}
+                    value={data?.about_business}
                     onChange={handleAboutChange}
                     rows={6}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 resize-none"
@@ -78,7 +85,7 @@ const Services: React.FC<ContactsProps> = ({ data, setData }) => {
                 />
 
                 <p className="mt-1 text-xs text-gray-500">
-                    {data.about.length} characters
+                    {data?.about_business?.length} characters
                 </p>
             </div>
         </div>

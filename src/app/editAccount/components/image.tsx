@@ -22,7 +22,7 @@ const SafeImg = ({ src, alt, className }: { src: File | string | null; alt: stri
 
 interface ImagesProps {
     // Updated to allow Files (new uploads) and strings (existing URLs)
-    data: { banner: File | string | null; gallery: (File | string)[] };
+    data: { logo: File | string | undefined; gallery: (File | string)[] };
     setData: React.Dispatch<React.SetStateAction<any>>;
 }
 
@@ -89,10 +89,10 @@ const Images: React.FC<ImagesProps> = ({ data, setData }) => {
                 <label className="text-sm text-gray-700 mb-2">
                     Business banner<span className="text-red-500">*</span>
                 </label>
-                {data.banner && (
+                {data.logo && (
                     <div className="w-full h-56 rounded-lg overflow-hidden border-2 border-gray-200 mb-4">
                         <SafeImg
-                            src={data.banner}
+                            src={data.logo}
                             alt="Business banner"
                             className="w-full h-full object-cover"
                         />

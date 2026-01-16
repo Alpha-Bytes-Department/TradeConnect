@@ -2,7 +2,24 @@
 
 import { useState,useEffect } from 'react';
 import { X, Star, ChevronDown } from 'lucide-react';
-import { Contact } from '@/app/(admin)/admin/interfaces';
+interface Contact {
+    id: string;
+    full_name: string;
+    email: string;
+    phone_number: string;
+    role: string;
+    custom_role: string | null;
+    is_primary: boolean;
+}
+
+interface ContactInfo {
+    office: {
+        phone_number: string;
+        email: string;
+        website: string;
+    };
+    contacts: Contact[];
+}
 
 interface updateContactModalProps {
     isOpen: boolean;
@@ -22,20 +39,21 @@ const roles = [
     'Sales Manager',
     'Marketing Manager',
     'Operations Manager',
-    'Other',
+    'other',
 ];
 
 export default function EditContactModal({ isOpen, onClose, onSubmit, contact }: updateContactModalProps) {
     const [formData, setFormData] = useState<Contact>({
-        id: new Date().toISOString(),
-        name: contact?.name||'',
-        position: contact?.position||'',
+        id: crypto.randomUUID(),
+        full_name: contact?.full_name||'',
+        role: contact?.role||'',
+        custom_role: contact?. custom_role || null,
         email: contact?.email||'',
-        phone: contact?.phone||'',
-        isPrimary: contact?.isPrimary||false,
+        phone_number: contact?.phone_number||'',
+        is_primary: contact?.is_primary||false,
     });
 
-    const [otherPosition, setOtherPosition] = useState<string>('')
+    const [otherPosition, setOtherPosition] = useState<string>(formData.custom_role? formData.custom_role:'')
 
 
     useEffect(() => {
@@ -48,18 +66,20 @@ export default function EditContactModal({ isOpen, onClose, onSubmit, contact }:
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        formData.position === 'Other' ? onSubmit({ ...formData, position: otherPosition }) : onSubmit(formData)
+        formData.role === 'other' ? onSubmit({ ...formData, custom_role: otherPosition }) : onSubmit({...formData, custom_role: null})
+        setOtherPosition('')
         onClose();
     };
 
     const handleCancel = () => {
         setFormData({
-            id: new Date().toISOString(),
-            name: '',
-            position: '',
+            id: crypto.randomUUID(),
+            full_name: '',
+            role: '',
+            custom_role: null,
             email: '',
-            phone: '',
-            isPrimary: false,
+            phone_number: '',
+            is_primary: false,
         });
         onClose();
     };
@@ -108,8 +128,8 @@ export default function EditContactModal({ isOpen, onClose, onSubmit, contact }:
                                 <input
                                     type="text"
                                     required
-                                    value={formData.name}
-                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                    value={formData.full_name}
+                                    onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
                                     placeholder="e.x. John Smith"
                                     className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400"
                                 />
@@ -126,8 +146,8 @@ export default function EditContactModal({ isOpen, onClose, onSubmit, contact }:
                                         onClick={() => setIsRoleDropdownOpen(!isRoleDropdownOpen)}
                                         className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-left flex items-center justify-between bg-white"
                                     >
-                                        <span className={formData.position ? 'text-gray-900' : 'text-gray-400'}>
-                                            {formData.position || 'Select a role'}
+                                        <span className={formData.role ? 'text-gray-900' : 'text-gray-400'}>
+                                            {formData.role || 'Select a role'}
                                         </span>
                                         <ChevronDown
                                             className={`w-5 h-5 text-gray-400 transition-transform ${isRoleDropdownOpen ? 'rotate-180' : ''
@@ -143,7 +163,7 @@ export default function EditContactModal({ isOpen, onClose, onSubmit, contact }:
                                                     key={role}
                                                     type="button"
                                                     onClick={() => {
-                                                        setFormData({ ...formData, position:role });
+                                                        setFormData({ ...formData, role:role });
                                                         setIsRoleDropdownOpen(false);
                                                     }}
                                                     className="w-full px-4 py-2.5 text-left hover:bg-gray-50 text-gray-700 transition-colors first:rounded-t-lg last:rounded-b-lg"
@@ -157,7 +177,7 @@ export default function EditContactModal({ isOpen, onClose, onSubmit, contact }:
 
 
                                 {
-                                    (formData.position === 'Other') && (
+                                    (formData.role === 'other') && (
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 my-2">
                                                 Add Position<span className="text-red-500">*</span>
@@ -199,9 +219,9 @@ export default function EditContactModal({ isOpen, onClose, onSubmit, contact }:
                                 <input
                                     type="tel"
                                     required
-                                    value={formData.phone}
+                                    value={formData.phone_number}
                                     maxLength={15}
-                                    onChange={(e) => setFormData({ ...formData, phone: e.target.value.replace(/[^\d+]/g, '') })}
+                                    onChange={(e) => setFormData({ ...formData, phone_number: e.target.value.replace(/[^\d+]/g, '') })}
                                     placeholder="e.x. +0158 246 987 654"
                                     className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400"
                                 />
@@ -213,8 +233,8 @@ export default function EditContactModal({ isOpen, onClose, onSubmit, contact }:
                                     <div className="relative flex items-center justify-center mt-0.5">
                                         <input
                                             type="checkbox"
-                                            checked={formData.isPrimary}
-                                            onChange={(e) => setFormData({ ...formData, isPrimary: e.target.checked })}
+                                            checked={formData.is_primary}
+                                            onChange={(e) => setFormData({ ...formData, is_primary: e.target.checked })}
                                             className="w-5 h-5 border-2 border-gray-300 rounded checked:bg-blue-600 checked:border-blue-600 cursor-pointer transition-all focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                         />
                                     </div>

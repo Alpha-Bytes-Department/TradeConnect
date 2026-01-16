@@ -1,133 +1,131 @@
-'use client';
+import api from '@/app/api';
+import React, { useEffect, useState } from 'react';
 
-import { useState, useEffect } from 'react';
-
-interface LocationData {
-  id: string,
+interface Country {
+  id: string;
   name: string;
-  address: string;
+  flag: string;
+}
+
+interface Branch {
+  id:string;
   city: string;
-  country: string;
-  email: string;
-  phone: string;
+  country: Country;
 }
 
 interface AddBranchModalProps {
+  isData:Branch | undefined,
   isOpen: boolean;
   onClose: () => void;
-  data: LocationData[];
-  editable?: LocationData;
-  setData: (data: LocationData[]) => void;
+  data: Branch[];
+  setData: React.Dispatch<React.SetStateAction<Branch[]>>;
 }
 
-const countries = [
-  'United States',
-  'United Kingdom',
-  'Canada',
-  'Australia',
-  'Germany',
-  'France',
-  'Japan',
-  'China',
-  'India',
-  'Brazil',
-  'Bangladesh',
+// Sample countries data - replace with your actual countries list
+const COUNTRIES: Country[] = [
+  { id: '1', name: 'United States', flag: '🇺🇸' },
+  { id: '2', name: 'United Kingdom', flag: '🇬🇧' },
+  { id: '3', name: 'Canada', flag: '🇨🇦' },
+  { id: '4', name: 'Australia', flag: '🇦🇺' },
+  { id: '5', name: 'Germany', flag: '🇩🇪' },
   // Add more countries as needed
 ];
 
-export default function AddBranchModal({
+const AddBranchModal: React.FC<AddBranchModalProps> = ({
   isOpen,
   onClose,
+  isData,
   data,
-  editable,
   setData,
-}: AddBranchModalProps) {
-  const [formData, setFormData] = useState<LocationData>({
-    id: '',
-    name: '',
-    address: '',
-    city: '',
-    country: '',
-    email: '',
-    phone: '',
-  });
+}) => {
+  const [city, setCity] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
+  const [countries, setCountries]=useState([])
 
-  const [errors, setErrors] = useState<Partial<Record<keyof LocationData, string>>>({});
+  const handleAddBranch = () => {
+    if (!city.trim() || !selectedCountry) {
+      return;
+    }
+
+    const newBranch: Branch = {
+      id: crypto.randomUUID(),
+      city: city.trim(),
+      country: selectedCountry,
+    };
+
+    isData ? setData(data.map((item: Branch) => {
+      if (item.id === isData.id) {
+        // Return a NEW object with updated city and country
+        return {
+          ...item,
+          city: city.trim(),
+          country: selectedCountry
+        };
+      }
+      // Return unchanged item for others
+      return item;
+    })):setData([...data, newBranch]);
+    handleClose();
+  };
+
+
+
+  const handleClose = () => {
+    setCity('');
+    setSelectedCountry(null);
+    onClose();
+  };
+
+  
+
 
   useEffect(() => {
-    if (editable) {
-      setFormData(editable);
-    } else {
-      setFormData({
-        id:'',
-        name: '',
-        address: '',
-        city: '',
-        country: '',
-        email: '',
-        phone: '',
-      });
-    }
-  }, [data, isOpen]);
+    const controller = new AbortController();
 
-  const validateForm = (): boolean => {
-    const newErrors: Partial<Record<keyof LocationData, string>> = {};
+    const fetchCountries = async () => {
+      
+      try {
+        // Using your api template
+        const res: any = await api.get('/core/countries/', {
+          signal: controller.signal
+        });
 
-    if (!formData.name.trim()) {
-      newErrors.name = 'Branch name is required';
-    }
-    if (!formData.address.trim()) {
-      newErrors.address = 'Full address is required';
-    }
-    if (!formData.city.trim()) {
-      newErrors.city = 'City is required';
-    }
-    if (!formData.country.trim()) {
-      newErrors.country = 'Country is required';
-    }
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email address is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Invalid email address';
-    }
-    if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone number is required';
-    }
+        // Adjust based on your API response structure 
+        // Usually res.data or res if your interceptor handles it
+        if (res) {
+          setCountries(res?.countries ? res?.countries:[]);
+          
+        }
+      } catch (err: any) {
+        if (err.name !== 'CanceledError') {
+         
+        }
+      } 
+      
+    };
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+    fetchCountries();
 
-  const handleSubmit = () => {
-    if (validateForm()) {
-      if (!editable) {
-        // Generate a unique ID for new branches
-        const newBranch = { ...formData, id: Date.now().toString() };
-        setData([...data, newBranch]);
-      } else {
-        // CHANGE: Use map to update the specific item while keeping all others
-        const updatedData = data.map((item) =>
-          item.id === editable.id ? formData : item
-        );
-        setData(updatedData);
-      }
+    return () => controller.abort();
+  }, []);
 
-      onClose();
-    }
-  };
 
-  const handleChange = (field: keyof LocationData, value: string) => {
   
-    setFormData((prev) => ({ ...prev, [field]: field === 'phone' ? value.replace(/[^\d+]/g, ""):value }));
-    // Clear error for this field when user starts typing
-    if (errors[field]) {
-      setErrors((prev) => {
-        const newErrors = { ...prev };
-        delete newErrors[field];
-        return newErrors;
-      });
+
+  useEffect(() => {
+  if (isData){
+    setSelectedCountry(isData.country)
+    setCity(isData.city)
+  }
+    else{
+    setSelectedCountry({
+      id: '',
+      name: '',
+      flag: '',
+    })
+      setCity('')
     }
-  };
+  }, [isData,isOpen])
 
   if (!isOpen) return null;
 
@@ -135,16 +133,16 @@ export default function AddBranchModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onClick={onClose}
+        className="absolute inset-0 bg-black/40"
+        onClick={handleClose}
       />
 
       {/* Modal */}
-      <div className="relative bg-white rounded-lg shadow-2xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+      <div className="relative bg-white  shadow-xl w-full max-w-md mx-4">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+        <div className="flex items-center justify-between p-4 border-b">
           <div>
-            <h2 className="text-2xl font-semibold text-gray-900">
+            <h2 className="text-lg font-semibold text-gray-900">
               Add New Branch
             </h2>
             <p className="text-sm text-gray-500 mt-1">
@@ -152,201 +150,121 @@ export default function AddBranchModal({
             </p>
           </div>
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="text-gray-400 hover:text-gray-600 transition-colors"
           >
             <svg
-              className="w-6 h-6"
+              className="w-5 h-5"
               fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
               stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <path d="M6 18L18 6M6 6l12 12"></path>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
 
-        {/* Form Content */}
-        <div className="p-6 space-y-5">
-          {/* Branch Name */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Branch Name<span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              value={formData.name}
-              onChange={(e) => handleChange('name', e.target.value)}
-              placeholder="e.x. New York Office, Downtown Branch"
-              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${errors.name ? 'border-red-500' : 'border-gray-300'
-                }`}
-            />
-            {errors.name && (
-              <p className="text-red-500 text-sm mt-1">{errors.name}</p>
-            )}
-          </div>
-
-          {/* Full Address */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Full Address<span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              value={formData.address}
-              onChange={(e) => handleChange('address', e.target.value)}
-              placeholder="Street address, building number"
-              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${errors.address ? 'border-red-500' : 'border-gray-300'
-                }`}
-            />
-            {errors.address && (
-              <p className="text-red-500 text-sm mt-1">{errors.address}</p>
-            )}
-          </div>
-
-          {/* City and Country Row */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* City */}
+        {/* Body */}
+        <div className="p-6">
+          <div className="grid grid-cols-2 gap-4">
+            {/* City Input */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                City<span className="text-red-500">*</span>
+              <label
+                htmlFor="city"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                City*
               </label>
               <input
+                id="city"
                 type="text"
-                value={formData.city}
-                onChange={(e) => handleChange('city', e.target.value)}
                 placeholder="City name"
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${errors.city ? 'border-red-500' : 'border-gray-300'
-                  }`}
+                value={ city}
+                onChange={(e) => setCity(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
-              {errors.city && (
-                <p className="text-red-500 text-sm mt-1">{errors.city}</p>
-              )}
             </div>
 
-            {/* Country */}
+            {/* Country Select */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Country<span className="text-red-500">*</span>
+              <label
+                htmlFor="country"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Country*
               </label>
-              <div className="relative">
-                <select
-                  value={formData.country}
-                  onChange={(e) => handleChange('country', e.target.value)}
-                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white transition-all ${errors.country ? 'border-red-500' : 'border-gray-300'
-                    } ${!formData.country ? 'text-gray-400' : 'text-gray-900'}`}
-                >
-                  <option value="" disabled>
-                    Select country
+              <select
+                id="country"
+                value={(selectedCountry?.id) || ''}
+                onChange={(e) => {
+                  const country = countries.find(
+                    (c:Country) => c.id === e.target.value
+                  );
+                  setSelectedCountry(country || null);
+                }}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+              >
+                <option value="">Select country</option>
+                {countries.map((country:Country) => (
+                  <option key={country.id} value={country.id}>
+                     {country.name}
                   </option>
-                  {countries.map((country) => (
-                    <option key={country} value={country}>
-                      {country}
-                    </option>
-                  ))}
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-700">
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path d="M19 9l-7 7-7-7"></path>
-                  </svg>
-                </div>
-              </div>
-              {errors.country && (
-                <p className="text-red-500 text-sm mt-1">{errors.country}</p>
-              )}
-            </div>
-          </div>
-
-          {/* Phone Number and Email Row */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Phone Number */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Phone Number<span className="text-red-500">*</span>
-              </label>
-              <input
-                type="tel"
-                maxLength={15}
-                value={formData.phone}
-                onChange={(e) => handleChange('phone', e.target.value)}
-                placeholder="+1 555-0123"
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${errors.phone ? 'border-red-500' : 'border-gray-300'
-                  }`}
-              />
-              {errors.phone && (
-                <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
-              )}
-            </div>
-
-            {/* Email Address */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address<span className="text-red-500">*</span>
-              </label>
-              <input
-                type="email"
-                value={formData.email}
-                onChange={(e) => handleChange('email', e.target.value)}
-                placeholder="branch@company.com"
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${errors.email ? 'border-red-500' : 'border-gray-300'
-                  }`}
-              />
-              {errors.email && (
-                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-              )}
+                ))}
+              </select>
             </div>
           </div>
         </div>
 
-        {/* Footer with Buttons */}
-        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-200">
+        {/* Footer */}
+        <div className="flex items-center justify-end gap-3 p-4 border-t bg-gray-50">
           <button
-            onClick={onClose}
-            className="flex items-center gap-2 px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg transition-colors"
+            onClick={handleClose}
+            className="px-4 py-2 text-sm font-medium bg-red-600 text-white  rounded-md hover: glr transition-colors flex items-center gap-2"
           >
             <svg
               className="w-4 h-4"
               fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
               stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <path d="M6 18L18 6M6 6l12 12"></path>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
             Cancel
           </button>
           <button
-            onClick={handleSubmit}
-            className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+            onClick={handleAddBranch}
+            disabled={!city.trim() || !selectedCountry}
+            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
           >
             <svg
               className="w-4 h-4"
               fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
               stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <path d="M12 4v16m8-8H4"></path>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 4v16m8-8H4"
+              />
             </svg>
-            {data ? 'Update Branch' : 'Add Branch'}
+            {isData ?'Edit Branch':'Add Branch'}
           </button>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default AddBranchModal;

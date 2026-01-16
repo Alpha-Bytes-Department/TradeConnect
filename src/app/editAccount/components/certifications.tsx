@@ -1,28 +1,30 @@
-import React from 'react';
-import { Award } from '@/app/(admin)/admin/interfaces';
+import React, { useEffect, useState } from 'react';
 
+import api from '@/app/api';
+import { Award } from 'lucide-react';
 
-interface BusinessCertificationsProps {
-    data: Award[];
-    setData: React.Dispatch<React.SetStateAction<Award[]>>;
+interface Certification {
+    id: string;
+    name: string;
 }
 
-const availableCertifications: Award[] = [
-    { id: 'ata', name: 'ATA' },
-    { id: 'fiata', name: 'FIATA' },
-    { id: 'nvocc', name: 'NVOCC' },
-    { id: 'customs-broker', name: 'Customs Broker License' },
-    { id: 'local-freight', name: 'Local Freight Association' },
-    { id: 'iso-9001', name: 'ISO 9001:2015' },
-    { id: 'iso-9002', name: 'ISO 9002' },
-    { id: 'fmc', name: 'FMC Registration' },
-];
+interface BusinessCertificationsProps {
+    data: Certification[];
+    setData: React.Dispatch<React.SetStateAction<Certification[]>>;
+}
+
+
+
+
 
 const Certifications: React.FC<BusinessCertificationsProps> = ({
     data,
     setData,
 }) => {
-    const handleToggle = (certification: Award) => {
+
+    const [certifications,setCertifications]=useState<Certification[]>([])
+
+    const handleToggle = (certification: Certification) => {
         const isSelected = data.some((cert) => cert.id === certification.id);
 
         if (isSelected) {
@@ -36,6 +38,37 @@ const Certifications: React.FC<BusinessCertificationsProps> = ({
         return data.some((cert) => cert.id === id);
     };
 
+
+    useEffect(() => {
+        
+        const controller = new AbortController();
+
+        const fetchCertifications = async () => {
+            
+            try {
+                
+                const res: any = await api.get('/core/certifications/', {
+                    signal: controller.signal
+                });
+
+                
+                if (res && res.certifications) {
+                    setCertifications(res.certifications);
+                } 
+
+            } catch (err: any) {
+                
+                if (err.name !== 'CanceledError') {
+                
+                }
+            }
+        };
+
+        fetchCertifications();
+
+        return () => controller.abort();
+    }, []);
+
     return (
         <div className="w-full ">
             <div className="mb-4">
@@ -48,7 +81,7 @@ const Certifications: React.FC<BusinessCertificationsProps> = ({
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                {availableCertifications.map((cert) => {
+                {certifications.map((cert) => {
                     const selected = isSelected(cert.id);
                     return (
                         <div
