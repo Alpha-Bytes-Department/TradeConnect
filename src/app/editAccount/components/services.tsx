@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 
 interface Service {
-    id: string | undefined;
+    id: string ;
     title: string|undefined;
 }
 interface ServicesData {

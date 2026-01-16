@@ -136,15 +136,7 @@ const ProfileLayout: React.FC = () => {
         },
         contacts: data?.contacts ? data?.contacts : [],
     });
-    const [branch, setBranch] = useState<any>(
-        data
-            ? data?.branches.map((item) => ({
-                id: item.id,
-                city: item.city,
-                country: item.country,
-            }))
-            : []
-    );
+    const [branch, setBranch] = useState<Branch[]>([]);
     const [certification, setCertification] = useState(
         data?.certifications || []
     );
@@ -176,7 +168,7 @@ const ProfileLayout: React.FC = () => {
             setCertification(data.certifications);
             setServices({
                 about_business: data.about_business,
-                services: data.services,
+                services: data?.services,
             });
             setImages({
                 logo: data.logo,
@@ -239,7 +231,7 @@ const ProfileLayout: React.FC = () => {
             contacts: (contact.contacts || []).map((c: any) => ({ ...c })),
 
             // Fix: 'branch' was potentially a nested array [[...]], so we flatten it
-            branches: (branch || []).flat().map((b: any) => ({
+            branches: (branch || []).flat().map((b: any) => ({...b,
                 id: b.id,
                 city: b.city,
                 country: b.country
