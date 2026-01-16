@@ -245,7 +245,9 @@ const ProfileLayout: React.FC = () => {
             certifications: (certification || []).map((c: any) => c),
         };
 
-        try {
+        setData(payload);
+
+       /* try {
             console.log("Sending Payload:", payload);
             // 2. Perform the API update
             const res = await api.put(`business/my/update/`, payload);
@@ -258,6 +260,8 @@ const ProfileLayout: React.FC = () => {
             console.error("Save failed:", err);
             alert("Failed to save changes.");
         }
+
+        */
     };
 
     const renderTab = () => {

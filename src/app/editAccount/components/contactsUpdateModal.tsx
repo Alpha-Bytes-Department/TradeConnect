@@ -66,7 +66,7 @@ export default function EditContactModal({ isOpen, onClose, onSubmit, contact }:
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        formData.role === 'other' ? onSubmit({ ...formData, custom_role: otherPosition }) : onSubmit(formData)
+        formData.role === 'other' ? onSubmit({ ...formData, custom_role: otherPosition }) : onSubmit({...formData, custom_role: null})
         setOtherPosition('')
         onClose();
     };
