@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface Service {
     id: string | undefined;
@@ -16,6 +16,11 @@ interface ContactsProps {
 }
 
 const Services: React.FC<ContactsProps> = ({ data, setData }) => {
+
+
+
+    const [services,setServices]=useState('')
+    const [about, setAbout] = useState('')
 
     const handleServicesChange = (
         e: React.ChangeEvent<HTMLTextAreaElement>
@@ -45,7 +50,15 @@ const Services: React.FC<ContactsProps> = ({ data, setData }) => {
             about_business: e.target?.value
         }));
     };
-    console.log('**************************************************************', data)
+
+
+    useEffect(()=>{
+        if(data){
+            setServices(data?.services?.map(s => s.title).join(', ')||'')
+            setAbout(data.about_business ||'')
+        }
+    },[])
+    
 
     return (
         <div className="space-y-6">
@@ -58,8 +71,9 @@ const Services: React.FC<ContactsProps> = ({ data, setData }) => {
                 <textarea
                     id="services"
                     rows={6}
-                    value={data?.services?.map(s => s.title).join(', ')}
-                    onChange={handleServicesChange}
+                    value={services}
+                    onChange={(e)=>setServices(e.target.value)}
+                    onBlur={handleServicesChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500"
                     placeholder="Software Development, Cloud Solutions, IT Consulting"
                 />
@@ -77,8 +91,9 @@ const Services: React.FC<ContactsProps> = ({ data, setData }) => {
 
                 <textarea
                     id="about"
-                    value={data?.about_business}
-                    onChange={handleAboutChange}
+                    value={about}
+                    onChange={(e) => setAbout(e.target.value)}
+                    onBlur={handleAboutChange}
                     rows={6}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 resize-none"
                     placeholder="Leading technology solutions provider with 15+ years of experience."

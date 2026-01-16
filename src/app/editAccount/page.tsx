@@ -101,6 +101,8 @@ const ProfileLayout: React.FC = () => {
     const router = useRouter();
     //const id = localStorage.getItem('n1X_ang@xinl23446')
 
+    
+
     const tabs: { id: TabType; label: string }[] = [
         { id: "basic", label: "Basic Information" },
         { id: "contact", label: "Contact Information" },
@@ -113,12 +115,18 @@ const ProfileLayout: React.FC = () => {
     const [activeTab, setActiveTab] = useState<
         "basic" | "contact" | "branches" | "certification" | "services" | "images"
     >("basic");
-    const [data, setData] = useState<Business>();
+    const [data, setData] = useState<Business | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error,setError]=useState(false)
 
     const [basic, setBasic] = useState<any>({
         business_name: data?.business_name || "",
         full_address: data?.full_address || "",
-        country: data?.country || {},
+        country: data?.country || {
+            id: '',
+            name: "",
+            flag: '',
+        },
     });
     const [contact, setContact] = useState<any>({
         office: {
@@ -301,9 +309,17 @@ const ProfileLayout: React.FC = () => {
                         signal: controller.signal,
                     });
 
-                    setData(res.business);
+
+                    if(res){
+                       setData(res?.business); 
+                       setIsLoading(false)
+                    }
+
+                    
                 }
-            } catch (err: any) { }
+            } catch (err: any) { 
+                setError(true)
+            }
         };
 
         fetchUsers();
@@ -317,6 +333,15 @@ const ProfileLayout: React.FC = () => {
         "**************************************************************",
         data
     );
+
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (!data) {
+        return <div>Error loading profile</div>;
+    }
 
     return (
         <div className="min-h-screen bg-gray-50 ">
