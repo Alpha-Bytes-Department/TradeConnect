@@ -629,8 +629,8 @@ export default function CreateBusinessForm() {
             const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
             const year = date.getFullYear();
 
-            const formattedDate = `${day}-${month}-${year}`;
-            console.log(formattedDate); // "23-01-2026"
+            const formattedDate = `${day}/${month}/${year}`;
+            console.log(formattedDate); // "23/01/2026"
 
             formData.append("membership_valid_till", formattedDate);
             // console.log("Membership:", data.membershipValidTill.toISOString());
