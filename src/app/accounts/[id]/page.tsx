@@ -161,7 +161,7 @@ export default function AccountPage({
     const activities = {
         active: true,
         activeFor: 23,
-        lastUpdated: new Date().toISOString(),
+        lastUpdated: crypto.randomUUID(),
     }
 
     

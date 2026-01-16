@@ -48,13 +48,13 @@ const AddBranchModal: React.FC<AddBranchModalProps> = ({
     }
 
     const newBranch: Branch = {
-      id: new Date().toISOString(),
+      id: crypto.randomUUID(),
       city: city.trim(),
       country: selectedCountry,
     };
 
     isData ? setData(data.map((item: Branch) => {
-      if (item.country.id === isData.country.id) {
+      if (item.id === isData.id) {
         // Return a NEW object with updated city and country
         return {
           ...item,
@@ -93,8 +93,8 @@ const AddBranchModal: React.FC<AddBranchModalProps> = ({
         // Adjust based on your API response structure 
         // Usually res.data or res if your interceptor handles it
         if (res) {
-          setCountries(res.countries);
-          console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',res.countries)
+          setCountries(res?.countries ? res?.countries:[]);
+          
         }
       } catch (err: any) {
         if (err.name !== 'CanceledError') {
@@ -117,7 +117,15 @@ const AddBranchModal: React.FC<AddBranchModalProps> = ({
     setSelectedCountry(isData.country)
     setCity(isData.city)
   }
-  }, [isData])
+    else{
+    setSelectedCountry({
+      id: '',
+      name: '',
+      flag: '',
+    })
+      setCity('')
+    }
+  }, [isData,isOpen])
 
   if (!isOpen) return null;
 

@@ -44,7 +44,7 @@ const roles = [
 
 export default function EditContactModal({ isOpen, onClose, onSubmit, contact }: updateContactModalProps) {
     const [formData, setFormData] = useState<Contact>({
-        id: new Date().toISOString(),
+        id: crypto.randomUUID(),
         full_name: contact?.full_name||'',
         role: contact?.role||'',
         custom_role: contact?. custom_role || null,
@@ -53,7 +53,7 @@ export default function EditContactModal({ isOpen, onClose, onSubmit, contact }:
         is_primary: contact?.is_primary||false,
     });
 
-    const [otherPosition, setOtherPosition] = useState<string>('')
+    const [otherPosition, setOtherPosition] = useState<string>(formData.custom_role? formData.custom_role:'')
 
 
     useEffect(() => {
@@ -73,7 +73,7 @@ export default function EditContactModal({ isOpen, onClose, onSubmit, contact }:
 
     const handleCancel = () => {
         setFormData({
-            id: new Date().toISOString(),
+            id: crypto.randomUUID(),
             full_name: '',
             role: '',
             custom_role: null,

@@ -26,7 +26,7 @@ const roles = [
 
 export default function AddContactModal({ isOpen, onClose, onSubmit }: AddContactModalProps) {
     const [formData, setFormData] = useState<Contact>({
-        id: new Date().toISOString(),
+        id: crypto.randomUUID(),
         name: '',
         position: '',
         email: '',
@@ -43,7 +43,7 @@ export default function AddContactModal({ isOpen, onClose, onSubmit }: AddContac
         formData.position === 'Other' ? onSubmit({ ...formData, position: otherPosition }) : onSubmit(formData)
         // Reset form
         setFormData({
-            id: new Date().toISOString(),
+            id: crypto.randomUUID(),
             name: '',
             position: '',
             email: '',
@@ -55,7 +55,7 @@ export default function AddContactModal({ isOpen, onClose, onSubmit }: AddContac
 
     const handleCancel = () => {
         setFormData({
-            id: new Date().toISOString(),
+            id: crypto.randomUUID(),
             name: '',
             position: '',
             email: '',

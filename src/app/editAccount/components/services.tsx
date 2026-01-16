@@ -27,7 +27,7 @@ const Services: React.FC<ContactsProps> = ({ data, setData }) => {
             .map(item => item.trim())
             .filter(Boolean)
             .map((name, index) => ({
-                id: `${new Date().toISOString()}-${index}`,
+                id: `${crypto.randomUUID() }-${index}`,
                 title: name
             }));
 

@@ -26,7 +26,7 @@ const roles = [
 
 export default function EditContactModal({ isOpen, onClose, onSubmit, contact }: updateContactModalProps) {
     const [formData, setFormData] = useState<Contact>({
-        id: new Date().toISOString(),
+        id: crypto.randomUUID(),
         name: contact?.name||'',
         position: contact?.position||'',
         email: contact?.email||'',
@@ -53,7 +53,7 @@ export default function EditContactModal({ isOpen, onClose, onSubmit, contact }:
 
     const handleCancel = () => {
         setFormData({
-            id: new Date().toISOString(),
+            id: crypto.randomUUID(),
             name: '',
             position: '',
             email: '',
