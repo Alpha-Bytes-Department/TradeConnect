@@ -15,8 +15,9 @@ import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
 
 interface GalleryImage {
-    file: File | null;
-    preview: string;
+    id?: string;           // ← নতুন: backend থেকে আসা image এর id/uuid
+    file: File | null;     // নতুন আপলোড করা হলে থাকবে
+    preview: string;       // url
 }
 
 interface Errors {
@@ -81,6 +82,9 @@ export default function EditBusiness() {
         flag: string;
     };
 
+    const token = localStorage.getItem("accessToken");
+    if (!token) return;
+
     const [countries, setCountries] = useState<Country[]>([]);
     useEffect(() => {
         axios.get("https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/core/countries/",
@@ -107,11 +111,6 @@ export default function EditBusiness() {
     useEffect(() => {
         const fetchBusinessData = async () => {
             try {
-                //setIsFetching(true);
-                // Replace with your actual API endpoint
-                const token = localStorage.getItem("accessToken");
-                if (!token) return;
-
                 const response = await axios.get(
                     `https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/${id}/`,
                     {
@@ -125,9 +124,8 @@ export default function EditBusiness() {
 
                 // Populate form fields with fetched data
                 setValue('businessName', data?.business?.business_name || '');
-                setValue('country', data?.business?.country?.name || '');
+                setValue('country', data?.business?.country?.id || '');
                 setValue('fullAddress', data?.business?.full_address || '');
-                setValue('membershipValidTill', data?.business?.membership_valid_till || '');
                 setValue('emailAddress', data?.business?.user_email || '');
                 setValue('phoneNumber', data?.business?.phone_number || '');
                 setValue('websiteURL', data?.business?.website || '');
@@ -138,9 +136,39 @@ export default function EditBusiness() {
                     .join(', ') || '';
                 setValue('servicesOffered', servicesString);
 
-                // Set date if available
+                // // Set date if available
+                // if (data?.business?.membership_valid_till) {
+                //     const dateValue = data.business.membership_valid_till;
+                //     const parsedDate = new Date(dateValue);
+                //     setValue('membershipValidTill', parsedDate.toISOString());
+                //     setDate(parsedDate);
+                // }
+
                 if (data?.business?.membership_valid_till) {
-                    setDate(new Date(data.membershipValidTill));
+                    const dateStr = data.business.membership_valid_till.trim(); // "12/04/2027"
+
+                    // Split and validate format
+                    const parts = dateStr.split("/");
+                    if (parts.length === 3) {
+                        const [day, month, year] = parts.map(p => parseInt(p, 10));
+
+                        // JavaScript Date months are 0-based → month-1
+                        const jsDate = new Date(year, month - 1, day);
+
+                        // Basic validation: check if date is valid
+                        if (
+                            !isNaN(jsDate.getTime()) &&
+                            jsDate.getDate() === day &&
+                            jsDate.getMonth() === month - 1 &&
+                            jsDate.getFullYear() === year
+                        ) {
+                            setDate(jsDate);
+                            setValue("membershipValidTill", jsDate.toISOString());
+                        } else {
+                            console.warn("Invalid date from API:", dateStr);
+                            // optionally: setDate(undefined); setValue("membershipValidTill", "");
+                        }
+                    }
                 }
 
                 // Set banner preview if available
@@ -151,8 +179,9 @@ export default function EditBusiness() {
                 // Set gallery images with correct property mapping
                 if (data?.business?.gallery && Array.isArray(data?.business?.gallery)) {
                     const galleryPreviews = data?.business?.gallery.map((item: any) => ({
+                        id: item.id,           // ← এটা থাকা চাই (backend থেকে)
                         file: null,
-                        preview: item.image // Use 'image' property from API response
+                        preview: item.image    // url
                     }));
                     setGalleryImages(galleryPreviews);
                 }
@@ -160,7 +189,8 @@ export default function EditBusiness() {
             } catch (error) {
                 console.error('Error fetching business data:', error);
                 if (axios.isAxiosError(error)) {
-                    console.error(`Failed to load business data: ${error.response?.data?.message || error.message}`);
+                    console.error(`Failed to load business data: ${error.response?.data?.message ||
+                        error.message}`);
                 } else {
                     console.log('Failed to load business data. Please try again.');
                 }
@@ -254,10 +284,42 @@ export default function EditBusiness() {
         if (input) input.value = '';
     };
 
-    // Type annotation for event handler
-    const removeGalleryImage = (index: number, e: React.MouseEvent<HTMLButtonElement>) => {
+    const removeGalleryImage = async (index: number, e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
-        setGalleryImages((prev) => prev.filter((_, i) => i !== index));
+
+        const imageToRemove = galleryImages[index];
+
+        // যদি নতুন আপলোড করা ছবি (file আছে) → শুধু frontend থেকে মুছে ফেলো
+        if (imageToRemove.file) {
+            setGalleryImages((prev) => prev.filter((_, i) => i !== index));
+            return;
+        }
+
+        // যদি existing ছবি (id আছে) → backend থেকে ডিলিট করো
+        if (imageToRemove.id) {
+            try {
+                await axios.delete(
+                    `https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/gallery/images/${imageToRemove.id}/`,
+                    {
+                        headers: {
+                            "Authorization": `Bearer ${token}`,
+                            "ngrok-skip-browser-warning": "true",
+                        },
+                    }
+                );
+                console.log(`Image ${imageToRemove.id} deleted from backend`);
+
+                // সফল হলে frontend থেকেও মুছে ফেলো
+                setGalleryImages((prev) => prev.filter((_, i) => i !== index));
+            } catch (error) {
+                console.error("Failed to delete gallery image:", error);
+                if (axios.isAxiosError(error) && error.response) {
+                    console.log("Delete error details:", error.response.data);
+                }
+                console.log("Could not delete the image. Please try again.");
+                // optionally: error state দেখাও UI-তে
+            }
+        }
     };
 
 
@@ -266,56 +328,89 @@ export default function EditBusiness() {
         try {
             //setIsLoading(true);
 
-            // Create FormData for file uploads
-            const formData = new FormData();
+            // Create FormData
+            const formData1 = new FormData();
 
             // Append text fields
-            formData.append('businessName', data.businessName);
-            formData.append('country', data.country);
-            formData.append('fullAddress', data.fullAddress);
-            formData.append('membershipValidTill', data.membershipValidTill);
-            formData.append('emailAddress', data.emailAddress || '');
-            formData.append('phoneNumber', data.phoneNumber || '');
-            formData.append('websiteURL', data.websiteURL || '');
-            formData.append('servicesOffered', data.servicesOffered);
-            formData.append('aboutBusiness', data.aboutBusiness);
+            formData1.append('business_name', data.businessName);
+            formData1.append('country', data.country);
+            formData1.append('full_address', data.fullAddress);
+            //formData1.append('membership_valid_till', data.membershipValidTill);
+            formData1.append('user_email', data.emailAddress || '');
+            formData1.append('phone_number', data.phoneNumber || '');
+            formData1.append('website', data.websiteURL || '');
+            formData1.append('services', data.servicesOffered);
+            formData1.append('about_business', data.aboutBusiness);
 
-            // Append password fields only if provided
-            if (data.newPassword) {
-                formData.append('newPassword', data.newPassword);
-            }
-            if (data.confirmPassword) {
-                formData.append('confirmPassword', data.confirmPassword);
-            }
+            const isoDate = data.membershipValidTill;
+            const date = new Date(isoDate);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+            const year = date.getFullYear();
+
+            const formattedDate = `${day}/${month}/${year}`;
+            formData1.append('membership_valid_till', formattedDate);
+            console.log(formattedDate); // "23/01/2026"
 
             // Append banner image if changed
             if (bannerImage) {
-                formData.append('bannerImage', bannerImage);
+                formData1.append('logo', bannerImage);
             }
 
+
+            const formData2 = new FormData();
             // Append gallery images (only new ones with file objects)
             galleryImages.forEach((image) => {
                 if (image.file) {
-                    formData.append('galleryImages', image.file);
+                    formData2.append('images', image.file);
                 }
             });
 
-            // Replace with your actual API endpoint
-            const response = await axios.patch(
+
+            const formData3 = new FormData();
+            // Append password fields only if provided
+            if (data.newPassword) {
+                formData3.append('newPassword', data.newPassword);
+            }
+            if (data.confirmPassword) {
+                formData3.append('confirmPassword', data.confirmPassword);
+            }
+
+
+            const response1 = await axios.patch(
                 `https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/${id}/update/`,
-                formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
+                formData1,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "ngrok-skip-browser-warning": "true",
+                        "Content-Type": "multipart/form-data"
+                    },
+                });
 
-            // console.log('Business updated successfully!');
-            console.log('Response:', response.data);
+            const response2 = await axios.post(
+                `https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/gallery/upload/${id}/`,
+                formData2,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "ngrok-skip-browser-warning": "true",
+                        "Content-Type": "multipart/form-data"
+                    },
+                });
 
-            // Optionally redirect
-            // router.push('/dashboard');
-
-        } catch (error) {
+            const response3 = await axios.patch(
+                `https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/auth/super-admin/users/change-password/`,
+                formData3,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "ngrok-skip-browser-warning": "true",
+                        "Content-Type": "application/json"
+                    },
+                });
+        }
+        catch (error) {
             console.error('Error updating business:', error);
             if (axios.isAxiosError(error)) {
                 console.log(`Failed to update business: ${error.response?.data?.message || error.message}`);
@@ -448,7 +543,7 @@ export default function EditBusiness() {
                                                 <SelectGroup>
                                                     <SelectLabel>Countries</SelectLabel>
                                                     {countries.map(item => (
-                                                        <SelectItem key={item.id} value={item.name}>
+                                                        <SelectItem key={item.id} value={item.id}>
                                                             {item.name}
                                                         </SelectItem>
                                                     ))}
@@ -519,18 +614,27 @@ export default function EditBusiness() {
                                                         className="w-full justify-between font-normal 
                                                         font-poppins text-[#313131] cursor-pointer"
                                                     >
-                                                        {date ? date.toLocaleDateString() : "DD / MM / YYYY"}
+                                                        {date ? date.toLocaleDateString('en-GB') :
+                                                            "DD / MM / YYYY"}
+                                                        {/* (en-GB → 12/04/2027 style) */}
                                                         <CalendarHeartIcon />
                                                     </Button>
                                                 </PopoverTrigger>
-                                                <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+                                                <PopoverContent className="w-auto overflow-hidden p-0"
+                                                    align="start">
                                                     <Calendar
                                                         mode="single"
                                                         selected={date}
                                                         captionLayout="dropdown"
                                                         onSelect={(selectedDate) => {
-                                                            setDate(selectedDate);
-                                                            field.onChange(selectedDate?.toISOString());
+                                                            if (selectedDate) {
+                                                                setDate(selectedDate);
+                                                                field.onChange(selectedDate.toISOString());
+                                                                // important for RHF
+                                                            } else {
+                                                                setDate(undefined);
+                                                                field.onChange("");
+                                                            }
                                                             setOpen(false);
                                                         }}
                                                     />
@@ -729,8 +833,9 @@ export default function EditBusiness() {
                             {/* Upload Area for Gallery */}
                             <div
                                 onClick={() => document.getElementById('gallery-input')?.click()}
-                                className={`w-full border-2 border-dashed rounded-lg 
-                    py-12 px-4 text-center cursor-pointer transition-colors bg-white ${errors.gallery ? 'border-red-300' : 'border-gray-300 hover:border-gray-400'
+                                className={`w-full border-2 border-dashed rounded-lg py-12 px-4 
+                                    text-center cursor-pointer transition-colors bg-white 
+                                    ${errors.gallery ? 'border-red-300' : 'border-gray-300 hover:border-gray-400'
                                     }`}
                             >
                                 <input
@@ -761,13 +866,15 @@ export default function EditBusiness() {
                 {activeTab === 'changePassword' &&
                     <div className="p-3">
                         <div className="w-1/2 grid gap-3 items-center mt-5">
-                            <label htmlFor="newPassword" className="text-[#252525] font-poppins">New Password*</label>
+                            <label htmlFor="newPassword" className="text-[#252525] font-poppins">
+                                New Password*</label>
                             <div className="relative w-full">
                                 <Input
                                     type={showPassword1 ? "text" : "password"}
                                     id="newPassword"
                                     placeholder="Enter New password"
-                                    className="pr-10 pl-9 font-poppins bg-[#FFFFFF] text-[#3F3F3F]" // leave space for the eye button
+                                    className="pr-10 pl-9 font-poppins bg-[#FFFFFF] text-[#3F3F3F]"
+                                    // leave space for the eye button
                                     {...register("newPassword", {
                                         minLength: {
                                             value: 8,
@@ -786,7 +893,8 @@ export default function EditBusiness() {
                                 </button>
                             </div>
                             {formErrors.newPassword && (
-                                <p className="text-red-500 text-sm font-poppins">{formErrors.newPassword.message}</p>
+                                <p className="text-red-500 text-sm font-poppins">
+                                    {formErrors.newPassword.message}</p>
                             )}
                         </div>
 
@@ -798,10 +906,12 @@ export default function EditBusiness() {
                                     type={showPassword2 ? "text" : "password"}
                                     id="confirmPassword"
                                     placeholder="Confirm New password"
-                                    className="pr-10 pl-9 font-poppins bg-[#FFFFFF] text-[#3F3F3F]" // leave space for the eye button
+                                    className="pr-10 pl-9 font-poppins bg-[#FFFFFF] text-[#3F3F3F]"
+                                    // leave space for the eye button
                                     {...register("confirmPassword", {
                                         validate: (value, formValues) =>
-                                            !formValues.newPassword || value === formValues.newPassword || "Passwords do not match"
+                                            !formValues.newPassword || value === formValues.newPassword ||
+                                            "Passwords do not match"
                                     })}
                                 />
                                 <LockKeyhole className="absolute top-2.5 left-2.5 w-5 h-5" />
@@ -1047,4 +1157,3 @@ export default function EditBusiness() {
 //             </div>
 //         </div>
 //     );
-// }
