@@ -13,16 +13,6 @@ interface BusinessCertificationsProps {
     setData: React.Dispatch<React.SetStateAction<Certification[]>>;
 }
 
-const availableCertifications: Certification[] = [
-    { id: 'ata', name: 'ATA' },
-    { id: 'fiata', name: 'FIATA' },
-    { id: 'nvocc', name: 'NVOCC' },
-    { id: 'customs-broker', name: 'Customs Broker License' },
-    { id: 'local-freight', name: 'Local Freight Association' },
-    { id: 'iso-9001', name: 'ISO 9001:2015' },
-    { id: 'iso-9002', name: 'ISO 9002' },
-    { id: 'fmc', name: 'FMC Registration' },
-];
 
 
 

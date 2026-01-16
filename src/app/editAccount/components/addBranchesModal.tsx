@@ -8,6 +8,7 @@ interface Country {
 }
 
 interface Branch {
+  id:string;
   city: string;
   country: Country;
 }
@@ -47,6 +48,7 @@ const AddBranchModal: React.FC<AddBranchModalProps> = ({
     }
 
     const newBranch: Branch = {
+      id: new Date().toISOString(),
       city: city.trim(),
       country: selectedCountry,
     };

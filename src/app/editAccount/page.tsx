@@ -123,8 +123,8 @@ const router = useRouter();
         },
         contacts: data?.contacts,
     })
-    const [branch, setBranch] = useState<any>([data?.branches.map((item)=>({city:item.city, country:item.country}))])
-    const [certification, setCertification] = useState(data?.certifications)
+    const [branch, setBranch] = useState<any>([data?.branches.map((item)=>({id: item.id, city:item.city, country:item.country}))])
+    const [certification, setCertification] = useState(data?.certifications || [])
     const [services, setServices] = useState({ about_business:data?.about_business,services:data?.services})
     const [images, setImages] = useState({ logo: data?.logo, gallery: data?.gallery })
 
@@ -172,7 +172,7 @@ const router = useRouter();
         
         contacts:contact.contacts,
 
-        branches:branch,
+        branches:branch.map((prev:any)=>{return {...prev ,id:prev.id,city:prev.city,country:prev.country}}),
 
         about_business: services.about_business || '',
         services:services.services || [],
@@ -184,6 +184,9 @@ const router = useRouter();
         phone_number:contact.office.phone,
             user_email: contact.office.email,
             website: contact.office.website,
+
+
+        certifications: certification?.map((c)=>c),
 
 
         })

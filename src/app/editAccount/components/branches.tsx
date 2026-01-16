@@ -10,6 +10,7 @@ interface Country {
     flag: string;
 }
 interface Branch {
+    id: string;
     city: string;
     country: Country;
     
@@ -26,14 +27,14 @@ export default function Branches({ data, setData }: BranchLocationsProps) {
 
     // CHANGE 1: Search by ID instead of array index for reliability
     const handleEdit = (id:any) => {
-        const temp = data.find((item,index) => index === id);
+        const temp = data.find((item) => item.id=== id);
         setIsData(temp);
         setIsModalOpen(true);
     };
 
     // CHANGE 2: Filter by ID to ensure the correct item is removed
     const handleDelete = (id: any) => {
-        const updatedLocations = data.filter((item,index) => index.toString() !== id);
+        const updatedLocations = data.filter((item) => item.id !== id);
         setData(updatedLocations);
     };
 
@@ -60,9 +61,9 @@ export default function Branches({ data, setData }: BranchLocationsProps) {
             </div>
 
             <div className="space-y-4">
-                {data.map((location,index) => (
+                {data.map((location) => (
                     <div
-                        key={index} // CHANGE 4: Use location.id as key instead of index
+                        key={location.id} // CHANGE 4: Use location.id as key instead of index
                         className="bg-white border border-blue-400 rounded-lg p-5 hover:bg-blue-100 transition-colors"
                     >
                         <div className="flex items-start justify-between">
@@ -79,13 +80,13 @@ export default function Branches({ data, setData }: BranchLocationsProps) {
 
                             <div className="flex items-center gap-2 ml-4">
                                 <button
-                                    onClick={() => handleEdit(index)}
+                                    onClick={() => handleEdit(location.id)}
                                     className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
                                 >
                                     <Pencil className="w-4 h-4 text-gray-600" />
                                 </button>
                                 <button
-                                    onClick={() => handleDelete(index)}
+                                    onClick={() => handleDelete(location.id)}
                                     className="p-2 hover:bg-red-50 rounded-lg transition-colors"
                                 >
                                     <Trash2 className="w-4 h-4 text-red-600" />
