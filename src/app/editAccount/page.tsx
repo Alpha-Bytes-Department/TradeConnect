@@ -39,7 +39,7 @@ const ProfileLayout: React.FC = () => {
 
     interface Service {
         id: string;
-        title: string;
+        title: string|undefined;
     }
 
     interface Branch {
