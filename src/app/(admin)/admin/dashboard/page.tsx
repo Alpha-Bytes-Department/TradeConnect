@@ -12,6 +12,7 @@ import {
     Calendar1Icon,
 } from "lucide-react";
 import Image from "next/image";
+import api from "@/app/api";
 
 const progressTab = {
     label: "Profile Completeness",
@@ -22,7 +23,7 @@ const progressTab = {
 
 const monthsActive = {
     icon: Calendar,
-    label: "Months Active",
+    label: "Expiry Date",
     color: "bg-green-100",
     iconColor: "text-green-600",
     active: 23,
@@ -31,7 +32,7 @@ const monthsActive = {
 const visits = {
     icon: Eye,
     visits: 124,
-    label: "Profile Views (Mock)",
+    label: "Profile Views",
     color: "bg-purple-100",
     iconColor: "text-purple-600",
 };
@@ -101,28 +102,128 @@ const recentlyViewedBusinesses = [
     },
 ];
 
+
+
+interface Business{
+    business_name: string;
+    country: string;
+    logo:string;
+    services: string[];
+    id: string;
+}
+
+
+interface MyData{
+    id: string; 
+    business_name: string;
+    user_email: string;
+    logo: string;
+    country: string;
+    updated_at: string;
+}
+
+
+interface Data{
+    profile_completeness: number;
+    membership_valid_till: string;
+    profile_views: number;
+}
+
 export default function Dashboard() {
     const [hoveredAction, setHoveredAction] = useState<number | null>(0);
     const router=useRouter()
+
+    const [data, setData] = useState<Data>({
+        profile_completeness: 0,
+        membership_valid_till: '',
+        profile_views: 0,
+})
+
+    const [myData,setMyData]=useState<MyData>({id: '',
+    business_name: '',
+    user_email: '',
+    logo: '',
+    country: '',
+    updated_at: '',})
+
+    const [recentlyViewed, setRecentlyViewed]=useState<Business[]>([])
 
     useEffect(() => {
         let controller = new AbortController()
 
         const fetchUsers = async () => {
-            /*try {
-                const res = await api.get(`/api/business/all/?country=${selectedCountry === 'No Selection' ? '' : selectedCountry}&search=${searchTerm}&service=${selectedService === 'No Selection' ? '' : selectedService}&page=${0}&sort_by=${sortBy}`);
+            try {
+                const res = await api.get(`business/dashboard/`, {
+                    signal: controller.signal,
+                });
                 if (controller) setData(res.data);
             } catch (err: any) {
 
-            }*/
+            
         };
-
+        }
         fetchUsers();
 
         return () => {
             controller.abort();
         };
     }, []);
+
+
+    useEffect(() => {
+        let controller = new AbortController()
+
+        const fetchUsers = async () => {
+            try {
+                const res = await api.get(`business/recently-viewed/`, {
+                    signal: controller.signal,
+                });
+                if (controller) setRecentlyViewed(res.data.map((r) => {return {
+                    business_name: r.business_name?.business_name ? r.data?.business_name?.business_name :'',
+                    country: r.country ? res.data?.country :'',
+                        logo: r.logo ? res.data?.logo :'',
+                        services: r.services ? res.data?.services :[],
+                        id: r.business_name?.id ? res.data?.business_name?.id: ''}}) );
+            } catch (err: any) {
+
+
+            };
+        }
+        fetchUsers();
+
+        return () => {
+            controller.abort();
+        };
+    }, []);
+
+    useEffect(() => {
+        let controller = new AbortController()
+
+        const fetchUsers = async () => {
+            try {
+                const res = await api.get(`business/my/`, {
+                    signal: controller.signal,
+                });
+                if (controller) setMyData({
+                    id: res.business?.id,
+                    business_name: res.business?.business_name,
+                    user_email: res.business?.user_email,
+                    logo: res.business?.logo,
+                    country: res.business?.country?.name,
+                    updated_at: res.business?.updated_at,
+                });
+            } catch (err: any) {
+
+
+            };
+        }
+        fetchUsers();
+
+        return () => {
+            controller.abort();
+        };
+    }, []);
+
 
 
     return (
@@ -146,8 +247,8 @@ export default function Dashboard() {
                     >
                         <CheckSquare className={`${progressTab.iconColor} w-6 h-6`} />
                     </div>
-                    <div className="text-3xl font-bold text-slate-800 mb-1">
-                        {`${progressTab.progress}%`}
+                    <div className="text-2xl font-semibold text-slate-800 mb-1">
+                        {`${data.profile_completeness}%`}
                     </div>
                     <div className="text-sm text-slate-600 font-medium mb-3">
                         {progressTab.label}
@@ -171,8 +272,12 @@ export default function Dashboard() {
                     >
                         <Calendar1Icon className={`${monthsActive.iconColor} w-6 h-6`} />
                     </div>
-                    <div className="text-3xl font-bold text-slate-800 mb-1">
-                        {monthsActive.active}
+                    <div className="text-2xl font-semibold text-slate-800 mb-1">
+                        {new Date(data?.membership_valid_till).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: '2-digit',
+                            year: 'numeric'
+                        }).toUpperCase()}
                     </div>
                     <div className="text-sm text-slate-600 font-medium mb-3">
                         {monthsActive.label}
@@ -188,8 +293,8 @@ export default function Dashboard() {
                     >
                         <Eye className={`${visits.iconColor} w-6 h-6`} />
                     </div>
-                    <div className="text-3xl font-bold text-slate-800 mb-1">
-                        {visits.visits}
+                    <div className="text-2xl font-semibold text-slate-800 mb-1">
+                        {data.profile_views}
                     </div>
                     <div className="text-sm text-slate-600 font-medium mb-3">
                         {visits.label}
@@ -245,7 +350,7 @@ export default function Dashboard() {
                         <div className="flex-shrink-0">
                             <div className="relative w-32 h-32 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shadow-md bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center">
                                 <Image
-                                    src='/accountsBanner.png'
+                                    src={myData.logo}
                                     alt='image'
                                     fill
                                     className="object-cover aspect-square"
@@ -260,7 +365,7 @@ export default function Dashboard() {
                                     Business Name
                                 </p>
                                 <p className="text-base font-semibold text-slate-800">
-                                    {profileData.businessName}
+                                    {myData.business_name}
                                 </p>
                             </div>
                             <div>
@@ -268,7 +373,7 @@ export default function Dashboard() {
                                     Country
                                 </p>
                                 <p className="text-base font-semibold text-slate-800">
-                                    {profileData.country}
+                                    {myData.country}
                                 </p>
                             </div>
                             <div>
@@ -276,16 +381,24 @@ export default function Dashboard() {
                                     Email
                                 </p>
                                 <p className="text-base font-semibold text-slate-800">
-                                    {profileData.email}
+                                    {myData.user_email}
                                 </p>
                             </div>
                             <div>
                                 <p className="text-sm font-semibold text-slate-500 tracking-wider mb-1">
                                     Last Updated
                                 </p>
+                                <div className='flex flex-row gap-6'>
                                 <p className="text-base font-semibold text-slate-800">
-                                    {profileData.lastUpdated}
-                                </p>
+                                    {new Date(myData.updated_at).toLocaleDateString('en-CA')} </p>
+                                    <p className="text-base font-semibold text-slate-800">{new Date(myData.updated_at).toLocaleTimeString('en-US', {
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        hour12: false
+                                    }) }
+
+
+                                </p></div>
                             </div>
                         </div>
 
@@ -322,7 +435,7 @@ export default function Dashboard() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {recentlyViewedBusinesses.map((business) => (
+                                {recentlyViewed.map((business) => (
                                     <tr key={business.id} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
                                         <td className="py-5 px-6">
                                             <div className="flex items-center gap-4">
@@ -330,7 +443,7 @@ export default function Dashboard() {
                                                     {business.logo ? (
                                                         <Image
                                                             src={business.logo}
-                                                            alt={`${business.name} logo`}
+                                                            alt={`${business.business_name} logo`}
                                                             fill
                                                             sizes="w-12 h-12"
                                                             className="object-cover" // 'object-contain' keeps the full logo visible without cropping
@@ -341,11 +454,11 @@ export default function Dashboard() {
                                                         </span>
                                                     )}
                                                 </div>
-                                                <span className="font-semibold text-slate-800">{business.name}</span>
+                                                <span className="font-semibold text-slate-800">{business.business_name}</span>
                                             </div>
                                         </td>
                                         <td className="py-5 px-6 text-slate-700">{business.country}</td>
-                                        <td className="py-5 px-6 text-slate-700 max-w-md truncate">{business.services}</td>
+                                        <td className="py-5 px-6 text-slate-700 max-w-md truncate">{business.services.map((i)=>i)}</td>
                                         <td className="py-5 px-6">
                                             <button
                                                 onClick={() => router.push(`/accounts/${business.id}`)}
