@@ -10,9 +10,12 @@ import axios from "axios";
 // We can use a Zod schema here if we want.
 
 export type allBusinessesTable = {
-    id: number;
+    id: string;
     business_name: string,
-    country: string,
+    country: {
+        name?: string;
+        flag?: string;
+    } | null,
     user_email: string,
     created_at: string,
     last_login: string,
@@ -43,21 +46,41 @@ export const columns: ColumnDef<allBusinessesTable>[] = [
             );
         },
     },
+
     {
-        accessorKey: "country_name",
+        id: "country",
         header: "Country",
+        accessorFn: (row) => row.country?.name || "N/A", // according to backend.
+        cell: ({ row }) => row.getValue("country"),
     },
+
     {
         accessorKey: "user_email",
         header: "Email",
     },
+
     {
         accessorKey: "created_at",
         header: "Created Date",
+        cell: ({ row }) => {
+            const dateStr = row.getValue("created_at") as string;
+            if (!dateStr) return "N/A";
+
+            const date = new Date(dateStr);
+            if (isNaN(date.getTime())) return "Invalid Date";
+
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // month starts from 0
+            const year = date.getFullYear();
+
+            return `${day}-${month}-${year}`;
+        },
     },
+
     {
         header: "Active Period",
     },
+
     {
         accessorKey: "is_locked",
         header: "Status",
@@ -72,6 +95,7 @@ export const columns: ColumnDef<allBusinessesTable>[] = [
             );
         },
     },
+
     {
         id: "actions",
         header: "Actions",
@@ -79,7 +103,7 @@ export const columns: ColumnDef<allBusinessesTable>[] = [
             const business = row.original;
 
             const handleEdit = () => {
-                console.log("Edit business:", business.id);
+                redirect(`/super-admin/edit-business/${business.id}`);
             };
 
             const handleDelete = async () => {
@@ -128,8 +152,8 @@ export const columns: ColumnDef<allBusinessesTable>[] = [
             return (
                 <div className="flex items-center gap-2">
                     <button
-                        // onClick={handleEdit}
-                        onClick={() => { redirect("/super-admin/edit-business") }}
+                        onClick={handleEdit}
+                        // onClick={() => { redirect(`/super-admin/edit-business/${business.id}`) }}
                         className="h-8 w-8 flex items-center justify-center rounded-sm 
                         hover:bg-gray-400 hover:text-white transition-colors cursor-pointer"
                     >

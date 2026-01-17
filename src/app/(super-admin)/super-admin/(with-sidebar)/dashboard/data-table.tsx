@@ -2,43 +2,22 @@
 // Bought from Shadcn.
 
 "use client"
-import { type ColumnDef, flexRender, getCoreRowModel, useReactTable, getPaginationRowModel, type SortingState, getSortedRowModel }
-    from "@tanstack/react-table"
+import { type ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-// import { DataTablePagination } from "@/components/payments/TablePagination"
 import { useState } from "react"
 
-interface DataTableProps<TData, TValue> {
-    columns: ColumnDef<TData, TValue>[]
-    data: TData[]
+interface DataTableProps<TData> {
+    columns: ColumnDef<TData>[];
+    data: TData[];
 }
 
-export function DataTable<TData, TValue>({
-    columns,
-    data,
-}: DataTableProps<TData, TValue>) {
-    const [sorting, setSorting] = useState<SortingState>([]);
-    const [rowSelection, setRowSelection] = useState({});
-    // const [pagination, setPagination] = useState({
-    //     pageIndex: 0,
-    //     pageSize: 10,
-    // });
-
+export function DataTable<TData>({ columns, data }: DataTableProps<TData>) {
     const table = useReactTable({
-        data,
-        columns,
+        data: data,
+        columns: columns,
         getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-        onSortingChange: setSorting,
-        getSortedRowModel: getSortedRowModel(),
-        onRowSelectionChange: setRowSelection,
-        // onPaginationChange: setPagination,
-        state: {
-            sorting,
-            rowSelection,
-            //pagination
-        },
-    })
+        // getPaginationRowModel: getPaginationRowModel()
+    });
 
     return (
         <div>
@@ -86,30 +65,6 @@ export function DataTable<TData, TValue>({
                     </TableBody>
                 </Table>
             </div>
-
-            {/* Basic Pagination */}
-            {/* <div className="flex items-center justify-end space-x-2 py-4">
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => table.previousPage()}
-                    disabled={!table.getCanPreviousPage()}
-                    className="cursor-pointer"
-                >
-                    Previous
-                </Button>
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => table.nextPage()}
-                    disabled={!table.getCanNextPage()}
-                    className="cursor-pointer"
-                >
-                    Next
-                </Button>
-            </div> */}
-
-            {/* <DataTablePagination table={table} /> */}
         </div>
     )
 }
