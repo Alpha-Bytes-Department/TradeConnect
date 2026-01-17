@@ -9,16 +9,35 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Textarea } from "@/components/ui/textarea";
 import { CalendarHeartIcon, Divide, Eye, EyeOff, LockKeyhole, MoveLeft, Save, Trash2, Upload, X }
     from "lucide-react";
-import { useState } from "react";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import axios from "axios";
 
 interface GalleryImage {
-    file: File;
-    preview: string;
+    id?: string;           // ← নতুন: backend থেকে আসা image এর id/uuid
+    file: File | null;     // নতুন আপলোড করা হলে থাকবে
+    preview: string;       // url
 }
 
 interface Errors {
     banner: string;
     gallery: string;
+}
+
+// Add interface for form data
+interface BusinessFormData {
+    businessName: string;
+    country: string;
+    fullAddress: string;
+    membershipValidTill: string;
+    emailAddress: string;
+    phoneNumber: string;
+    websiteURL: string;
+    servicesOffered: string;
+    aboutBusiness: string;
+    newPassword?: string;
+    confirmPassword?: string;
 }
 
 export default function EditBusiness() {
@@ -31,6 +50,159 @@ export default function EditBusiness() {
     const [showPassword2, setShowPassword2] = useState(false);
     const [open, setOpen] = useState(false);
     const [date, setDate] = useState<Date | undefined>(undefined);
+
+    const { id } = useParams(); // Extract id from URL
+    const [data, setData] = useState<any>(null);
+
+    // Initialize React Hook Form
+    const { register, handleSubmit, control, formState: { errors: formErrors }, setValue, reset, watch } =
+        useForm<BusinessFormData>({
+            defaultValues: {
+                businessName: '',
+                country: '',
+                fullAddress: '',
+                membershipValidTill: '',
+                emailAddress: '',
+                phoneNumber: '',
+                websiteURL: '',
+                servicesOffered: '',
+                aboutBusiness: '',
+                newPassword: '',
+                confirmPassword: ''
+            }
+        });
+
+    // Watch aboutBusiness for character count
+    const aboutBusiness = watch('aboutBusiness');
+
+    // Country type definition
+    type Country = {
+        id: string;
+        name: string;
+        flag: string;
+    };
+
+    const token = localStorage.getItem("accessToken");
+    if (!token) return;
+
+    const [countries, setCountries] = useState<Country[]>([]);
+    useEffect(() => {
+        axios.get("https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/core/countries/",
+            {
+                headers: { "ngrok-skip-browser-warning": "true" },
+            }
+        )
+            .then(response => {
+                setCountries(response?.data?.countries || []);
+                // console.log("success");
+                // Handle the successful response
+                // return response?.data?.countries;
+                // console.log(response.data); // The actual data payload from the server
+            })
+            .catch(error => {
+                console.log("failed");
+                console.log(error); // Axios rejects promises for HTTP errors
+                // Handle the error
+                console.error('Error fetching data:', error.status);
+            });
+    }, []);
+
+    // Fetch data from API on component mount using Axios
+    useEffect(() => {
+        const fetchBusinessData = async () => {
+            try {
+                const response = await axios.get(
+                    `https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/${id}/`,
+                    {
+                        headers: {
+                            "ngrok-skip-browser-warning": "true",
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+                const data = response?.data;
+
+                // Populate form fields with fetched data
+                setValue('businessName', data?.business?.business_name || '');
+                setValue('country', data?.business?.country?.id || '');
+                setValue('fullAddress', data?.business?.full_address || '');
+                setValue('emailAddress', data?.business?.user_email || '');
+                setValue('phoneNumber', data?.business?.phone_number || '');
+                setValue('websiteURL', data?.business?.website || '');
+                setValue('aboutBusiness', data?.business?.about_business || '');
+
+                // Handle services array properly
+                const servicesString = data?.business?.services?.map((service: any) => service.title)
+                    .join(', ') || '';
+                setValue('servicesOffered', servicesString);
+
+                // // Set date if available
+                // if (data?.business?.membership_valid_till) {
+                //     const dateValue = data.business.membership_valid_till;
+                //     const parsedDate = new Date(dateValue);
+                //     setValue('membershipValidTill', parsedDate.toISOString());
+                //     setDate(parsedDate);
+                // }
+
+                if (data?.business?.membership_valid_till) {
+                    const dateStr = data.business.membership_valid_till.trim(); // "12/04/2027"
+
+                    // Split and validate format
+                    const parts = dateStr.split("/");
+                    if (parts.length === 3) {
+                        const [day, month, year] = parts.map(p => parseInt(p, 10));
+
+                        // JavaScript Date months are 0-based → month-1
+                        const jsDate = new Date(year, month - 1, day);
+
+                        // Basic validation: check if date is valid
+                        if (
+                            !isNaN(jsDate.getTime()) &&
+                            jsDate.getDate() === day &&
+                            jsDate.getMonth() === month - 1 &&
+                            jsDate.getFullYear() === year
+                        ) {
+                            setDate(jsDate);
+                            setValue("membershipValidTill", jsDate.toISOString());
+                        } else {
+                            console.warn("Invalid date from API:", dateStr);
+                            // optionally: setDate(undefined); setValue("membershipValidTill", "");
+                        }
+                    }
+                }
+
+                // Set banner preview if available
+                if (data?.business?.logo) {
+                    setBannerPreview(data.business.logo);
+                }
+
+                // Set gallery images with correct property mapping
+                if (data?.business?.gallery && Array.isArray(data?.business?.gallery)) {
+                    const galleryPreviews = data?.business?.gallery.map((item: any) => ({
+                        id: item.id,           // ← এটা থাকা চাই (backend থেকে)
+                        file: null,
+                        preview: item.image    // url
+                    }));
+                    setGalleryImages(galleryPreviews);
+                }
+
+            } catch (error) {
+                console.error('Error fetching business data:', error);
+                if (axios.isAxiosError(error)) {
+                    console.error(`Failed to load business data: ${error.response?.data?.message ||
+                        error.message}`);
+                } else {
+                    console.log('Failed to load business data. Please try again.');
+                }
+            } finally {
+                //setIsFetching(false);
+            }
+        };
+
+        if (id) {
+            fetchBusinessData();
+        }
+    }, [id, setValue]);
 
     // Type annotation for validation function
     const validateFile = (file: File): string | null => {
@@ -69,8 +241,8 @@ export default function EditBusiness() {
     const handleGalleryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files || []);
 
-        if (galleryImages.length + files.length > 10) {
-            setErrors({ ...errors, gallery: 'Maximum 10 images allowed' });
+        if (galleryImages.length + files.length > 8) {
+            setErrors({ ...errors, gallery: 'Maximum 8 images allowed' });
             return;
         }
 
@@ -112,14 +284,171 @@ export default function EditBusiness() {
         if (input) input.value = '';
     };
 
-    // Type annotation for event handler
-    const removeGalleryImage = (index: number, e: React.MouseEvent<HTMLButtonElement>) => {
+    const removeGalleryImage = async (index: number, e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
-        setGalleryImages((prev) => prev.filter((_, i) => i !== index));
+
+        const imageToRemove = galleryImages[index];
+
+        // যদি নতুন আপলোড করা ছবি (file আছে) → শুধু frontend থেকে মুছে ফেলো
+        if (imageToRemove.file) {
+            setGalleryImages((prev) => prev.filter((_, i) => i !== index));
+            return;
+        }
+
+        // যদি existing ছবি (id আছে) → backend থেকে ডিলিট করো
+        if (imageToRemove.id) {
+            try {
+                await axios.delete(
+                    `https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/gallery/images/${imageToRemove.id}/`,
+                    {
+                        headers: {
+                            "Authorization": `Bearer ${token}`,
+                            "ngrok-skip-browser-warning": "true",
+                        },
+                    }
+                );
+                console.log(`Image ${imageToRemove.id} deleted from backend`);
+
+                // সফল হলে frontend থেকেও মুছে ফেলো
+                setGalleryImages((prev) => prev.filter((_, i) => i !== index));
+            } catch (error) {
+                console.error("Failed to delete gallery image:", error);
+                if (axios.isAxiosError(error) && error.response) {
+                    console.log("Delete error details:", error.response.data);
+                }
+                console.log("Could not delete the image. Please try again.");
+                // optionally: error state দেখাও UI-তে
+            }
+        }
     };
 
+
+    // Add form submission handler using Axios
+    const onSubmit = async (data: BusinessFormData) => {
+        try {
+            //setIsLoading(true);
+
+            // Create FormData
+            const formData1 = new FormData();
+
+            // Append text fields
+            formData1.append('business_name', data.businessName);
+            formData1.append('country', data.country);
+            formData1.append('full_address', data.fullAddress);
+            //formData1.append('membership_valid_till', data.membershipValidTill);
+            formData1.append('user_email', data.emailAddress || '');
+            formData1.append('phone_number', data.phoneNumber || '');
+            formData1.append('website', data.websiteURL || '');
+            formData1.append('services', data.servicesOffered);
+            formData1.append('about_business', data.aboutBusiness);
+
+            const isoDate = data.membershipValidTill;
+            const date = new Date(isoDate);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+            const year = date.getFullYear();
+
+            const formattedDate = `${day}/${month}/${year}`;
+            formData1.append('membership_valid_till', formattedDate);
+            console.log(formattedDate); // "23/01/2026"
+
+            // Append banner image if changed
+            if (bannerImage) {
+                formData1.append('logo', bannerImage);
+            }
+
+
+            const formData2 = new FormData();
+            // Append gallery images (only new ones with file objects)
+            galleryImages.forEach((image) => {
+                if (image.file) {
+                    formData2.append('images', image.file);
+                }
+                // console.log(image)
+            });
+
+
+            const formData3 = new FormData();
+            // Append password fields only if provided
+            if (data.newPassword) {
+                formData3.append('newPassword', data.newPassword);
+            }
+            if (data.confirmPassword) {
+                formData3.append('confirmPassword', data.confirmPassword);
+            }
+
+
+            const response1 = await axios.patch(
+                `https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/${id}/update/`,
+                formData1,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "ngrok-skip-browser-warning": "true",
+                        "Content-Type": "multipart/form-data"
+                    },
+                });
+
+            const response2 = await axios.post(
+                `https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/gallery/upload/${id}/`,
+                formData2,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "ngrok-skip-browser-warning": "true",
+                        "Content-Type": "multipart/form-data"
+                    },
+                });
+
+            const response3 = await axios.patch(
+                `https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/auth/super-admin/users/change-password/`,
+                formData3,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "ngrok-skip-browser-warning": "true",
+                        "Content-Type": "application/json"
+                    },
+                });
+        }
+        catch (error) {
+            console.error('Error updating business:', error);
+            if (axios.isAxiosError(error)) {
+                console.log(`Failed to update business: ${error.response?.data?.message || error.message}`);
+            } else {
+                console.log('Failed to update business. Please try again.');
+            }
+        } finally {
+            //setIsLoading(false);
+        }
+    };
+
+    // Add cancel handler
+    const handleCancel = () => {
+        // Reset form to original values
+        reset();
+        setBannerImage(null);
+        setBannerPreview(null);
+        setGalleryImages([]);
+        setDate(undefined);
+        // Optionally redirect back
+        // router.back();
+    };
+
+    // Show loading state while fetching
+    // if (isFetching) {
+    //     return (
+    //         <div className="max-w-[1300px] mx-auto p-8">
+    //             <div className="text-center py-12">
+    //                 <p className="text-gray-600 font-poppins">Loading business data...</p>
+    //             </div>
+    //         </div>
+    //     );
+    // }
+
+
     return (
-        <div className="max-w-[1300px] mx-auto">
+        <form onSubmit={handleSubmit(onSubmit)} className="max-w-[1300px] mx-auto">
             <button className="flex items-center gap-2 px-4 py-1 bg-[#BFD7FDB8] rounded-lg 
             font-poppins text-[#153569] mt-4 cursor-pointer">
                 <MoveLeft />
@@ -190,47 +519,47 @@ export default function EditBusiness() {
                                 <div className="w-full">
                                     <Input type="text" id="businessName" placeholder="Tech Solution Inc."
                                         className="font-poppins bg-[#FFFFFF] text-[#3F3F3F] text-base"
-                                    // {...register("businessName")}
+                                        {...register("businessName")}
                                     />
                                 </div>
-                                {/* {errors.businessName && (
+                                {formErrors.businessName && (
                                     <p className="text-red-500 text-sm font-poppins mt-1">
-                                        {errors.businessName.message}
+                                        {formErrors.businessName.message}
                                     </p>
-                                )} */}
+                                )}
                             </div>
                             <div className="w-full lg:w-1/2 grid gap-2 items-center mt-4">
                                 <label htmlFor="country" className="font-poppins text-[#252525]">
                                     Country*</label>
                                 {/* Used Controller for Select component */}
-                                {/* <Controller
+                                <Controller
                                     name="country"
                                     control={control}
                                     render={({ field }) => (
                                         <Select onValueChange={field.onChange} value={field.value}>
                                             <SelectTrigger className="w-full cursor-pointer font-poppins">
-                                                <SelectValue placeholder="All Countries" />
+                                                <SelectValue placeholder="Countries" />
                                             </SelectTrigger>
                                             <SelectContent className="font-poppins">
                                                 <SelectGroup>
                                                     <SelectLabel>Countries</SelectLabel>
-                                                    <SelectItem value="Bangladesh">Bangladesh</SelectItem>
-                                                    <SelectItem value="Germany">Germany</SelectItem>
-                                                    <SelectItem value="France">France</SelectItem>
-                                                    <SelectItem value="Taiwan">Taiwan</SelectItem>
-                                                    <SelectItem value="China">China</SelectItem>
+                                                    {countries.map(item => (
+                                                        <SelectItem key={item.id} value={item.id}>
+                                                            {item.name}
+                                                        </SelectItem>
+                                                    ))}
                                                 </SelectGroup>
                                             </SelectContent>
                                         </Select>
                                     )}
                                 />
-                                {errors.country && (
+                                {formErrors.country && (
                                     <p className="text-red-500 text-sm font-poppins mt-1">
-                                        {errors.country.message}
+                                        {formErrors.country.message}
                                     </p>
-                                )} */}
+                                )}
 
-                                <div>
+                                {/* <div>
                                     <Select>
                                         <SelectTrigger className="w-full cursor-pointer font-poppins">
                                             <SelectValue placeholder="All Countries" />
@@ -246,7 +575,7 @@ export default function EditBusiness() {
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
 
@@ -258,49 +587,68 @@ export default function EditBusiness() {
                                     <Input type="text" id="fullAddress"
                                         placeholder="123 Tech street, san Francisco, CA 94105"
                                         className="font-poppins bg-[#FFFFFF] text-[#3F3F3F] text-base"
-                                    // {...register("fullAddress")}
+                                        {...register("fullAddress")}
                                     />
                                 </div>
-                                {/* {errors.fullAddress && (
-                                <p className="text-red-500 text-sm font-poppins mt-1">
-                                    {errors.fullAddress.message}
-                                </p>
-                            )} */}
+                                {formErrors.fullAddress && (
+                                    <p className="text-red-500 text-sm font-poppins mt-1">
+                                        {formErrors.fullAddress.message}
+                                    </p>
+                                )}
                             </div>
+
                             <div className="w-full lg:w-1/2 grid gap-2 items-center mt-4">
                                 <label htmlFor="membership" className="font-poppins text-[#000000]">
                                     Membership Valid Till*</label>
                                 <div className="w-full">
-                                    <Popover open={open} onOpenChange={setOpen}>
-                                        <PopoverTrigger asChild>
-                                            <Button
-                                                variant="outline"
-                                                id="date"
-                                                className="w-full justify-between font-normal font-poppins 
-                                    text-[#313131] cursor-pointer"
-                                            >
-                                                {date ? date.toLocaleDateString() : "DD / MM / YYYY"}
-                                                <CalendarHeartIcon />
-                                            </Button>
-                                        </PopoverTrigger>
-                                        <PopoverContent className="w-auto overflow-hidden p-0" align="start">
-                                            <Calendar
-                                                mode="single"
-                                                selected={date}
-                                                captionLayout="dropdown"
-                                                onSelect={(date) => {
-                                                    setDate(date)
-                                                    setOpen(false)
-                                                }}
-                                            />
-                                        </PopoverContent>
-                                    </Popover>
+                                    <Controller
+                                        name="membershipValidTill"
+                                        control={control}
+                                        //rules={{ required: "Membership date is required" }}
+                                        render={({ field }) => (
+                                            <Popover open={open} onOpenChange={setOpen}>
+                                                <PopoverTrigger asChild>
+                                                    <Button
+                                                        variant="outline"
+                                                        id="date"
+                                                        type="button"
+                                                        className="w-full justify-between font-normal 
+                                                        font-poppins text-[#313131] cursor-pointer"
+                                                    >
+                                                        {date ? date.toLocaleDateString('en-GB') :
+                                                            "DD / MM / YYYY"}
+                                                        {/* (en-GB → 12/04/2027 style) */}
+                                                        <CalendarHeartIcon />
+                                                    </Button>
+                                                </PopoverTrigger>
+                                                <PopoverContent className="w-auto overflow-hidden p-0"
+                                                    align="start">
+                                                    <Calendar
+                                                        mode="single"
+                                                        selected={date}
+                                                        captionLayout="dropdown"
+                                                        onSelect={(selectedDate) => {
+                                                            if (selectedDate) {
+                                                                setDate(selectedDate);
+                                                                field.onChange(selectedDate.toISOString());
+                                                                // important for RHF
+                                                            } else {
+                                                                setDate(undefined);
+                                                                field.onChange("");
+                                                            }
+                                                            setOpen(false);
+                                                        }}
+                                                    />
+                                                </PopoverContent>
+                                            </Popover>
+                                        )}
+                                    />
                                 </div>
-                                {/* {errors.websiteURL && (
-                                <p className="text-red-500 text-sm font-poppins mt-1">
-                                    {errors.websiteURL.message}
-                                </p>
-                            )} */}
+                                {formErrors.membershipValidTill && (
+                                    <p className="text-red-500 text-sm font-poppins mt-1">
+                                        {formErrors.membershipValidTill.message}
+                                    </p>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -314,14 +662,14 @@ export default function EditBusiness() {
                             <div className="w-full">
                                 <Input type="text" id="emailAddress" placeholder="admin@business.com"
                                     className="font-poppins bg-[#FFFFFF] text-[#3F3F3F] text-base"
-                                // {...register("emailAddress")}
+                                    {...register("emailAddress")}
                                 />
                             </div>
-                            {/* {errors.emailAddress && (
+                            {formErrors.emailAddress && (
                                 <p className="text-red-500 text-sm font-poppins mt-1">
-                                    {errors.emailAddress.message}
+                                    {formErrors.emailAddress.message}
                                 </p>
-                            )} */}
+                            )}
                         </div>
                         <div className="w-full grid gap-2 items-center mt-4">
                             <label htmlFor="phoneNumber" className="font-poppins text-[#515151]">
@@ -329,14 +677,14 @@ export default function EditBusiness() {
                             <div className="w-full">
                                 <Input type="text" id="phoneNumber" placeholder="Tech Solution Inc."
                                     className="font-poppins bg-[#FFFFFF] text-[#3F3F3F] text-base"
-                                // {...register("phoneNumber")}
+                                    {...register("phoneNumber")}
                                 />
                             </div>
-                            {/* {errors.phoneNumber && (
+                            {formErrors.phoneNumber && (
                                 <p className="text-red-500 text-sm font-poppins mt-1">
-                                    {errors.phoneNumber.message}
+                                    {formErrors.phoneNumber.message}
                                 </p>
-                            )} */}
+                            )}
                         </div>
                         <div className="w-full grid gap-2 items-center mt-4">
                             <label htmlFor="websiteURL" className="font-poppins text-[#515151]">
@@ -344,14 +692,14 @@ export default function EditBusiness() {
                             <div className="w-full">
                                 <Input type="text" id="websiteURL" placeholder="example.com"
                                     className="font-poppins bg-[#FFFFFF] text-[#3F3F3F] text-base"
-                                // {...register("websiteURL")}
+                                    {...register("websiteURL")}
                                 />
                             </div>
-                            {/* {errors.websiteURL && (
+                            {formErrors.websiteURL && (
                                 <p className="text-red-500 text-sm font-poppins mt-1">
-                                    {errors.websiteURL.message}
+                                    {formErrors.websiteURL.message}
                                 </p>
-                            )} */}
+                            )}
                         </div>
                     </div>
                 }
@@ -364,15 +712,15 @@ export default function EditBusiness() {
                             <div className="w-full">
                                 <Textarea id="servicesOffered" placeholder="List services separated by commas"
                                     className="font-poppins resize-none whitespace-normal break-words"
-                                // {...register("servicesOffered")}
+                                    {...register("servicesOffered")}
                                 />
                             </div>
                             <p className="font-poppins text-[#595959] text-xs">Separate services with commas</p>
-                            {/* {errors.servicesOffered && (
+                            {formErrors.servicesOffered && (
                                 <p className="text-red-500 text-sm font-poppins mt-1">
-                                    {errors.servicesOffered.message}
+                                    {formErrors.servicesOffered.message}
                                 </p>
-                            )} */}
+                            )}
                         </div>
                         <div className="w-full grid gap-2 items-center mt-4">
                             <label htmlFor="aboutBusiness" className="font-poppins text-[#515151]">
@@ -381,15 +729,15 @@ export default function EditBusiness() {
                                 <Textarea id="aboutBusiness" placeholder="Leading technology solutions 
                                 provider with 15+ years of experience in enterprise software development."
                                     className="font-poppins resize-none whitespace-normal break-words"
-                                // {...register("aboutBusiness")} 
+                                    {...register("aboutBusiness")}
                                 />
                             </div>
                             <p className="font-poppins text-[#595959] text-xs">102 characters</p>
-                            {/* {errors.aboutBusiness && (
+                            {formErrors.aboutBusiness && (
                                 <p className="text-red-500 text-sm font-poppins mt-1">
-                                    {errors.aboutBusiness.message}
+                                    {formErrors.aboutBusiness.message}
                                 </p>
-                            )} */}
+                            )}
                         </div>
                     </div>
                 }
@@ -456,9 +804,9 @@ export default function EditBusiness() {
                         <div>
                             <h2 className="font-poppins text-sm text-[#515151] mb-2">Gallery Images</h2>
                             {/* Display Gallery Images */}
-                            {galleryImages.length > 0 && (
+                            {galleryImages?.length > 0 && (
                                 <div className="grid grid-cols-2 gap-4 mb-4">
-                                    {galleryImages.map((image, index) => (
+                                    {galleryImages?.map((image, index) => (
                                         <div key={index} className="relative group">
                                             <div className="w-full h-48 bg-gray-900 rounded-lg 
                                                     overflow-hidden">
@@ -486,8 +834,9 @@ export default function EditBusiness() {
                             {/* Upload Area for Gallery */}
                             <div
                                 onClick={() => document.getElementById('gallery-input')?.click()}
-                                className={`w-full border-2 border-dashed rounded-lg 
-                    py-12 px-4 text-center cursor-pointer transition-colors bg-white ${errors.gallery ? 'border-red-300' : 'border-gray-300 hover:border-gray-400'
+                                className={`w-full border-2 border-dashed rounded-lg py-12 px-4 
+                                    text-center cursor-pointer transition-colors bg-white 
+                                    ${errors.gallery ? 'border-red-300' : 'border-gray-300 hover:border-gray-400'
                                     }`}
                             >
                                 <input
@@ -518,14 +867,21 @@ export default function EditBusiness() {
                 {activeTab === 'changePassword' &&
                     <div className="p-3">
                         <div className="w-1/2 grid gap-3 items-center mt-5">
-                            <label htmlFor="newPassword" className="text-[#252525] font-poppins">New Password*</label>
+                            <label htmlFor="newPassword" className="text-[#252525] font-poppins">
+                                New Password*</label>
                             <div className="relative w-full">
                                 <Input
                                     type={showPassword1 ? "text" : "password"}
-                                    id="password"
+                                    id="newPassword"
                                     placeholder="Enter New password"
-                                    className="pr-10 pl-9 font-poppins bg-[#FFFFFF] text-[#3F3F3F]" // leave space for the eye button
-                                // {...register("password")}
+                                    className="pr-10 pl-9 font-poppins bg-[#FFFFFF] text-[#3F3F3F]"
+                                    // leave space for the eye button
+                                    {...register("newPassword", {
+                                        minLength: {
+                                            value: 8,
+                                            message: "Password must be at least 8 characters"
+                                        }
+                                    })}
                                 />
                                 <LockKeyhole className="absolute top-2.5 left-2.5 w-5 h-5" />
                                 <button type="button" className="absolute right-3 top-3.5 cursor-pointer"
@@ -537,19 +893,27 @@ export default function EditBusiness() {
                                     )}
                                 </button>
                             </div>
-                            {/* {errors.password && (
-                                <p className="text-red-500 text-sm font-poppins">{errors.password.message}</p>
-                            )} */}
+                            {formErrors.newPassword && (
+                                <p className="text-red-500 text-sm font-poppins">
+                                    {formErrors.newPassword.message}</p>
+                            )}
                         </div>
+
                         <div className="w-1/2 grid gap-3 items-center mt-5">
-                            <label htmlFor="newPassword" className="text-[#252525] font-poppins">Confirm Password*</label>
+                            <label htmlFor="confirmPassword" className="text-[#252525] font-poppins">
+                                Confirm Password*</label>
                             <div className="relative w-full">
                                 <Input
                                     type={showPassword2 ? "text" : "password"}
-                                    id="password"
+                                    id="confirmPassword"
                                     placeholder="Confirm New password"
-                                    className="pr-10 pl-9 font-poppins bg-[#FFFFFF] text-[#3F3F3F]" // leave space for the eye button
-                                // {...register("password")}
+                                    className="pr-10 pl-9 font-poppins bg-[#FFFFFF] text-[#3F3F3F]"
+                                    // leave space for the eye button
+                                    {...register("confirmPassword", {
+                                        validate: (value, formValues) =>
+                                            !formValues.newPassword || value === formValues.newPassword ||
+                                            "Passwords do not match"
+                                    })}
                                 />
                                 <LockKeyhole className="absolute top-2.5 left-2.5 w-5 h-5" />
                                 <button type="button" className="absolute right-3 top-3.5 cursor-pointer"
@@ -561,9 +925,10 @@ export default function EditBusiness() {
                                     )}
                                 </button>
                             </div>
-                            {/* {errors.password && (
-                                <p className="text-red-500 text-sm font-poppins">{errors.password.message}</p>
-                            )} */}
+                            {formErrors.confirmPassword && (
+                                <p className="text-red-500 text-sm font-poppins">
+                                    {formErrors.confirmPassword.message}</p>
+                            )}
                         </div>
                     </div>
                 }
@@ -577,7 +942,8 @@ export default function EditBusiness() {
                         Save Changes
                     </button>
                     <button type="button" className="flex items-center justify-center 
-                gap-2 bg-[#B3261E] text-[#EBF2FE] font-poppins px-4 py-2 rounded-lg cursor-pointer">
+                gap-2 bg-[#B3261E] text-[#EBF2FE] font-poppins px-4 py-2 rounded-lg cursor-pointer"
+                        onClick={handleCancel}>
                         <X className="text-[#EBF2FE] w-5 h-5" />
                         Cancel
                     </button>
@@ -602,7 +968,8 @@ export default function EditBusiness() {
                 </span> Your profile information is visible to all logged-in users in the directory.
                     Make sure all information is accurate and up-to date.</p>
             </div>
-        </div>
+        </form>
+
     );
 }
 
@@ -791,4 +1158,3 @@ export default function EditBusiness() {
 //             </div>
 //         </div>
 //     );
-// }
