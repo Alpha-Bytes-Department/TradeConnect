@@ -364,6 +364,7 @@ export default function EditBusiness() {
                 if (image.file) {
                     formData2.append('images', image.file);
                 }
+                // console.log(image)
             });
 
 
