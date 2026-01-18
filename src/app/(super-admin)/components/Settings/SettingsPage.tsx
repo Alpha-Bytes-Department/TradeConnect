@@ -76,7 +76,7 @@ export default function SettingsPage() {
             // Send data to backend using axios
             // IMPORTANT: Don't manually set Content-Type for FormData
             const response = await axios.put(
-                'https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/auth/profile/',
+                'https://squishiest-punctually-daxton.ngrok-free.dev/api/auth/profile/',
                 formData,
                 {
                     headers: {

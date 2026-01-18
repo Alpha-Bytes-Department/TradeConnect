@@ -39,7 +39,7 @@ export default function SignIn() {
 
   const onSubmit = async (data: SignInFormData) => {
     try {
-      const response = await axios.post("https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/auth/login/",
+      const response = await axios.post("https://squishiest-punctually-daxton.ngrok-free.dev/api/auth/login/",
         {
           email: data.emailAddress,
           password: data.password
