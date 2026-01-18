@@ -10,6 +10,7 @@ import { BsGrid3X3Gap } from "react-icons/bs";
 import { useView } from "../../ListGridContext";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useFilter } from "../../FilterContext";
 
 interface FilterFormData {
     search: string;
@@ -28,18 +29,24 @@ type Country = {
 
 export default function FilterBox() {
     const { list, grid, setList, setGrid } = useView();
+    const { setSearch, setCountry, setStatus, setSortBy } = useFilter();
 
     const [countries, setCountries] = useState<Country[]>([]);
 
+    const token = localStorage.getItem("accessToken");
+    if (!token) return;
+
     useEffect(() => {
-        axios.get("https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/core/countries/",
+        axios.get("https://squishiest-punctually-daxton.ngrok-free.dev/api/core/countries/",
             {
-                headers: { "ngrok-skip-browser-warning": "true" },
+                headers: {
+                    "ngrok-skip-browser-warning": "true",
+                    Authorization: `Bearer ${token}`,
+                },
             }
         )
             .then(response => {
                 setCountries(response?.data?.countries || []);
-                // console.log("success");
                 // Handle the successful response
                 // return response?.data?.countries;
                 // console.log(response.data); // The actual data payload from the server
@@ -53,7 +60,7 @@ export default function FilterBox() {
     }, []);
 
 
-    const { register, setValue, watch, handleSubmit } = useForm<FilterFormData>({
+    const { register, setValue, watch } = useForm<FilterFormData>({
         defaultValues: {
             search: "",
             country: "",
@@ -62,13 +69,19 @@ export default function FilterBox() {
         }
     });
 
-    const onSubmit = (data: FilterFormData) => {
-        console.log("Form data:", data);
-        // Handle form submission here
-    };
+    // Watch all form values
+    const formValues = watch();
+
+    // Update context whenever form values change
+    useEffect(() => {
+        setSearch(formValues.search);
+        setCountry(formValues.country);
+        setStatus(formValues.status);
+        setSortBy(formValues.sortBy);
+    }, [formValues, setSearch, setCountry, setStatus, setSortBy]);
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="bg-[#FFFFFF] border rounded-md mt-6 p-4">
+        <div className="bg-[#FFFFFF] border rounded-md mt-6 p-4">
             <div className="grid grid-cols-1 xl:grid-cols-4 gap-4">
                 <div className="relative xl:col-span-2">
                     <Input
@@ -96,16 +109,6 @@ export default function FilterBox() {
                                 ))}
                             </SelectGroup>
                         </SelectContent>
-                        {/* <SelectContent>
-                            <SelectGroup>
-                                <SelectLabel>Countries</SelectLabel>
-                                <SelectItem value="Bangladesh">Bangladesh</SelectItem>
-                                <SelectItem value="Germany">Germany</SelectItem>
-                                <SelectItem value="France">France</SelectItem>
-                                <SelectItem value="Taiwan">Taiwan</SelectItem>
-                                <SelectItem value="China">China</SelectItem>
-                            </SelectGroup>
-                        </SelectContent> */}
                     </Select>
                 </div>
 
@@ -117,8 +120,8 @@ export default function FilterBox() {
                         <SelectContent>
                             <SelectGroup>
                                 <SelectLabel>Status</SelectLabel>
-                                <SelectItem value="active">Active</SelectItem>
-                                <SelectItem value="locked">Locked</SelectItem>
+                                <SelectItem value="false">Active</SelectItem>
+                                <SelectItem value="true">Locked</SelectItem>
                             </SelectGroup>
                         </SelectContent>
                     </Select>
@@ -138,7 +141,7 @@ export default function FilterBox() {
                         <SelectContent>
                             <SelectGroup>
                                 <SelectItem value="a-z">A-Z</SelectItem>
-                                <SelectItem value="z-a">Z-A</SelectItem>
+                                <SelectItem value="newest">Newest</SelectItem>
                             </SelectGroup>
                         </SelectContent>
                     </Select>
@@ -160,6 +163,6 @@ export default function FilterBox() {
                     />
                 </div>
             </div>
-        </form>
+        </div>
     );
 }
