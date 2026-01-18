@@ -1,4 +1,5 @@
 // Fahim
+"use client"
 import type { Metadata } from "next";
 import "@/app/globals.css";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -7,7 +8,6 @@ import AppSidebar from "../../components/common/AppSidebar";
 import { ViewProvider } from "../../ListGridContext";
 import { Poppins } from "next/font/google";
 import NavBarWithTrigger from "../../components/common/NavBarWithTrigger";
-
 
 const poppinsFont = Poppins({
     subsets: ["latin"],

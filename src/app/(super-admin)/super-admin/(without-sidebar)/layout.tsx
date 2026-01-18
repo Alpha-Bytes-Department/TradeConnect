@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import LogOutModal from "../../components/common/LogOutModal";
 import { SidebarSeparator } from "@/components/ui/sidebar";
 import { Poppins } from "next/font/google";
+import Link from "next/link";
 
 const poppinsFont = Poppins({
     subsets: ["latin"],
@@ -52,9 +53,10 @@ function NavbarWithoutTrigger() {
         <div>
             <nav className="p-4 flex items-center justify-between">
                 {/*Left*/}
-                <div className="w-44 h-16 relative">
+                <Link href="/" className="w-44 h-16 relative transition-all 
+                group-data-[collapsible=icon]:hidden">
                     <Image src="/logos/Primary_Logo.png" alt="main-logo" fill />
-                </div>
+                </Link>
 
                 {/*Right*/}
                 <div className="flex justify-end items-center gap-3">
@@ -63,8 +65,10 @@ function NavbarWithoutTrigger() {
                             className="rounded-full" />
                     </div>
                     <div>
-                        <h1 className="font-poppins text-[#252525]">Admin</h1>
-                        <p className="font-poppins text-[#595959]">admin@business.com</p>
+                        <h1 className="font-poppins text-[#252525]">
+                            {localStorage.getItem("user_name")}</h1>
+                        <p className="font-poppins text-[#595959]">
+                            {localStorage.getItem("user_email")}</p>
                     </div>
                     <Popover>
                         <PopoverTrigger asChild>
