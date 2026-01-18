@@ -1,7 +1,6 @@
 // Fahim
 "use client"
 import { type ColumnDef } from "@tanstack/react-table"
-import { cn } from "@/lib/utils";
 import { Eye, SquarePen } from "lucide-react";
 import { redirect } from "next/navigation";
 
@@ -9,12 +8,12 @@ import { redirect } from "next/navigation";
 // You can use a Zod schema here if you want.
 
 export type dashboardLatestBusiness = {
-    id: number;
+    id: string;
     business_name: string,
     country: string,
     last_login: string,
+    logo: string,
     status: string,
-    banner_src: string
 };
 
 export const columns: ColumnDef<dashboardLatestBusiness>[] = [
@@ -27,7 +26,7 @@ export const columns: ColumnDef<dashboardLatestBusiness>[] = [
         header: "Business Name",
         cell: ({ row }) => {
             const businessName = row.getValue("business_name") as string;
-            const businessPhoto = row.original.banner_src;
+            const businessPhoto = row.original.logo;
             return (
                 <div className="flex items-center gap-3">
                     <img
@@ -40,6 +39,7 @@ export const columns: ColumnDef<dashboardLatestBusiness>[] = [
             );
         },
     },
+
     {
         accessorKey: "country",
         header: "Country",
@@ -48,6 +48,7 @@ export const columns: ColumnDef<dashboardLatestBusiness>[] = [
         accessorKey: "last_login",
         header: "Last Login",
     },
+
     {
         accessorKey: "status",
         header: "Status",
@@ -64,36 +65,32 @@ export const columns: ColumnDef<dashboardLatestBusiness>[] = [
             );
         },
     },
+
     {
         id: "actions",
         header: "Actions",
         cell: ({ row }) => {
             const business = row.original;
 
+            const handleViewDetails = () => {
+                redirect(`/super-admin/business-details/${business.id}`);
+            };
+
             const handleEdit = () => {
-                console.log("Edit business:", business.id);
-            };
-
-            const handleDelete = () => {
-                console.log("Delete business:", business.id);
-            };
-
-            const handleLock = () => {
-                console.log("Lock business:", business.id);
+                redirect(`/super-admin/edit-business/${business.id}`);
             };
 
             return (
                 <div className="flex items-center gap-2">
                     <button
-                        onClick={() => redirect("/super-admin/business-details")}
+                        onClick={handleViewDetails}
                         className="h-8 w-8 flex items-center justify-center rounded-sm  
                         text-[#2459B1] hover:bg-red-100 transition-colors cursor-pointer"
                     >
                         <Eye className="h-4 w-4" />
                     </button>
                     <button
-                        //onClick={handleEdit}
-                        onClick={() => { redirect("/super-admin/edit-business") }}
+                        onClick={handleEdit}
                         className="h-8 w-8 flex items-center justify-center rounded-sm 
                         hover:bg-gray-400 hover:text-white transition-colors cursor-pointer"
                     >

@@ -511,7 +511,7 @@ const businessFormSchema = z.object({
     servicesOffered: z.string().min(1, "Services offered is required"),
     aboutBusiness: z.string().min(1, "About business is required"),
     bannerImage: z.instanceof(File, { message: "Banner image is required" }),
-    // membershipValidTill: z.date({ message: "Membership date is required" })
+    membershipValidTill: z.date({ message: "Membership date is required" })
 });
 
 type BusinessFormData = z.infer<typeof businessFormSchema>;
@@ -617,10 +617,23 @@ export default function CreateBusinessForm() {
             formData.append("country", data.country); // Now sends UUID instead of name
             formData.append("full_address", data.fullAddress);
             formData.append("website", data.websiteURL);
-            formData.append("services_offered", data.servicesOffered);
+            formData.append("services", data.servicesOffered);
             formData.append("about_business", data.aboutBusiness);
             formData.append("logo", data.bannerImage);
             // formData.append("membership_valid_till", data.membershipValidTill.toISOString());
+            // 2026-01-15T01:38:58.016109Z
+
+            const isoDate = data.membershipValidTill;
+            const date = new Date(isoDate);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+            const year = date.getFullYear();
+
+            const formattedDate = `${day}/${month}/${year}`;
+            console.log(formattedDate); // "23/01/2026"
+
+            formData.append("membership_valid_till", formattedDate);
+            // console.log("Membership:", data.membershipValidTill.toISOString());
 
             const response = await axios.post(
                 "https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/create-with-user/",
@@ -799,6 +812,47 @@ export default function CreateBusinessForm() {
                         </p>
                     )}
                 </div>
+            </div>
+
+            <div className="w-full lg:w-1/2 grid gap-2 items-center mt-4">
+                <label htmlFor="membership" className="font-poppins text-[#000000]">
+                    Membership Valid Till*</label>
+                <div className="w-full">
+                    <Controller
+                        name="membershipValidTill"
+                        control={control}
+                        render={({ field }) => (
+                            <Popover open={open} onOpenChange={setOpen}>
+                                <PopoverTrigger asChild>
+                                    <Button
+                                        variant="outline"
+                                        id="date"
+                                        className="w-full justify-between font-normal font-poppins 
+                                            text-[#313131] cursor-pointer">
+                                        {field.value ? field.value.toLocaleDateString() : "DD / MM / YYYY"}
+                                        <CalendarHeartIcon />
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+                                    <Calendar
+                                        mode="single"
+                                        selected={field.value}
+                                        captionLayout="dropdown"
+                                        onSelect={(selectedDate) => {
+                                            field.onChange(selectedDate)
+                                            setOpen(false)
+                                        }}
+                                    />
+                                </PopoverContent>
+                            </Popover>
+                        )}
+                    />
+                </div>
+                {errors.membershipValidTill && (
+                    <p className="text-red-500 text-sm font-poppins mt-1">
+                        {errors.membershipValidTill.message}
+                    </p>
+                )}
             </div>
 
             <div className="w-full grid gap-2 items-center mt-4">
