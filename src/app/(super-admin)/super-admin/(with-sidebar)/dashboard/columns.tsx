@@ -1,7 +1,6 @@
 // Fahim
 "use client"
 import { type ColumnDef } from "@tanstack/react-table"
-import { cn } from "@/lib/utils";
 import { Eye, SquarePen } from "lucide-react";
 import { redirect } from "next/navigation";
 
@@ -13,8 +12,8 @@ export type dashboardLatestBusiness = {
     business_name: string,
     country: string,
     last_login: string,
+    logo: string,
     status: string,
-    banner_src: string
 };
 
 export const columns: ColumnDef<dashboardLatestBusiness>[] = [
@@ -27,7 +26,7 @@ export const columns: ColumnDef<dashboardLatestBusiness>[] = [
         header: "Business Name",
         cell: ({ row }) => {
             const businessName = row.getValue("business_name") as string;
-            const businessPhoto = row.original.banner_src;
+            const businessPhoto = row.original.logo;
             return (
                 <div className="flex items-center gap-3">
                     <img

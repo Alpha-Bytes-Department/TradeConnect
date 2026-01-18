@@ -4,30 +4,12 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Mail, LockKeyhole, Eye, EyeOff } from 'lucide-react';
 import { useState } from "react";
-// import { z } from "zod";
-// import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { redirect, useRouter } from "next/navigation";
 import { FaArrowRight } from "react-icons/fa6";
 import axios from "axios";
 import { useView } from "./(super-admin)/ListGridContext";
 import Image from "next/image";
-
-// const SignInSchema = z.object({
-//   emailAddress: z
-//     .string()
-//     .email("Incorrect Email")
-//     .toLowerCase()
-//     .trim(),
-
-//   password: z
-//     .string()
-//     .min(8, "Wrong Password")
-//     .regex(
-//       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-//       "Password must contain at least one uppercase letter, one lowercase letter and one number"
-//     ),
-// });
 
 // Type inference from schema
 // type SignInFormData = z.infer<typeof SignInSchema>;
@@ -64,7 +46,6 @@ export default function SignIn() {
         },
         {
           headers: { 'Content-Type': 'application/json' },
-          // withCredentials: true
         }
       );
       console.log(JSON.stringify(response?.data));
@@ -81,15 +62,20 @@ export default function SignIn() {
       // Check if we received a valid token
       const token = response?.data?.tokens?.access;
 
+      // console.log("ff",user,email);
       if (!token) {
         throw new Error("No authentication token received");
       }
 
       // Store the token
       localStorage.setItem('accessToken', token);
-      localStorage.setItem('n1X_ang@xinl23446', response.data.user.id);
-      localStorage.setItem('user', response.data.user);
-      setAuth({ accessToken: token });
+      localStorage.setItem('n1X_ang@xinl23446', response?.data?.user?.id);
+
+      localStorage.setItem('user_name', response?.data?.user?.full_name);
+      localStorage.setItem('user_email', response?.data?.user?.email);
+      localStorage.setItem('user_phone', response?.data?.user?.phone_number);
+
+      // setAuth({ accessToken: token });
 
       // // Store user data if needed
       // if (response.data.is_superuser !== undefined) {
@@ -97,7 +83,7 @@ export default function SignIn() {
       // }
 
       // Now redirect based on role
-      if (response.data.user.is_superuser === true) {
+      if (response?.data?.user?.is_superuser === true) {
         router.push("/super-admin/dashboard");
       } else {
         router.push("/admin/dashboard");
