@@ -2,6 +2,7 @@
 
 import { useState,useEffect } from 'react';
 import { X, Star, ChevronDown } from 'lucide-react';
+import api from '@/app/api';
 interface Contact {
     id: string;
     full_name: string;
@@ -30,16 +31,18 @@ interface updateContactModalProps {
 
 
 const roles = [
-    'Chief Executive Officer (CEO)',
-    'Chief Technology Officer (CTO)',
-    'Chief Operating Officer (COO)',
-    'Chief Financial Officer (CFO)',
-    'Managing Director',
-    'General Manager',
-    'Sales Manager',
-    'Marketing Manager',
-    'Operations Manager',
-    'other',
+    { id: 'ceo', title: 'CEO'},
+    { id: 'managing_director', title: 'Managing Director'},
+    { id: 'operations_manager', title: 'Operations Manager'},
+    { id: 'sales_manager', title: 'Sales Manager'},
+    { id: 'business_development_manager', title: 'Business Development Manager'},
+    { id: 'account_manager', title: 'Account Manager'},
+    { id: 'customer_service_manager', title: 'Customer Service Manager'},
+    { id: 'general_manager', title: 'General Manager'},
+    { id: 'director', title: 'Director'},
+    { id: 'partner', title: 'Partner'},
+    { id: 'owner', title: 'Owner'},
+    { id: 'other', title: 'Other'},
 ];
 
 export default function EditContactModal({ isOpen, onClose, onSubmit, contact }: updateContactModalProps) {
@@ -54,6 +57,7 @@ export default function EditContactModal({ isOpen, onClose, onSubmit, contact }:
     });
 
     const [otherPosition, setOtherPosition] = useState<string>(formData.custom_role? formData.custom_role:'')
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
 
     useEffect(() => {
@@ -64,9 +68,38 @@ export default function EditContactModal({ isOpen, onClose, onSubmit, contact }:
 
     const [isRoleDropdownOpen, setIsRoleDropdownOpen] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async(e: React.FormEvent) => {
         e.preventDefault();
         formData.role === 'other' ? onSubmit({ ...formData, custom_role: otherPosition }) : onSubmit({...formData, custom_role: null})
+
+        setIsLoading(true);
+
+
+        const { id, ...rest } = formData;
+
+        const payload = {
+            ...rest,
+            custom_role: rest.role === 'other' ? otherPosition : null,
+        };
+        console.log('||||||||||||||||||||||||||||||||||||||||||||||||||',payload)
+
+
+        try {
+
+            const response = await api.patch(`business/contact-persons/${id}/`, payload);
+
+
+            onSubmit(response.data || payload);
+
+            
+            onClose();
+        } catch (error) {
+            console.error('Failed to add contact person:', error);
+
+        } finally {
+            setIsLoading(false);
+        }
+
         setOtherPosition('')
         onClose();
     };
@@ -147,7 +180,7 @@ export default function EditContactModal({ isOpen, onClose, onSubmit, contact }:
                                         className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-left flex items-center justify-between bg-white"
                                     >
                                         <span className={formData.role ? 'text-gray-900' : 'text-gray-400'}>
-                                            {formData.role || 'Select a role'}
+                                            {formData.role?roles?.find((r)=>r?.id===formData?.role)?.title:'Select a role' }
                                         </span>
                                         <ChevronDown
                                             className={`w-5 h-5 text-gray-400 transition-transform ${isRoleDropdownOpen ? 'rotate-180' : ''
@@ -160,15 +193,15 @@ export default function EditContactModal({ isOpen, onClose, onSubmit, contact }:
                                         <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto animate-fadeIn">
                                             {roles.map((role) => (
                                                 <button
-                                                    key={role}
+                                                    key={role.id}
                                                     type="button"
                                                     onClick={() => {
-                                                        setFormData({ ...formData, role:role });
+                                                        setFormData({ ...formData, role:role.id });
                                                         setIsRoleDropdownOpen(false);
                                                     }}
                                                     className="w-full px-4 py-2.5 text-left hover:bg-gray-50 text-gray-700 transition-colors first:rounded-t-lg last:rounded-b-lg"
                                                 >
-                                                    {role}
+                                                    {role.title}
                                                 </button>
                                             ))}
                                         </div>

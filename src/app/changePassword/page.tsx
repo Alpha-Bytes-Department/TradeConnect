@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { Eye, EyeClosedIcon, Lock, LockIcon, Shield, X } from 'lucide-react';
-import { CgLock } from 'react-icons/cg';
-import { RiLockPasswordFill, RiLockPasswordLine } from 'react-icons/ri';
+import { Eye, EyeClosedIcon, Shield, X } from 'lucide-react';
 import { TbLockPassword } from 'react-icons/tb';
 import Navbar from '../(admin)/admin/components/common/NavBar';
 import { SidebarProvider } from '@/components/ui/sidebar';
+import api from '@/app/api'; // Import your API helper
+import { toast } from 'sonner'; // Assuming you use Sonner for toasts
 
 export default function ChangePassword() {
     const [currentPassword, setCurrentPassword] = useState('');
@@ -16,38 +16,69 @@ export default function ChangePassword() {
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [match,setMatch]  = useState<boolean>(false)
+    const [match, setMatch] = useState<boolean>(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if(newPassword===confirmPassword){
-            setMatch(false)
-            setIsSubmitting(true);
-            setCurrentPassword('');
-            setNewPassword('');
-            setConfirmPassword('');
-            setIsSubmitting(false);
-        }
-        else{
-            setMatch(true)
+        setMatch(false);
+
+        // Basic Frontend Validation
+        if (newPassword !== confirmPassword) {
+            setMatch(true);
+            return;
         }
 
-        
+        if (newPassword.length < 8) {
+            toast.error("New password must be at least 8 characters long.");
+            return;
+        }
+
+        setIsSubmitting(true);
+
+        try {
+            // API Call
+            const payload = {
+                old_password: currentPassword,
+                new_password: newPassword,
+                confirm_password: confirmPassword
+            };
+
+            const response = await api.post('auth/change-password/', payload);
+
+            if (response.data?.success || response.status === 200 || response.status === 201) {
+                toast.success("Password changed successfully.");
+
+                // Clear form on success
+                setCurrentPassword('');
+                setNewPassword('');
+                setConfirmPassword('');
+            }
+        } catch (error: any) {
+            console.error("Change password error:", error);
+
+            // Handle specific API error messages if available
+            const errorMessage = error.response?.data?.message ||
+                error.response?.data?.detail ||
+                "Failed to change password. Please check your current password.";
+
+            toast.error(errorMessage);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleCancel = () => {
         setCurrentPassword('');
         setNewPassword('');
         setConfirmPassword('');
+        setMatch(false);
     };
 
     return (
         <div className="w-full min-h-screen bg-white flex justify-start items-center">
-            
-
             <SidebarProvider>
                 <div className="w-full">
-                    <Navbar/>
+                    <Navbar />
                     <div className="max-w-4xl pl-[50px] mt-8 ">
                         {/* Header */}
                         <div className="mb-8">
@@ -100,7 +131,6 @@ export default function ChangePassword() {
                                         Current Password<span className="text-red-500">*</span>
                                     </label>
                                     <div className="relative">
-
                                         <input
                                             type={showCurrentPassword ? 'text' : 'password'}
                                             value={currentPassword}
@@ -108,9 +138,7 @@ export default function ChangePassword() {
                                             placeholder={`Enter current password`}
                                             className="w-full pl-12 pr-6 py-4 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         />
-                                        {
-                                            currentPassword === '' && <TbLockPassword size={28} color={'#888888'} strokeWidth={1} className='absolute left-3 bottom-4' />
-                                        }
+                                        {currentPassword === '' && <TbLockPassword size={28} color={'#888888'} strokeWidth={1} className='absolute left-3 bottom-4' />}
                                         <button
                                             type="button"
                                             onClick={() => setShowCurrentPassword(!showCurrentPassword)}
@@ -131,7 +159,6 @@ export default function ChangePassword() {
                                         New Password<span className="text-red-500">*</span>
                                     </label>
                                     <div className="relative">
-
                                         <input
                                             type={showNewPassword ? 'text' : 'password'}
                                             value={newPassword}
@@ -139,11 +166,7 @@ export default function ChangePassword() {
                                             placeholder="Enter New password"
                                             className="w-full pl-12 pr-6 py-4 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         />
-
-                                        {
-                                            newPassword === '' && <TbLockPassword size={28} color={'#888888'} strokeWidth={1} className='absolute left-3 bottom-4' />
-                                        }
-
+                                        {newPassword === '' && <TbLockPassword size={28} color={'#888888'} strokeWidth={1} className='absolute left-3 bottom-4' />}
                                         <button
                                             type="button"
                                             onClick={() => setShowNewPassword(!showNewPassword)}
@@ -164,7 +187,6 @@ export default function ChangePassword() {
                                         Confirm Password<span className="text-red-500">*</span>
                                     </label>
                                     <div className="relative">
-
                                         <input
                                             type={showConfirmPassword ? 'text' : 'password'}
                                             value={confirmPassword}
@@ -172,12 +194,7 @@ export default function ChangePassword() {
                                             placeholder="Confirm New password"
                                             className="w-full pl-12 pr-6 py-4 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         />
-
-                                        {
-                                            confirmPassword === '' && <TbLockPassword size={28} color={'#888888'} strokeWidth={1} className='absolute left-3 bottom-4' />
-                                        }
-
-
+                                        {confirmPassword === '' && <TbLockPassword size={28} color={'#888888'} strokeWidth={1} className='absolute left-3 bottom-4' />}
                                         <button
                                             type="button"
                                             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
@@ -200,11 +217,7 @@ export default function ChangePassword() {
                                         disabled={isSubmitting}
                                         className="relative w-full fc bg-blue-500 hover:bg-blue-600 text-white font-semibold py-4 px-8 rounded-xl flex items-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg gl"
                                     >
-
-                                        {
-                                            !match && <TbLockPassword size={30} color={'#ffffff'} strokeWidth={1} className='absolute left-8 bottom-3.5' />
-                                        }
-
+                                        {!match && <TbLockPassword size={30} color={'#ffffff'} strokeWidth={1} className='absolute left-8 bottom-3.5' />}
                                         {isSubmitting ? 'Updating...' : 'Update Password'}
                                     </button>
                                     <button
@@ -227,10 +240,7 @@ export default function ChangePassword() {
                         </div>
                     </div>
                 </div>
-                
             </SidebarProvider>
-            
-           
         </div>
     );
 }

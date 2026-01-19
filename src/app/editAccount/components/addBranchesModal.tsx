@@ -8,9 +8,12 @@ interface Country {
 }
 
 interface Branch {
-  id:string;
+  id: string;
+  full_name: string;
+  address: string;
   city: string;
   country: Country;
+  phone_number: string;
 }
 
 interface AddBranchModalProps {
@@ -51,6 +54,9 @@ const AddBranchModal: React.FC<AddBranchModalProps> = ({
       id: crypto.randomUUID(),
       city: city.trim(),
       country: selectedCountry,
+      full_name: '',
+      address: '',
+      phone_number: '',
     };
 
     isData ? setData(data.map((item: Branch) => {

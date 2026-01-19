@@ -11,8 +11,11 @@ interface Country {
 }
 interface Branch {
     id: string;
+    full_name: string;
+    address: string;
     city: string;
     country: Country;
+    phone_number: string;
     
 }
 
