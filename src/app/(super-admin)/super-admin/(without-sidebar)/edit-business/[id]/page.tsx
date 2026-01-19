@@ -299,7 +299,7 @@ export default function EditBusiness() {
         if (imageToRemove.id) {
             try {
                 await axios.delete(
-                    `https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/gallery/images/${imageToRemove.id}/`,
+                    `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/gallery/images/${imageToRemove.id}/`,
                     {
                         headers: {
                             "Authorization": `Bearer ${token}`,

@@ -111,7 +111,7 @@ export const columns: ColumnDef<allBusinessesTable>[] = [
                 if (!token) return;
                 try {
                     const response = await axios.delete(
-                        `https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/${business.id}/delete/`,
+                        `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/${business.id}/delete/`,
                         {
                             headers: {
                                 Authorization: `Bearer ${token}`
@@ -131,7 +131,7 @@ export const columns: ColumnDef<allBusinessesTable>[] = [
                 if (!token) return;
                 try {
                     const response = await axios.patch(
-                        `https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/${business.id}/update/`,
+                        `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/${business.id}/update/`,
                         {
                             is_locked: !business.is_locked
                         },

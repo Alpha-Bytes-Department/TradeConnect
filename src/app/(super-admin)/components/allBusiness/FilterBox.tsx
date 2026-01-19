@@ -8,9 +8,9 @@ import { HiOutlineSearch } from "react-icons/hi";
 import { SlList } from "react-icons/sl";
 import { BsGrid3X3Gap } from "react-icons/bs";
 import { useView } from "../../ListGridContext";
+import { useFilter } from "../../FilterContext";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useFilter } from "../../FilterContext";
 
 interface FilterFormData {
     search: string;
@@ -26,39 +26,33 @@ type Country = {
     flag: string;
 };
 
+// Add props interface to receive currentPage from parent
+interface FilterBoxProps {
+    currentPage: number;
+}
 
-export default function FilterBox() {
+
+// Add props parameter
+export default function FilterBox({ currentPage }: FilterBoxProps) {
     const { list, grid, setList, setGrid } = useView();
-    const { setSearch, setCountry, setStatus, setSortBy } = useFilter();
-
+    const { setBusinesses, setTotal, setLoading } = useFilter();
     const [countries, setCountries] = useState<Country[]>([]);
-
-    const token = localStorage.getItem("accessToken");
-    if (!token) return;
 
     useEffect(() => {
         axios.get("https://squishiest-punctually-daxton.ngrok-free.dev/api/core/countries/",
             {
-                headers: {
-                    "ngrok-skip-browser-warning": "true",
-                    Authorization: `Bearer ${token}`,
-                },
+                headers: { "ngrok-skip-browser-warning": "true" },
             }
         )
             .then(response => {
                 setCountries(response?.data?.countries || []);
-                // Handle the successful response
-                // return response?.data?.countries;
-                // console.log(response.data); // The actual data payload from the server
             })
             .catch(error => {
                 console.log("failed");
-                console.log(error); // Axios rejects promises for HTTP errors
-                // Handle the error
+                console.log(error);
                 console.error('Error fetching data:', error.status);
             });
     }, []);
-
 
     const { register, setValue, watch } = useForm<FilterFormData>({
         defaultValues: {
@@ -69,16 +63,69 @@ export default function FilterBox() {
         }
     });
 
-    // Watch all form values
-    const formValues = watch();
+    // Watch individual fields instead of entire form object
+    const Search = watch("search");
+    const Country = watch("country");
+    const Status = watch("status");
+    const SortBy = watch("sortBy");
 
-    // Update context whenever form values change
+
+    // Fetch filtered data whenever form values or currentPage change
     useEffect(() => {
-        setSearch(formValues.search);
-        setCountry(formValues.country);
-        setStatus(formValues.status);
-        setSortBy(formValues.sortBy);
-    }, [formValues, setSearch, setCountry, setStatus, setSortBy]);
+        const fetchFilteredBusinesses = async () => {
+            const token = localStorage.getItem("accessToken");
+            if (!token) {
+                console.error("No access token found");
+                return;
+            }
+
+            // Set loading to true in context
+            setLoading(true);
+
+            try {
+                // Build query params from individual watched values.
+                // According to backend query params name.
+                const params = new URLSearchParams({
+                    page: currentPage.toString(),
+                    search: Search || "",
+                    country: Country || "",
+                    sort_by: SortBy || "",
+                    status: Status || ""
+                });
+
+                // Fetch data with query params
+                const response = await axios.get(
+                    `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/all/?${params.toString()}`,
+                    {
+                        headers: {
+                            "ngrok-skip-browser-warning": "true",
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+
+                // Set businesses data to context
+                setBusinesses(response?.data?.results?.businesses || []);
+                // Set total count to context
+                setTotal(response?.data?.count || 0);
+
+                console.log("Filtered Data:", response?.data?.results?.businesses);
+            }
+            catch (error) {
+                console.error("Error fetching filtered businesses:", error);
+                // Set empty array on error
+                setBusinesses([]);
+                setTotal(0);
+            }
+            finally {
+                // Set loading to false in context
+                setLoading(false);
+            }
+        };
+
+        fetchFilteredBusinesses();
+    }, [Search, Country, Status, SortBy, currentPage]); // Watch individual primitive values
+
 
     return (
         <div className="bg-[#FFFFFF] border rounded-md mt-6 p-4">
@@ -113,15 +160,15 @@ export default function FilterBox() {
                 </div>
 
                 <div>
-                    <Select onValueChange={(value) => setValue("status", value)}>
+                    <Select defaultValue="active" onValueChange={(value) => setValue("status", value)}>
                         <SelectTrigger className="w-full cursor-pointer">
                             <SelectValue placeholder="All Status" />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>
                                 <SelectLabel>Status</SelectLabel>
-                                <SelectItem value="false">Active</SelectItem>
-                                <SelectItem value="true">Locked</SelectItem>
+                                <SelectItem value="active">Active</SelectItem>
+                                <SelectItem value="locked">Locked</SelectItem>
                             </SelectGroup>
                         </SelectContent>
                     </Select>
