@@ -853,7 +853,7 @@ export default function EditBusiness() {
                                     Click to add more images
                                 </p>
                                 <p className="font-poppins text-gray-400 text-xs">
-                                    Add up to 10 images to showcase your business
+                                    Add up to 8 images to showcase your business
                                 </p>
                             </div>
 
