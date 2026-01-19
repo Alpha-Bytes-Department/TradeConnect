@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import AddContactModal from './contactsModal';
 import { Mail, Pencil, Phone, Plus, Star, Trash2 } from 'lucide-react';
+import AddContactModal from './contactsModal';
 import EditContactModal from './contactsUpdateModal';
+// 👇 Ensure this points to your actual axios instance
+import api from '@/app/api';
 
 interface Contact {
     id: string;
@@ -41,12 +43,25 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
         }));
     };
 
-    const handleAddContact = (contactData: Omit<Contact, 'id'>) => {
-        const newEntry: Contact = {
-            ...contactData,
-            id: crypto.randomUUID(),
-        };
+    const roles=[
+        { id: 'ceo', title: 'CEO' },
+        { id: 'managing_director', title: 'Managing Director' },
+        { id: 'operations_manager', title: 'Operations Manager' },
+        { id: 'sales_manager', title: 'Sales Manager' },
+        { id: 'business_development_manager', title: 'Business Development Manager' },
+        { id: 'account_manager', title: 'Account Manager' },
+        { id: 'customer_service_manager', title: 'Customer Service Manager' },
+        { id: 'general_manager', title: 'General Manager' },
+        { id: 'director', title: 'Director' },
+        { id: 'partner', title: 'Partner' },
+        { id: 'owner', title: 'Owner' },
+        { id: 'other', title: 'Other' },
+    ];
 
+    // FIXED: Accepts full Contact object now. 
+    // The Modal handles the API POST and returns the backend-generated ID.
+    // We must use that ID, otherwise 'Delete' will fail due to ID mismatch.
+    const handleAddContact = (newEntry: Contact) => {
         setData((prev) => ({
             ...prev,
             // If new is primary, disable primary for others
@@ -76,11 +91,24 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
         setIsEditModalOpen(true);
     };
 
-    const onDeleteContacts = (id: string) => {
-        setData((prev) => ({
-            ...prev,
-            contacts: prev.contacts.filter((con) => con.id !== id),
-        }));
+    // FIXED: API integration for Delete
+    const onDeleteContacts = async (id: string) => {
+        // Optional: Simple confirm check to prevent accidental deletes
+        if (!window.confirm("Are you sure you want to delete this contact?")) return;
+
+        try {
+            // 1. Call API
+            await api.delete(`business/contact-persons/${id}/`);
+
+            // 2. On success, update UI
+            setData((prev) => ({
+                ...prev,
+                contacts: prev.contacts.filter((con) => con.id !== id),
+            }));
+        } catch (error) {
+            console.error("Failed to delete contact:", error);
+            // Optional: Add toast notification here
+        }
     };
 
     return (
@@ -146,7 +174,6 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
                 </div>
 
                 <div className="space-y-4">
-                    {/* OPTIMIZATION: Mapping directly from props 'data' to avoid loops */}
                     {data.contacts.map((contact) => (
                         <div key={contact.id} className="bg-gray-50 border border-blue-400 hover:bg-blue-100 rounded-lg p-4">
                             <div className="flex items-start justify-between">
@@ -160,7 +187,7 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
                                             </span>
                                         )}
                                     </div>
-                                    <p className="text-sm text-gray-600 mb-3">{contact.custom_role || contact.role}</p>
+                                    <p className="text-sm text-gray-600 mb-3">{contact.custom_role || ( contact.role ? roles.find((r) => r.id === contact.role).title : 'Select a role' )}</p>
                                     <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-600">
                                         <div className="flex items-center gap-2">
                                             <Mail className="w-4 h-4 text-gray-400" />

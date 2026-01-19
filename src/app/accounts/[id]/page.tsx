@@ -212,13 +212,14 @@ export default function AccountPage({
                 setLoading(true);
                 setError(null);
 
-                const response:any = await api.get(`business/all/`, {
+                const response:any = await api.get(`business/my/`, {
                     signal: controller.signal
                 });
 
                
 
-                const data = response.results.businesses.find((b: any) => b.id === id);
+                const data = response.results.business
+                console.log('||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||',data)
                 setBusinesses(data);
 
             } catch (err: any) {

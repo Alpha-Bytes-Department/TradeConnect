@@ -1,7 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { X, Star, ChevronDown } from 'lucide-react';
+import { X, Star, ChevronDown, Loader2 } from 'lucide-react';
+// 👇 IMPORT YOUR API INSTANCE HERE
+import api from '@/app/api'; // Adjust this path to where your axios instance is defined
+
 interface Contact {
     id: string;
     full_name: string;
@@ -12,36 +15,29 @@ interface Contact {
     is_primary: boolean;
 }
 
-interface ContactInfo {
-    office: {
-        phone_number: string;
-        email: string;
-        website: string;
-    };
-    contacts: Contact[];
-}
-
 interface AddContactModalProps {
     isOpen: boolean;
     onClose: () => void;
     onSubmit: (data: Contact) => void;
 }
 
-
 const roles = [
-    'Chief Executive Officer (CEO)',
-    'Chief Technology Officer (CTO)',
-    'Chief Operating Officer (COO)',
-    'Chief Financial Officer (CFO)',
-    'Managing Director',
-    'General Manager',
-    'Sales Manager',
-    'Marketing Manager',
-    'Operations Manager',
-    'other',
+    { id: 'ceo', title: 'CEO' },
+    { id: 'managing_director', title: 'Managing Director' },
+    { id: 'operations_manager', title: 'Operations Manager' },
+    { id: 'sales_manager', title: 'Sales Manager' },
+    { id: 'business_development_manager', title: 'Business Development Manager' },
+    { id: 'account_manager', title: 'Account Manager' },
+    { id: 'customer_service_manager', title: 'Customer Service Manager' },
+    { id: 'general_manager', title: 'General Manager' },
+    { id: 'director', title: 'Director' },
+    { id: 'partner', title: 'Partner' },
+    { id: 'owner', title: 'Owner' },
+    { id: 'other', title: 'Other' },
 ];
 
 export default function AddContactModal({ isOpen, onClose, onSubmit }: AddContactModalProps) {
+    const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState<Contact>({
         id: crypto.randomUUID(),
         full_name: '',
@@ -52,15 +48,11 @@ export default function AddContactModal({ isOpen, onClose, onSubmit }: AddContac
         is_primary: false,
     });
 
-    const [otherPosition, setOtherPosition]=useState<string>('')
-
+    const [otherPosition, setOtherPosition] = useState<string>('');
     const [isRoleDropdownOpen, setIsRoleDropdownOpen] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        formData.role === 'other' ? onSubmit({ ...formData, custom_role: otherPosition }) : onSubmit(formData)
-        setOtherPosition('')
-        // Reset form
+    // Helper to reset form to initial state
+    const resetForm = () => {
         setFormData({
             id: crypto.randomUUID(),
             full_name: '',
@@ -70,25 +62,43 @@ export default function AddContactModal({ isOpen, onClose, onSubmit }: AddContac
             phone_number: '',
             is_primary: false,
         });
-        onClose();
+        setOtherPosition('');
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsLoading(true);
+
+        
+        const { id, ...rest } = formData; 
+
+        const payload = {
+            ...rest,
+            custom_role: rest.role === 'other' ? otherPosition : null,
+        };
+
+
+        try {
+            
+            const response = await api.post('business/contact-persons/', payload);
+
+            
+            onSubmit(response.data || payload);
+
+            resetForm();
+            onClose();
+        } catch (error) {
+            console.error('Failed to add contact person:', error);
+            
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const handleCancel = () => {
-        setFormData({
-            id: crypto.randomUUID(),
-            full_name: '',
-            role: '',
-            custom_role: null,
-            email: '',
-            phone_number: '',
-            is_primary: false,
-        });
+        resetForm();
         onClose();
     };
-
-
-
-    
 
     if (!isOpen) return null;
 
@@ -97,7 +107,7 @@ export default function AddContactModal({ isOpen, onClose, onSubmit }: AddContac
             {/* Backdrop */}
             <div
                 className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 animate-fadeIn"
-                onClick={onClose}
+                onClick={isLoading ? undefined : onClose}
             />
 
             {/* Modal */}
@@ -116,7 +126,8 @@ export default function AddContactModal({ isOpen, onClose, onSubmit }: AddContac
                             </div>
                             <button
                                 onClick={onClose}
-                                className="text-gray-400 hover:text-gray-600 transition-colors p-1 hover:bg-gray-100 rounded-lg"
+                                disabled={isLoading}
+                                className="text-gray-400 hover:text-gray-600 transition-colors p-1 hover:bg-gray-100 rounded-lg disabled:opacity-50"
                             >
                                 <X className="w-5 h-5" />
                             </button>
@@ -134,10 +145,11 @@ export default function AddContactModal({ isOpen, onClose, onSubmit }: AddContac
                                 <input
                                     type="text"
                                     required
+                                    disabled={isLoading}
                                     value={formData.full_name}
                                     onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
                                     placeholder="e.x. John Smith"
-                                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400"
+                                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400 disabled:bg-gray-50"
                                 />
                             </div>
 
@@ -149,15 +161,15 @@ export default function AddContactModal({ isOpen, onClose, onSubmit }: AddContac
                                 <div className="relative">
                                     <button
                                         type="button"
+                                        disabled={isLoading}
                                         onClick={() => setIsRoleDropdownOpen(!isRoleDropdownOpen)}
-                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-left flex items-center justify-between bg-white"
+                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-left flex items-center justify-between bg-white disabled:bg-gray-50"
                                     >
                                         <span className={formData.role ? 'text-gray-900' : 'text-gray-400'}>
-                                            {formData.role || 'Select a role'}
+                                            {formData.role ? roles.find((r) => r.id === formData.role).title : 'Select a role'}
                                         </span>
                                         <ChevronDown
-                                            className={`w-5 h-5 text-gray-400 transition-transform ${isRoleDropdownOpen ? 'rotate-180' : ''
-                                                }`}
+                                            className={`w-5 h-5 text-gray-400 transition-transform ${isRoleDropdownOpen ? 'rotate-180' : ''}`}
                                         />
                                     </button>
 
@@ -166,37 +178,36 @@ export default function AddContactModal({ isOpen, onClose, onSubmit }: AddContac
                                         <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto animate-fadeIn">
                                             {roles.map((role) => (
                                                 <button
-                                                    key={role}
+                                                    key={role.id}
                                                     type="button"
                                                     onClick={() => {
-                                                        setFormData({ ...formData, role:role });
+                                                        setFormData({ ...formData, role: role.id });
                                                         setIsRoleDropdownOpen(false);
                                                     }}
                                                     className="w-full px-4 py-2.5 text-left hover:bg-gray-50 text-gray-700 transition-colors first:rounded-t-lg last:rounded-b-lg"
                                                 >
-                                                    {role}
+                                                    {role.title}
                                                 </button>
                                             ))}
                                         </div>
                                     )}
 
-                                    {
-                                        (formData.role==='other')&&(
-                                            <div>
-                                                <label className="block text-sm font-medium text-gray-700 my-2">
-                                                    Add Position<span className="text-red-500">*</span>
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    required
-                                                    value={otherPosition ? otherPosition :''}
-                                                    onChange={(e) => setOtherPosition(e.target.value) }
-                                                    placeholder="e.x. Chief Executive Officer(CEO)"
-                                                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400"
-                                                />
-                                            </div>
-                                        )
-                                    }
+                                    {(formData.role === 'other') && (
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 my-2">
+                                                Add Position<span className="text-red-500">*</span>
+                                            </label>
+                                            <input
+                                                type="text"
+                                                required
+                                                disabled={isLoading}
+                                                value={otherPosition}
+                                                onChange={(e) => setOtherPosition(e.target.value)}
+                                                placeholder="e.x. Chief Executive Officer(CEO)"
+                                                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400 disabled:bg-gray-50"
+                                            />
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
@@ -208,10 +219,11 @@ export default function AddContactModal({ isOpen, onClose, onSubmit }: AddContac
                                 <input
                                     type="email"
                                     required
+                                    disabled={isLoading}
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                     placeholder="e.x. john.smit@company.com"
-                                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400"
+                                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400 disabled:bg-gray-50"
                                 />
                             </div>
 
@@ -224,22 +236,24 @@ export default function AddContactModal({ isOpen, onClose, onSubmit }: AddContac
                                     type="tel"
                                     required
                                     maxLength={15}
+                                    disabled={isLoading}
                                     value={formData.phone_number}
-                                    onChange={(e) => setFormData({ ...formData, phone_number: e.target.value.replace(/[^\d+]/g,'') })}
+                                    onChange={(e) => setFormData({ ...formData, phone_number: e.target.value.replace(/[^\d+]/g, '') })}
                                     placeholder="e.x. +0158 246 987 654"
-                                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400"
+                                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder:text-gray-400 disabled:bg-gray-50"
                                 />
                             </div>
 
                             {/* Primary Contact Checkbox */}
                             <div className="pt-2">
-                                <label className="flex items-start gap-3 cursor-pointer group">
+                                <label className={`flex items-start gap-3 group ${isLoading ? 'cursor-not-allowed opacity-70' : 'cursor-pointer'}`}>
                                     <div className="relative flex items-center justify-center mt-0.5">
                                         <input
                                             type="checkbox"
+                                            disabled={isLoading}
                                             checked={formData.is_primary}
                                             onChange={(e) => setFormData({ ...formData, is_primary: e.target.checked })}
-                                            className="w-5 h-5 border-2 border-gray-300 rounded checked:bg-blue-600 checked:border-blue-600 cursor-pointer transition-all focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                            className="w-5 h-5 border-2 border-gray-300 rounded checked:bg-blue-600 checked:border-blue-600 transition-all focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed"
                                         />
                                     </div>
                                     <div className="flex-1">
@@ -250,8 +264,7 @@ export default function AddContactModal({ isOpen, onClose, onSubmit }: AddContac
                                             <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
                                         </div>
                                         <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-                                            The primary contact will be highlighted and displayed first in your business
-                                            profile
+                                            The primary contact will be highlighted and displayed first in your business profile
                                         </p>
                                     </div>
                                 </label>
@@ -262,16 +275,25 @@ export default function AddContactModal({ isOpen, onClose, onSubmit }: AddContac
                         <div className="flex items-center justify-end gap-3 mt-8 pt-6 border-t border-gray-100">
                             <button
                                 type="button"
+                                disabled={isLoading}
                                 onClick={handleCancel}
-                                className="px-5 py-2.5 text-sm font-medium text-red-600 border-2 border-red-600 rounded-lg hover:bg-red-50 transition-all active:scale-95"
+                                className="px-5 py-2.5 text-sm font-medium text-red-600 border-2 border-red-600 rounded-lg hover:bg-red-50 transition-all active:scale-95 disabled:opacity-50 disabled:active:scale-100"
                             >
                                 Cancel
                             </button>
                             <button
                                 type="submit"
-                                className="px-5 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-all active:scale-95 shadow-sm hover:shadow-md"
+                                disabled={isLoading}
+                                className="px-5 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-all active:scale-95 shadow-sm hover:shadow-md disabled:opacity-70 disabled:active:scale-100 flex items-center gap-2"
                             >
-                                Add Contact
+                                {isLoading ? (
+                                    <>
+                                        <Loader2 className="w-4 h-4 animate-spin" />
+                                        Adding...
+                                    </>
+                                ) : (
+                                    'Add Contact'
+                                )}
                             </button>
                         </div>
                     </form>
@@ -280,32 +302,15 @@ export default function AddContactModal({ isOpen, onClose, onSubmit }: AddContac
 
             <style jsx global>{`
         @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
+          from { opacity: 0; }
+          to { opacity: 1; }
         }
-
         @keyframes slideUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px) scale(0.95);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-          }
+          from { opacity: 0; transform: translateY(20px) scale(0.95); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
         }
-
-        .animate-fadeIn {
-          animation: fadeIn 0.2s ease-out;
-        }
-
-        .animate-slideUp {
-          animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+        .animate-fadeIn { animation: fadeIn 0.2s ease-out; }
+        .animate-slideUp { animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
       `}</style>
         </>
     );
