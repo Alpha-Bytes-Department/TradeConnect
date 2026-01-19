@@ -187,7 +187,7 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
                                             </span>
                                         )}
                                     </div>
-                                    <p className="text-sm text-gray-600 mb-3">{contact.custom_role || ( contact.role ? roles.find((r) => r.id === contact.role).title : 'Select a role' )}</p>
+                                    <p className="text-sm text-gray-600 mb-3">{contact.custom_role || ( contact.role ? roles.find((r) => r?.id === contact?.role)?.title : 'Select a role' )}</p>
                                     <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-600">
                                         <div className="flex items-center gap-2">
                                             <Mail className="w-4 h-4 text-gray-400" />

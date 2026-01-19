@@ -180,7 +180,7 @@ export default function EditContactModal({ isOpen, onClose, onSubmit, contact }:
                                         className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-left flex items-center justify-between bg-white"
                                     >
                                         <span className={formData.role ? 'text-gray-900' : 'text-gray-400'}>
-                                            {formData.role?roles.find((r)=>r.id===formData.role).title:'Select a role' }
+                                            {formData.role?roles?.find((r)=>r?.id===formData?.role)?.title:'Select a role' }
                                         </span>
                                         <ChevronDown
                                             className={`w-5 h-5 text-gray-400 transition-transform ${isRoleDropdownOpen ? 'rotate-180' : ''
