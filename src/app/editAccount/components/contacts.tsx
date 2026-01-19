@@ -123,8 +123,9 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
                         type="email"
                         value={data.office.email}
                         onChange={(e) => handleBasicChange('email', e.target.value)}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                        className="w-full px-4 py-3 border border-gray-300 text-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                         placeholder="business@company.com"
+                        disabled={true}
                     />
                 </div>
 

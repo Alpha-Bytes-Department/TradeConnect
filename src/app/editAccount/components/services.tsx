@@ -2,39 +2,49 @@
 import React, { useEffect, useState } from 'react';
 
 interface Service {
-    id: string ;
-    title: string|undefined;
+    id: string;
+    title: string | undefined;
 }
+
 interface ServicesData {
-    about_business?: string|undefined;
-    services?: Service[]|[];
+    about_business?: string | undefined;
+    services?: Service[] | [];
 }
 
 interface ContactsProps {
-    data: ServicesData|undefined;
+    data: ServicesData | undefined;
     setData: React.Dispatch<React.SetStateAction<ServicesData | undefined>>;
 }
 
 const Services: React.FC<ContactsProps> = ({ data, setData }) => {
+    const [services, setServices] = useState('');
+    const [about, setAbout] = useState('');
 
+    // Sync local state when prop data initially arrives
+    useEffect(() => {
+        if (data) {
+            // Only update local state if it's currently empty to avoid overwriting user typing
+            if (!services && data.services) {
+                setServices(data.services.map(s => s.title).join(', ') || '');
+            }
+            if (!about && data.about_business) {
+                setAbout(data.about_business || '');
+            }
+        }
+    }, [data]); // Watch data for async loading
 
-
-    const [services,setServices]=useState('')
-    const [about, setAbout] = useState('')
-
-    const handleServicesChange = (
-        e: React.ChangeEvent<HTMLTextAreaElement>
-    ) => {
-        const value = e.target.value;
-
-        const servicesArray: Service[] = value
+    const handleServicesChange = () => {
+        const servicesArray: Service[] = services
             .split(',')
             .map(item => item.trim())
             .filter(Boolean)
             .map((name, index) => ({
-                id: `${crypto.randomUUID() }-${index}`,
+                // Using crypto.randomUUID() safely
+                id: `${crypto.randomUUID()}-${index}`,
                 title: name
             }));
+
+            
 
         setData(prev => ({
             ...prev,
@@ -42,29 +52,18 @@ const Services: React.FC<ContactsProps> = ({ data, setData }) => {
         }));
     };
 
-    const handleAboutChange = (
-        e: React.ChangeEvent<HTMLTextAreaElement>
-    ) => {
+    const handleAboutChange = () => {
         setData(prev => ({
             ...prev,
-            about_business: e.target?.value
+            about_business: about
         }));
     };
-
-
-    useEffect(()=>{
-        if(data){
-            setServices(data?.services?.map(s => s.title).join(', ')||'')
-            setAbout(data.about_business ||'')
-        }
-    },[])
-    
-
+    console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX', data)
     return (
         <div className="space-y-6">
             {/* Services */}
             <div>
-                <label htmlFor="services" className="text-sm text-gray-700 mb-2">
+                <label htmlFor="services" className="text-sm text-gray-700 mb-2 block">
                     Services Offered<span className="text-red-500">*</span>
                 </label>
 
@@ -72,9 +71,9 @@ const Services: React.FC<ContactsProps> = ({ data, setData }) => {
                     id="services"
                     rows={6}
                     value={services}
-                    onChange={(e)=>setServices(e.target.value)}
+                    onChange={(e) => setServices(e.target.value)}
                     onBlur={handleServicesChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 outline-none"
                     placeholder="Software Development, Cloud Solutions, IT Consulting"
                 />
 
@@ -85,7 +84,7 @@ const Services: React.FC<ContactsProps> = ({ data, setData }) => {
 
             {/* About */}
             <div>
-                <label htmlFor="about" className="text-sm text-gray-700 mb-2">
+                <label htmlFor="about" className="text-sm text-gray-700 mb-2 block">
                     About Your Business<span className="text-red-500">*</span>
                 </label>
 
@@ -95,12 +94,13 @@ const Services: React.FC<ContactsProps> = ({ data, setData }) => {
                     onChange={(e) => setAbout(e.target.value)}
                     onBlur={handleAboutChange}
                     rows={6}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 resize-none"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 resize-none outline-none"
                     placeholder="Leading technology solutions provider with 15+ years of experience."
                 />
 
                 <p className="mt-1 text-xs text-gray-500">
-                    {data?.about_business?.length} characters
+                    {/* Fixed: Now tracks typing in real-time */}
+                    {about.length} characters
                 </p>
             </div>
         </div>

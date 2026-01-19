@@ -119,7 +119,7 @@ const ProfileLayout: React.FC = () => {
         return () => controller.abort();
     }, []);
 
-    const handleSave = async () => {
+/*    const handleSave = async () => {
         setIsSaving(true);
         // Construct payload from sub-states
         const payload = {
@@ -132,7 +132,7 @@ const ProfileLayout: React.FC = () => {
             contacts: contact.contacts,
             branches: branch.flat(),
             about_business: services.about_business,
-            services: services.services.map((s: any) => s.id || s),
+            services: services.services,
             certifications: certification,
             logo: images.logo,
             gallery: images.gallery
@@ -149,8 +149,13 @@ const ProfileLayout: React.FC = () => {
                 website: payload.website,
                 about_business: payload.about_business,
                 services: payload.services.map((s: any) => s.title).join(','),
-                certifications: payload.certifications.map((s: any) => s.id).join(','),
-                logo: payload.logo,
+                certifications: payload.certifications.map((s: any) => s.id),
+                ...(payload?.logo instanceof File && ['image/jpeg', 'image/png', 'image/jpg'].includes(payload.logo.type)
+                    ? { logo: payload.logo }
+                    : payload.logo === null
+                        ? { logo: null }
+                        : {} // Omitted from payload if it's an existing string/URL
+                ),
                
 });
 
@@ -166,6 +171,80 @@ const ProfileLayout: React.FC = () => {
             setIsSaving(false);
         }
     };
+*/
+
+
+
+
+    const handleSave = async () => {
+        setIsSaving(true);
+        const formData = new FormData();
+
+        // 1. Basic Text Fields
+        formData.append("business_name", basic.business_name || "");
+        formData.append("full_address", basic.full_address || "");
+        formData.append("phone_number", contact.office.phone || "");
+        formData.append("user_email", contact.office.email || "");
+        formData.append("website", contact.office.website || "");
+        formData.append("about_business", services.about_business || "");
+
+        // 2. Handle Country (Send as a single string ID)
+        const countryId = basic.country?.id ? basic.country.id : basic.country;
+        if (countryId) formData.append("country", countryId);
+
+        // 3. FIX: Handle Certifications (ManyToMany)
+        // We must append each ID individually to the same key
+        certification.forEach((cert: any) => {
+            const id = cert.id || cert;
+            if (id) formData.append("certifications", id);
+        });
+
+        // 4. Handle Services 
+        // If your backend expects a list of IDs/Titles, append individually:
+        
+            
+        formData.append("services", services.services.map((s: any) => s.title).join(', '));
+        ;
+
+        // 5. FIX: Logo Logic
+        // Only send if it's a new file. If null, send null/empty to clear it.
+        if (images.logo instanceof File) {
+            formData.append("logo", images.logo);
+        } else if (images.logo === null) {
+            formData.append("logo", ""); // Backend sees this as clearing the file
+        }
+        // Note: If images.logo is a URL (string), we don't append it, 
+        // so PATCH won't overwrite the existing image on the server.
+
+        // 6. Handle Gallery (Multiple Files)
+        images.gallery.forEach((item: any) => {
+            if (item instanceof File) {
+                formData.append("gallery", item);
+            }
+        });
+
+        try {
+            const res: any = await api.patch(`business/${data?.id}/update/`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+
+            if (res) {
+                // Update the main data state with the response from server
+                setData(res.business || { ...data, ...Object.fromEntries(formData) });
+                alert("Profile updated successfully!");
+            }
+        } catch (err: any) {
+            console.error("Save failed:", err.response?.data || err);
+            const errorMsg = err.response?.data ? JSON.stringify(err.response.data) : "Check your connection.";
+            alert(`Failed to save changes: ${errorMsg}`);
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+
 
     const handleCancel = () => {
         // Simple refresh to discard changes
