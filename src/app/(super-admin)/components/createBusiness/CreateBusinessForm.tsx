@@ -541,7 +541,7 @@ export default function CreateBusinessForm() {
         const fetchCountries = async () => {
             try {
                 const response = await axios.get(
-                    'https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/core/countries/',
+                    'https://squishiest-punctually-daxton.ngrok-free.dev/api/core/countries/',
                     {
                         headers: {
                             "ngrok-skip-browser-warning": "true",
@@ -636,7 +636,7 @@ export default function CreateBusinessForm() {
             // console.log("Membership:", data.membershipValidTill.toISOString());
 
             const response = await axios.post(
-                "https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/create-with-user/",
+                "https://squishiest-punctually-daxton.ngrok-free.dev/api/business/create-with-user/",
                 formData,
                 {
                     headers: {

@@ -2,45 +2,33 @@
 "use client"
 import { createContext, useContext, useState, ReactNode } from "react";
 
+// Simplified interface - only businesses data
 interface FilterContextType {
-    search: string;
-    country: string;
-    status: string;
-    sortBy: string;
-    setSearch: (value: string) => void;
-    setCountry: (value: string) => void;
-    setStatus: (value: string) => void;
-    setSortBy: (value: string) => void;
-    resetFilters: () => void;
+    businesses: any[];
+    total: number;
+    loading: boolean;
+    setBusinesses: (data: any[]) => void;
+    setTotal: (total: number) => void;
+    setLoading: (loading: boolean) => void;
 }
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined);
 
 export function FilterProvider({ children }: { children: ReactNode }) {
-    const [search, setSearch] = useState("");
-    const [country, setCountry] = useState("");
-    const [status, setStatus] = useState("");
-    const [sortBy, setSortBy] = useState("a-z");
-
-    const resetFilters = () => {
-        setSearch("");
-        setCountry("");
-        setStatus("");
-        setSortBy("a-z");
-    };
+    // Only state for businesses data
+    const [businesses, setBusinesses] = useState<any[]>([]);
+    const [total, setTotal] = useState(0);
+    const [loading, setLoading] = useState(false);
 
     return (
         <FilterContext.Provider
             value={{
-                search,
-                country,
-                status,
-                sortBy,
-                setSearch,
-                setCountry,
-                setStatus,
-                setSortBy,
-                resetFilters,
+                businesses,
+                total,
+                loading,
+                setBusinesses,
+                setTotal,
+                setLoading,
             }}
         >
             {children}
@@ -55,3 +43,6 @@ export function useFilter() {
     }
     return context;
 }
+
+
+

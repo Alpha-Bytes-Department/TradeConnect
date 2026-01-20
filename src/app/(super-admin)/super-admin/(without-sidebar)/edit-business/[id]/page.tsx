@@ -124,7 +124,7 @@ export default function EditBusiness() {
 
                 // Populate form fields with fetched data
                 setValue('businessName', data?.business?.business_name || '');
-                setValue('country', data?.business?.country?.id || '');
+                setValue('country', data?.business?.country?.name || '');
                 setValue('fullAddress', data?.business?.full_address || '');
                 setValue('emailAddress', data?.business?.user_email || '');
                 setValue('phoneNumber', data?.business?.phone_number || '');
@@ -299,7 +299,7 @@ export default function EditBusiness() {
         if (imageToRemove.id) {
             try {
                 await axios.delete(
-                    `https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/gallery/images/${imageToRemove.id}/`,
+                    `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/gallery/images/${imageToRemove.id}/`,
                     {
                         headers: {
                             "Authorization": `Bearer ${token}`,
@@ -853,7 +853,7 @@ export default function EditBusiness() {
                                     Click to add more images
                                 </p>
                                 <p className="font-poppins text-gray-400 text-xs">
-                                    Add up to 10 images to showcase your business
+                                    Add up to 8 images to showcase your business
                                 </p>
                             </div>
 
