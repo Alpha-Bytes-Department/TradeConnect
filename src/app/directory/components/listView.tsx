@@ -1,6 +1,6 @@
 import React from 'react';
 import { ExternalLink } from 'lucide-react';
-import { CompanyData } from '../page';
+import { CompanyData } from '../../(admin)/admin/dashboard/page';
 import Link from 'next/link';
 
 

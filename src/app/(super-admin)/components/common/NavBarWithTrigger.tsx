@@ -24,8 +24,10 @@ export default function NavBarWithTrigger() {
                             className="rounded-full" />
                     </div>
                     <div>
-                        <h1 className="font-poppins text-[#252525]">Admin</h1>
-                        <p className="font-poppins text-[#595959]">admin@business.com</p>
+                        <h1 className="font-poppins text-[#252525]">
+                            {localStorage.getItem("user_name")}</h1>
+                        <p className="font-poppins text-[#595959]">
+                            {localStorage.getItem("user_email")}</p>
                     </div>
                     <Popover>
                         <PopoverTrigger asChild>

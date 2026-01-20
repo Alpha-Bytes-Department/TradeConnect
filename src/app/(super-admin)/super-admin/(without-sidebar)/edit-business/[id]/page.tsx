@@ -87,7 +87,7 @@ export default function EditBusiness() {
 
     const [countries, setCountries] = useState<Country[]>([]);
     useEffect(() => {
-        axios.get("https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/core/countries/",
+        axios.get("https://squishiest-punctually-daxton.ngrok-free.dev/api/core/countries/",
             {
                 headers: { "ngrok-skip-browser-warning": "true" },
             }
@@ -112,7 +112,7 @@ export default function EditBusiness() {
         const fetchBusinessData = async () => {
             try {
                 const response = await axios.get(
-                    `https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/${id}/`,
+                    `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/${id}/`,
                     {
                         headers: {
                             "ngrok-skip-browser-warning": "true",
@@ -299,7 +299,7 @@ export default function EditBusiness() {
         if (imageToRemove.id) {
             try {
                 await axios.delete(
-                    `https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/gallery/images/${imageToRemove.id}/`,
+                    `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/gallery/images/${imageToRemove.id}/`,
                     {
                         headers: {
                             "Authorization": `Bearer ${token}`,
@@ -379,7 +379,7 @@ export default function EditBusiness() {
 
 
             const response1 = await axios.patch(
-                `https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/${id}/update/`,
+                `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/${id}/update/`,
                 formData1,
                 {
                     headers: {
@@ -390,7 +390,7 @@ export default function EditBusiness() {
                 });
 
             const response2 = await axios.post(
-                `https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/gallery/upload/${id}/`,
+                `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/gallery/upload/${id}/`,
                 formData2,
                 {
                     headers: {
@@ -401,7 +401,7 @@ export default function EditBusiness() {
                 });
 
             const response3 = await axios.patch(
-                `https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/auth/super-admin/users/change-password/`,
+                `https://squishiest-punctually-daxton.ngrok-free.dev/api/auth/super-admin/users/change-password/`,
                 formData3,
                 {
                     headers: {
@@ -853,7 +853,7 @@ export default function EditBusiness() {
                                     Click to add more images
                                 </p>
                                 <p className="font-poppins text-gray-400 text-xs">
-                                    Add up to 10 images to showcase your business
+                                    Add up to 8 images to showcase your business
                                 </p>
                             </div>
 

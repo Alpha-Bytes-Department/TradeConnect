@@ -1,6 +1,6 @@
 import React from "react";
 import Card from "./card";
-import { CompanyData } from "../page";
+import { CompanyData } from "../../(admin)/admin/dashboard/page";
 import Link from "next/link";
 
 interface CardView {

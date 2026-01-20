@@ -18,7 +18,7 @@ export default function Dashboard() {
             if (!token) return;
 
             const response = await axios.get(
-                `https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/admin/dashboard/`,
+                `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/admin/dashboard/`,
                 {
                     headers: {
                         "ngrok-skip-browser-warning": "true",

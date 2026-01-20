@@ -1,4 +1,5 @@
-import React from 'react';
+import api from '@/app/api';
+import React, { useEffect, useState } from 'react';
 
 
 interface Country {
@@ -13,21 +14,58 @@ full_address: string,
 country: Country,
 }
 
+
 interface BasicProps {
     data: Basic;
     setData: React.Dispatch<React.SetStateAction<Basic>>;
 }
 
 const Basic: React.FC<BasicProps> = ({ data, setData }) => {
+    
+    const [countries,setCountries] = useState<Country[]>([])
     const handleInputChange = (field: keyof Basic, value: string) => {
         setData(prev => ({
             ...prev,
             
-                [field]: value
+                [field]: field==='country'?countries.find((c)=>c.id===value):value,
+                
             
         }));
     };
-    const countries = ['United States', 'Canada', 'Singapore', 'France', 'Dubai', 'Argentina', 'Germany', 'Nepal', 'Finland']
+    
+    useEffect(() => {
+        const controller = new AbortController();
+
+        const fetchCountries = async () => {
+
+            try {
+                // Using your api template
+                const res: any = await api.get('/core/countries/', {
+                    signal: controller.signal
+                });
+
+                // Adjust based on your API response structure 
+                // Usually res.data or res if your interceptor handles it
+                if (res) {
+                    setCountries(res?.countries ? res?.countries : []);
+
+                }
+            } catch (err: any) {
+                if (err.name !== 'CanceledError') {
+
+                }
+            }
+
+        };
+
+        fetchCountries();
+
+        return () => controller.abort();
+    }, []);
+
+
+
+
     return (
         <div className="w-full space-y-6">
             {/* Business business_name and Country Row */}
@@ -54,7 +92,7 @@ const Basic: React.FC<BasicProps> = ({ data, setData }) => {
                     </label>
                     <select
                         id="country"
-                        value={data?.country?.name}
+                        value={data?.country.id}
                         onChange={(e) => handleInputChange('country', e.target.value)}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 appearance-none bg-white cursor-pointer"
                         style={{
@@ -67,7 +105,7 @@ const Basic: React.FC<BasicProps> = ({ data, setData }) => {
                         
                         
                     >
-                        {countries.map((country,index)=><option key={index} value={country}>{country}</option>)}
+                        {countries.map((country)=><option key={country.id} value={country.id}>{country.name}</option>)}
                         
                     </select>
                 </div>

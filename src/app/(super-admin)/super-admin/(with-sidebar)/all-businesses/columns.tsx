@@ -78,7 +78,31 @@ export const columns: ColumnDef<allBusinessesTable>[] = [
     },
 
     {
+        id: "activePeriod",
         header: "Active Period",
+        accessorFn: (row) => row.created_at, // original date is kept for sorting
+        cell: ({ row }) => {
+            const createdStr = row.original.created_at as string;
+            if (!createdStr) return "N/A";
+
+            const createdDate = new Date(createdStr);
+            if (isNaN(createdDate.getTime())) return "Invalid";
+
+            const now = new Date(); // current date & time
+
+            let months =
+                (now.getFullYear() - createdDate.getFullYear()) * 12 +
+                (now.getMonth() - createdDate.getMonth());
+
+            // if date of current month is not passed, then reduce 1 month
+            if (now.getDate() < createdDate.getDate()) {
+                months--;
+            }
+
+            months = Math.max(0, months); // if negative, then 0
+
+            return months === 0 ? "Less than 1 month" : `${months} month ${months > 1 ? 's' : ''}`;
+        },
     },
 
     {
@@ -111,7 +135,7 @@ export const columns: ColumnDef<allBusinessesTable>[] = [
                 if (!token) return;
                 try {
                     const response = await axios.delete(
-                        `https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/${business.id}/delete/`,
+                        `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/${business.id}/delete/`,
                         {
                             headers: {
                                 Authorization: `Bearer ${token}`
@@ -131,7 +155,7 @@ export const columns: ColumnDef<allBusinessesTable>[] = [
                 if (!token) return;
                 try {
                     const response = await axios.patch(
-                        `https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/${business.id}/update/`,
+                        `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/${business.id}/update/`,
                         {
                             is_locked: !business.is_locked
                         },

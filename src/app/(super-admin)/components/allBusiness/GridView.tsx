@@ -5,72 +5,36 @@ import { useView } from "../../ListGridContext";
 // import { allBusinessData } from "../../data";
 import { MapPin } from "lucide-react";
 import { Pagination } from "antd";
-import { useEffect, useState } from "react";
-import { redirect } from "next/navigation";
-import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useFilter } from "../../FilterContext";
 
-// const getFlagEmoji = (countryCode: string) => {
-//     console.log("Country code:", countryCode); // Debug
-//     const flag = countryCode
-//         .toUpperCase()
-//         .split('')
-//         .map(char => String.fromCodePoint(127397 + char.charCodeAt(0)))
-//         .join('');
-//     console.log("Generated flag:", flag); // Debug
-//     return flag;
-// };
+interface GridViewProps {
+    currentPage: number;
+    onPageChange: (page: number) => void;
+    total: number;
+}
 
-export default function GridView() {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [datas, setDatas] = useState<any[]>([]);
-    const [total, setTotal] = useState(0);
+export default function GridView({ total, currentPage, onPageChange }: GridViewProps) {
     const pageSize = 8;
 
-    // 32 data items
-    // const allData = [...allBusinessData]; // data array
-
-    useEffect(() => {
-        const fetchBusinessDatas = async () => {
-            const token = localStorage.getItem("accessToken");
-            if (!token) return;
-
-            const response = await axios.get(
-                `https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/business/all/?country=&search=&service=&page=${currentPage}&sort_by=`,
-                {
-                    headers: {
-                        "ngrok-skip-browser-warning": "true",
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-            setDatas(response?.data?.results?.businesses);
-            setTotal(response?.data?.count);
-            // console.log("all business data:",response.data);
-            // console.log("datas:",datas);
-        };
-        fetchBusinessDatas();
-    }, [currentPage]);
-
-    // Calculate the data to display on current page
-    // const startIndex = (page - 1) * pageSize;
-    // const endIndex = startIndex + pageSize;
-    // const currentData = datas.slice(startIndex, endIndex);
-
     const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-        // Optional: scroll to top when page changes
+        // Use prop function instead of local setState
+        onPageChange(page);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
+
     const { grid } = useView();
     const router = useRouter();
+
+    // Get businesses from context
+    const { businesses } = useFilter();
 
     return (
         <div>
             {grid && (
                 <div>
                     <div className="grid grid-cols-1 xl:grid-cols-3 2xl:grid-cols-4 gap-8 mt-8">
-                        {datas.map(item => (
+                        {businesses.map(item => (
                             <div key={item.id} className="h-[460px] rounded-lg border bg-[#FFFFFF] 
                             shadow-lg">
                                 <div className="relative h-1/3">

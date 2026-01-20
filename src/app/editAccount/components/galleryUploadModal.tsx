@@ -1,11 +1,12 @@
 import { Upload } from "lucide-react";
 import React, { useState, useRef, ChangeEvent } from "react";
+import api from "@/app/api";
 
 interface GalleryUploadModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onConfirm: (files: File[]) => void;
-    currentGalleryLength: number;
+    onConfirm: () => Promise<void>;
+    currentGallery: { id: string; image: string }[];
     maxImages?: number;
 }
 
@@ -13,13 +14,14 @@ const GalleryUploadModal: React.FC<GalleryUploadModalProps> = ({
     isOpen,
     onClose,
     onConfirm,
-    currentGalleryLength,
+    currentGallery,
     maxImages = 10,
 }) => {
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+    const [isUploading, setIsUploading] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const remainingSlots = maxImages - currentGalleryLength;
+    const remainingSlots = maxImages - currentGallery.length;
 
     const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files || []);
@@ -32,7 +34,7 @@ const GalleryUploadModal: React.FC<GalleryUploadModalProps> = ({
             return;
         }
 
-        const validFiles = files.filter((file) => file.size <= 50 * 1024 * 1024);
+        const validFiles = files.filter((file) => file.size <= 5 * 1024 * 1024);
         if (validFiles.length !== files.length) {
             alert("Some files were skipped because they exceed 5MB");
         }
@@ -49,10 +51,52 @@ const GalleryUploadModal: React.FC<GalleryUploadModalProps> = ({
         setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
     };
 
-    const handleConfirm = () => {
-        onConfirm(selectedFiles);
-        setSelectedFiles([]);
-        onClose();
+    const handleConfirm = async () => {
+        if (selectedFiles.length === 0) return;
+
+        setIsUploading(true);
+
+        try {
+            console.log('Starting upload of', selectedFiles.length, 'images...');
+
+            // Create FormData to send files
+            const formData = new FormData();
+
+            // Append each file to FormData
+            selectedFiles.forEach((file) => {
+                formData.append('images', file);
+            });
+
+            // Make API call to upload images
+            const uploadResponse = await api.post('business/gallery/bulk-upload/', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            console.log('Upload completed successfully:', uploadResponse.data);
+
+            // Small delay to ensure server has processed the upload
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            console.log('Reloading gallery from parent...');
+
+            // Call parent's onConfirm to reload gallery
+            await onConfirm();
+
+            console.log('Gallery reload completed');
+
+            // Reset state
+            setSelectedFiles([]);
+
+            // Close modal after everything completes
+            onClose();
+        } catch (error) {
+            console.error('Error uploading images:', error);
+            alert('Failed to upload images. Please try again.');
+        } finally {
+            setIsUploading(false);
+        }
     };
 
     const handleCancel = () => {
@@ -83,6 +127,7 @@ const GalleryUploadModal: React.FC<GalleryUploadModalProps> = ({
                         onClick={handleCancel}
                         className="text-gray-400 hover:text-gray-600 transition-colors"
                         aria-label="Close modal"
+                        disabled={isUploading}
                     >
                         <svg
                             className="w-6 h-6"
@@ -102,23 +147,55 @@ const GalleryUploadModal: React.FC<GalleryUploadModalProps> = ({
 
                 {/* Content */}
                 <div className="px-6 py-6 space-y-6 flex-1 overflow-y-auto">
+                    {/* Current Gallery Images */}
+                    {currentGallery.length > 0 && (
+                        <div>
+                            <h3 className="text-sm font-semibold text-gray-700 mb-3">
+                                Current Gallery ({currentGallery.length}/{maxImages})
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {currentGallery.map((image, index) => (
+                                    <div
+                                        key={image.id}
+                                        className="bg-gray-50 border border-gray-200 rounded-lg p-2"
+                                    >
+                                        <div className="relative aspect-video rounded overflow-hidden bg-gray-100">
+                                            <img
+                                                src={image.image}
+                                                alt={`Current gallery ${index + 1}`}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
                     {/* Upload Area */}
                     {selectedFiles.length < remainingSlots && (
-                        <div
-                            onClick={() => fileInputRef.current?.click()}
-                            className="border-2 border-dashed border-blue-300 rounded-lg p-16 hover:border-blue-400 transition-colors cursor-pointer  hover:bg-blue-100"
-                        >
-                            <div className="flex flex-col items-center justify-center text-center">
-                                <div className="fc aspect-square bg-gray-200 p-4 rounded-full"><Upload color={'#808080ff'} size={52}/></div>
-                                <p className="text-base font-medium text-gray-700 mb-2">
-                                    Click to add more images
-                                </p>
-                                <p className="text-md text-gray-500 mb-2">
-                                    Any ratio accepted | Max 50MB | PNG, JPG
-                                </p>
-                                <p className="text-md font-medium text-blue-600">
-                                    {remainingSlots - selectedFiles.length} Slots Remaining
-                                </p>
+                        <div>
+                            <h3 className="text-sm font-semibold text-gray-700 mb-3">
+                                Add New Images
+                            </h3>
+                            <div
+                                onClick={() => !isUploading && fileInputRef.current?.click()}
+                                className="border-2 border-dashed border-blue-300 rounded-lg p-16 hover:border-blue-400 transition-colors cursor-pointer hover:bg-blue-100"
+                            >
+                                <div className="flex flex-col items-center justify-center text-center">
+                                    <div className="fc aspect-square bg-gray-200 p-4 rounded-full">
+                                        <Upload color={'#808080ff'} size={52} />
+                                    </div>
+                                    <p className="text-base font-medium text-gray-700 mb-2">
+                                        Click to add more images
+                                    </p>
+                                    <p className="text-md text-gray-500 mb-2">
+                                        Any ratio accepted | Max 5MB | PNG, JPG
+                                    </p>
+                                    <p className="text-md font-medium text-blue-600">
+                                        {remainingSlots - selectedFiles.length} Slots Remaining
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     )}
@@ -130,6 +207,7 @@ const GalleryUploadModal: React.FC<GalleryUploadModalProps> = ({
                         multiple
                         onChange={handleFileSelect}
                         className="hidden"
+                        disabled={isUploading}
                     />
 
                     {/* Selected Images */}
@@ -144,20 +222,21 @@ const GalleryUploadModal: React.FC<GalleryUploadModalProps> = ({
                                     <button
                                         onClick={() => fileInputRef.current?.click()}
                                         className="text-sm font-medium text-blue-600 hover:text-blue-700"
+                                        disabled={isUploading}
                                     >
                                         Add More
                                     </button>
                                 )}
                             </div>
 
-                            <div className="grid grid-cols-2 gap-2">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {selectedFiles.map((file, index) => (
                                     <div
                                         key={index}
-                                        className="bg-blue-50 border border-blue-200 rounded-lg p-2 flex flex-col gap-4 col-span-2 md:col-span-1 overflow-hidden relative"
+                                        className="bg-blue-50 border border-blue-200 rounded-lg p-2 flex flex-col gap-4 overflow-hidden relative"
                                     >
                                         {/* Image Preview */}
-                                        <div className="relative aspect-square rounded overflow-hidden flex-shrink-0 bg-gray-100">
+                                        <div className="relative aspect-video rounded overflow-hidden flex-shrink-0 bg-gray-100">
                                             <img
                                                 src={URL.createObjectURL(file)}
                                                 alt={file.name}
@@ -167,6 +246,7 @@ const GalleryUploadModal: React.FC<GalleryUploadModalProps> = ({
                                                 onClick={() => removeFile(index)}
                                                 className="absolute top-2 left-2 w-7 h-7 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-gray-100 transition-colors"
                                                 aria-label="Remove image"
+                                                disabled={isUploading}
                                             >
                                                 <svg
                                                     className="w-4 h-4 text-gray-700"
@@ -235,15 +315,16 @@ const GalleryUploadModal: React.FC<GalleryUploadModalProps> = ({
                 <div className="sticky bottom-0 bg-gray-50 border-t border-gray-200 px-6 py-4 flex items-center justify-start gap-3">
                     <button
                         onClick={handleConfirm}
-                        disabled={selectedFiles.length === 0}
+                        disabled={selectedFiles.length === 0 || isUploading}
                         className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center gap-2"
                     >
-                        <Upload/>
-                        Upload Images
+                        <Upload />
+                        {isUploading ? 'Uploading...' : 'Upload Images'}
                     </button>
                     <button
                         onClick={handleCancel}
                         className="px-6 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium flex items-center gap-2"
+                        disabled={isUploading}
                     >
                         <svg
                             className="w-5 h-5"

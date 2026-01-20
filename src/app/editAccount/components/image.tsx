@@ -1,34 +1,41 @@
+'use client';
 import React, { useRef, useState, ChangeEvent, useEffect } from 'react';
 import GalleryUploadModal from './galleryUploadModal';
 import { PlusCircleIcon } from 'lucide-react';
+import api from '@/app/api';
 
 // This handles the UI rendering safely without memory leaks
 const SafeImg = ({ src, alt, className }: { src: File | string | null; alt: string; className: string }) => {
     const [preview, setPreview] = useState<string>('');
 
     useEffect(() => {
-        if (!src) return;
+        if (!src) {
+            setPreview('');
+            return;
+        }
         if (typeof src === 'string') {
             setPreview(src);
             return;
         }
+        // Create a blob URL for File objects
         const url = URL.createObjectURL(src);
         setPreview(url);
+
+        // Clean up memory
         return () => URL.revokeObjectURL(url);
     }, [src]);
 
-    return preview ? <img src={preview} alt={alt} className={className} /> : null;
+    if (!preview) return null;
+    return <img src={preview} alt={alt} className={className} />;
 };
 
 interface ImagesProps {
-    // Updated to allow Files (new uploads) and strings (existing URLs)
-    data: { logo: File | string | undefined; gallery: (File | string)[] };
+    data: { logo: File | string | undefined; gallery: { id: string; image: string }[] };
     setData: React.Dispatch<React.SetStateAction<any>>;
 }
 
 const Images: React.FC<ImagesProps> = ({ data, setData }) => {
     const bannerInputRef = useRef<HTMLInputElement>(null);
-    const galleryInputRef = useRef<HTMLInputElement>(null);
     const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
 
     const MAX_SIZE = 5 * 1024 * 1024; // 5MB
@@ -39,7 +46,7 @@ const Images: React.FC<ImagesProps> = ({ data, setData }) => {
             if (file.size <= MAX_SIZE) {
                 setData((prev: any) => ({
                     ...prev,
-                    banner: file, // Fixed: removed .images nesting
+                    logo: file,
                 }));
             } else {
                 alert('File size must be less than 5MB');
@@ -47,48 +54,67 @@ const Images: React.FC<ImagesProps> = ({ data, setData }) => {
         }
     };
 
-    const handleGalleryChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const files = Array.from(e.target.files || []);
-        const currentGalleryLength = data.gallery.length;
-        const remainingSlots = 10 - currentGalleryLength;
+    const reloadGalleryFromAPI = async () => {
+        try {
+            // Add cache-busting parameter to ensure fresh data
+            const timestamp = new Date().getTime();
+            const response = await api.get(`business/my/`);
+            if (response?.business) {
+                // Check if gallery exists in response, otherwise default to empty array
+                const gallery = response?.business?.gallery || [];
 
-        if (files.length > remainingSlots) {
-            alert(`You can only add ${remainingSlots} more image(s). Maximum 10 images allowed.`);
-            return;
+                
+                setData((prev: any) => ({
+                    ...prev,
+                    gallery: gallery,
+                }));
+                console.log('Gallery reloaded:', gallery.length, 'images');
+            }
+        } catch (error) {
+            console.error('Error reloading gallery:', error);
         }
+    };
 
-        const validFiles = files.filter((file) => file.size <= MAX_SIZE);
-        if (validFiles.length !== files.length) {
-            alert('Some files were skipped because they exceed 5MB');
+    const handleGalleryUploadFromModal = async () => {
+        // Reload gallery from API after upload
+        await reloadGalleryFromAPI();
+    };
+
+    const removeGalleryImage = async (imageId: string) => {
+        // Optimistically remove from UI
+        setData((prev: any) => ({
+            ...prev,
+            gallery: prev.gallery.filter((img: any) => img.id !== imageId),
+        }));
+
+        try {
+            await api.delete(`business/gallery/images/${imageId}/`);
+            // Reload from API to ensure sync
+            await reloadGalleryFromAPI();
+        } catch (e) {
+            console.error('Error deleting image:', e);
+            // Reload from API to restore state if delete failed
+            await reloadGalleryFromAPI();
+            alert('Failed to delete image. Please try again.');
         }
-
-        setData((prev: any) => ({
-            ...prev,
-            gallery: [...prev.gallery, ...validFiles], // Fixed: removed .images nesting
-        }));
     };
 
-    const handleGalleryUploadFromModal = (files: File[]) => {
-        setData((prev: any) => ({
-            ...prev,
-            gallery: [...prev.gallery, ...files], // Fixed: removed .images nesting
-        }));
-    };
 
-    const removeGalleryImage = (index: number) => {
-        setData((prev: any) => ({
-            ...prev,
-            gallery: prev.gallery.filter((_: any, i: number) => i !== index),
-        }));
-    };
+    useEffect(()=>{
+
+        reloadGalleryFromAPI()
+
+    },[setData])
 
     return (
         <div className="w-full mx-auto space-y-8">
             {/* Banner Section */}
             <div>
-                <label className="text-sm text-gray-700 mb-2">
+                <label className="text-sm text-gray-700 mb-2 block">
                     Business banner<span className="text-red-500">*</span>
                 </label>
+
+                {/* Preview Container */}
                 {data.logo && (
                     <div className="w-full h-56 rounded-lg overflow-hidden border-2 border-gray-200 mb-4">
                         <SafeImg
@@ -122,24 +148,25 @@ const Images: React.FC<ImagesProps> = ({ data, setData }) => {
 
             {/* Gallery Section */}
             <div>
-                <label className="text-sm text-gray-700 mb-2">Gallery Images</label>
+                <label className="text-sm text-gray-700 mb-2 block">Gallery Images</label>
 
                 {data.gallery.length > 0 && (
-                    <div className="grid grid-cols-2 gap-2 mb-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         {data.gallery.map((image, index) => (
-                            <div key={index} className="relative col-span-2 md:col-span-1 group">
+                            <div key={image.id} className="relative group">
                                 <div className="aspect-video rounded-lg overflow-hidden border-2 border-gray-200">
                                     <SafeImg
-                                        src={image}
+                                        src={image.image}
                                         alt={`Gallery image ${index + 1}`}
                                         className="w-full h-full object-cover"
                                     />
                                 </div>
                                 <button
-                                    onClick={() => removeGalleryImage(index)}
-                                    className="absolute top-3 right-3 w-6 h-6 bg-white shadow-md shadow-gray-500 hover:bg-opacity-90 rounded-full flex items-center justify-center transition-all"
+                                    type="button"
+                                    onClick={() => removeGalleryImage(image.id)}
+                                    className="absolute top-3 right-3 w-8 h-8 bg-white shadow-md hover:bg-gray-100 rounded-full flex items-center justify-center transition-all border border-gray-200"
                                 >
-                                    <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
                                     </svg>
                                 </button>
@@ -154,7 +181,7 @@ const Images: React.FC<ImagesProps> = ({ data, setData }) => {
                         className="border-2 border-dashed border-gray-300 rounded-lg p-16 hover:border-gray-400 transition-colors cursor-pointer bg-gray-50 hover:bg-gray-100"
                     >
                         <div className="flex flex-col items-center justify-center text-center">
-                            <div className="bg-orange-500 rounded-full shadow-md hover:shadow-lg shadow-orange-500 text-white flex items-center justify-center h-20 w-20 mb-10">
+                            <div className="bg-orange-500 rounded-full shadow-md hover:shadow-lg text-white flex items-center justify-center h-20 w-20 mb-10 transition-transform active:scale-95">
                                 <PlusCircleIcon size={45} strokeWidth={1} />
                             </div>
                             <p className="text-base font-medium text-gray-700 mb-1">Add gallery images.</p>
@@ -168,7 +195,7 @@ const Images: React.FC<ImagesProps> = ({ data, setData }) => {
                 isOpen={isGalleryModalOpen}
                 onClose={() => setIsGalleryModalOpen(false)}
                 onConfirm={handleGalleryUploadFromModal}
-                currentGalleryLength={data.gallery.length}
+                currentGallery={data.gallery}
                 maxImages={10}
             />
         </div>

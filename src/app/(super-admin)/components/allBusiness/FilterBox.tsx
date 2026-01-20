@@ -8,6 +8,7 @@ import { HiOutlineSearch } from "react-icons/hi";
 import { SlList } from "react-icons/sl";
 import { BsGrid3X3Gap } from "react-icons/bs";
 import { useView } from "../../ListGridContext";
+import { useFilter } from "../../FilterContext";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -25,35 +26,35 @@ type Country = {
     flag: string;
 };
 
+// Add props interface to receive currentPage from parent
+interface FilterBoxProps {
+    currentPage: number;
+}
 
-export default function FilterBox() {
+
+// Add props parameter
+export default function FilterBox({ currentPage }: FilterBoxProps) {
     const { list, grid, setList, setGrid } = useView();
-
+    const { setBusinesses, setTotal, setLoading } = useFilter();
     const [countries, setCountries] = useState<Country[]>([]);
 
     useEffect(() => {
-        axios.get("https://rihanna-preacquisitive-eleanore.ngrok-free.dev/api/core/countries/",
+        axios.get("https://squishiest-punctually-daxton.ngrok-free.dev/api/core/countries/",
             {
                 headers: { "ngrok-skip-browser-warning": "true" },
             }
         )
             .then(response => {
                 setCountries(response?.data?.countries || []);
-                // console.log("success");
-                // Handle the successful response
-                // return response?.data?.countries;
-                // console.log(response.data); // The actual data payload from the server
             })
             .catch(error => {
                 console.log("failed");
-                console.log(error); // Axios rejects promises for HTTP errors
-                // Handle the error
+                console.log(error);
                 console.error('Error fetching data:', error.status);
             });
     }, []);
 
-
-    const { register, setValue, watch, handleSubmit } = useForm<FilterFormData>({
+    const { register, setValue, watch } = useForm<FilterFormData>({
         defaultValues: {
             search: "",
             country: "",
@@ -62,13 +63,72 @@ export default function FilterBox() {
         }
     });
 
-    const onSubmit = (data: FilterFormData) => {
-        console.log("Form data:", data);
-        // Handle form submission here
-    };
+    // Watch individual fields instead of entire form object
+    const Search = watch("search");
+    const Country = watch("country");
+    const Status = watch("status");
+    const SortBy = watch("sortBy");
+
+
+    // Fetch filtered data whenever form values or currentPage change
+    useEffect(() => {
+        const fetchFilteredBusinesses = async () => {
+            const token = localStorage.getItem("accessToken");
+            if (!token) {
+                console.error("No access token found");
+                return;
+            }
+
+            // Set loading to true in context
+            setLoading(true);
+
+            try {
+                // Build query params from individual watched values.
+                // According to backend query params name.
+                const params = new URLSearchParams({
+                    page: currentPage.toString(),
+                    search: Search || "",
+                    country: Country || "",
+                    sort_by: SortBy || "",
+                    status: Status || ""
+                });
+
+                // Fetch data with query params
+                const response = await axios.get(
+                    `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/all/?${params.toString()}`,
+                    {
+                        headers: {
+                            "ngrok-skip-browser-warning": "true",
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+
+                // Set businesses data to context
+                setBusinesses(response?.data?.results?.businesses || []);
+                // Set total count to context
+                setTotal(response?.data?.count || 0);
+
+                console.log("Filtered Data:", response?.data?.results?.businesses);
+            }
+            catch (error) {
+                console.error("Error fetching filtered businesses:", error);
+                // Set empty array on error
+                setBusinesses([]);
+                setTotal(0);
+            }
+            finally {
+                // Set loading to false in context
+                setLoading(false);
+            }
+        };
+
+        fetchFilteredBusinesses();
+    }, [Search, Country, Status, SortBy, currentPage]); // Watch individual primitive values
+
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="bg-[#FFFFFF] border rounded-md mt-6 p-4">
+        <div className="bg-[#FFFFFF] border rounded-md mt-6 p-4">
             <div className="grid grid-cols-1 xl:grid-cols-4 gap-4">
                 <div className="relative xl:col-span-2">
                     <Input
@@ -96,21 +156,11 @@ export default function FilterBox() {
                                 ))}
                             </SelectGroup>
                         </SelectContent>
-                        {/* <SelectContent>
-                            <SelectGroup>
-                                <SelectLabel>Countries</SelectLabel>
-                                <SelectItem value="Bangladesh">Bangladesh</SelectItem>
-                                <SelectItem value="Germany">Germany</SelectItem>
-                                <SelectItem value="France">France</SelectItem>
-                                <SelectItem value="Taiwan">Taiwan</SelectItem>
-                                <SelectItem value="China">China</SelectItem>
-                            </SelectGroup>
-                        </SelectContent> */}
                     </Select>
                 </div>
 
                 <div>
-                    <Select onValueChange={(value) => setValue("status", value)}>
+                    <Select defaultValue="active" onValueChange={(value) => setValue("status", value)}>
                         <SelectTrigger className="w-full cursor-pointer">
                             <SelectValue placeholder="All Status" />
                         </SelectTrigger>
@@ -138,7 +188,7 @@ export default function FilterBox() {
                         <SelectContent>
                             <SelectGroup>
                                 <SelectItem value="a-z">A-Z</SelectItem>
-                                <SelectItem value="z-a">Z-A</SelectItem>
+                                <SelectItem value="newest">Newest</SelectItem>
                             </SelectGroup>
                         </SelectContent>
                     </Select>
@@ -160,6 +210,6 @@ export default function FilterBox() {
                     />
                 </div>
             </div>
-        </form>
+        </div>
     );
 }

@@ -1,4 +1,5 @@
 // Fahim
+"use client"
 import type { Metadata } from "next";
 import "@/app/globals.css";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -7,7 +8,7 @@ import AppSidebar from "../../components/common/AppSidebar";
 import { ViewProvider } from "../../ListGridContext";
 import { Poppins } from "next/font/google";
 import NavBarWithTrigger from "../../components/common/NavBarWithTrigger";
-
+import { FilterProvider } from "../../FilterContext";
 
 const poppinsFont = Poppins({
     subsets: ["latin"],
@@ -31,15 +32,17 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={`${poppinsFont.variable} antialiased`}>
-                <ViewProvider>
-                    <SidebarProvider>
-                        <AppSidebar />
-                        <main className="w-full">
-                            <NavBarWithTrigger />
-                            {children}
-                        </main>
-                    </SidebarProvider>
-                </ViewProvider>
+                <FilterProvider>
+                    <ViewProvider>
+                        <SidebarProvider>
+                            <AppSidebar />
+                            <main className="w-full">
+                                <NavBarWithTrigger />
+                                {children}
+                            </main>
+                        </SidebarProvider>
+                    </ViewProvider>
+                </FilterProvider>
             </body>
         </html>
     );

@@ -50,9 +50,9 @@ export default function AppSidebar() {
     return (
         <Sidebar collapsible="icon" side="left" className="font-poppins text-base">
             <SidebarHeader className="h-20 py-1 flex items-center justify-center">
-                <div className="w-44 h-16 relative transition-all group-data-[collapsible=icon]:hidden">
+                <Link href="/" className="w-44 h-16 relative transition-all group-data-[collapsible=icon]:hidden">
                     <Image src="/logos/Primary_Logo.png" alt="main-logo" fill />
-                </div>
+                </Link>
             </SidebarHeader>
             <SidebarSeparator />
 
