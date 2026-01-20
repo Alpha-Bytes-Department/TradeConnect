@@ -202,7 +202,8 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
                 </div>
 
                 <div className="space-y-4">
-                    {data.contacts.map((contact) => (
+                    {data.contacts.map((contact) => (contact.is_primary === false ? null :
+                        (
                         <div key={contact.id} className="bg-gray-50 border border-blue-400 hover:bg-blue-100 rounded-lg p-4">
                             <div className="flex items-start justify-between">
                                 <div className="flex-1">
@@ -236,8 +237,46 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
                                     </button>
                                 </div>
                             </div>
-                        </div>
+                        </div>)
                     ))}
+                    {data.contacts.map((contact) => (contact.is_primary === true ? null :
+                        (
+                            <div key={contact.id} className="bg-gray-50 border border-blue-400 hover:bg-blue-100 rounded-lg p-4">
+                                <div className="flex items-start justify-between">
+                                    <div className="flex-1">
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <h3 className="text-base font-medium text-gray-900 mb-2">{contact.full_name}</h3>
+                                            {contact.is_primary && (
+                                                <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-orange-100 text-orange-400 border border-orange-400 rounded-full text-xs font-medium">
+                                                    <Star className="w-3 h-3 fill-orange-400" />
+                                                    Primary
+                                                </span>
+                                            )}
+                                        </div>
+                                        <p className="text-sm text-gray-600 mb-3">{contact.custom_role || (contact.role ? roles.find((r) => r?.id === contact?.role)?.title : 'Select a role')}</p>
+                                        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-600">
+                                            <div className="flex items-center gap-2">
+                                                <Mail className="w-4 h-4 text-gray-400" />
+                                                <span>{contact.email}</span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <Phone className="w-4 h-4 text-gray-400" />
+                                                <span>{contact.phone_number}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-2 ml-4">
+                                        <button onClick={() => onEditContact(contact.id)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                                            <Pencil className="w-4 h-4" />
+                                        </button>
+                                        <button onClick={() => onDeleteContacts(contact.id)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                            <Trash2 className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>)
+                    ))}
+
                 </div>
             </div>
 
