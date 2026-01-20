@@ -149,6 +149,24 @@ export default function Dashboard() {
 
     const [recentlyViewed, setRecentlyViewed] = useState<Business[]>([])
 
+    
+        const increaseBusinessView = async (id:string) => {
+            try {
+                const response = await api.post(`/business/${id}/increase-view/`);
+    
+                if (!response) {
+                    throw new Error(`HTTP error! status: ${response}`);
+                }
+    
+                
+            } catch (error) {
+                console.error('Error increasing business view:', error);
+                throw error;
+            }
+            
+        };
+    
+
     useEffect(() => {
         const controller = new AbortController()
 
@@ -157,7 +175,7 @@ export default function Dashboard() {
                 const res = await api.get(`business/dashboard/`, {
                     signal: controller.signal,
                 });
-                if (!controller.signal.aborted) setData(res.data);
+                if (!controller.signal.aborted) setData(res.data.data);
             } catch (err: any) {
                 // handle error
             }
@@ -179,8 +197,8 @@ export default function Dashboard() {
                     signal: controller.signal,
                 });
 
-                if (!controller.signal.aborted && Array.isArray(res.data)) {
-                    setRecentlyViewed(res.data.map((r: any) => {
+                if (!controller.signal.aborted && Array.isArray(res.data.data)) {
+                    setRecentlyViewed(res.data.data.map((r: any) => {
                         return {
                             business_name: r.business_name?.business_name || r.business_name || '',
                             country: r.country || '',
@@ -210,12 +228,12 @@ export default function Dashboard() {
                     signal: controller.signal,
                 });
                 if (!controller.signal.aborted) setMyData({
-                    id: res.business?.id,
-                    business_name: res.business?.business_name,
-                    user_email: res.business?.user_email,
-                    logo: res.business?.logo,
-                    country: res.business?.country?.name,
-                    updated_at: res.business?.updated_at,
+                    id: res.data.business?.id,
+                    business_name: res.data.business?.business_name,
+                    user_email: res.data.business?.user_email,
+                    logo: res.data.business?.logo,
+                    country: res.data.business?.country?.name,
+                    updated_at: res.data.business?.updated_at,
                 });
             } catch (err: any) {
                 // handle error
@@ -413,7 +431,7 @@ export default function Dashboard() {
                         {/* Public View Button */}
                         <div className="flex-shrink-0 lg:self-end">
                             <button
-                                onClick={() => router.push(`/accounts/${myData.id}`)}
+                                onClick={async () => { await increaseBusinessView(myData.id); router.push(`/accounts/${myData.id}/`) }}
                                 className="w-full m-1 sm:w-auto bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
                             >
                                 <Eye className="w-5 h-5" />
@@ -470,7 +488,7 @@ export default function Dashboard() {
                                         <td className="py-5 px-6 text-slate-700 max-w-md truncate">{business.services?.join(', ')}</td>
                                         <td className="py-5 px-6">
                                             <button
-                                                onClick={() => router.push(`/accounts/${business.id}`)}
+                                                onClick={async () => { await increaseBusinessView(business.id); router.push(`/accounts/${business.id}/`) }}
                                                 className="w-28 h-10 rounded-lg bg-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold flex items-center justify-center gap-2 transition-all group"
                                             >
                                                 View

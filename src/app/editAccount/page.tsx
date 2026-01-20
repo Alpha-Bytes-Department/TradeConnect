@@ -104,8 +104,8 @@ const ProfileLayout: React.FC = () => {
         const fetchProfile = async () => {
             try {
                 const res: any = await api.get(`business/my/`, { signal: controller.signal });
-                if (res && res.business) {
-                    setData(res.business);
+                if (res && res.data.business) {
+                    setData(res.data.business);
                 }
                 setIsLoading(false);
             } catch (err: any) {
@@ -232,7 +232,7 @@ const ProfileLayout: React.FC = () => {
 
             if (res) {
                 // Update the main data state with the response from server
-                setData(res.business || { ...data, ...Object.fromEntries(formData) });
+                setData(res.data.business || { ...data, ...Object.fromEntries(formData) });
                 alert("Profile updated successfully!");
             }
         } catch (err: any) {
@@ -250,7 +250,7 @@ const ProfileLayout: React.FC = () => {
             const response = await api.get(`business/my/`);
             if (response.data) {
                 // Check if gallery exists in response, otherwise default to empty array
-                const gallery = response.data.gallery || [];
+                const gallery = response.data.business.gallery || [];
 
 
                 setData((prev: any) => ({

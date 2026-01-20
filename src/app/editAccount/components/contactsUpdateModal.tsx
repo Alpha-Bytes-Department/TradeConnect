@@ -81,7 +81,7 @@ export default function EditContactModal({ isOpen, onClose, onSubmit, contact }:
             ...rest,
             custom_role: rest.role === 'other' ? otherPosition : null,
         };
-        console.log('||||||||||||||||||||||||||||||||||||||||||||||||||',payload)
+        
 
 
         try {
@@ -89,7 +89,7 @@ export default function EditContactModal({ isOpen, onClose, onSubmit, contact }:
             const response = await api.patch(`business/contact-persons/${id}/`, payload);
 
 
-            onSubmit(response.data || payload);
+            onSubmit(response.data.data || payload);
 
             
             onClose();

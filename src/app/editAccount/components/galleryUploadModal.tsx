@@ -74,7 +74,7 @@ const GalleryUploadModal: React.FC<GalleryUploadModalProps> = ({
                 },
             });
 
-            console.log('Upload completed successfully:', uploadResponse.data);
+            console.log('Upload completed successfully:', uploadResponse.data.data);
 
             // Small delay to ensure server has processed the upload
             await new Promise(resolve => setTimeout(resolve, 500));

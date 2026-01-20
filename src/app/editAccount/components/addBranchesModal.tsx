@@ -44,7 +44,7 @@ const AddBranchModal: React.FC<AddBranchModalProps> = ({
   const fetchBusinessData = useCallback(async () => {
     try {
       const response: any = await api.get('/business/my/');
-      const businessData = response.data || response;
+      const businessData = response.data.data || response;
 
       if (businessData?.branches) {
         setData(businessData.branches);
@@ -91,7 +91,7 @@ const AddBranchModal: React.FC<AddBranchModalProps> = ({
           payload
         );
 
-        const newBranch = response.data || response;
+        const newBranch = response.data.data || response;
 
         // Construct UI branch object with full country data
         const uiBranchObject: Branch = {
@@ -137,7 +137,7 @@ const AddBranchModal: React.FC<AddBranchModalProps> = ({
         });
 
         // Handle different possible response structures
-        const countriesData = response?.countries || response?.results || response?.data || response || [];
+        const countriesData = response?.data.countries || response?.data.results || response?.data.data || response || [];
         setCountries(Array.isArray(countriesData) ? countriesData : []);
       } catch (err: any) {
         if (err.name !== 'CanceledError' && err.name !== 'AbortError') {

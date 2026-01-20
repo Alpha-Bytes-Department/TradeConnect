@@ -47,7 +47,7 @@ const Basic: React.FC<BasicProps> = ({ data, setData }) => {
                 // Adjust based on your API response structure 
                 // Usually res.data or res if your interceptor handles it
                 if (res) {
-                    setCountries(res?.countries ? res?.countries : []);
+                    setCountries(res?.data.countries ? res?.data.countries : []);
 
                 }
             } catch (err: any) {
