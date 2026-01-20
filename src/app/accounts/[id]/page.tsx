@@ -212,7 +212,7 @@ export default function AccountPage({
                 setLoading(true);
                 setError(null);
 
-                const response:any = await api.get(`business/my/`, {
+                const response:any = await api.get(`business/${id}/`, {
                     signal: controller.signal
                 });
 
