@@ -142,7 +142,7 @@ const ListView: React.FC<DirectoryListProps> = ({ companies }) => {
                                 <div className="flex items-center justify-start">
                                     <Link
                                         href={`/accounts/${item.id}`}
-                                        target=""
+                                        
                                         rel="noopener noreferrer"
                                         className="fc gap-3 bg-blue-100 hover:bg-blue-700 text-blue-700 hover:text-white text-md  font-semibold py-2 px-4 rounded-xl transition-colors border border-blue-600 "
                                     >
