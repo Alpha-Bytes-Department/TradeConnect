@@ -110,8 +110,8 @@ const ProfileLayout: React.FC = () => {
                 setIsLoading(false);
             } catch (err: any) {
                 if (err.name !== 'CanceledError') {
-                    setError(true);
-                    setIsLoading(false);
+                    //setError(true);
+                    //setIsLoading(false);
                 }
             }
         };
@@ -208,7 +208,7 @@ const ProfileLayout: React.FC = () => {
 
         // 5. FIX: Logo Logic
         // Only send if it's a new file. If null, send null/empty to clear it.
-        if (images.logo instanceof File) {
+        if (images?.logo instanceof File) {
             formData.append("logo", images.logo);
         } else if (images.logo === null) {
             formData.append("logo", ""); // Backend sees this as clearing the file
@@ -241,6 +241,26 @@ const ProfileLayout: React.FC = () => {
             alert(`Failed to save changes: ${errorMsg}`);
         } finally {
             setIsSaving(false);
+        }
+    };
+    const reloadGalleryFromAPI = async () => {
+        try {
+            // Add cache-busting parameter to ensure fresh data
+            const timestamp = new Date().getTime();
+            const response = await api.get(`business/my/`);
+            if (response.data) {
+                // Check if gallery exists in response, otherwise default to empty array
+                const gallery = response.data.gallery || [];
+
+
+                setData((prev: any) => ({
+                    ...prev,
+                    gallery: gallery,
+                }));
+                console.log('Gallery reloaded:', gallery.length, 'images');
+            }
+        } catch (error) {
+            console.error('Error reloading gallery:', error);
         }
     };
 

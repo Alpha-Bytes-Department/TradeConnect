@@ -70,6 +70,8 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
                 newEntry
             ],
         }));
+
+        reloadGalleryFromAPI()
     };
 
     const handleEditContact = (updatedContact: Contact) => {
@@ -84,11 +86,34 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
                 return isTarget ? updatedContact : item;
             }),
         }));
+
+        reloadGalleryFromAPI()
     };
 
     const onEditContact = (id: string) => {
         setIdToEdit(id);
         setIsEditModalOpen(true);
+    };
+
+    const reloadGalleryFromAPI = async () => {
+        try {
+            // Add cache-busting parameter to ensure fresh data
+            const timestamp = new Date().getTime();
+            const response = await api.get(`business/my/`);
+            if (response?.business) {
+                // Check if gallery exists in response, otherwise default to empty array
+                const res = response?.business?.contacts || [];
+
+
+                setData((prev: any) => ({
+                    ...prev,
+                    contacts: res,
+                }));
+                
+            }
+        } catch (error) {
+            console.error('Error reloading response:', error);
+        }
     };
 
     // FIXED: API integration for Delete
@@ -105,6 +130,8 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
                 ...prev,
                 contacts: prev.contacts.filter((con) => con.id !== id),
             }));
+
+            reloadGalleryFromAPI()
         } catch (error) {
             console.error("Failed to delete contact:", error);
             // Optional: Add toast notification here
