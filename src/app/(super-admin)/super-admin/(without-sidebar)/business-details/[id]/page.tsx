@@ -78,7 +78,7 @@ export default function BusinessDetails() {
                 <div className="flex items-center gap-2">
                     <MapPin className="text-[#909090] text-sm" />
                     <p className="font-poppins text-[#909090] text-sm">
-                        {data?.country?.name}</p>
+                        {data?.full_address}{", "}{data?.country?.name}</p>
                 </div>
 
                 <div className="flex flex-col md:flex-row gap-8 mt-2">
@@ -227,7 +227,18 @@ export default function BusinessDetails() {
                             <div>
                                 <h1 className="font-poppins font-medium text-[#595959]">
                                     Connected Since:</h1>
-                                <p className="font-poppins text-[#2E73E3]">{data?.created_at}</p>
+                                <p className="font-poppins text-[#2E73E3]">
+                                    {data?.created_at ?
+                                        (() => {
+                                            const d = new Date(data.created_at);
+                                            if (isNaN(d.getTime())) return "Invalid Date";
+                                            const dd = String(d.getDate()).padStart(2, '0');
+                                            const mm = String(d.getMonth() + 1).padStart(2, '0');
+                                            const yyyy = d.getFullYear();
+                                            return `${dd}/${mm}/${yyyy}`;
+                                        })()
+                                        : "N/A"}
+                                </p>
                             </div>
                         </div>
                         <div className="flex items-center gap-3 mt-3">
@@ -238,7 +249,9 @@ export default function BusinessDetails() {
                             <div>
                                 <h1 className="font-poppins font-medium text-[#595959]">
                                     Membership Valid Till:</h1>
-                                <p className="font-poppins text-[#327EF9]">22 June 2026</p>
+                                <p className="font-poppins text-[#327EF9]">
+                                    {data?.membership_valid_till}
+                                </p>
                             </div>
                         </div>
                     </div>
