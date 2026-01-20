@@ -190,7 +190,7 @@ export default function AccountPage({
 
 
     function getLastUpdated() {
-        const date = businesses ? businesses.created_at : ''
+        const date = businesses ? businesses.updated_at : ''
 
         const formattedDate = date.slice(0, 10);
         const formattedTime = date.slice(11, 16); 
