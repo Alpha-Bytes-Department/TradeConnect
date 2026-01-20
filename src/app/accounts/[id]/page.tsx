@@ -20,6 +20,7 @@ import {
     PhoneIcon,
     Building2,
     AwardIcon,
+    Star,
 } from "lucide-react";
 import { PiX } from "react-icons/pi";
 import { redirect, useRouter } from "next/navigation";
@@ -173,7 +174,7 @@ export default function AccountPage({
 
     function getActiveMonths(): number {
         const createdAt = new Date(businesses?businesses.created_at:'');
-        const now = new Date();
+        const now = new Date(); 
 
         let months =
             (now.getFullYear() - createdAt.getFullYear()) * 12 +
@@ -189,7 +190,7 @@ export default function AccountPage({
 
 
     function getLastUpdated() {
-        const date = businesses ? businesses.created_at : ''
+        const date = businesses ? businesses.updated_at : ''
 
         const formattedDate = date.slice(0, 10);
         const formattedTime = date.slice(11, 16); 
@@ -433,15 +434,21 @@ export default function AccountPage({
                                     Contact Persons
                                 </h3>
 
-                                {businesses?.contacts.map((item, index) => (
-                                    <div
+                                {businesses?.contacts.map((item, index) => (item.is_primary===false? null:
+                                   ( <div
                                         key={index}
                                         className="border border-[#327EF9] hover:bg-[#327EF922] px-4 p-2 mb-2 rounded-lg"
                                     >
                                         <div>
-                                            <span className="flex flex-row items-center gap-2 text-[#000000] text-lg font-medium transition-colors">
-                                                {item.full_name}
+                                            <span className="flex flex-row items-center gap-4 text-[#000000] text-lg font-medium transition-colors">
+                                                {item.full_name}{item.is_primary && (
+                                                <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-orange-100 text-orange-400 border border-orange-400 rounded-full text-xs font-medium">
+                                                    <Star className="w-3 h-3 fill-orange-400" />
+                                                    Primary
+                                                </span>
+                                            )}
                                             </span>
+                                            
                                         </div>
                                         <div>
                                             <span className="flex flex-row items-center gap-2 text-gray-500 text-md font-medium transition-colors">
@@ -463,7 +470,41 @@ export default function AccountPage({
                                                 {item.email}
                                             </a>
                                         </div>
-                                    </div>
+                                    </div>)
+                                ))}
+
+                                {businesses?.contacts.map((item, index) => (item.is_primary === true ? null :
+                                    (<div
+                                        key={index}
+                                        className="border border-[#327EF9] hover:bg-[#327EF922] px-4 p-2 mb-2 rounded-lg"
+                                    >
+                                        <div>
+                                            <span className="flex flex-row items-center gap-2 text-[#000000] text-lg font-medium transition-colors">
+                                                {item.full_name}
+                                            </span>
+                                            
+                                        </div>
+                                        <div>
+                                            <span className="flex flex-row items-center gap-2 text-gray-500 text-md font-medium transition-colors">
+                                                {item.position}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span className="flex flex-row items-center gap-2 text-[#327EF9] hover:text-blue-700  text-md font-semibold transition-colors">
+                                                <PhoneIcon color={"#327EF9"} size={16} />
+                                                {item.phone_number}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <a
+                                                href={`mailto:${item.email}`}
+                                                className="flex flex-row items-center gap-2 text-[#327EF9] text-md font-semibold hover:text-blue-700 transition-colors"
+                                            >
+                                                <MailIcon color={"#327EF9"} size={16} />
+                                                {item.email}
+                                            </a>
+                                        </div>
+                                    </div>)
                                 ))}
                             </div>
 
