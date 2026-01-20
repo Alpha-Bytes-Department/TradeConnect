@@ -30,8 +30,8 @@ export default function RootLayout({
     // const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
 
     return (
-        <html lang="en">
-            <body className={`${poppinsFont.variable} antialiased`}>
+        <section>
+            <div className={`${poppinsFont.variable} antialiased`}>
                 <FilterProvider>
                     <ViewProvider>
                         <SidebarProvider>
@@ -43,8 +43,8 @@ export default function RootLayout({
                         </SidebarProvider>
                     </ViewProvider>
                 </FilterProvider>
-            </body>
-        </html>
+            </div>
+        </section>
     );
 }
 

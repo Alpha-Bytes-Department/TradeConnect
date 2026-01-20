@@ -2,13 +2,16 @@
 import Modal from "@/components/ui/modal";
 import { useView } from "../../ListGridContext";
 import { Button } from "@/components/ui/button";
+import { redirect } from "next/navigation";
 
 export default function LogOutModal() {
     const { isLogoutOpen, setIsLogoutOpen } = useView();
 
     const handleLogout = () => {
-        alert("Logged out successfully!");
+        console.log("Logged out successfully!");
+        localStorage.removeItem('accessToken');
         setIsLogoutOpen(false);
+        redirect("/");
     };
 
     return (
@@ -55,13 +58,14 @@ export default function LogOutModal() {
                 </div>
 
                 <div className="flex justify-end space-x-3">
-                    <Button onClick={() => setIsLogoutOpen(false)} variant="secondary">
+                    <Button onClick={() => setIsLogoutOpen(false)} variant="secondary"
+                        className="cursor-pointer">
                         Stay Logged In
                     </Button>
                     <Button
                         onClick={handleLogout}
                         variant="default"
-                        className="bg-orange-500 hover:bg-orange-600"
+                        className="bg-orange-500 hover:bg-orange-600 cursor-pointer"
                     >
                         Logout
                     </Button>

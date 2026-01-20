@@ -82,18 +82,22 @@ export default function BusinessDetails() {
                 </div>
 
                 <div className="flex flex-col md:flex-row gap-8 mt-2">
-                    <button className="bg-[#327EF9] text-[#EBF2FE] flex 
-                items-center gap-3 px-8 py-2 rounded-sm cursor-pointer
-                font-poppins">
-                        <Mail className="w-5 h-5 text-[#EBF2FE]" />
-                        Email
-                    </button>
-                    <button className="bg-[#327EF9] text-[#EBF2FE] flex 
-                items-center gap-3 px-8 py-2 rounded-sm cursor-pointer
-                font-poppins">
-                        <Globe className="w-5 h-5 text-[#EBF2FE]" />
-                        Website
-                    </button>
+                    <a href={`mailto:${data?.user_email}`}>
+                        <button className="bg-[#F6F6F6] text-[#153569] hover:bg-[#327EF9] 
+                        hover:text-[#EBF2FE] flex items-center gap-3 px-8 py-2 rounded-sm 
+                        cursor-pointer font-poppins border border-[#153569]">
+                            <Mail className="w-5 h-5 text-[#153569] hover:text-[#EBF2FE]" />
+                            Email
+                        </button>
+                    </a>
+                    <a href={data?.website} target="_blank" rel="noopener noreferrer">
+                        <button className="bg-[#F6F6F6] text-[#153569] hover:bg-[#327EF9] 
+                        hover:text-[#EBF2FE] flex items-center gap-3 px-8 py-2 rounded-sm 
+                        cursor-pointer font-poppins border border-[#153569]">
+                            <Globe className="w-5 h-5 text-[#153569] hover:text-[#EBF2FE]" />
+                            Website
+                        </button>
+                    </a>
                 </div>
             </div>
 

@@ -145,7 +145,7 @@ export default function SettingsPage() {
             const token = localStorage.getItem('accessToken');
             if (!token) {
                 console.error("No access token found");
-                alert("Please login first");
+                // alert("Please login first");
                 return;
             }
 
@@ -184,7 +184,7 @@ export default function SettingsPage() {
             URL.revokeObjectURL(url);
 
             console.log("CSV exported successfully!");
-            alert("CSV file downloaded successfully!");
+            // ("CSV file downloaded successfully!");
 
         } catch (error) {
             console.error("Export failed:", error);
@@ -192,7 +192,7 @@ export default function SettingsPage() {
                 console.error("Response data:", error.response?.data);
                 console.error("Response status:", error.response?.status);
             }
-            alert("Failed to export CSV");
+            // alert("Failed to export CSV");
         }
     };
 
