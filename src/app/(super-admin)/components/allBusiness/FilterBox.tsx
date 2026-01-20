@@ -160,7 +160,7 @@ export default function FilterBox({ currentPage }: FilterBoxProps) {
                 </div>
 
                 <div>
-                    <Select defaultValue="active" onValueChange={(value) => setValue("status", value)}>
+                    <Select onValueChange={(value) => setValue("status", value)}>
                         <SelectTrigger className="w-full cursor-pointer">
                             <SelectValue placeholder="All Status" />
                         </SelectTrigger>
@@ -178,10 +178,7 @@ export default function FilterBox({ currentPage }: FilterBoxProps) {
             <div className="flex flex-col md:flex-row justify-between gap-4 mt-5">
                 <div className="flex items-center gap-2">
                     <p>Sort by:</p>
-                    <Select
-                        defaultValue="a-z"
-                        onValueChange={(value) => setValue("sortBy", value)}
-                    >
+                    <Select onValueChange={(value) => setValue("sortBy", value)}>
                         <SelectTrigger className="w-[200px] cursor-pointer">
                             <SelectValue placeholder="A-Z" />
                         </SelectTrigger>

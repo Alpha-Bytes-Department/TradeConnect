@@ -124,7 +124,7 @@ export default function EditBusiness() {
 
                 // Populate form fields with fetched data
                 setValue('businessName', data?.business?.business_name || '');
-                setValue('country', data?.business?.country?.id || '');
+                setValue('country', data?.business?.country?.name || '');
                 setValue('fullAddress', data?.business?.full_address || '');
                 setValue('emailAddress', data?.business?.user_email || '');
                 setValue('phoneNumber', data?.business?.phone_number || '');
