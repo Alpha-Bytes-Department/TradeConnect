@@ -32,16 +32,16 @@ export default function RootLayout({
     // const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
 
     return (
-        <html lang="en">
-            <body className={`${poppinsFont.variable} antialiased`}>
+        <section>
+            <div className={`${poppinsFont.variable} antialiased`}>
                 <ViewProvider>
                     <main className="w-full">
                         <NavbarWithoutTrigger />
                         {children}
                     </main>
                 </ViewProvider>
-            </body>
-        </html>
+            </div>
+        </section>
     );
 }
 

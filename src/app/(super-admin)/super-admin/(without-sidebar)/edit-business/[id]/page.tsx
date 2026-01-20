@@ -107,6 +107,54 @@ export default function EditBusiness() {
             });
     }, []);
 
+    const refreshBusinessData = async () => {
+        try {
+            const res = await axios.get(
+                `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/${id}/`,
+                {
+                    headers: {
+                        "ngrok-skip-browser-warning": "true",
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            const freshData = res.data;
+
+            // Re-populate ALL fields (same as in initial fetch)
+            setValue('businessName', freshData?.business?.business_name || '');
+            setValue('country', freshData?.business?.country?.id || '', { shouldValidate: true });           // ← this fixes country
+            setValue('fullAddress', freshData?.business?.full_address || '');
+            setValue('emailAddress', freshData?.business?.user_email || '');
+            setValue('phoneNumber', freshData?.business?.phone_number || '');
+            setValue('websiteURL', freshData?.business?.website || '');
+            setValue('aboutBusiness', freshData?.business?.about_business || '');
+
+            const servicesStr = freshData?.business?.services
+                ?.map((s: any) => s.title)
+                .join(', ') || '';
+            setValue('servicesOffered', servicesStr);
+
+            // membership date
+            if (freshData?.business?.membership_valid_till) {
+                const dateStr = freshData.business.membership_valid_till.trim();
+                const parts = dateStr.split("/");
+                if (parts.length === 3) {
+                    const [d, m, y] = parts.map(Number);
+                    const jsDate = new Date(y, m - 1, d);
+                    if (!isNaN(jsDate.getTime())) {
+                        setDate(jsDate);
+                        setValue("membershipValidTill", jsDate.toISOString());
+                    }
+                }
+            }
+
+            // banner & gallery can stay as-is or refresh too if needed
+        } catch (err) {
+            console.error("Failed to refresh data after update", err);
+        }
+    };
+
     // Fetch data from API on component mount using Axios
     useEffect(() => {
         const fetchBusinessData = async () => {
@@ -124,7 +172,7 @@ export default function EditBusiness() {
 
                 // Populate form fields with fetched data
                 setValue('businessName', data?.business?.business_name || '');
-                setValue('country', data?.business?.country?.name || '');
+                setValue('country', data?.business?.country?.id || '');
                 setValue('fullAddress', data?.business?.full_address || '');
                 setValue('emailAddress', data?.business?.user_email || '');
                 setValue('phoneNumber', data?.business?.phone_number || '');
@@ -203,6 +251,26 @@ export default function EditBusiness() {
             fetchBusinessData();
         }
     }, [id, setValue]);
+
+    const handleDelete = async () => {
+        const token = localStorage.getItem("accessToken");
+        if (!token) return;
+        try {
+            const response = await axios.delete(
+                `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/${id}/delete/`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+            console.log("Business Deleted", response.data);
+            // We may want to refresh the table data here or use a state management solution
+            // to update the UI immediately
+        } catch (error) {
+            console.error("Error deleting", error);
+        }
+    };
 
     // Type annotation for validation function
     const validateFile = (file: File): string | null => {
@@ -297,6 +365,7 @@ export default function EditBusiness() {
 
         // যদি existing ছবি (id আছে) → backend থেকে ডিলিট করো
         if (imageToRemove.id) {
+            console.log("iid", imageToRemove.id)
             try {
                 await axios.delete(
                     `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/gallery/images/${imageToRemove.id}/`,
@@ -410,7 +479,9 @@ export default function EditBusiness() {
                         "Content-Type": "application/json"
                     },
                 });
+            await refreshBusinessData();
         }
+
         catch (error) {
             console.error('Error updating business:', error);
             if (axios.isAxiosError(error)) {
@@ -449,15 +520,15 @@ export default function EditBusiness() {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="max-w-[1300px] mx-auto">
-            <button className="flex items-center gap-2 px-4 py-1 bg-[#BFD7FDB8] rounded-lg 
+            {/* <button className="flex items-center gap-2 px-4 py-1 bg-[#BFD7FDB8] rounded-lg 
             font-poppins text-[#153569] mt-4 cursor-pointer">
                 <MoveLeft />
                 Back
-            </button>
+            </button> */}
             <h1 className="font-medium font-poppins text-[#0B0B0B] text-2xl mt-5">Edit Profile</h1>
             <p className="font-poppins text-[#626262]">Update your business information and images</p>
             <div className="bg-white rounded-lg shadow-md border mt-6">
-                <div className="flex justify-around border-b">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 border-b">
                     <button
                         onClick={() => setActiveTab('basic')}
                         className={`px-8 py-2 font-medium font-poppins border-b-2 transition-colors 
@@ -660,7 +731,7 @@ export default function EditBusiness() {
                             <label htmlFor="emailAddress" className="font-poppins text-[#515151]">
                                 Email Address</label>
                             <div className="w-full">
-                                <Input type="text" id="emailAddress" placeholder="admin@business.com"
+                                <Input disabled type="text" id="emailAddress" placeholder="admin@business.com"
                                     className="font-poppins bg-[#FFFFFF] text-[#3F3F3F] text-base"
                                     {...register("emailAddress")}
                                 />
@@ -957,7 +1028,7 @@ export default function EditBusiness() {
                     </button>
                     <button type="button" className="flex items-center justify-center 
                 gap-2 bg-[#F59D9D] text-[#B3261E] font-poppins px-4 py-2 rounded-lg cursor-pointer">
-                        <Trash2 className="text-[#B3261E] w-5 h-5" />
+                        <Trash2 className="text-[#B3261E] w-5 h-5" onClick={handleDelete} />
                         Delete Business
                     </button>
                 </div>
