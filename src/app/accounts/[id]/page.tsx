@@ -174,7 +174,7 @@ export default function AccountPage({
 
     function getActiveMonths(): number {
         const createdAt = new Date(businesses?businesses.created_at:'');
-        const now = new Date();
+        const now = new Date(); 
 
         let months =
             (now.getFullYear() - createdAt.getFullYear()) * 12 +
