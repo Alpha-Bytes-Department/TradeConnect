@@ -3,7 +3,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://squishiest-punctually-daxton.ngrok-free.dev/api/",
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   timeout: 15000,
   headers: {
     "ngrok-skip-browser-warning": "true",

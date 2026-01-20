@@ -181,7 +181,7 @@ const Images: React.FC<ImagesProps> = ({ data, setData }) => {
                         className="border-2 border-dashed border-gray-300 rounded-lg p-16 hover:border-gray-400 transition-colors cursor-pointer bg-gray-50 hover:bg-gray-100"
                     >
                         <div className="flex flex-col items-center justify-center text-center">
-                            <div className="bg-orange-500 rounded-full shadow-md hover:shadow-lg text-white flex items-center justify-center h-20 w-20 mb-10 transition-transform active:scale-95">
+                            <div className="bg-blue-500 rounded-full shadow-md hover:shadow-lg text-white flex items-center justify-center h-20 w-20 mb-10 transition-transform active:scale-95">
                                 <PlusCircleIcon size={45} strokeWidth={1} />
                             </div>
                             <p className="text-base font-medium text-gray-700 mb-1">Add gallery images.</p>
