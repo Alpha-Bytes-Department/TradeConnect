@@ -61,7 +61,7 @@ function NavbarWithoutTrigger() {
                 {/*Right*/}
                 <div className="flex justify-end items-center gap-3">
                     <div className="relative w-12 h-12">
-                        <Image src={"/dashboard-images/AdminPhoto.jpg"} alt="admin-photo" fill
+                        <Image src={localStorage.getItem('user_photo') || ''} alt="admin-photo" fill
                             className="rounded-full" />
                     </div>
                     <div>

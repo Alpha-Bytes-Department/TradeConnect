@@ -1,3 +1,4 @@
+// Fahim
 "use client"
 import { Input } from "@/components/ui/input";
 import { ArchiveRestore, Bookmark, Camera, Database } from "lucide-react";
@@ -7,9 +8,7 @@ import axios from "axios";
 
 type SettingsFormData = {
     fullName: string;
-    emailAddress: string;
     phoneNumber: string;
-    role: string;
 };
 
 export default function SettingsPage() {
@@ -24,9 +23,7 @@ export default function SettingsPage() {
     } = useForm<SettingsFormData>({
         defaultValues: {
             fullName: "",
-            emailAddress: "",
             phoneNumber: "",
-            role: "Super Admin",
         },
     });
 
@@ -38,7 +35,6 @@ export default function SettingsPage() {
         const userPhoto = localStorage.getItem('user_photo') || '';
 
         setValue('fullName', userName);
-        setValue('emailAddress', userEmail);
         setValue('phoneNumber', userPhone);
         setProfileImageUrl(userPhoto);
     }, [setValue]);
@@ -47,25 +43,29 @@ export default function SettingsPage() {
         const file = e.target.files?.[0];
         if (file) {
             setImageFile(file);
+            // Create preview URL and update profileImageUrl immediately
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setProfileImageUrl(reader.result as string);
+            };
+            reader.readAsDataURL(file);
         }
     };
 
     // Form submit handler - sends data to backend
     const onSubmit = async (data: SettingsFormData) => {
         setIsLoading(true);
-
         try {
             const token = localStorage.getItem('accessToken');
             if (!token) {
                 console.error("No access token found");
-                alert("Please login first");
+                console.log("Please login first");
                 return;
             }
 
             // Prepare form data for backend
             const formData = new FormData();
             formData.append('full_name', data.fullName);
-            formData.append('email', data.emailAddress);
             formData.append('phone_number', data.phoneNumber);
 
             // Add profile image if changed
@@ -73,8 +73,7 @@ export default function SettingsPage() {
                 formData.append('profile_image', imageFile);
             }
 
-            // Send data to backend using axios
-            // IMPORTANT: Don't manually set Content-Type for FormData
+            // Send data to backend
             const response = await axios.put(
                 'https://squishiest-punctually-daxton.ngrok-free.dev/api/auth/profile/',
                 formData,
@@ -82,32 +81,44 @@ export default function SettingsPage() {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'ngrok-skip-browser-warning': 'true',
-                        // Content-Type will be set automatically by axios with boundary
                     }
                 }
             );
 
+            console.log("Full Backend Response:", response.data);
+
             // Update localStorage with new values
             localStorage.setItem('user_name', data.fullName);
-            localStorage.setItem('user_email', data.emailAddress);
             localStorage.setItem('user_phone', data.phoneNumber);
 
-            // Save the photo URL from backend response
-            if (response.data?.data?.profile_image || response.data?.profile_image) {
-                const photoUrl = response.data?.data?.profile_image || response.data?.profile_image;
+            let photoUrl = null;
+
+            if (response?.data?.user?.profile_image) {
+                photoUrl = response.data.user.profile_image;
+            }
+
+            if (photoUrl) {
                 localStorage.setItem('user_photo', photoUrl);
                 setProfileImageUrl(photoUrl);
+                console.log("Photo URL saved:", photoUrl);
+            } else {
+                console.warn("Photo URL not found in response. Response structure:", response.data);
             }
 
             // Clear the selected file after successful upload
             setImageFile(null);
 
-            alert("Settings saved successfully!");
-            console.log("Backend response:", response.data);
-        } catch (error) {
+            console.log("Settings saved successfully!");
+        }
+        catch (error) {
             console.error("Error updating profile:", error);
-            alert("Failed to save settings. Please try again.");
-        } finally {
+            if (axios.isAxiosError(error)) {
+                console.error("Response data:", error.response?.data);
+                console.error("Response status:", error.response?.status);
+            }
+            console.log("Failed to save settings. Please try again.");
+        }
+        finally {
             setIsLoading(false);
         }
     };
@@ -120,21 +131,67 @@ export default function SettingsPage() {
         const userPhoto = localStorage.getItem('user_photo') || '';
 
         setValue('fullName', userName);
-        setValue('emailAddress', userEmail);
         setValue('phoneNumber', userPhone);
         setProfileImageUrl(userPhoto);
         setImageFile(null);
 
-        alert("Settings reset to saved values!");
+        console.log("Settings reset to saved values!");
     };
 
     // Export CSV handler
+    // Updated Export CSV handler - for when API returns CSV string directly
     const handleExportCSV = async () => {
         try {
+            const token = localStorage.getItem('accessToken');
+            if (!token) {
+                console.error("No access token found");
+                alert("Please login first");
+                return;
+            }
+
+            // Show loading state (optional)
             console.log("Exporting CSV...");
-            alert("CSV export initiated (backend integration needed)");
+
+            const response = await axios.get(
+                'https://squishiest-punctually-daxton.ngrok-free.dev/api/business/export/csv/',
+                {
+                    headers: {
+                        "ngrok-skip-browser-warning": "true",
+                        'Authorization': `Bearer ${token}`,
+                    }
+                }
+            );
+
+            console.log("API Response:", response?.data);
+
+            // Since API returns CSV string directly, use it as is
+            const csvContent = response.data;
+
+            // Create blob and download
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+
+            link.setAttribute('href', url);
+            link.setAttribute('download', `businesses_export_${new Date().getTime()}.csv`);
+            link.style.visibility = 'hidden';
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            // Clean up the URL object
+            URL.revokeObjectURL(url);
+
+            console.log("CSV exported successfully!");
+            alert("CSV file downloaded successfully!");
+
         } catch (error) {
             console.error("Export failed:", error);
+            if (axios.isAxiosError(error)) {
+                console.error("Response data:", error.response?.data);
+                console.error("Response status:", error.response?.status);
+            }
             alert("Failed to export CSV");
         }
     };
@@ -156,13 +213,7 @@ export default function SettingsPage() {
                 <div className="relative w-32 h-32 mt-5">
                     <div className="w-full h-full rounded-full overflow-hidden bg-gray-300 border-2 border-white shadow-lg">
                         <img
-                            src={
-                                imageFile
-                                    ? URL.createObjectURL(imageFile)
-                                    : profileImageUrl
-                                        ? profileImageUrl
-                                        : 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop'
-                            }
+                            src={profileImageUrl || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop'}
                             alt="Profile"
                             className="w-full h-full object-cover"
                         />
@@ -179,6 +230,11 @@ export default function SettingsPage() {
                     </label>
                 </div>
                 <p className="font-poppins text-[#515151] mt-3">Profile Image</p>
+                {imageFile && (
+                    <p className="font-poppins text-[#327EF9] text-xs mt-1">
+                        New photo selected: {imageFile.name}
+                    </p>
+                )}
 
                 <div className="flex flex-col lg:flex-row gap-2 lg:gap-6">
                     <div className="w-full grid gap-2 items-center mt-6">
@@ -189,7 +245,7 @@ export default function SettingsPage() {
                                 id="fullName"
                                 placeholder="Admin User"
                                 className="font-poppins bg-[#FFFFFF] text-[#3F3F3F] text-base"
-                                {...register("fullName", { required: true })}
+                                {...register("fullName")}
                             />
                         </div>
                     </div>
@@ -197,11 +253,11 @@ export default function SettingsPage() {
                         <label htmlFor="emailAddress" className="font-poppins text-[#252525]">Email</label>
                         <div className="w-full">
                             <Input
+                                disabled
                                 type="email"
                                 id="emailAddress"
                                 placeholder="admin@business.com"
                                 className="font-poppins bg-[#FFFFFF] text-[#3F3F3F] text-base"
-                                {...register("emailAddress", { required: true })}
                             />
                         </div>
                     </div>
@@ -216,7 +272,7 @@ export default function SettingsPage() {
                                 id="phoneNumber"
                                 placeholder="+1234567890"
                                 className="font-poppins bg-[#FFFFFF] text-[#3F3F3F] text-base"
-                                {...register("phoneNumber", { required: true })}
+                                {...register("phoneNumber")}
                             />
                         </div>
                     </div>
@@ -228,7 +284,6 @@ export default function SettingsPage() {
                                 type="text"
                                 placeholder="Super Admin"
                                 className="font-poppins"
-                                {...register("role")}
                             />
                         </div>
                     </div>
