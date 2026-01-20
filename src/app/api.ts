@@ -34,7 +34,7 @@ api.interceptors.request.use(
 /* ---------------- Response Interceptor ---------------- */
 
 api.interceptors.response.use(
-  (response) => response.data,
+  (response) => response,
   (error) => {
     if (axios.isCancel(error)) {
       return Promise.reject({ canceled: true });

@@ -2,6 +2,8 @@ import React from 'react';
 import { ExternalLink } from 'lucide-react';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import api from '@/app/api';
 
 interface Service {
     id: string;
@@ -66,7 +68,24 @@ interface DirectoryListProps {
 
 const ListView: React.FC<DirectoryListProps> = ({ companies }) => {
 
-    console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', companies)
+    const router=useRouter()
+        const increaseBusinessView = async (id:string) => {
+            try {
+                const response = await api.post(`/business/${id}/increase-view/`);
+    
+                if (!response) {
+                    throw new Error(`HTTP error! status: ${response}`);
+                }
+    
+                const data = await response;
+                return data;
+            } catch (error) {
+                console.error('Error increasing business view:', error);
+                throw error;
+            }
+            
+        };
+    
     return (
         <div className="w-full bg-gradient-to-br from-slate-50 to-slate-100 px-8 min-h-screen">
             <div className=" mx-auto">
@@ -140,15 +159,15 @@ const ListView: React.FC<DirectoryListProps> = ({ companies }) => {
 
                                 {/* Action Column */}
                                 <div className="flex items-center justify-start">
-                                    <Link
-                                        href={`/accounts/${item.id}`}
+                                    <button
+                                        onClick={async () => { await increaseBusinessView(item.id); router.push(`/accounts/${item.id}/`) }}
                                         
                                         rel="noopener noreferrer"
                                         className="fc gap-3 bg-blue-100 hover:bg-blue-700 text-blue-700 hover:text-white text-md  font-semibold py-2 px-4 rounded-xl transition-colors border border-blue-600 "
                                     >
                                         <span>View</span>
                                         <ExternalLink className="w-5 h-5 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-200" />
-                                    </Link>
+                                    </button>
                                 </div>
                             </div>
                         ))}

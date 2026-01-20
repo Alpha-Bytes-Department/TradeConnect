@@ -218,8 +218,8 @@ export default function AccountPage({
 
                
 
-                const data = response.business
-                console.log('||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||',data)
+                const data = response.data.business
+                
                 setBusinesses(data);
 
             } catch (err: any) {

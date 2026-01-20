@@ -40,7 +40,7 @@ export default function Branches({ data, setData }: BranchLocationsProps) {
     const fetchBusinessData = async () => {
         try {
             const response: any = await api.get('/business/my/');
-            const businessData = response.business || response;
+            const businessData = response.data.business || response;
 
             if (businessData?.branches) {
                 setData(businessData.branches);

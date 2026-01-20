@@ -24,7 +24,7 @@ export default function Flag({ id, h = 28, w = 28 }: FlagProps) {
                     signal: controller.signal,
                 });
 
-                const country = response.countries.find(
+                const country = response.data.countries.find(
                     (c: any) => c.id === id || c.name === id
                 );
 

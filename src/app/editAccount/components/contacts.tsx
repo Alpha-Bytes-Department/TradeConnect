@@ -100,9 +100,9 @@ const Contacts: React.FC<ContactsProps> = ({ data, setData }) => {
             // Add cache-busting parameter to ensure fresh data
             const timestamp = new Date().getTime();
             const response = await api.get(`business/my/`);
-            if (response?.business) {
+            if (response?.data.business) {
                 // Check if gallery exists in response, otherwise default to empty array
-                const res = response?.business?.contacts || [];
+                const res = response?.data.business?.contacts || [];
 
 
                 setData((prev: any) => ({
