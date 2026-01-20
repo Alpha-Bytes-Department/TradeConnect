@@ -218,7 +218,7 @@ export default function AccountPage({
 
                
 
-                const data = response.results.business
+                const data = response.business
                 console.log('||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||',data)
                 setBusinesses(data);
 

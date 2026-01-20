@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { X, Star, ChevronDown, Loader2 } from 'lucide-react';
 // 👇 IMPORT YOUR API INSTANCE HERE
 import api from '@/app/api'; // Adjust this path to where your axios instance is defined
@@ -99,6 +99,7 @@ export default function AddContactModal({ isOpen, onClose, onSubmit }: AddContac
         resetForm();
         onClose();
     };
+
 
     if (!isOpen) return null;
 
