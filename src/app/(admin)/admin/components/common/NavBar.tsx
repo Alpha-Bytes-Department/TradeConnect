@@ -9,6 +9,7 @@ import AccountDropdown from "./dropdown";
 interface BusinessProfile {
     logo?: string;
     user_email?: string;
+    user_full_name: string;
 }
 
 export default function Navbar() {
@@ -21,7 +22,8 @@ export default function Navbar() {
             try {
                 const response = await api.get("business/my/");
                 setData({logo:response?.data?.business.logo,
-                user_email : response?.data?.business.user_email});
+                user_email : response?.data?.business.user_email,
+                    user_full_name: response?.data?.business.user_full_name });
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -45,8 +47,10 @@ export default function Navbar() {
                         />
                     </div>
                     <div>
-                        <h1 className="font-poppins text-[#252525]">Admin</h1>
-                        <p className="font-poppins text-[#595959]">
+                        <h1 className="font-poppins text-[#252525] text-md">
+                            {data?.user_full_name}
+                            </h1>
+                        <p className="font-poppins text-[#595959] text-sm">
                             {data?.user_email}
                         </p>
                     </div>
