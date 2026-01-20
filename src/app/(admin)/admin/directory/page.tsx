@@ -150,7 +150,7 @@ useEffect(() => {
           
         if (controller) {
             
-            const businesses: CompanyProfile[] = res.results.businesses.map((b: any) => ({
+            const businesses: CompanyProfile[] = res.data.results.businesses.map((b: any) => ({
                 id:b.id,
                 headerImage: b.logo,
                 title: b.business_name,
@@ -166,14 +166,14 @@ useEffect(() => {
 
             setData(businesses);
 
-            setTotal(res.results.count)
+            setTotal(res.data.results.count)
 
             
             const countr:any = await api.get(`core/countries/`, { signal: controller.signal });
             const serv: any = await api.get(`core/services/`, { signal: controller.signal });
 
-            setCountries([{ id: '', name: 'No Selection', flag: '' },...countr.countries])
-            setServices([{ id: '', title: 'No Selection' },...serv.services, ])
+            setCountries([{ id: '', name: 'No Selection', flag: '' },...countr.data.countries])
+            setServices([{ id: '', title: 'No Selection' }, ...serv.data.services, ])
 
 
 

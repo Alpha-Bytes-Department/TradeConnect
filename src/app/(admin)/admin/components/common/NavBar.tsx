@@ -1,6 +1,7 @@
 // Fahim
 "use client"
 import { LogOut, Moon, Settings, SquareMenu, Sun, User } from "lucide-react";
+import { useEffect, useState } from "react";
 // import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 // import {
 //     DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator,
@@ -11,11 +12,26 @@ import { SidebarSeparator, SidebarTrigger, useSidebar } from '@/components/ui/si
 import Link from "next/link";
 import Image from "next/image";
 import AccountDropdown from "./dropdown";
+import api from "@/app/api";
 // import { useTheme } from "next-themes";
 
 export default function Navbar() {
     // const { theme, setTheme } = useTheme();
     // const { toggleSidebar } = useSidebar();
+    const [data, setData] = useState(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await api.get("business/my/");
+                setData(response?.data.business);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     return (
         <div>
@@ -27,14 +43,14 @@ export default function Navbar() {
                 {/*Right*/}
                 <div className="flex justify-end items-center gap-3">
                     <div className="relative w-12 h-12">
-                        <Image src={"/dashboard-images/AdminPhoto.jpg"} alt="admin-photo" fill className="rounded-full object-cover" />
+                        <Image src={data?.logo ? data?.logo:'/logo.png'} alt="admin-photo" fill className="rounded-full object-cover" />
                     </div>
                     <div>
                         <h1 className="font-poppins text-[#252525]">Admin</h1>
-                        <p className="font-poppins text-[#595959]">admin@business.com</p>
+                        <p className="font-poppins text-[#595959]">{data?.user_email}</p>
                     </div>
                     <div className="fc">
-                        <AccountDropdown/>
+                        <AccountDropdown />
                     </div>
                 </div>
 

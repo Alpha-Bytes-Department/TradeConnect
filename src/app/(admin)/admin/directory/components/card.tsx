@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import Flag from "@/app/flag/page";
+import api from "@/app/api";
 
 export interface Service {
     id: string,
@@ -31,7 +32,7 @@ interface CardProps {
 }
 const Card: React.FC<CardProps> = ({ prop }) => {
 
-    const router=useRouter()
+    
     // Display first 3 services, and show "+N" for remaining
     const {
         id,
@@ -46,6 +47,24 @@ const Card: React.FC<CardProps> = ({ prop }) => {
     } = prop;
     const displayedServices = services?.slice(0, 3);
     const remainingCount = services ? services.length - 3 : 0;
+    const router=useRouter()
+    const increaseBusinessView = async (id:string) => {
+        try {
+            const response = await api.post(`/business/${id}/increase-view/`);
+
+            if (!response) {
+                throw new Error(`HTTP error! status: ${response}`);
+            }
+
+            
+        } catch (error) {
+            console.error('Error increasing business view:', error);
+            throw error;
+        }
+        
+    };
+
+
 
     return (
         <div className="flex flex-col h-full col-span-4 md:col-span-1 w-full bg-white rounded-2xl shadow-lg overflow-hidden border ">
@@ -127,7 +146,7 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                 {/* Action Buttons */}
                 <div className="mt-auto flex items-center gap-3">
                     <Button
-                        onClick={()=>router.push(`/accounts/${id}`)}
+                        onClick={async()=>{await increaseBusinessView(id); router.push(`/accounts/${id}/`)}}
                         className="fc flex-1 bg-blue-600 hover:bg-blue-700 text-white text-lg font-medium py-1 rounded-xl transition-colors"
                     >
                         View Profile

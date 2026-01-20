@@ -83,7 +83,7 @@ export default function AddContactModal({ isOpen, onClose, onSubmit }: AddContac
             const response = await api.post('business/contact-persons/', payload);
 
             
-            onSubmit(response.data || payload);
+            onSubmit(response.data.data || payload);
 
             resetForm();
             onClose();

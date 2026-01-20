@@ -52,8 +52,8 @@ const Certifications: React.FC<BusinessCertificationsProps> = ({
                 });
 
                 
-                if (res && res.certifications) {
-                    setCertifications(res.certifications);
+                if (res && res.data.certifications) {
+                    setCertifications(res.data.certifications);
                 } 
 
             } catch (err: any) {
