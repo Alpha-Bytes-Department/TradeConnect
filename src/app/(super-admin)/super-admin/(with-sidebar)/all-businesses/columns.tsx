@@ -1,10 +1,10 @@
 // Fahim
 "use client"
 import { type ColumnDef } from "@tanstack/react-table"
-import { cn } from "@/lib/utils";
 import { LockKeyhole, LockOpen, SquarePen, Trash2 } from "lucide-react";
 import { redirect } from "next/navigation";
 import axios from "axios";
+import { toast } from "sonner";
 
 // This type is used to define the shape of our data.
 // We can use a Zod schema here if we want.
@@ -142,10 +142,13 @@ export const columns: ColumnDef<allBusinessesTable>[] = [
                             }
                         }
                     );
+                    window.location.reload(); // Simple reload
+                    toast.success("Deleted", {
+                        description: "Business Deleted.",
+                    });
                     console.log("Business Deleted", response.data);
                     // We may want to refresh the table data here or use a state management solution
                     // to update the UI immediately
-                    window.location.reload(); // Simple reload
                 }
                 catch (error) {
                     console.error("Error deleting", error);
