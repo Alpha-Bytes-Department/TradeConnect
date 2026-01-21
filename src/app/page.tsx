@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Mail, LockKeyhole, Eye, EyeOff } from 'lucide-react';
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { FaArrowRight } from "react-icons/fa6";
 import axios from "axios";
 import { useView } from "./(super-admin)/ListGridContext";
@@ -105,23 +105,6 @@ export default function SignIn() {
       // }
       // errRef.current.focus();
     }
-
-    // if (data.emailAddress === "admin@gmail.com" && data.password === "HelloFahim19")
-    //   router.push("/super-admin/dashboard");
-    // const payload = {
-    //   "email": "tusharimranme0@gmail.com",
-    //   "password": "12345678"
-    // }
-    // try {
-    //   const response = await axios.post('http://127.0.0.1:8000/api/accounts/login/', payload, {
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     }
-    //   });
-    //   return response.data;
-    // } catch (error) {
-    //   console.error("Submission error:", error);
-    // }
   };
 
   return (
