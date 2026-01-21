@@ -7,9 +7,9 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue }
     from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { CalendarHeartIcon, Divide, Eye, EyeOff, LockKeyhole, Save, Trash2, Upload, X }
+import { CalendarHeartIcon, Eye, EyeOff, LockKeyhole, MoveLeft, Save, Trash2, Upload, X }
     from "lucide-react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
@@ -71,9 +71,6 @@ export default function EditBusiness() {
                 confirmPassword: ''
             }
         });
-
-    // Watch aboutBusiness for character count
-    const aboutBusiness = watch('aboutBusiness');
 
     // Country type definition
     type Country = {
@@ -410,6 +407,43 @@ export default function EditBusiness() {
         }
     };
 
+    const handleToggleLock = async () => {
+        const token = localStorage.getItem("accessToken");
+        if (!token) return;
+
+        try {
+            const newLockStatus = !datas?.business?.is_locked;
+
+            const response = await axios.patch(
+                `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/${id}/update/`,
+                { is_locked: newLockStatus },
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "ngrok-skip-browser-warning": "true",
+                        "Content-Type": "application/json"
+                    },
+                }
+            );
+
+            // Update local state after successful API call
+            setDatas({
+                ...datas,
+                business: {
+                    ...datas.business,
+                    is_locked: newLockStatus
+                }
+            });
+
+            console.log(`Account ${newLockStatus ? 'locked' : 'unlocked'} successfully`);
+
+        } catch (error) {
+            console.error('Error toggling lock status:', error);
+            if (axios.isAxiosError(error)) {
+                console.log(`Failed to update lock status: ${error.response?.data?.message || error.message}`);
+            }
+        }
+    };
 
     // Add form submission handler using Axios
     const onSubmit = async (data: BusinessFormData) => {
@@ -494,10 +528,10 @@ export default function EditBusiness() {
                     },
                 });
 
-            // ✅ Reset bannerImage state after successful upload
+            // Reset bannerImage state after successful upload
             setBannerImage(null);
 
-            // ✅ Refresh all data from backend
+            // Refresh all data from backend
             await refreshBusinessData();
 
             console.log("Business updated successfully!");
@@ -535,9 +569,16 @@ export default function EditBusiness() {
     //     );
     // }
 
+    const router = useRouter();
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="max-w-[1300px] mx-auto">
+            <button className="mt-3 bg-[#BFD7FDB8] text-[#153569] px-2 py-1 
+                flex items-center gap-1.5 font-semibold font-poppins rounded-lg cursor-pointer"
+                onClick={() => router.push("/super-admin/all-businesses")}>
+                <MoveLeft />
+                Back
+            </button>
             <h1 className="font-medium font-poppins text-[#0B0B0B] text-2xl mt-5">Edit Profile</h1>
             <p className="font-poppins text-[#626262]">Update your business information and images</p>
             <div className="bg-white rounded-lg shadow-md border mt-6">
@@ -1038,18 +1079,20 @@ export default function EditBusiness() {
                         // console.log(data?.is_locked);
                         datas?.business?.is_locked === true ?
                             <button type="button" className="flex items-center justify-center gap-2 
-                            bg-[#8ACF84] text-[#0C8C00] font-poppins px-4 py-2 rounded-lg cursor-pointer">
+                            bg-[#8ACF84]/60 text-[#0C8C00] font-poppins px-4 py-2 rounded-lg cursor-pointer"
+                                onClick={handleToggleLock}>
                                 <LockKeyhole className="text-[#0C8C00] w-5 h-5" />
                                 Unlock Account
                             </button> :
                             <button type="button" className="flex items-center justify-center gap-2 
-                            bg-[#CFB584] text-[#AD7703] font-poppins px-4 py-2 rounded-lg cursor-pointer">
+                            bg-[#CFB584]/60 text-[#AD7703] font-poppins px-4 py-2 rounded-lg cursor-pointer"
+                                onClick={handleToggleLock}>
                                 <LockKeyhole className="text-[#AD7703] w-5 h-5" />
                                 Lock Account
                             </button>
                     }
                     <button type="button" className="flex items-center justify-center 
-                gap-2 bg-[#F59D9D] text-[#B3261E] font-poppins px-4 py-2 rounded-lg cursor-pointer"
+                gap-2 bg-[#F59D9D]/60 text-[#B3261E] font-poppins px-4 py-2 rounded-lg cursor-pointer"
                         onClick={handleDelete}>
                         <Trash2 className="text-[#B3261E] w-5 h-5" />
                         Delete Business
