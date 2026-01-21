@@ -7,7 +7,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue }
     from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { CalendarHeartIcon, Divide, Eye, EyeOff, LockKeyhole, MoveLeft, Save, Trash2, Upload, X }
+import { CalendarHeartIcon, Divide, Eye, EyeOff, LockKeyhole, Save, Trash2, Upload, X }
     from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -52,7 +52,7 @@ export default function EditBusiness() {
     const [date, setDate] = useState<Date | undefined>(undefined);
 
     const { id } = useParams(); // Extract id from URL
-    const [data, setData] = useState<any>(null);
+    const [datas, setDatas] = useState<any>(null);
 
     // Initialize React Hook Form
     const { register, handleSubmit, control, formState: { errors: formErrors }, setValue, reset, watch } =
@@ -86,6 +86,7 @@ export default function EditBusiness() {
     if (!token) return;
 
     const [countries, setCountries] = useState<Country[]>([]);
+
     useEffect(() => {
         axios.get("https://squishiest-punctually-daxton.ngrok-free.dev/api/core/countries/",
             {
@@ -119,11 +120,12 @@ export default function EditBusiness() {
                 }
             );
 
-            const freshData = res.data;
+            const freshData = res?.data;
+            setDatas(freshData);
 
             // Re-populate ALL fields (same as in initial fetch)
             setValue('businessName', freshData?.business?.business_name || '');
-            setValue('country', freshData?.business?.country?.id || '', { shouldValidate: true });           // ← this fixes country
+            setValue('country', freshData?.business?.country?.id || '', { shouldValidate: true });
             setValue('fullAddress', freshData?.business?.full_address || '');
             setValue('emailAddress', freshData?.business?.user_email || '');
             setValue('phoneNumber', freshData?.business?.phone_number || '');
@@ -149,7 +151,21 @@ export default function EditBusiness() {
                 }
             }
 
-            // banner & gallery can stay as-is or refresh too if needed
+            // Update banner preview if available
+            if (freshData?.business?.logo) {
+                setBannerPreview(freshData.business.logo);
+            }
+
+            // Update gallery images
+            if (freshData?.business?.gallery && Array.isArray(freshData?.business?.gallery)) {
+                const galleryPreviews = freshData?.business?.gallery.map((item: any) => ({
+                    id: item.id,
+                    file: null,
+                    preview: item.image
+                }));
+                setGalleryImages(galleryPreviews);
+            }
+
         } catch (err) {
             console.error("Failed to refresh data after update", err);
         }
@@ -168,7 +184,9 @@ export default function EditBusiness() {
                         },
                     }
                 );
+
                 const data = response?.data;
+                setDatas(data);
 
                 // Populate form fields with fetched data
                 setValue('businessName', data?.business?.business_name || '');
@@ -251,6 +269,7 @@ export default function EditBusiness() {
             fetchBusinessData();
         }
     }, [id, setValue]);
+
 
     const handleDelete = async () => {
         const token = localStorage.getItem("accessToken");
@@ -395,8 +414,6 @@ export default function EditBusiness() {
     // Add form submission handler using Axios
     const onSubmit = async (data: BusinessFormData) => {
         try {
-            //setIsLoading(true);
-
             // Create FormData
             const formData1 = new FormData();
 
@@ -404,7 +421,6 @@ export default function EditBusiness() {
             formData1.append('business_name', data.businessName);
             formData1.append('country', data.country);
             formData1.append('full_address', data.fullAddress);
-            //formData1.append('membership_valid_till', data.membershipValidTill);
             formData1.append('user_email', data.emailAddress || '');
             formData1.append('phone_number', data.phoneNumber || '');
             formData1.append('website', data.websiteURL || '');
@@ -414,18 +430,16 @@ export default function EditBusiness() {
             const isoDate = data.membershipValidTill;
             const date = new Date(isoDate);
             const day = String(date.getDate()).padStart(2, '0');
-            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+            const month = String(date.getMonth() + 1).padStart(2, '0');
             const year = date.getFullYear();
 
             const formattedDate = `${day}/${month}/${year}`;
             formData1.append('membership_valid_till', formattedDate);
-            console.log(formattedDate); // "23/01/2026"
 
             // Append banner image if changed
             if (bannerImage) {
                 formData1.append('logo', bannerImage);
             }
-
 
             const formData2 = new FormData();
             // Append gallery images (only new ones with file objects)
@@ -433,9 +447,7 @@ export default function EditBusiness() {
                 if (image.file) {
                     formData2.append('images', image.file);
                 }
-                // console.log(image)
             });
-
 
             const formData3 = new FormData();
             // Append password fields only if provided
@@ -446,7 +458,7 @@ export default function EditBusiness() {
                 formData3.append('confirmPassword', data.confirmPassword);
             }
 
-
+            // Update business details
             const response1 = await axios.patch(
                 `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/${id}/update/`,
                 formData1,
@@ -458,6 +470,7 @@ export default function EditBusiness() {
                     },
                 });
 
+            // Upload gallery images
             const response2 = await axios.post(
                 `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/gallery/upload/${id}/`,
                 formData2,
@@ -469,6 +482,7 @@ export default function EditBusiness() {
                     },
                 });
 
+            // Update password
             const response3 = await axios.patch(
                 `https://squishiest-punctually-daxton.ngrok-free.dev/api/auth/super-admin/users/change-password/`,
                 formData3,
@@ -479,18 +493,22 @@ export default function EditBusiness() {
                         "Content-Type": "application/json"
                     },
                 });
-            await refreshBusinessData();
-        }
 
-        catch (error) {
+            // ✅ Reset bannerImage state after successful upload
+            setBannerImage(null);
+
+            // ✅ Refresh all data from backend
+            await refreshBusinessData();
+
+            console.log("Business updated successfully!");
+
+        } catch (error) {
             console.error('Error updating business:', error);
             if (axios.isAxiosError(error)) {
                 console.log(`Failed to update business: ${error.response?.data?.message || error.message}`);
             } else {
                 console.log('Failed to update business. Please try again.');
             }
-        } finally {
-            //setIsLoading(false);
         }
     };
 
@@ -520,11 +538,6 @@ export default function EditBusiness() {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="max-w-[1300px] mx-auto">
-            {/* <button className="flex items-center gap-2 px-4 py-1 bg-[#BFD7FDB8] rounded-lg 
-            font-poppins text-[#153569] mt-4 cursor-pointer">
-                <MoveLeft />
-                Back
-            </button> */}
             <h1 className="font-medium font-poppins text-[#0B0B0B] text-2xl mt-5">Edit Profile</h1>
             <p className="font-poppins text-[#626262]">Update your business information and images</p>
             <div className="bg-white rounded-lg shadow-md border mt-6">
@@ -1021,14 +1034,24 @@ export default function EditBusiness() {
                 </div>
 
                 <div className="flex flex-col lg:flex-row gap-6 mt-6">
-                    <button type="button" className="flex items-center justify-center gap-2 bg-[#CFB584] 
-                text-[#AD7703] font-poppins px-4 py-2 rounded-lg cursor-pointer">
-                        <LockKeyhole className="text-[#AD7703] w-5 h-5" />
-                        Locked Account
-                    </button>
+                    {
+                        // console.log(data?.is_locked);
+                        datas?.business?.is_locked === true ?
+                            <button type="button" className="flex items-center justify-center gap-2 
+                            bg-[#8ACF84] text-[#0C8C00] font-poppins px-4 py-2 rounded-lg cursor-pointer">
+                                <LockKeyhole className="text-[#0C8C00] w-5 h-5" />
+                                Unlock Account
+                            </button> :
+                            <button type="button" className="flex items-center justify-center gap-2 
+                            bg-[#CFB584] text-[#AD7703] font-poppins px-4 py-2 rounded-lg cursor-pointer">
+                                <LockKeyhole className="text-[#AD7703] w-5 h-5" />
+                                Lock Account
+                            </button>
+                    }
                     <button type="button" className="flex items-center justify-center 
-                gap-2 bg-[#F59D9D] text-[#B3261E] font-poppins px-4 py-2 rounded-lg cursor-pointer">
-                        <Trash2 className="text-[#B3261E] w-5 h-5" onClick={handleDelete} />
+                gap-2 bg-[#F59D9D] text-[#B3261E] font-poppins px-4 py-2 rounded-lg cursor-pointer"
+                        onClick={handleDelete}>
+                        <Trash2 className="text-[#B3261E] w-5 h-5" />
                         Delete Business
                     </button>
                 </div>
@@ -1040,7 +1063,6 @@ export default function EditBusiness() {
                     Make sure all information is accurate and up-to date.</p>
             </div>
         </form>
-
     );
 }
 
