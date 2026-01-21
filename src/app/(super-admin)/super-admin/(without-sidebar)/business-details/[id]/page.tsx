@@ -2,9 +2,9 @@
 "use client"
 import Modal from "@/components/ui/modal";
 import axios from "axios";
-import { Globe, Mail, MapPin, Phone } from "lucide-react";
+import { Globe, Mail, MapPin, MoveLeft, Phone } from "lucide-react";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IoInformationCircleOutline } from "react-icons/io5";
 
@@ -30,6 +30,7 @@ export default function BusinessDetails() {
         setActiveModal(null);
     };
 
+    const router = useRouter();
     const { id } = useParams(); // Extract id from URL
     const [data, setData] = useState<any>(null);
 
@@ -59,7 +60,14 @@ export default function BusinessDetails() {
             <div className="relative w-full h-[350px] px-4 flex items-center justify-center">
                 <Image src={data?.logo} alt={data?.logo} fill
                     className="object-cover object-center" />
+                <button className="absolute top-2 left-2 bg-[#BFD7FDB8] text-[#153569] px-2 py-1 
+                flex items-center gap-1.5 font-semibold font-poppins rounded-lg cursor-pointer"
+                    onClick={() => router.push("/super-admin/all-businesses")}>
+                    <MoveLeft />
+                    Back
+                </button>
             </div>
+
             {/* <div className="max-w-[300px] h-[150px] mx-auto -mt-16 relative">
                 <Image src="/all-business-card-banners/2.jpg" alt="" fill
                     className="rounded-lg object-cover object-center
