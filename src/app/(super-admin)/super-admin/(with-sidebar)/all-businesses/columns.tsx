@@ -145,7 +145,9 @@ export const columns: ColumnDef<allBusinessesTable>[] = [
                     console.log("Business Deleted", response.data);
                     // We may want to refresh the table data here or use a state management solution
                     // to update the UI immediately
-                } catch (error) {
+                    window.location.reload(); // Simple reload
+                }
+                catch (error) {
                     console.error("Error deleting", error);
                 }
             };
@@ -168,7 +170,9 @@ export const columns: ColumnDef<allBusinessesTable>[] = [
                     console.log("Lock status updated:", response.data);
                     // We may want to refresh the table data here or use a state management solution
                     // to update the UI immediately
-                } catch (error) {
+                    window.location.reload(); // Simple reload
+                }
+                catch (error) {
                     console.error("Error updating lock status:", error);
                 }
             };
