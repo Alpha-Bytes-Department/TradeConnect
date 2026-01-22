@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { ArrowLeft, Eye, EyeClosedIcon, Shield, X } from 'lucide-react';
 import { TbLockPassword } from 'react-icons/tb';
-import Navbar from '../(admin)/admin/components/common/NavBar';
+
 import { SidebarProvider } from '@/components/ui/sidebar';
 import api from '@/app/api';
 import { toast } from 'sonner';
@@ -30,6 +30,9 @@ export default function ChangePassword() {
 
 
     const getPasswordValidationError = (password: string): string | boolean => {
+        if (password.length === 0) {
+            return false;
+        }
         if (password.length < 8) {
             return "Password must be at least 8 characters long.";
         }
@@ -118,7 +121,6 @@ export default function ChangePassword() {
         <div className="w-full min-h-screen bg-white flex justify-start items-center">
             <SidebarProvider>
                 <div className="w-full">
-                    <Navbar />
                     <div className="max-w-4xl pl-[50px] mt-8 ">
                         {/* Header */}
                         <div className="mb-8">

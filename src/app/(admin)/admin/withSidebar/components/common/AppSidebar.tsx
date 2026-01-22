@@ -7,7 +7,7 @@ import {
 import { LuBriefcaseBusiness, LuLayoutDashboard, LuSettings } from "react-icons/lu";
 import { FiPlusCircle } from "react-icons/fi";
 import { TbCategory, TbCategory2, TbCategoryFilled, TbCategoryPlus, TbLogout } from "react-icons/tb";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useView } from "../ListGridContext";
 import LogOutModal from "./LogOutModal";
 import { DotSquareIcon, Grid3x3Icon } from "lucide-react";
@@ -24,12 +24,12 @@ const items: SidebarItem[] = [
     
     {
         title: "Directory",
-        url: "/admin/directory",
+        url: "/admin/withSidebar/directory",
         icon: <BsGrid3X3Gap/>
     },
     {
         title: "Dashboard",
-        url: "/admin/dashboard",
+        url: "/admin/withSidebar/dashboard",
         icon: <LuLayoutDashboard />,
     },
 ];
@@ -38,14 +38,16 @@ export default function AppSidebar() {
     // const [isLogoutOpen, setIsLogoutOpen] = useState(false);
     const pathname = usePathname();
     const { isLogoutOpen, setIsLogoutOpen } = useView();
+    const router = useRouter()
 
     return (
         <Sidebar collapsible="icon" side="left" className="font-poppins text-base">
             <SidebarHeader className=" h-21">
                 <div className="flex flex-col items-start pl-3 transition-all group-data-[collapsible=icon]:hidden">
-                    <div className="relative fc pl-3 ">
-                        <Image src={'/primaryLogo.png'} alt={'logo'} height={100} width={120} className="object-cover"/>
-                    </div>
+                   <a className="relative fc pl-3 " href={'/admin/withSidebar/dashboard'} >
+                                                           <Image src={'/primaryLogo.png'} alt={'logo'} height={100} width={120} className="object-cover"/>
+                                                       </a>
+                   
                     
                 </div>
             </SidebarHeader>

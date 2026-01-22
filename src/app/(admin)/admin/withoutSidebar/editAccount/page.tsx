@@ -9,9 +9,9 @@ import Branches from "./components/branches";
 import Certifications from "./components/certifications";
 import { ArrowLeft, Save } from "lucide-react";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import Navbar from "../(admin)/admin/components/common/NavBar";
+
 import { useRouter } from "next/navigation";
-import api from "../api";
+import api from "../../../../api";
 
 // --- Interfaces ---
 interface Country { id: string; name: string; flag: string; }
@@ -60,6 +60,7 @@ const ProfileLayout: React.FC = () => {
     const [certification, setCertification] = useState<Certification[]>([]);
     const [services, setServices] = useState({ about_business: "", services: [] as Service[] });
     const [images, setImages] = useState({ logo: "", gallery: [] as GalleryItem[] });
+    const [cache, setCache] = useState<boolean>(true)
 
     const tabs: { id: TabType; label: string }[] = [
         { id: "basic", label: "Basic Information" },
@@ -172,7 +173,115 @@ const ProfileLayout: React.FC = () => {
         }
     };
 */
+    const normalizeArray = (arr: any[]) =>
+        JSON.stringify([...arr].sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b))));
 
+    const isFile = (v: any) => typeof File !== "undefined" && v instanceof File;
+
+
+    function hasProfileChanges({
+        data,
+        basic,
+        contact,
+        branch,
+        certification,
+        services,
+        images,
+    }: {
+        data: Business;
+        basic: any;
+        contact: any;
+        branch: Branch[];
+        certification: Certification[];
+        services: { about_business: string; services: Service[] };
+        images: { logo: any; gallery: any[] };
+    }): boolean {
+        if (!data) return false;
+
+        /* ---------- BASIC ---------- */
+        if (
+            basic.business_name !== data.business_name ||
+            basic.full_address !== data.full_address ||
+            (basic.country?.id ?? basic.country) !== data.country?.id
+        ) return true;
+
+        /* ---------- CONTACT ---------- */
+        if (
+            contact.office.phone !== data.phone_number ||
+            contact.office.email !== data.user_email ||
+            contact.office.website !== data.website
+        ) return true;
+
+        const originalContacts = (data.contacts || []).map(c => ({
+            id: c.id,
+            full_name: c.full_name,
+            email: c.email,
+            phone_number: c.phone_number,
+            role: c.role,
+            custom_role: c.custom_role,
+            is_primary: c.is_primary,
+        }));
+
+        const currentContacts = (contact.contacts || []).map((c: any) => ({
+            id: c.id,
+            full_name: c.full_name,
+            email: c.email,
+            phone_number: c.phone_number,
+            role: c.role,
+            custom_role: c.custom_role,
+            is_primary: c.is_primary,
+        }));
+
+        if (normalizeArray(originalContacts) !== normalizeArray(currentContacts)) return true;
+
+        /* ---------- BRANCHES ---------- */
+        const originalBranches = (data.branches || []).map(b => ({
+            id: b.id,
+            full_name: b.full_name,
+            address: b.address,
+            city: b.city,
+            country: b.country?.id,
+            phone_number: b.phone_number,
+        }));
+
+        const currentBranches = (branch || []).map(b => ({
+            id: b.id,
+            full_name: b.full_name,
+            address: b.address,
+            city: b.city,
+            country: b.country?.id,
+            phone_number: b.phone_number,
+        }));
+
+        if (normalizeArray(originalBranches) !== normalizeArray(currentBranches)) return true;
+
+        /* ---------- CERTIFICATIONS ---------- */
+        const originalCerts = (data.certifications || []).map(c => c.id);
+        const currentCerts = (certification || []).map(c => c.id ?? c);
+
+        if (normalizeArray(originalCerts) !== normalizeArray(currentCerts)) return true;
+
+        /* ---------- SERVICES ---------- */
+        if (services.about_business !== data.about_business) return true;
+
+        const originalServices = (data.services || []).map(s => s.title);
+        const currentServices = (services.services || []).map(s => s.title);
+
+        if (normalizeArray(originalServices) !== normalizeArray(currentServices)) return true;
+
+        /* ---------- IMAGES ---------- */
+        // Logo: new file OR cleared
+        if (
+            (isFile(images.logo)) ||
+            (images.logo === null && data.logo !== null)
+        ) return true;
+
+        // Gallery: new files added
+        const newGalleryFiles = images.gallery.some(item => isFile(item));
+        if (newGalleryFiles) return true;
+
+        return false;
+    }
 
 
 
@@ -189,7 +298,7 @@ const ProfileLayout: React.FC = () => {
         formData.append("about_business", services.about_business || "");
 
         // 2. Handle Country (Send as a single string ID)
-        const countryId = basic.country?.id ? basic.country.id : basic.country;
+        const countryId =  basic?.country?.id;
         if (countryId) formData.append("country", countryId);
 
         // 3. FIX: Handle Certifications (ManyToMany)
@@ -283,6 +392,29 @@ const ProfileLayout: React.FC = () => {
         }
     };
 
+    useEffect(()=>{
+        const hasChanges = hasProfileChanges({
+            data,
+            basic,
+            contact,
+            branch,
+            certification,
+            services,
+            images,
+        });
+
+        setCache(!hasChanges)
+
+    }, [data,
+        basic,
+        contact,
+        branch,
+        certification,
+        services,
+        images])
+
+   
+
     if (isLoading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
     if (error || !data) return <div className="min-h-screen flex items-center justify-center">Error loading profile</div>;
 
@@ -290,7 +422,6 @@ const ProfileLayout: React.FC = () => {
         <div className="min-h-screen bg-gray-50">
             <SidebarProvider>
                 <div className="w-full">
-                    <Navbar />
                     <div className="max-w-full px-4 md:px-24 mx-auto mt-4">
                         {/* Header */}
                         <div className="mb-8">
@@ -329,11 +460,13 @@ const ProfileLayout: React.FC = () => {
                         </div>
 
                         {/* Action Buttons */}
+
+
                         <div className="flex flex-col md:flex-row gap-4 mt-8">
                             <button
                                 onClick={handleSave}
-                                disabled={isSaving}
-                                className={`flex items-center justify-center gap-2 px-6 py-3 bg-[#327EF9] text-white rounded-lg font-medium transition-opacity ${isSaving ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-600'}`}
+                                disabled={ isSaving || cache}
+                                className={`flex items-center justify-center gap-2 px-6 py-3 bg-[#327EF9] text-white rounded-lg font-medium transition-opacity ${isSaving || cache ? 'bg-gray-400 cursor-not-allowed' : 'hover:bg-blue-600'}`}
                             >
                                 <Save size={20} />
                                 {isSaving ? "Saving..." : "Save Changes"}

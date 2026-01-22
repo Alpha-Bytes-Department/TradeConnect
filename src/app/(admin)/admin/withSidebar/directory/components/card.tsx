@@ -146,7 +146,7 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                 {/* Action Buttons */}
                 <div className="mt-auto flex items-center gap-3">
                     <Button
-                        onClick={async()=>{await increaseBusinessView(id); router.push(`/accounts/${id}/`)}}
+                        onClick={async()=>{await increaseBusinessView(id); router.replace(`/admin/withoutSidebar/accounts/${id}/`)}}
                         className="fc flex-1 bg-blue-600 hover:bg-blue-700 text-white text-lg font-medium py-1 rounded-xl transition-colors"
                     >
                         View Profile
