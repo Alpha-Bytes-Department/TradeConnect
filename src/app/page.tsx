@@ -97,7 +97,7 @@ export default function SignIn() {
       if (response?.data?.user?.is_superuser === true) {
         router.push("/super-admin/dashboard");
       } else {
-        router.push("/admin/dashboard");
+        router.push("/admin/withSidebar/dashboard");
       }
     }
     catch (err: any) {
