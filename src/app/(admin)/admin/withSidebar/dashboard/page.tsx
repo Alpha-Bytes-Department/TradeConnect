@@ -42,7 +42,7 @@ const quickActions = [
         id: 1,
         icon: Edit3,
         title: "Edit Profile",
-        link: '/editAccount',
+        link: '/admin/withoutSidebar/editAccount',
         description: "Update your information",
         color: "bg-blue-100",
         iconColor: "text-blue-600",
@@ -51,7 +51,7 @@ const quickActions = [
         id: 2,
         icon: Lock,
         title: "Change Password",
-        link: '/changePassword',
+        link: '/admin/withoutSidebar/changePassword',
         description: "Update security",
         color: "bg-purple-100",
         iconColor: "text-purple-600",
@@ -60,7 +60,7 @@ const quickActions = [
         id: 3,
         icon: ImageIcon,
         title: "Update Images",
-        link: '/editAccount',
+        link: '/admin/withoutSidebar/editAccount',
         description: "Add photos to gallery",
         color: "bg-green-100",
         iconColor: "text-green-600",
@@ -431,7 +431,7 @@ export default function Dashboard() {
                         {/* Public View Button */}
                         <div className="flex-shrink-0 lg:self-end">
                             <button
-                                onClick={async () => { await increaseBusinessView(myData.id); router.push(`/accounts/${myData.id}/`) }}
+                                onClick={async () => { await increaseBusinessView(myData.id); router.push(`/admin/withoutSidebar/accounts/${myData.id}/`) }}
                                 className="w-full m-1 sm:w-auto bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
                             >
                                 <Eye className="w-5 h-5" />
@@ -488,7 +488,7 @@ export default function Dashboard() {
                                         <td className="py-5 px-6 text-slate-700 max-w-md truncate">{business.services?.join(', ')}</td>
                                         <td className="py-5 px-6">
                                             <button
-                                                onClick={async () => { await increaseBusinessView(business.id); router.push(`/accounts/${business.id}/`) }}
+                                                onClick={async () => { await increaseBusinessView(business.id); router.push(`/admin/withoutSidebar/accounts/${business.id}/`) }}
                                                 className="w-28 h-10 rounded-lg bg-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold flex items-center justify-center gap-2 transition-all group"
                                             >
                                                 View

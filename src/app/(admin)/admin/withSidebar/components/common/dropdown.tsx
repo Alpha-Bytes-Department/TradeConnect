@@ -20,7 +20,7 @@ export default function AccountDropdown() {
     }, []);
 
     const handleEditAccount = () => {
-        router.push('/editAccount');
+        router.push('/admin/withoutSidebar/editAccount');
         setIsOpen(false);
     };
 

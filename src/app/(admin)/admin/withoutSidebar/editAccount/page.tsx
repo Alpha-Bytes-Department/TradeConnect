@@ -9,9 +9,9 @@ import Branches from "./components/branches";
 import Certifications from "./components/certifications";
 import { ArrowLeft, Save } from "lucide-react";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import Navbar from "../(admin)/admin/components/common/NavBar";
+
 import { useRouter } from "next/navigation";
-import api from "../api";
+import api from "../../../../api";
 
 // --- Interfaces ---
 interface Country { id: string; name: string; flag: string; }
@@ -298,7 +298,7 @@ const ProfileLayout: React.FC = () => {
         formData.append("about_business", services.about_business || "");
 
         // 2. Handle Country (Send as a single string ID)
-        const countryId = basic.country?.id ? basic.country.id : basic.country;
+        const countryId =  basic?.country?.id;
         if (countryId) formData.append("country", countryId);
 
         // 3. FIX: Handle Certifications (ManyToMany)
@@ -413,7 +413,7 @@ const ProfileLayout: React.FC = () => {
         services,
         images])
 
-    console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", cache)
+   
 
     if (isLoading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
     if (error || !data) return <div className="min-h-screen flex items-center justify-center">Error loading profile</div>;
@@ -422,7 +422,6 @@ const ProfileLayout: React.FC = () => {
         <div className="min-h-screen bg-gray-50">
             <SidebarProvider>
                 <div className="w-full">
-                    <Navbar />
                     <div className="max-w-full px-4 md:px-24 mx-auto mt-4">
                         {/* Header */}
                         <div className="mb-8">

@@ -25,7 +25,7 @@ import {
 import { PiX } from "react-icons/pi";
 import { redirect, useRouter } from "next/navigation";
 import Image from "next/image";
-import api from "../../api";
+import api from "../../../../../api";
 import Flag from "@/app/flag/page";
 
 /*
@@ -299,7 +299,7 @@ export default function AccountPage({
                                 href={`mailto:${businesses?.user_email}`}
                                 className="z-50 group w-full max-w-40 fc px-4 md:px-8 text-[#153569] py-2 bg-white hover:bg-blue-500 hover:text-white rounded-sm font-medium transition-all border border-[#153569] hover:border-blue-500 duration-300 hover:-translate-y-0.5 flex items-center gap-2 mt-4"
                             >
-                                <Mail className="w-4 h-4 group-hover:rotate-12 transition-transform" />
+                                <Mail className="w-4 h-4  transition-transform" />
                                 Email
                             </a>
 
@@ -310,7 +310,7 @@ export default function AccountPage({
                                 rel="noopener noreferrer"
                                 className="w-full hover:text-white hover:bg-blue-500 hover:border-blue-500 max-w-40 fc px-4 md:px-8 py-2 bg-white text-[#153569] rounded-sm font-medium transition-all duration-300 hover:-translate-y-0.5 border border-[#153569] flex items-center gap-2 mt-4 group"
                             >
-                                <Globe className="w-4 h-4 group-hover:rotate-12 transition-transform" />
+                                <Globe className="w-4 h-4  transition-transform" />
                                 Website
                             </a>
                         </div>
