@@ -21,6 +21,19 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "http",
+        hostname: "particularistically-transelementary-owen.ngrok-free.dev",
+        port: "",
+        pathname: "/media/**",
+      },
+      // If you use https for ngrok, add it here too
+      {
+        protocol: "https",
+        hostname: "particularistically-transelementary-owen.ngrok-free.dev",
+        port: "",
+        pathname: "/media/**",
+      },
     ],
   },
 };
