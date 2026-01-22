@@ -42,6 +42,54 @@ interface BusinessFormData {
     confirmPassword?: string;
 }
 
+
+// Zod password validation schema
+const passwordSchema = z
+    .object({
+        newPassword: z
+            .string()
+            .optional()
+            .refine(
+                (val) =>
+                    !val ||
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/.test(val),
+                {
+                    message:
+                        "Password must be at least 8 characters and include uppercase, lowercase, number, and special character",
+                }
+            ),
+
+        confirmPassword: z.string().optional(),
+    })
+    .refine(
+        (data) =>
+            !data.newPassword ||
+            (data.newPassword && data.confirmPassword === data.newPassword),
+        {
+            message: "Passwords do not match",
+            path: ["confirmPassword"],
+        }
+    );
+
+// 🔴 ADDED: Full form schema
+const businessFormSchema = z
+    .object({
+        businessName: z.string().min(1, "Business name is required"),
+        country: z.string().min(1, "Country is required"),
+        fullAddress: z.string().min(1, "Full address is required"),
+        membershipValidTill: z.string().min(1, "Membership date is required"),
+        emailAddress: z.string().email().optional(),
+        phoneNumber: z.string().optional(),
+        websiteURL: z.string().optional(),
+        servicesOffered: z.string().min(1, "Services are required"),
+        aboutBusiness: z.string().min(1, "About business is required"),
+
+        newPassword: z.string().optional(),
+        confirmPassword: z.string().optional(),
+    })
+    .and(passwordSchema);
+
+
 export default function EditBusiness() {
     const [activeTab, setActiveTab] = useState('basic');
     const [bannerImage, setBannerImage] = useState<File | null>(null);
@@ -57,22 +105,32 @@ export default function EditBusiness() {
     const [datas, setDatas] = useState<any>(null);
 
     // Initialize React Hook Form
-    const { register, handleSubmit, control, formState: { errors: formErrors }, setValue, reset, watch } =
-        useForm<BusinessFormData>({
-            defaultValues: {
-                businessName: '',
-                country: '',
-                fullAddress: '',
-                membershipValidTill: '',
-                emailAddress: '',
-                phoneNumber: '',
-                websiteURL: '',
-                servicesOffered: '',
-                aboutBusiness: '',
-                newPassword: '',
-                confirmPassword: ''
-            }
-        });
+    // useForm now uses zodResolver
+    const {
+        register,
+        handleSubmit,
+        control,
+        formState: { errors: formErrors },
+        setValue,
+        reset,
+        watch,
+    } = useForm<BusinessFormData>({
+        resolver: zodResolver(businessFormSchema),
+        defaultValues: {
+            businessName: "",
+            country: "",
+            fullAddress: "",
+            membershipValidTill: "",
+            emailAddress: "",
+            phoneNumber: "",
+            websiteURL: "",
+            servicesOffered: "",
+            aboutBusiness: "",
+            newPassword: "",
+            confirmPassword: "",
+        },
+    });
+
 
     // Country type definition
     type Country = {
@@ -545,7 +603,7 @@ export default function EditBusiness() {
                 catch (error) {
                     console.error("Password change failed:", error);
                     if (axios.isAxiosError(error)) {
-                        alert(`Failed to change password: ${error.response?.data?.message || error.message}`);
+                        console.log(`Failed to change password: ${error.response?.data?.message || error.message}`);
                     }
                 }
             } else {
@@ -558,14 +616,14 @@ export default function EditBusiness() {
             // Refresh all data from backend
             await refreshBusinessData();
 
-            alert("Business updated successfully!");
+            console.log("Business updated successfully!");
 
         } catch (error) {
             console.error('Error updating business:', error);
             if (axios.isAxiosError(error)) {
-                alert(`Failed to update business: ${error.response?.data?.message || error.message}`);
+                console.log(`Failed to update business: ${error.response?.data?.message || error.message}`);
             } else {
-                alert('Failed to update business. Please try again.');
+                console.log('Failed to update business. Please try again.');
             }
         }
     };
@@ -1025,12 +1083,7 @@ export default function EditBusiness() {
                                     placeholder="Enter New password"
                                     className="pr-10 pl-9 font-poppins bg-[#FFFFFF] text-[#3F3F3F]"
                                     // leave space for the eye button
-                                    {...register("newPassword", {
-                                        minLength: {
-                                            value: 8,
-                                            message: "Password must be at least 8 characters"
-                                        }
-                                    })}
+                                    {...register("newPassword")}
                                 />
                                 <LockKeyhole className="absolute top-2.5 left-2.5 w-5 h-5" />
                                 <button type="button" className="absolute right-3 top-3.5 cursor-pointer"
@@ -1058,11 +1111,7 @@ export default function EditBusiness() {
                                     placeholder="Confirm New password"
                                     className="pr-10 pl-9 font-poppins bg-[#FFFFFF] text-[#3F3F3F]"
                                     // leave space for the eye button
-                                    {...register("confirmPassword", {
-                                        validate: (value, formValues) =>
-                                            !formValues.newPassword || value === formValues.newPassword ||
-                                            "Passwords do not match"
-                                    })}
+                                    {...register("confirmPassword")}
                                 />
                                 <LockKeyhole className="absolute top-2.5 left-2.5 w-5 h-5" />
                                 <button type="button" className="absolute right-3 top-3.5 cursor-pointer"
