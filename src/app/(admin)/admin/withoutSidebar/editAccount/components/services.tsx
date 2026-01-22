@@ -58,7 +58,6 @@ const Services: React.FC<ContactsProps> = ({ data, setData }) => {
             about_business: about
         }));
     };
-    console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX', data)
     return (
         <div className="space-y-6">
             {/* Services */}

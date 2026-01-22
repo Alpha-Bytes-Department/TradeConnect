@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
-  
+
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -20,6 +20,19 @@ const nextConfig: NextConfig = {
         hostname: "images.unsplash.com",
         port: "",
         pathname: "/**",
+      },
+      {
+        protocol: "http",
+        hostname: "particularistically-transelementary-owen.ngrok-free.dev",
+        port: "",
+        pathname: "/media/**",
+      },
+      // If you use https for ngrok, add it here too
+      {
+        protocol: "https",
+        hostname: "particularistically-transelementary-owen.ngrok-free.dev",
+        port: "",
+        pathname: "/media/**",
       },
     ],
   },
