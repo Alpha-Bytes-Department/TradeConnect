@@ -1,7 +1,5 @@
-//fahim
-
+//Fahim
 "use client";
-
 import { ChevronDown, LogOut, Settings } from "lucide-react";
 import { SidebarSeparator, SidebarTrigger } from '@/components/ui/sidebar';
 import Image from "next/image";

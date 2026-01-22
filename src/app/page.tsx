@@ -41,7 +41,7 @@ export default function SignIn() {
   const onSubmit = async (data: SignInFormData) => {
     try {
       const response =
-        await axios.post("https://squishiest-punctually-daxton.ngrok-free.dev/api/auth/login/",
+        await axios.post("https://particularistically-transelementary-owen.ngrok-free.dev/api/auth/login/",
           {
             email: data.emailAddress,
             password: data.password
@@ -102,6 +102,7 @@ export default function SignIn() {
     }
     catch (err: any) {
       // Add toast notifications for errors
+      console.log("Error:",err?.response);
       if (!err?.response) {
         toast.error("Network Error", {
           description: "Unable to connect to server. Please check your connection.",

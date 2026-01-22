@@ -39,7 +39,7 @@ export default function FilterBox({ currentPage }: FilterBoxProps) {
     const [countries, setCountries] = useState<Country[]>([]);
 
     useEffect(() => {
-        axios.get("https://squishiest-punctually-daxton.ngrok-free.dev/api/core/countries/",
+        axios.get("https://particularistically-transelementary-owen.ngrok-free.dev/api/core/countries/",
             {
                 headers: { "ngrok-skip-browser-warning": "true" },
             }
@@ -95,7 +95,7 @@ export default function FilterBox({ currentPage }: FilterBoxProps) {
 
                 // Fetch data with query params
                 const response = await axios.get(
-                    `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/all/?${params.toString()}`,
+                    `https://particularistically-transelementary-owen.ngrok-free.dev/api/business/all/?${params.toString()}`,
                     {
                         headers: {
                             "ngrok-skip-browser-warning": "true",

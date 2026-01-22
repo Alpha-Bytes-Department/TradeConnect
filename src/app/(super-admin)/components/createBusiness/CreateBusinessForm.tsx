@@ -541,7 +541,7 @@ export default function CreateBusinessForm() {
         const fetchCountries = async () => {
             try {
                 const response = await axios.get(
-                    'https://squishiest-punctually-daxton.ngrok-free.dev/api/core/countries/',
+                    'https://particularistically-transelementary-owen.ngrok-free.dev/api/core/countries/',
                     {
                         headers: {
                             "ngrok-skip-browser-warning": "true",
@@ -636,7 +636,7 @@ export default function CreateBusinessForm() {
             // console.log("Membership:", data.membershipValidTill.toISOString());
 
             const response = await axios.post(
-                "https://squishiest-punctually-daxton.ngrok-free.dev/api/business/create-with-user/",
+                "https://particularistically-transelementary-owen.ngrok-free.dev/api/business/create-with-user/",
                 formData,
                 {
                     headers: {

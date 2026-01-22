@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
-  
+
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "http",
-        hostname: "squishiest-punctually-daxton.ngrok-free.dev",
+        hostname: "particularistically-transelementary-owen.ngrok-free.dev",
         pathname: "/**",
       },
       {

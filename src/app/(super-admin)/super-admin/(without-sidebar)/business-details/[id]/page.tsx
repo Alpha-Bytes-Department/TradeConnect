@@ -40,7 +40,7 @@ export default function BusinessDetails() {
             if (!token) return;
 
             const response = await axios.get(
-                `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/${id}/`,
+                `https://particularistically-transelementary-owen.ngrok-free.dev/api/business/${id}/`,
                 {
                     headers: {
                         "ngrok-skip-browser-warning": "true",
