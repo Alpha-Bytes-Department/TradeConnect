@@ -4,11 +4,12 @@ import FilterBox from "@/app/(super-admin)/components/allBusiness/FilterBox";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
 import GridView from "@/app/(super-admin)/components/allBusiness/GridView";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useFilter } from "@/app/(super-admin)/FilterContext";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 
-export default function AllBusiness() {
+// Extract the component that uses useSearchParams
+function AllBusinessContent() {
     const { businesses, total, loading } = useFilter();
     const router = useRouter();
     const pathname = usePathname();
@@ -60,6 +61,16 @@ export default function AllBusiness() {
         </div>
     );
 }
+
+// Wrap with Suspense boundary
+export default function AllBusiness() {
+    return (
+        <Suspense fallback={<div className="p-6 bg-[#F6F6F6] text-center py-8">Loading...</div>}>
+            <AllBusinessContent />
+        </Suspense>
+    );
+}
+
 
 
 // parseInt('8', 10)   // 8  (decimal)
