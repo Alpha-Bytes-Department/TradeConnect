@@ -145,7 +145,7 @@ export default function EditBusiness() {
     const [countries, setCountries] = useState<Country[]>([]);
 
     useEffect(() => {
-        axios.get("https://squishiest-punctually-daxton.ngrok-free.dev/api/core/countries/",
+        axios.get("https://particularistically-transelementary-owen.ngrok-free.dev/api/core/countries/",
             {
                 headers: { "ngrok-skip-browser-warning": "true" },
             }
@@ -168,7 +168,7 @@ export default function EditBusiness() {
     const refreshBusinessData = async () => {
         try {
             const res = await axios.get(
-                `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/${id}/`,
+                `https://particularistically-transelementary-owen.ngrok-free.dev/api/business/${id}/`,
                 {
                     headers: {
                         "ngrok-skip-browser-warning": "true",
@@ -233,7 +233,7 @@ export default function EditBusiness() {
         const fetchBusinessData = async () => {
             try {
                 const response = await axios.get(
-                    `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/${id}/`,
+                    `https://particularistically-transelementary-owen.ngrok-free.dev/api/business/${id}/`,
                     {
                         headers: {
                             "ngrok-skip-browser-warning": "true",
@@ -444,7 +444,7 @@ export default function EditBusiness() {
             console.log("iid", imageToRemove.id)
             try {
                 await axios.delete(
-                    `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/gallery/images/${imageToRemove.id}/`,
+                    `https://particularistically-transelementary-owen.ngrok-free.dev/api/business/gallery/images/${imageToRemove.id}/`,
                     {
                         headers: {
                             "Authorization": `Bearer ${token}`,
@@ -475,7 +475,7 @@ export default function EditBusiness() {
             const newLockStatus = !datas?.business?.is_locked;
 
             const response = await axios.patch(
-                `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/${id}/update/`,
+                `https://particularistically-transelementary-owen.ngrok-free.dev/api/business/${id}/update/`,
                 { is_locked: newLockStatus },
                 {
                     headers: {
@@ -536,7 +536,7 @@ export default function EditBusiness() {
 
             // Update business details
             const response1 = await axios.patch(
-                `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/${id}/update/`,
+                `https://particularistically-transelementary-owen.ngrok-free.dev/api/business/${id}/update/`,
                 formData1,
                 {
                     headers: {
@@ -558,7 +558,7 @@ export default function EditBusiness() {
                 });
 
                 const response2 = await axios.post(
-                    `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/gallery/upload/${id}/`,
+                    `https://particularistically-transelementary-owen.ngrok-free.dev/api/business/gallery/upload/${id}/`,
                     formData2,
                     {
                         headers: {
@@ -583,7 +583,7 @@ export default function EditBusiness() {
 
                 try {
                     const response3 = await axios.post(
-                        `https://squishiest-punctually-daxton.ngrok-free.dev/api/auth/super-admin/users/change-password/`,
+                        `https://particularistically-transelementary-owen.ngrok-free.dev/api/auth/super-admin/users/change-password/`,
                         passwordData,
                         {
                             headers: {

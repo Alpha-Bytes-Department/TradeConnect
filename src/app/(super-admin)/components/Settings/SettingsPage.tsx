@@ -75,7 +75,7 @@ export default function SettingsPage() {
 
             // Send data to backend
             const response = await axios.put(
-                'https://squishiest-punctually-daxton.ngrok-free.dev/api/auth/profile/',
+                'https://particularistically-transelementary-owen.ngrok-free.dev/api/auth/profile/',
                 formData,
                 {
                     headers: {
@@ -153,7 +153,7 @@ export default function SettingsPage() {
             console.log("Exporting CSV...");
 
             const response = await axios.get(
-                'https://squishiest-punctually-daxton.ngrok-free.dev/api/business/export/csv/',
+                'https://particularistically-transelementary-owen.ngrok-free.dev/api/business/export/csv/',
                 {
                     headers: {
                         "ngrok-skip-browser-warning": "true",

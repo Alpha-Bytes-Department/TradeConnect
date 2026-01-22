@@ -21,7 +21,7 @@ export default function DashboardCard() {
             if (!token) return;
 
             const response = await axios.get(
-                `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/admin/dashboard/`,
+                `https://particularistically-transelementary-owen.ngrok-free.dev/api/business/admin/dashboard/`,
                 {
                     headers: {
                         "ngrok-skip-browser-warning": "true",
