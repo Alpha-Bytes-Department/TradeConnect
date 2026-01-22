@@ -2,9 +2,9 @@
 "use client"
 import { type ColumnDef } from "@tanstack/react-table"
 import { LockKeyhole, LockOpen, SquarePen, Trash2 } from "lucide-react";
-import { redirect } from "next/navigation";
 import axios from "axios";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 // This type is used to define the shape of our data.
 // We can use a Zod schema here if we want.
@@ -126,8 +126,9 @@ export const columns: ColumnDef<allBusinessesTable>[] = [
         cell: ({ row }) => {
             const business = row.original;
 
+            const router = useRouter();
             const handleEdit = () => {
-                redirect(`/super-admin/edit-business/${business.id}`);
+                router.push(`/super-admin/edit-business/${business.id}`);
             };
 
             const handleDelete = async () => {

@@ -515,6 +515,7 @@ export default function EditBusiness() {
                         "Content-Type": "multipart/form-data"
                     },
                 });
+            console.log(response2);
 
             // Update password
             const response3 = await axios.patch(
