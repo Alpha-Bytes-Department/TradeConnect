@@ -13,6 +13,8 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 
 interface GalleryImage {
     id?: string;           // ← নতুন: backend থেকে আসা image এর id/uuid
@@ -450,7 +452,6 @@ export default function EditBusiness() {
         try {
             // Create FormData
             const formData1 = new FormData();
-
             // Append text fields
             formData1.append('business_name', data.businessName);
             formData1.append('country', data.country);
@@ -475,23 +476,6 @@ export default function EditBusiness() {
                 formData1.append('logo', bannerImage);
             }
 
-            const formData2 = new FormData();
-            // Append gallery images (only new ones with file objects)
-            galleryImages.forEach((image) => {
-                if (image.file) {
-                    formData2.append('images', image.file);
-                }
-            });
-
-            const formData3 = new FormData();
-            // Append password fields only if provided
-            if (data.newPassword) {
-                formData3.append('newPassword', data.newPassword);
-            }
-            if (data.confirmPassword) {
-                formData3.append('confirmPassword', data.confirmPassword);
-            }
-
             // Update business details
             const response1 = await axios.patch(
                 `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/${id}/update/`,
@@ -504,30 +488,69 @@ export default function EditBusiness() {
                     },
                 });
 
-            // Upload gallery images
-            const response2 = await axios.post(
-                `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/gallery/upload/${id}/`,
-                formData2,
-                {
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                        "ngrok-skip-browser-warning": "true",
-                        "Content-Type": "multipart/form-data"
-                    },
-                });
-            console.log(response2);
 
-            // Update password
-            const response3 = await axios.patch(
-                `https://squishiest-punctually-daxton.ngrok-free.dev/api/auth/super-admin/users/change-password/`,
-                formData3,
-                {
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                        "ngrok-skip-browser-warning": "true",
-                        "Content-Type": "application/json"
-                    },
+            // Upload gallery images (only if there are new images)
+            const newGalleryImages = galleryImages.filter(img => img.file);
+            if (newGalleryImages.length > 0) {
+                const formData2 = new FormData();
+                newGalleryImages.forEach((image) => {
+                    if (image.file) {
+                        formData2.append('images', image.file);
+                    }
                 });
+
+                const response2 = await axios.post(
+                    `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/gallery/upload/${id}/`,
+                    formData2,
+                    {
+                        headers: {
+                            "Authorization": `Bearer ${token}`,
+                            "ngrok-skip-browser-warning": "true",
+                            "Content-Type": "multipart/form-data"
+                        },
+                    });
+                console.log("Gallery upload successful:", response2.data);
+            }
+
+
+            // Only update password if BOTH fields are provided
+            if (data.newPassword && data.confirmPassword) {
+                console.log("Attempting to change password..."); // Debug log
+
+                const passwordData = {
+                    email: data.emailAddress,
+                    new_password: data.newPassword,
+                    confirm_password: data.confirmPassword
+                };
+
+                try {
+                    const response3 = await axios.post(
+                        `https://squishiest-punctually-daxton.ngrok-free.dev/api/auth/super-admin/users/change-password/`,
+                        passwordData,
+                        {
+                            headers: {
+                                "Authorization": `Bearer ${token}`,
+                                "ngrok-skip-browser-warning": "true",
+                                "Content-Type": "application/json"
+                            },
+                        }
+                    );
+                    console.log("Password updated successfully", response3.data);
+                    console.log("Password changed successfully!");
+
+                    // Clear password fields after successful change
+                    setValue('newPassword', '');
+                    setValue('confirmPassword', '');
+                }
+                catch (error) {
+                    console.error("Password change failed:", error);
+                    if (axios.isAxiosError(error)) {
+                        alert(`Failed to change password: ${error.response?.data?.message || error.message}`);
+                    }
+                }
+            } else {
+                console.log("No password provided, skipping password change");
+            }
 
             // Reset bannerImage state after successful upload
             setBannerImage(null);
@@ -535,14 +558,14 @@ export default function EditBusiness() {
             // Refresh all data from backend
             await refreshBusinessData();
 
-            console.log("Business updated successfully!");
+            alert("Business updated successfully!");
 
         } catch (error) {
             console.error('Error updating business:', error);
             if (axios.isAxiosError(error)) {
-                console.log(`Failed to update business: ${error.response?.data?.message || error.message}`);
+                alert(`Failed to update business: ${error.response?.data?.message || error.message}`);
             } else {
-                console.log('Failed to update business. Please try again.');
+                alert('Failed to update business. Please try again.');
             }
         }
     };
