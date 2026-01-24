@@ -490,7 +490,7 @@ export default function EditBusiness() {
             }
 
             // Update business details
-            const response1 = await axios.patch(`/api/business/${id}/update/`,
+            const response1 = await api.patch(`/api/business/${id}/update/`,
                 formData1,
                 {
                     headers: {
@@ -594,14 +594,15 @@ export default function EditBusiness() {
 
     const router = useRouter();
 
+
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="max-w-[1300px] mx-auto">
-            <button className="mt-3 bg-[#BFD7FDB8] text-[#153569] px-2 py-1 
+            {/* <button className="mt-3 bg-[#BFD7FDB8] text-[#153569] px-2 py-1 
                 flex items-center gap-1.5 font-semibold font-poppins rounded-lg cursor-pointer"
                 onClick={() => router.push("/super-admin/all-businesses")}>
                 <MoveLeft />
                 Back
-            </button>
+            </button> */}
             <h1 className="font-medium font-poppins text-[#0B0B0B] text-2xl mt-5">Edit Profile</h1>
             <p className="font-poppins text-[#626262]">Update your business information and images</p>
             <div className="bg-white rounded-lg shadow-md border mt-6">
