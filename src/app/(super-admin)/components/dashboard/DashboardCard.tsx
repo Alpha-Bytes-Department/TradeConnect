@@ -1,5 +1,5 @@
 // Fahim
-import axios from "axios";
+import api from "@/lib/axiosInterceptor";
 import { useEffect, useState } from "react";
 import { BsPlusSquare } from "react-icons/bs";
 import { LuActivity, LuBriefcaseBusiness } from "react-icons/lu";
@@ -17,18 +17,7 @@ export default function DashboardCard() {
 
     useEffect(() => {
         const fetchDashboardCards = async () => {
-            const token = localStorage.getItem("accessToken");
-            if (!token) return;
-
-            const response = await axios.get(
-                `https://particularistically-transelementary-owen.ngrok-free.dev/api/business/admin/dashboard/`,
-                {
-                    headers: {
-                        "ngrok-skip-browser-warning": "true",
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
+            const response = await api.get('/api/business/admin/dashboard/');
             setDashboardCardData(response?.data?.data?.metrics);
         };
         fetchDashboardCards();

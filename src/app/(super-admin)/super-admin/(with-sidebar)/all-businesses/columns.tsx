@@ -5,6 +5,7 @@ import { LockKeyhole, LockOpen, SquarePen, Trash2 } from "lucide-react";
 import axios from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import api from "@/lib/axiosInterceptor";
 
 // This type is used to define the shape of our data.
 // We can use a Zod schema here if we want.
@@ -98,9 +99,7 @@ export const columns: ColumnDef<allBusinessesTable>[] = [
             if (now.getDate() < createdDate.getDate()) {
                 months--;
             }
-
             months = Math.max(0, months); // if negative, then 0
-
             return months === 0 ? "Less than 1 month" : `${months} month ${months > 1 ? 's' : ''}`;
         },
     },
@@ -132,17 +131,8 @@ export const columns: ColumnDef<allBusinessesTable>[] = [
             };
 
             const handleDelete = async () => {
-                const token = localStorage.getItem("accessToken");
-                if (!token) return;
                 try {
-                    const response = await axios.delete(
-                        `https://particularistically-transelementary-owen.ngrok-free.dev/api/business/${business.id}/delete/`,
-                        {
-                            headers: {
-                                Authorization: `Bearer ${token}`
-                            }
-                        }
-                    );
+                    const response = await api.delete(`/api/business/${business.id}/delete/`);
                     window.location.reload(); // Simple reload
                     toast.success("Deleted", {
                         description: "Business Deleted.",
@@ -153,31 +143,28 @@ export const columns: ColumnDef<allBusinessesTable>[] = [
                 }
                 catch (error) {
                     console.error("Error deleting", error);
+                    toast.error("Delete failed", {
+                        description: "Could not delete the business. Please try again."
+                    });
                 }
             };
 
             const handleLock = async () => {
-                const token = localStorage.getItem("accessToken");
-                if (!token) return;
                 try {
-                    const response = await axios.patch(
-                        `https://particularistically-transelementary-owen.ngrok-free.dev/api/business/${business.id}/update/`,
+                    const response = await api.patch(`/api/business/${business.id}/update/`,
                         {
                             is_locked: !business.is_locked
                         },
-                        {
-                            headers: {
-                                Authorization: `Bearer ${token}`
-                            }
-                        }
                     );
                     console.log("Lock status updated:", response.data);
                     // We may want to refresh the table data here or use a state management solution
                     // to update the UI immediately
                     window.location.reload(); // Simple reload
+                    toast.success(business.is_locked ? "Account Unlocked" : "Account Locked");
                 }
                 catch (error) {
                     console.error("Error updating lock status:", error);
+                    toast.error("Failed to update status");
                 }
             };
 

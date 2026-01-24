@@ -1,10 +1,13 @@
 // Fahim
 "use client"
 import { Input } from "@/components/ui/input";
+import api from "@/lib/axiosInterceptor";
+import axios from "axios";
 import { ArchiveRestore, Bookmark, Camera, Database } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import { toast } from "sonner";
+
 
 type SettingsFormData = {
     fullName: string;
@@ -56,13 +59,6 @@ export default function SettingsPage() {
     const onSubmit = async (data: SettingsFormData) => {
         setIsLoading(true);
         try {
-            const token = localStorage.getItem('accessToken');
-            if (!token) {
-                console.error("No access token found");
-                console.log("Please login first");
-                return;
-            }
-
             // Prepare form data for backend
             const formData = new FormData();
             formData.append('full_name', data.fullName);
@@ -74,18 +70,10 @@ export default function SettingsPage() {
             }
 
             // Send data to backend
-            const response = await axios.put(
-                'https://particularistically-transelementary-owen.ngrok-free.dev/api/auth/profile/',
-                formData,
-                {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'ngrok-skip-browser-warning': 'true',
-                    }
-                }
+            const response = await api.put('/api/auth/profile/',
+                formData
             );
-
-            console.log("Full Backend Response:", response.data);
+            console.log("Full Backend Response:", response?.data);
 
             // Update localStorage with new values
             localStorage.setItem('user_name', data.fullName);
@@ -107,8 +95,11 @@ export default function SettingsPage() {
 
             // Clear the selected file after successful upload
             setImageFile(null);
-
             console.log("Settings saved successfully!");
+            window.location.reload(); // Simple reload
+            toast.success("Settings saved!", {
+                description: "Your profile information has been updated successfully.",
+            });
         }
         catch (error) {
             console.error("Error updating profile:", error);
@@ -152,15 +143,7 @@ export default function SettingsPage() {
             // Show loading state (optional)
             console.log("Exporting CSV...");
 
-            const response = await axios.get(
-                'https://particularistically-transelementary-owen.ngrok-free.dev/api/business/export/csv/',
-                {
-                    headers: {
-                        "ngrok-skip-browser-warning": "true",
-                        'Authorization': `Bearer ${token}`,
-                    }
-                }
-            );
+            const response = await axios.get('/api/business/export/csv/');
 
             console.log("API Response:", response?.data);
 
@@ -186,7 +169,8 @@ export default function SettingsPage() {
             console.log("CSV exported successfully!");
             // ("CSV file downloaded successfully!");
 
-        } catch (error) {
+        }
+        catch (error) {
             console.error("Export failed:", error);
             if (axios.isAxiosError(error)) {
                 console.error("Response data:", error.response?.data);
@@ -197,7 +181,7 @@ export default function SettingsPage() {
     };
 
     return (
-        <div>
+        <form onSubmit={handleSubmit(onSubmit)}>
             {/* Admin Profile Information */}
             <div className="bg-[#FFFFFF] mt-5 p-4 rounded-md">
                 <div className="flex gap-3">
@@ -317,251 +301,23 @@ export default function SettingsPage() {
             </div>
 
             <div className="flex flex-col lg:flex-row gap-6 mt-6">
-                <button
-                    type="button"
-                    onClick={handleSubmit(onSubmit)}
-                    disabled={isLoading}
-                    className="flex items-center justify-center gap-2 bg-[#327EF9] text-[#EBF2FE] font-poppins px-4 py-2 rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                <button type="submit" disabled={isLoading}
+                    className="flex items-center justify-center gap-2 bg-[#327EF9] text-[#EBF2FE] 
+                    font-poppins px-4 py-2 rounded-lg cursor-pointer disabled:opacity-50 
+                    disabled:cursor-not-allowed"
                 >
                     <Bookmark className="text-[#EBF2FE] w-5 h-5" />
                     {isLoading ? 'Saving...' : 'Save Settings'}
                 </button>
-                <button
-                    type="button"
-                    onClick={handleReset}
-                    className="flex items-center justify-center gap-2 bg-[#B3261E] text-[#EBF2FE] font-poppins px-4 py-2 rounded-lg cursor-pointer"
+                <button type="button" onClick={handleReset}
+                    className="flex items-center justify-center gap-2 bg-[#B3261E] text-[#EBF2FE] 
+                    font-poppins px-4 py-2 rounded-lg cursor-pointer"
                 >
                     <ArchiveRestore className="text-[#EBF2FE] w-5 h-5" />
                     Reset to Defaults
                 </button>
             </div>
-        </div>
+        </form>
     );
 }
 
-
-// // Fahim
-// "use client"
-// import { Input } from "@/components/ui/input";
-// import { ArchiveRestore, Bookmark, Camera, Database } from "lucide-react";
-// import { useState } from "react";
-// import { zodResolver } from "@hookform/resolvers/zod";
-// import { z } from "zod";
-// import { useForm } from "react-hook-form";
-
-// const settingsSchema = z.object({
-//     fullName: z.string().min(2, "Full name must be at least 2 characters"),
-//     emailAddress: z.string().email("Invalid email address"),
-//     phoneNumber: z.string().min(6, "Phone number must be at least 6 characters"),
-//     role: z.string(),
-// });
-
-// // Type inference from schema
-// type SettingsFormData = z.infer<typeof settingsSchema>;
-
-// export default function SettingsPage() {
-//     const [image, setImage] = useState('https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop');
-//     const [imageFile, setImageFile] = useState<File | null>(null);
-
-//     // Initialize React Hook Form with Zod resolver
-//     const {
-//         register,
-//         handleSubmit,
-//         formState: { errors },
-//         setValue,
-//         watch,
-//         reset,
-//     } = useForm<SettingsFormData>({
-//         resolver: zodResolver(settingsSchema),
-//         defaultValues: {
-//             fullName: "",
-//             emailAddress: "",
-//             phoneNumber: "",
-//             role: "Super Admin",
-//         },
-//     });
-
-//     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//         const file = e.target.files?.[0];
-//         if (file) {
-//             setImageFile(file); // Store the file
-//             const reader = new FileReader();
-//             reader.onloadend = () => {
-//                 setImage(reader.result as string);
-//             };
-//             reader.readAsDataURL(file);
-//         }
-//     };
-
-//     // Form submit handler
-//     const onSubmit = (data: SettingsFormData) => {
-//         console.log("Form Data:", data);
-//         console.log("Profile Image:", imageFile);
-//         // TODO: Send data to backend
-//     };
-
-//     // Reset handler
-//     const handleReset = () => {
-//         reset();
-//         setImage('https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop');
-//         alert("Settings reset to defaults!");
-//     };
-
-//     // Export CSV handler (backend call)
-//     const handleExportCSV = async () => {
-//         try {
-//             // TODO: Replace with actual backend endpoint
-//             console.log("Exporting CSV...");
-//             // const response = await fetch('/api/export-businesses', { method: 'GET' });
-//             // const blob = await response.blob();
-//             // const url = window.URL.createObjectURL(blob);
-//             // const a = document.createElement('a');
-//             // a.href = url;
-//             // a.download = 'businesses.csv';
-//             // a.click();
-//             alert("CSV export initiated (backend integration needed)");
-//         } catch (error) {
-//             console.error("Export failed:", error);
-//             alert("Failed to export CSV");
-//         }
-//     };
-
-//     return (
-//         <form onSubmit={handleSubmit(onSubmit)}>
-//             {/* Admin Profile Information */}
-//             <div className="bg-[#FFFFFF] mt-5 p-4 rounded-md">
-//                 <div className="flex gap-3">
-//                     <div className="bg-[#DBBFFF] w-11 h-11 rounded-lg flex items-center justify-center">
-//                         <Database className="text-[#8A38F5] w-6 h-6" />
-//                     </div>
-//                     <div>
-//                         <h1 className="font-poppins font-medium text-[#313131]">Admin Profile
-//                             Information</h1>
-//                         <p className="font-poppins text-[#626262] text-xs">Update your admin account
-//                             details</p>
-//                     </div>
-//                 </div>
-
-//                 <div className="relative w-32 h-32 mt-5">
-//                     <div className="w-full h-full rounded-full overflow-hidden bg-gray-300 border-2
-//                         border-white shadow-lg">
-//                         <img
-//                             src={image}
-//                             alt="Profile"
-//                             className="w-full h-full object-cover"
-//                         />
-//                     </div>
-//                     {/* Uploading new photo from here */}
-//                     <label htmlFor="profile-upload" className="absolute bottom-0 right-0 bg-gray-800
-//                         hover:bg-gray-700 rounded-full p-2 cursor-pointer transition-colors shadow-lg"
-//                     >
-//                         <Camera className="w-5 h-5 text-white" />
-//                         <input
-//                             id="profile-upload"
-//                             type="file"
-//                             accept="image/*"
-//                             onChange={handleImageChange}
-//                             className="hidden"
-//                         />
-//                     </label>
-//                 </div>
-//                 <p className="font-poppins text-[#515151] mt-3">Profile Image</p>
-
-//                 <div className="flex flex-col lg:flex-row gap-2 lg:gap-6">
-//                     <div className="w-full grid gap-2 items-center mt-6">
-//                         <label htmlFor="fullName" className="font-poppins text-[#252525]">
-//                             Full Name</label>
-//                         <div className="w-full">
-//                             <Input type="text" id="fullName" placeholder="Admin User"
-//                                 className="font-poppins bg-[#FFFFFF] text-[#3F3F3F] text-base"
-//                                 {...register("fullName")}
-//                             />
-//                         </div>
-//                         {errors.fullName && (
-//                             <p className="text-red-500 text-sm font-poppins mt-1">
-//                                 {errors.fullName.message}
-//                             </p>
-//                         )}
-//                     </div>
-//                     <div className="w-full grid gap-2 items-center mt-6">
-//                         <label htmlFor="emailAddress" className="font-poppins text-[#252525]">
-//                             Email</label>
-//                         <div className="w-full">
-//                             <Input type="text" id="emailAddress" placeholder="admin@business.com"
-//                                 className="font-poppins bg-[#FFFFFF] text-[#3F3F3F] text-base"
-//                                 {...register("emailAddress")}
-//                             />
-//                         </div>
-//                         {errors.emailAddress && (
-//                             <p className="text-red-500 text-sm font-poppins mt-1">
-//                                 {errors.emailAddress.message}
-//                             </p>
-//                         )}
-//                     </div>
-//                 </div>
-//                 <div className="flex flex-col lg:flex-row gap-2 lg:gap-6">
-//                     <div className="w-full grid gap-2 items-center mt-4">
-//                         <label htmlFor="phoneNumber" className="font-poppins text-[#252525]">
-//                             Phone</label>
-//                         <div className="w-full">
-//                             <Input type="text" id="phoneNumber" placeholder="Tech Solution Inc."
-//                                 className="font-poppins bg-[#FFFFFF] text-[#3F3F3F] text-base"
-//                                 {...register("phoneNumber")}
-//                             />
-//                         </div>
-//                         {errors.phoneNumber && (
-//                             <p className="text-red-500 text-sm font-poppins mt-1">
-//                                 {errors.phoneNumber.message}
-//                             </p>
-//                         )}
-//                     </div>
-//                     <div className="w-full grid gap-2 items-center mt-4">
-//                         <label htmlFor="role" className="font-poppins text-[#252525]">
-//                             Role</label>
-//                         <div className="w-full">
-//                             <Input disabled type="text" placeholder="Super Admin" className="font-poppins"
-//                                 {...register("role")} />
-//                         </div>
-//                     </div>
-//                 </div>
-//             </div>
-
-
-//             {/* Backup & Export */}
-//             <div className="bg-[#FFFFFF] mt-5 p-4 rounded-md">
-//                 <div className="flex gap-3">
-//                     <div className="bg-[#BFFDBA] w-11 h-11 rounded-lg flex items-center justify-center">
-//                         <Database className="text-[#279300] w-6 h-6" />
-//                     </div>
-//                     <div>
-//                         <h1 className="font-poppins font-medium text-[#313131]">Backup & Export</h1>
-//                         <p className="font-poppins text-[#626262] text-xs">Data management options
-//                             (placeholder)</p>
-//                     </div>
-//                 </div>
-//                 <div className="bg-[#EEEEEE] flex justify-between items-center p-2 rounded-lg mt-5">
-//                     <div>
-//                         <h1 className="font-poppins text-[#000000]">Export All Businesses</h1>
-//                         <p className="font-poppins text-[#7A7A7A] text-xs">Download CSV file with all
-//                             business data</p>
-//                     </div>
-//                     <button type="button" onClick={handleExportCSV} className="font-poppins bg-[#327EF9]
-//                     text-[#EBF2FE] px-2 py-1 rounded-md cursor-pointer">Export CSV</button>
-//                 </div>
-//             </div>
-
-//             <div className="flex flex-col lg:flex-row gap-6 mt-6">
-//                 <button type="submit" className="flex items-center justify-center gap-2 bg-[#327EF9]
-//                 text-[#EBF2FE] font-poppins px-4 py-2 rounded-lg cursor-pointer">
-//                     <Bookmark className="text-[#EBF2FE] w-5 h-5" />
-//                     Save Settings
-//                 </button>
-//                 <button type="button" onClick={handleReset} className="flex items-center justify-center
-//                 gap-2 bg-[#B3261E] text-[#EBF2FE] font-poppins px-4 py-2 rounded-lg cursor-pointer">
-//                     <ArchiveRestore className="text-[#EBF2FE] w-5 h-5" />
-//                     Reset to Defaults
-//                 </button>
-//             </div>
-//         </form>
-//     );
-// }

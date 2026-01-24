@@ -2,7 +2,6 @@
 "use client"
 import Image from "next/image";
 import { useView } from "../../ListGridContext";
-// import { allBusinessData } from "../../data";
 import { MapPin } from "lucide-react";
 import { Pagination } from "antd";
 import { useRouter } from "next/navigation";

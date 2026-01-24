@@ -20,6 +20,7 @@ export default function NavBarWithTrigger() {
     useEffect(() => {
         // This runs only on client side
         setUserPhoto(localStorage.getItem('user_photo') || '');
+        console.log("up", userPhoto)
         setUserName(localStorage.getItem('user_name') || '');
         setUserEmail(localStorage.getItem('user_email') || '');
     }, []);

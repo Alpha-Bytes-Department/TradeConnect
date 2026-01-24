@@ -1,7 +1,7 @@
 // Fahim
 "use client"
 import Modal from "@/components/ui/modal";
-import axios from "axios";
+import api from "@/lib/axiosInterceptor";
 import { Globe, Mail, MapPin, MoveLeft, Phone } from "lucide-react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
@@ -36,18 +36,7 @@ export default function BusinessDetails() {
 
     useEffect(() => {
         const fetchBusinessDatas = async () => {
-            const token = localStorage.getItem("accessToken");
-            if (!token) return;
-
-            const response = await axios.get(
-                `https://particularistically-transelementary-owen.ngrok-free.dev/api/business/${id}/`,
-                {
-                    headers: {
-                        "ngrok-skip-browser-warning": "true",
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
+            const response = await api.get(`/api/business/${id}/`);
             setData(response?.data?.business);
             // console.log("response =", response?.data?.business);
             // console.log(data);
@@ -60,12 +49,12 @@ export default function BusinessDetails() {
             <div className="relative w-full h-[350px] px-4 flex items-center justify-center">
                 <Image src={data?.logo} alt={data?.logo} fill
                     className="object-cover object-center" />
-                <button className="absolute top-2 left-2 bg-[#BFD7FDB8] text-[#153569] px-2 py-1 
+                {/* <button className="absolute top-2 left-2 bg-[#BFD7FDB8] text-[#153569] px-2 py-1 
                 flex items-center gap-1.5 font-semibold font-poppins rounded-lg cursor-pointer"
                     onClick={() => router.push("/super-admin/all-businesses")}>
                     <MoveLeft />
                     Back
-                </button>
+                </button> */}
             </div>
 
             {/* <div className="max-w-[300px] h-[150px] mx-auto -mt-16 relative">
