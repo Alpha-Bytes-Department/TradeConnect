@@ -490,7 +490,7 @@ export default function EditBusiness() {
             }
 
             // Update business details
-            const response1 = await axios.patch(`/api/business/${id}/update/`,
+            const response1 = await api.patch(`/api/business/${id}/update/`,
                 formData1,
                 {
                     headers: {
