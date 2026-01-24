@@ -5,6 +5,7 @@ import { ArchiveRestore, Bookmark, Camera, Database } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { toast } from "sonner";
 
 type SettingsFormData = {
     fullName: string;
@@ -84,8 +85,7 @@ export default function SettingsPage() {
                     }
                 }
             );
-
-            console.log("Full Backend Response:", response.data);
+            console.log("Full Backend Response:", response?.data);
 
             // Update localStorage with new values
             localStorage.setItem('user_name', data.fullName);
@@ -107,8 +107,11 @@ export default function SettingsPage() {
 
             // Clear the selected file after successful upload
             setImageFile(null);
-
             console.log("Settings saved successfully!");
+            window.location.reload(); // Simple reload
+            toast.success("Settings saved!", {
+                description: "Your profile information has been updated successfully.",
+            });
         }
         catch (error) {
             console.error("Error updating profile:", error);
@@ -197,7 +200,7 @@ export default function SettingsPage() {
     };
 
     return (
-        <div>
+        <form onSubmit={handleSubmit(onSubmit)}>
             {/* Admin Profile Information */}
             <div className="bg-[#FFFFFF] mt-5 p-4 rounded-md">
                 <div className="flex gap-3">
@@ -317,25 +320,23 @@ export default function SettingsPage() {
             </div>
 
             <div className="flex flex-col lg:flex-row gap-6 mt-6">
-                <button
-                    type="button"
-                    onClick={handleSubmit(onSubmit)}
-                    disabled={isLoading}
-                    className="flex items-center justify-center gap-2 bg-[#327EF9] text-[#EBF2FE] font-poppins px-4 py-2 rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                <button type="submit" disabled={isLoading}
+                    className="flex items-center justify-center gap-2 bg-[#327EF9] text-[#EBF2FE] 
+                    font-poppins px-4 py-2 rounded-lg cursor-pointer disabled:opacity-50 
+                    disabled:cursor-not-allowed"
                 >
                     <Bookmark className="text-[#EBF2FE] w-5 h-5" />
                     {isLoading ? 'Saving...' : 'Save Settings'}
                 </button>
-                <button
-                    type="button"
-                    onClick={handleReset}
-                    className="flex items-center justify-center gap-2 bg-[#B3261E] text-[#EBF2FE] font-poppins px-4 py-2 rounded-lg cursor-pointer"
+                <button type="button" onClick={handleReset}
+                    className="flex items-center justify-center gap-2 bg-[#B3261E] text-[#EBF2FE] 
+                    font-poppins px-4 py-2 rounded-lg cursor-pointer"
                 >
                     <ArchiveRestore className="text-[#EBF2FE] w-5 h-5" />
                     Reset to Defaults
                 </button>
             </div>
-        </div>
+        </form>
     );
 }
 

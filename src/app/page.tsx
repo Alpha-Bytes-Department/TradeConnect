@@ -80,6 +80,7 @@ export default function SignIn() {
       localStorage.setItem('user_name', response?.data?.user?.full_name);
       localStorage.setItem('user_email', response?.data?.user?.email);
       localStorage.setItem('user_phone', response?.data?.user?.phone_number);
+      localStorage.setItem('user_photo', response?.data?.user?.profile_image);
 
       // Add success toast
       toast.success("Login Successful", {
@@ -102,7 +103,7 @@ export default function SignIn() {
     }
     catch (err: any) {
       // Add toast notifications for errors
-      console.log("Error:",err?.response);
+      console.log("Error:", err?.response);
       if (!err?.response) {
         toast.error("Network Error", {
           description: "Unable to connect to server. Please check your connection.",
