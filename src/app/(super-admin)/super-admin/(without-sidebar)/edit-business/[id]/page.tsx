@@ -12,9 +12,10 @@ import { CalendarHeartIcon, Eye, EyeOff, LockKeyhole, MoveLeft, Save, Trash2, Up
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import api from "@/lib/axiosInterceptor";
+import axios from "axios";
 
 interface GalleryImage {
     id?: string;           // ← নতুন: backend থেকে আসা image এর id/uuid
@@ -71,7 +72,7 @@ const passwordSchema = z
         }
     );
 
-// 🔴 ADDED: Full form schema
+// Full form schema
 const businessFormSchema = z
     .object({
         businessName: z.string().min(1, "Business name is required"),
@@ -145,11 +146,7 @@ export default function EditBusiness() {
     const [countries, setCountries] = useState<Country[]>([]);
 
     useEffect(() => {
-        axios.get("https://particularistically-transelementary-owen.ngrok-free.dev/api/core/countries/",
-            {
-                headers: { "ngrok-skip-browser-warning": "true" },
-            }
-        )
+        api.get("/api/core/countries/")
             .then(response => {
                 setCountries(response?.data?.countries || []);
                 // console.log("success");
@@ -167,15 +164,7 @@ export default function EditBusiness() {
 
     const refreshBusinessData = async () => {
         try {
-            const res = await axios.get(
-                `https://particularistically-transelementary-owen.ngrok-free.dev/api/business/${id}/`,
-                {
-                    headers: {
-                        "ngrok-skip-browser-warning": "true",
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
+            const res = await api.get(`/api/business/${id}/`);
 
             const freshData = res?.data;
             setDatas(freshData);
@@ -232,15 +221,7 @@ export default function EditBusiness() {
     useEffect(() => {
         const fetchBusinessData = async () => {
             try {
-                const response = await axios.get(
-                    `https://particularistically-transelementary-owen.ngrok-free.dev/api/business/${id}/`,
-                    {
-                        headers: {
-                            "ngrok-skip-browser-warning": "true",
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }
-                );
+                const response = await api.get(`/api/business/${id}/`);
 
                 const data = response?.data;
                 setDatas(data);
@@ -309,7 +290,8 @@ export default function EditBusiness() {
                     setGalleryImages(galleryPreviews);
                 }
 
-            } catch (error) {
+            }
+            catch (error) {
                 console.error('Error fetching business data:', error);
                 if (axios.isAxiosError(error)) {
                     console.error(`Failed to load business data: ${error.response?.data?.message ||
@@ -317,7 +299,8 @@ export default function EditBusiness() {
                 } else {
                     console.log('Failed to load business data. Please try again.');
                 }
-            } finally {
+            }
+            finally {
                 //setIsFetching(false);
             }
         };
@@ -329,17 +312,8 @@ export default function EditBusiness() {
 
 
     const handleDelete = async () => {
-        const token = localStorage.getItem("accessToken");
-        if (!token) return;
         try {
-            const response = await axios.delete(
-                `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/${id}/delete/`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            );
+            const response = await api.delete(`/api/business/${id}/delete/`);
             console.log("Business Deleted", response.data);
             // We may want to refresh the table data here or use a state management solution
             // to update the UI immediately
@@ -443,15 +417,7 @@ export default function EditBusiness() {
         if (imageToRemove.id) {
             console.log("iid", imageToRemove.id)
             try {
-                await axios.delete(
-                    `https://particularistically-transelementary-owen.ngrok-free.dev/api/business/gallery/images/${imageToRemove.id}/`,
-                    {
-                        headers: {
-                            "Authorization": `Bearer ${token}`,
-                            "ngrok-skip-browser-warning": "true",
-                        },
-                    }
-                );
+                await api.delete(`/api/business/gallery/images/${imageToRemove.id}/`);
                 console.log(`Image ${imageToRemove.id} deleted from backend`);
 
                 // সফল হলে frontend থেকেও মুছে ফেলো
@@ -468,22 +434,11 @@ export default function EditBusiness() {
     };
 
     const handleToggleLock = async () => {
-        const token = localStorage.getItem("accessToken");
-        if (!token) return;
-
         try {
             const newLockStatus = !datas?.business?.is_locked;
 
-            const response = await axios.patch(
-                `https://particularistically-transelementary-owen.ngrok-free.dev/api/business/${id}/update/`,
+            const response = await api.patch(`/api/business/${id}/update/`,
                 { is_locked: newLockStatus },
-                {
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                        "ngrok-skip-browser-warning": "true",
-                        "Content-Type": "application/json"
-                    },
-                }
             );
 
             // Update local state after successful API call
@@ -535,13 +490,10 @@ export default function EditBusiness() {
             }
 
             // Update business details
-            const response1 = await axios.patch(
-                `https://particularistically-transelementary-owen.ngrok-free.dev/api/business/${id}/update/`,
+            const response1 = await axios.patch(`/api/business/${id}/update/`,
                 formData1,
                 {
                     headers: {
-                        "Authorization": `Bearer ${token}`,
-                        "ngrok-skip-browser-warning": "true",
                         "Content-Type": "multipart/form-data"
                     },
                 });
@@ -557,13 +509,10 @@ export default function EditBusiness() {
                     }
                 });
 
-                const response2 = await axios.post(
-                    `https://particularistically-transelementary-owen.ngrok-free.dev/api/business/gallery/upload/${id}/`,
+                const response2 = await api.post(`/api/business/gallery/upload/${id}/`,
                     formData2,
                     {
                         headers: {
-                            "Authorization": `Bearer ${token}`,
-                            "ngrok-skip-browser-warning": "true",
                             "Content-Type": "multipart/form-data"
                         },
                     });
@@ -582,16 +531,8 @@ export default function EditBusiness() {
                 };
 
                 try {
-                    const response3 = await axios.post(
-                        `https://particularistically-transelementary-owen.ngrok-free.dev/api/auth/super-admin/users/change-password/`,
-                        passwordData,
-                        {
-                            headers: {
-                                "Authorization": `Bearer ${token}`,
-                                "ngrok-skip-browser-warning": "true",
-                                "Content-Type": "application/json"
-                            },
-                        }
+                    const response3 = await api.post(`/api/auth/super-admin/users/change-password/`,
+                        passwordData
                     );
                     console.log("Password updated successfully", response3.data);
                     console.log("Password changed successfully!");
