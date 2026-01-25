@@ -32,10 +32,11 @@ export default function GridView({ total, currentPage, onPageChange }: GridViewP
         <div>
             {grid && (
                 <div>
-                    <div className="grid grid-cols-1 xl:grid-cols-3 2xl:grid-cols-4 gap-8 mt-8">
+                    <div className="grid sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 
+                    gap-8 mt-8">
                         {businesses.map(item => (
                             <div key={item?.id} className="h-[460px] rounded-lg border bg-[#FFFFFF] 
-                            shadow-lg">
+                            shadow-lg relative">
                                 <div className="relative h-1/3">
                                     {item?.logo ? (
                                         <Image
@@ -73,7 +74,10 @@ export default function GridView({ total, currentPage, onPageChange }: GridViewP
                                     </div>
                                     <div className="mt-2">
                                         <p className="font-poppins text-[#3F3F3F] text-sm">
-                                            {item?.about_business}</p>
+                                            {item?.about_business?.length > 70
+                                                ? `${item?.about_business.substring(0, 70)}......`
+                                                : item?.about_business}
+                                        </p>
                                     </div>
 
                                     <p className="font-poppins text-[#595959] text-sm mt-2">Services:</p>
@@ -98,22 +102,22 @@ export default function GridView({ total, currentPage, onPageChange }: GridViewP
                                         )}
                                     </div>
 
-                                    <div className="grid grid-cols-4 gap-2 mt-3">
-                                        <div className="col-span-3">
-                                            <button className="w-full py-2 bg-[#BFD7FD] font-poppins 
-                                        font-medium text-[#2459B1] text-center rounded-lg cursor-pointer"
-                                                onClick={() =>
-                                                    router.push(`/super-admin/business-details/${item?.id}`)}>
-                                                View Profile</button>
-                                        </div>
-                                        <div className="col-span-1">
-                                            <button className="w-full py-2 bg-[#FFFFFF] font-poppins 
-                                        font-medium text-[#2459B1] text-center rounded-lg cursor-pointer 
-                                        border border-[#1C4589]"
-                                                onClick={() =>
-                                                    router.push(`/super-admin/edit-business/${item?.id}`)}>
-                                                Edit</button>
-                                        </div>
+                                    <div className="flex gap-2 absolute bottom-4 left-4 right-4">
+                                        <button
+                                            className="flex-3 py-2 bg-[#BFD7FD] font-poppins 
+                                            font-medium text-[#2459B1] text-center rounded-lg cursor-pointer"
+                                            onClick={() => router.push(`/super-admin/business-details/${item?.id}`)}
+                                        >
+                                            View Profile
+                                        </button>
+                                        <button
+                                            className="flex-1 py-2 bg-[#FFFFFF] font-poppins font-medium 
+                                            text-[#2459B1] text-center rounded-lg cursor-pointer border 
+                                            border-[#1C4589]"
+                                            onClick={() => router.push(`/super-admin/edit-business/${item?.id}`)}
+                                        >
+                                            Edit
+                                        </button>
                                     </div>
                                 </div>
                             </div>
