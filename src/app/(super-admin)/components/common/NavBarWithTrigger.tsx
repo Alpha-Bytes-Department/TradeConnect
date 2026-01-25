@@ -20,7 +20,7 @@ export default function NavBarWithTrigger() {
     useEffect(() => {
         // This runs only on client side
         setUserPhoto(localStorage.getItem('user_photo') || '');
-        console.log("up", userPhoto)
+        // console.log("up", userPhoto);
         setUserName(localStorage.getItem('user_name') || '');
         setUserEmail(localStorage.getItem('user_email') || '');
     }, []);
@@ -49,11 +49,13 @@ export default function NavBarWithTrigger() {
                             <ChevronDown className="cursor-pointer" />
                         </PopoverTrigger>
                         <PopoverContent className="w-64 mr-4 flex flex-col gap-4 bg-white">
-                            <button className="font-poppins text-[#252525] cursor-pointer flex items-center gap-3" onClick={() => redirect("/super-admin/settings")}>
+                            <button className="font-poppins text-[#252525] cursor-pointer flex items-center 
+                            gap-3" onClick={() => redirect("/super-admin/settings")}>
                                 <Settings className="w-5 h-5" />
                                 Settings
                             </button>
-                            <button className="font-poppins text-[#B3261E] cursor-pointer flex items-center gap-3" onClick={() => setIsLogoutOpen(true)}>
+                            <button className="font-poppins text-[#B3261E] cursor-pointer flex items-center 
+                            gap-3" onClick={() => setIsLogoutOpen(true)}>
                                 <LogOut className="w-5 h-5" />
                                 Log Out
                             </button>
