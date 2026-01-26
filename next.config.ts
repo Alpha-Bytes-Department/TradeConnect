@@ -11,8 +11,8 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "https://backend.c2c.network/",
+        protocol: "http",
+        hostname: "particularistically-transelementary-owen.ngrok-free.dev",
         pathname: "/**",
       },
       {

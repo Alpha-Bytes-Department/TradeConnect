@@ -9,8 +9,8 @@ import { SlList } from "react-icons/sl";
 import { BsGrid3X3Gap } from "react-icons/bs";
 import { useView } from "../../ListGridContext";
 import { useFilter } from "../../FilterContext";
-import axios from "axios";
 import { useEffect, useState } from "react";
+import api from "@/lib/axiosInterceptor";
 
 interface FilterFormData {
     search: string;
@@ -39,11 +39,7 @@ export default function FilterBox({ currentPage }: FilterBoxProps) {
     const [countries, setCountries] = useState<Country[]>([]);
 
     useEffect(() => {
-        axios.get("https://squishiest-punctually-daxton.ngrok-free.dev/api/core/countries/",
-            {
-                headers: { "ngrok-skip-browser-warning": "true" },
-            }
-        )
+        api.get("/api/core/countries/")
             .then(response => {
                 setCountries(response?.data?.countries || []);
             })
@@ -73,12 +69,6 @@ export default function FilterBox({ currentPage }: FilterBoxProps) {
     // Fetch filtered data whenever form values or currentPage change
     useEffect(() => {
         const fetchFilteredBusinesses = async () => {
-            const token = localStorage.getItem("accessToken");
-            if (!token) {
-                console.error("No access token found");
-                return;
-            }
-
             // Set loading to true in context
             setLoading(true);
 
@@ -94,15 +84,7 @@ export default function FilterBox({ currentPage }: FilterBoxProps) {
                 });
 
                 // Fetch data with query params
-                const response = await axios.get(
-                    `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/all/?${params.toString()}`,
-                    {
-                        headers: {
-                            "ngrok-skip-browser-warning": "true",
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }
-                );
+                const response = await api.get(`/api/business/all/?${params.toString()}`);
 
                 // Set businesses data to context
                 setBusinesses(response?.data?.results?.businesses || []);

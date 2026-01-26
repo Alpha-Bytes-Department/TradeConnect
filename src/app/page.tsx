@@ -7,10 +7,10 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { FaArrowRight } from "react-icons/fa6";
-import axios from "axios";
 import { useView } from "./(super-admin)/ListGridContext";
 import Image from "next/image";
 import { toast } from "sonner";
+import api from "@/lib/axiosInterceptor";
 
 // Type inference from schema
 // type SignInFormData = z.infer<typeof SignInSchema>;
@@ -28,7 +28,6 @@ export default function SignIn() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    setValue,
   } = useForm<SignInFormData>({ // Add type parameter here
     // resolver: zodResolver(SignInSchema),
     mode: "onChange", // Add this for immediate validation
@@ -40,32 +39,19 @@ export default function SignIn() {
 
   const onSubmit = async (data: SignInFormData) => {
     try {
-      const response =
-        await axios.post("https://squishiest-punctually-daxton.ngrok-free.dev/api/auth/login/",
-          {
-            email: data.emailAddress,
-            password: data.password
-          },
-          {
-            headers: { 'Content-Type': 'application/json' },
-          }
-        );
+      const response = await api.post("/api/auth/login/",
+        {
+          email: data.emailAddress,
+          password: data.password
+        },
+      );
       console.log(JSON.stringify(response?.data));
-      //console.log(JSON.stringify(response));
-      //const accessToken = response?.data?.accessToken;
-      // const roles = response?.data?.roles;
-      // setAuth({ user, pwd, roles, accessToken });
-      // setSuccess(true);
 
-      // if (response?.data?.is_superuser === true) {
-      //   router.push("/super-admin/dashboard");
-      // }
-
-      // Check if we received a valid token
-      const token = response?.data?.tokens?.access;
+      const accessToken = response?.data?.tokens?.access;
+      const refreshToken = response?.data?.tokens?.refresh;
 
       // console.log("ff",user,email);
-      if (!token) {
+      if (!accessToken) {
         // Add toast for no token
         toast.error("Authentication Failed", {
           description: "No authentication token received.",
@@ -74,12 +60,14 @@ export default function SignIn() {
       }
 
       // Store the token
-      localStorage.setItem('accessToken', token);
+      localStorage.setItem('access_token', accessToken);
+      localStorage.setItem('refresh_token', refreshToken);
       localStorage.setItem('n1X_ang@xinl23446', response?.data?.user?.id);
 
       localStorage.setItem('user_name', response?.data?.user?.full_name);
       localStorage.setItem('user_email', response?.data?.user?.email);
       localStorage.setItem('user_phone', response?.data?.user?.phone_number);
+      localStorage.setItem('user_photo', response?.data?.user?.profile_image);
 
       // Add success toast
       toast.success("Login Successful", {
@@ -87,11 +75,6 @@ export default function SignIn() {
       });
 
       // setAuth({ accessToken: token });
-
-      // // Store user data if needed
-      // if (response.data.is_superuser !== undefined) {
-      //   localStorage.setItem('isSuperUser', response.data.is_superuser.toString());
-      // }
 
       // Now redirect based on role
       if (response?.data?.user?.is_superuser === true) {
@@ -102,6 +85,7 @@ export default function SignIn() {
     }
     catch (err: any) {
       // Add toast notifications for errors
+      console.log("Error:", err?.response);
       if (!err?.response) {
         toast.error("Network Error", {
           description: "Unable to connect to server. Please check your connection.",

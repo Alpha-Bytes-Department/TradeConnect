@@ -12,9 +12,10 @@ import { CalendarHeartIcon, Eye, EyeOff, LockKeyhole, MoveLeft, Save, Trash2, Up
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import api from "@/lib/axiosInterceptor";
+import axios from "axios";
 
 interface GalleryImage {
     id?: string;           // ← নতুন: backend থেকে আসা image এর id/uuid
@@ -42,6 +43,54 @@ interface BusinessFormData {
     confirmPassword?: string;
 }
 
+
+// Zod password validation schema
+const passwordSchema = z
+    .object({
+        newPassword: z
+            .string()
+            .optional()
+            .refine(
+                (val) =>
+                    !val ||
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/.test(val),
+                {
+                    message:
+                        "Password must be at least 8 characters and include uppercase, lowercase, number, and special character",
+                }
+            ),
+
+        confirmPassword: z.string().optional(),
+    })
+    .refine(
+        (data) =>
+            !data.newPassword ||
+            (data.newPassword && data.confirmPassword === data.newPassword),
+        {
+            message: "Passwords do not match",
+            path: ["confirmPassword"],
+        }
+    );
+
+// Full form schema
+const businessFormSchema = z
+    .object({
+        businessName: z.string().min(1, "Business name is required"),
+        country: z.string().min(1, "Country is required"),
+        fullAddress: z.string().min(1, "Full address is required"),
+        membershipValidTill: z.string().min(1, "Membership date is required"),
+        emailAddress: z.string().email().optional(),
+        phoneNumber: z.string().optional(),
+        websiteURL: z.string().optional(),
+        servicesOffered: z.string().min(1, "Services are required"),
+        aboutBusiness: z.string().min(1, "About business is required"),
+
+        newPassword: z.string().optional(),
+        confirmPassword: z.string().optional(),
+    })
+    .and(passwordSchema);
+
+
 export default function EditBusiness() {
     const [activeTab, setActiveTab] = useState('basic');
     const [bannerImage, setBannerImage] = useState<File | null>(null);
@@ -57,22 +106,32 @@ export default function EditBusiness() {
     const [datas, setDatas] = useState<any>(null);
 
     // Initialize React Hook Form
-    const { register, handleSubmit, control, formState: { errors: formErrors }, setValue, reset, watch } =
-        useForm<BusinessFormData>({
-            defaultValues: {
-                businessName: '',
-                country: '',
-                fullAddress: '',
-                membershipValidTill: '',
-                emailAddress: '',
-                phoneNumber: '',
-                websiteURL: '',
-                servicesOffered: '',
-                aboutBusiness: '',
-                newPassword: '',
-                confirmPassword: ''
-            }
-        });
+    // useForm now uses zodResolver
+    const {
+        register,
+        handleSubmit,
+        control,
+        formState: { errors: formErrors },
+        setValue,
+        reset,
+        watch,
+    } = useForm<BusinessFormData>({
+        resolver: zodResolver(businessFormSchema),
+        defaultValues: {
+            businessName: "",
+            country: "",
+            fullAddress: "",
+            membershipValidTill: "",
+            emailAddress: "",
+            phoneNumber: "",
+            websiteURL: "",
+            servicesOffered: "",
+            aboutBusiness: "",
+            newPassword: "",
+            confirmPassword: "",
+        },
+    });
+
 
     // Country type definition
     type Country = {
@@ -87,11 +146,7 @@ export default function EditBusiness() {
     const [countries, setCountries] = useState<Country[]>([]);
 
     useEffect(() => {
-        axios.get("https://squishiest-punctually-daxton.ngrok-free.dev/api/core/countries/",
-            {
-                headers: { "ngrok-skip-browser-warning": "true" },
-            }
-        )
+        api.get("/api/core/countries/")
             .then(response => {
                 setCountries(response?.data?.countries || []);
                 // console.log("success");
@@ -109,15 +164,7 @@ export default function EditBusiness() {
 
     const refreshBusinessData = async () => {
         try {
-            const res = await axios.get(
-                `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/${id}/`,
-                {
-                    headers: {
-                        "ngrok-skip-browser-warning": "true",
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
+            const res = await api.get(`/api/business/${id}/`);
 
             const freshData = res?.data;
             setDatas(freshData);
@@ -174,15 +221,7 @@ export default function EditBusiness() {
     useEffect(() => {
         const fetchBusinessData = async () => {
             try {
-                const response = await axios.get(
-                    `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/${id}/`,
-                    {
-                        headers: {
-                            "ngrok-skip-browser-warning": "true",
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }
-                );
+                const response = await api.get(`/api/business/${id}/`);
 
                 const data = response?.data;
                 setDatas(data);
@@ -251,7 +290,8 @@ export default function EditBusiness() {
                     setGalleryImages(galleryPreviews);
                 }
 
-            } catch (error) {
+            }
+            catch (error) {
                 console.error('Error fetching business data:', error);
                 if (axios.isAxiosError(error)) {
                     console.error(`Failed to load business data: ${error.response?.data?.message ||
@@ -259,7 +299,8 @@ export default function EditBusiness() {
                 } else {
                     console.log('Failed to load business data. Please try again.');
                 }
-            } finally {
+            }
+            finally {
                 //setIsFetching(false);
             }
         };
@@ -271,17 +312,8 @@ export default function EditBusiness() {
 
 
     const handleDelete = async () => {
-        const token = localStorage.getItem("accessToken");
-        if (!token) return;
         try {
-            const response = await axios.delete(
-                `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/${id}/delete/`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            );
+            const response = await api.delete(`/api/business/${id}/delete/`);
             console.log("Business Deleted", response.data);
             // We may want to refresh the table data here or use a state management solution
             // to update the UI immediately
@@ -385,15 +417,7 @@ export default function EditBusiness() {
         if (imageToRemove.id) {
             console.log("iid", imageToRemove.id)
             try {
-                await axios.delete(
-                    `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/gallery/images/${imageToRemove.id}/`,
-                    {
-                        headers: {
-                            "Authorization": `Bearer ${token}`,
-                            "ngrok-skip-browser-warning": "true",
-                        },
-                    }
-                );
+                await api.delete(`/api/business/gallery/images/${imageToRemove.id}/`);
                 console.log(`Image ${imageToRemove.id} deleted from backend`);
 
                 // সফল হলে frontend থেকেও মুছে ফেলো
@@ -410,22 +434,11 @@ export default function EditBusiness() {
     };
 
     const handleToggleLock = async () => {
-        const token = localStorage.getItem("accessToken");
-        if (!token) return;
-
         try {
             const newLockStatus = !datas?.business?.is_locked;
 
-            const response = await axios.patch(
-                `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/${id}/update/`,
+            const response = await api.patch(`/api/business/${id}/update/`,
                 { is_locked: newLockStatus },
-                {
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                        "ngrok-skip-browser-warning": "true",
-                        "Content-Type": "application/json"
-                    },
-                }
             );
 
             // Update local state after successful API call
@@ -477,13 +490,10 @@ export default function EditBusiness() {
             }
 
             // Update business details
-            const response1 = await axios.patch(
-                `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/${id}/update/`,
+            const response1 = await api.patch(`/api/business/${id}/update/`,
                 formData1,
                 {
                     headers: {
-                        "Authorization": `Bearer ${token}`,
-                        "ngrok-skip-browser-warning": "true",
                         "Content-Type": "multipart/form-data"
                     },
                 });
@@ -499,13 +509,10 @@ export default function EditBusiness() {
                     }
                 });
 
-                const response2 = await axios.post(
-                    `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/gallery/upload/${id}/`,
+                const response2 = await api.post(`/api/business/gallery/upload/${id}/`,
                     formData2,
                     {
                         headers: {
-                            "Authorization": `Bearer ${token}`,
-                            "ngrok-skip-browser-warning": "true",
                             "Content-Type": "multipart/form-data"
                         },
                     });
@@ -524,16 +531,8 @@ export default function EditBusiness() {
                 };
 
                 try {
-                    const response3 = await axios.post(
-                        `https://squishiest-punctually-daxton.ngrok-free.dev/api/auth/super-admin/users/change-password/`,
-                        passwordData,
-                        {
-                            headers: {
-                                "Authorization": `Bearer ${token}`,
-                                "ngrok-skip-browser-warning": "true",
-                                "Content-Type": "application/json"
-                            },
-                        }
+                    const response3 = await api.post(`/api/auth/super-admin/users/change-password/`,
+                        passwordData
                     );
                     console.log("Password updated successfully", response3.data);
                     console.log("Password changed successfully!");
@@ -545,7 +544,7 @@ export default function EditBusiness() {
                 catch (error) {
                     console.error("Password change failed:", error);
                     if (axios.isAxiosError(error)) {
-                        alert(`Failed to change password: ${error.response?.data?.message || error.message}`);
+                        console.log(`Failed to change password: ${error.response?.data?.message || error.message}`);
                     }
                 }
             } else {
@@ -558,14 +557,14 @@ export default function EditBusiness() {
             // Refresh all data from backend
             await refreshBusinessData();
 
-            alert("Business updated successfully!");
+            console.log("Business updated successfully!");
 
         } catch (error) {
             console.error('Error updating business:', error);
             if (axios.isAxiosError(error)) {
-                alert(`Failed to update business: ${error.response?.data?.message || error.message}`);
+                console.log(`Failed to update business: ${error.response?.data?.message || error.message}`);
             } else {
-                alert('Failed to update business. Please try again.');
+                console.log('Failed to update business. Please try again.');
             }
         }
     };
@@ -595,14 +594,15 @@ export default function EditBusiness() {
 
     const router = useRouter();
 
+
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="max-w-[1300px] mx-auto">
-            <button className="mt-3 bg-[#BFD7FDB8] text-[#153569] px-2 py-1 
+            {/* <button className="mt-3 bg-[#BFD7FDB8] text-[#153569] px-2 py-1 
                 flex items-center gap-1.5 font-semibold font-poppins rounded-lg cursor-pointer"
                 onClick={() => router.push("/super-admin/all-businesses")}>
                 <MoveLeft />
                 Back
-            </button>
+            </button> */}
             <h1 className="font-medium font-poppins text-[#0B0B0B] text-2xl mt-5">Edit Profile</h1>
             <p className="font-poppins text-[#626262]">Update your business information and images</p>
             <div className="bg-white rounded-lg shadow-md border mt-6">
@@ -1025,12 +1025,7 @@ export default function EditBusiness() {
                                     placeholder="Enter New password"
                                     className="pr-10 pl-9 font-poppins bg-[#FFFFFF] text-[#3F3F3F]"
                                     // leave space for the eye button
-                                    {...register("newPassword", {
-                                        minLength: {
-                                            value: 8,
-                                            message: "Password must be at least 8 characters"
-                                        }
-                                    })}
+                                    {...register("newPassword")}
                                 />
                                 <LockKeyhole className="absolute top-2.5 left-2.5 w-5 h-5" />
                                 <button type="button" className="absolute right-3 top-3.5 cursor-pointer"
@@ -1058,11 +1053,7 @@ export default function EditBusiness() {
                                     placeholder="Confirm New password"
                                     className="pr-10 pl-9 font-poppins bg-[#FFFFFF] text-[#3F3F3F]"
                                     // leave space for the eye button
-                                    {...register("confirmPassword", {
-                                        validate: (value, formValues) =>
-                                            !formValues.newPassword || value === formValues.newPassword ||
-                                            "Passwords do not match"
-                                    })}
+                                    {...register("confirmPassword")}
                                 />
                                 <LockKeyhole className="absolute top-2.5 left-2.5 w-5 h-5" />
                                 <button type="button" className="absolute right-3 top-3.5 cursor-pointer"

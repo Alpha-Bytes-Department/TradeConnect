@@ -9,7 +9,7 @@ export default function LogOutModal() {
 
     const handleLogout = () => {
         console.log("Logged out successfully!");
-        localStorage.removeItem('accessToken');
+        localStorage.removeItem('access_token');
         setIsLogoutOpen(false);
         redirect("/");
     };
