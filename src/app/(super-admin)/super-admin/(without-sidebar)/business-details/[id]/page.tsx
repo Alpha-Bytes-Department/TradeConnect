@@ -47,7 +47,7 @@ export default function BusinessDetails() {
     return (
         <div className="max-w-[1300px] mx-auto p-3">
             <div className="relative w-full h-[350px] px-4 flex items-center justify-center">
-                <Image src={data?.logo} alt={data?.logo} fill
+                <Image src={data?.logo} alt="business-logo" fill
                     className="object-cover object-center" />
                 {/* <button className="absolute top-2 left-2 bg-[#BFD7FDB8] text-[#153569] px-2 py-1 
                 flex items-center gap-1.5 font-semibold font-poppins rounded-lg cursor-pointer"

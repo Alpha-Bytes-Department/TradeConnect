@@ -486,6 +486,7 @@ export default function EditBusiness() {
 
             // Append banner image if changed
             if (bannerImage) {
+                console.log(bannerImage);
                 formData1.append('logo', bannerImage);
             }
 
@@ -607,7 +608,7 @@ export default function EditBusiness() {
             <p className="font-poppins text-[#626262]">Update your business information and images</p>
             <div className="bg-white rounded-lg shadow-md border mt-6">
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 border-b">
-                    <button
+                    <button type="button"
                         onClick={() => setActiveTab('basic')}
                         className={`px-8 py-2 font-medium font-poppins border-b-2 transition-colors 
                             text-[#141414] cursor-pointer 
@@ -617,7 +618,7 @@ export default function EditBusiness() {
                     >
                         Basic Information
                     </button>
-                    <button
+                    <button type="button"
                         onClick={() => setActiveTab('contact')}
                         className={`px-8 py-2 font-medium font-poppins border-b-2 transition-colors 
                             text-[#141414] cursor-pointer
@@ -627,7 +628,7 @@ export default function EditBusiness() {
                     >
                         Contact Information
                     </button>
-                    <button
+                    <button type="button"
                         onClick={() => setActiveTab('services')}
                         className={`px-8 py-2 font-medium font-poppins border-b-2 transition-colors 
                             text-[#141414] cursor-pointer
@@ -637,7 +638,7 @@ export default function EditBusiness() {
                     >
                         Services & About
                     </button>
-                    <button
+                    <button type="button"
                         onClick={() => setActiveTab('images')}
                         className={`px-8 py-2 font-medium font-poppins border-b-2 transition-colors 
                             text-[#141414] cursor-pointer 
@@ -647,7 +648,7 @@ export default function EditBusiness() {
                     >
                         Images
                     </button>
-                    <button
+                    <button type="button"
                         onClick={() => setActiveTab('changePassword')}
                         className={`px-8 py-2 font-medium font-poppins border-b-2 transition-colors 
                             text-[#141414] cursor-pointer 

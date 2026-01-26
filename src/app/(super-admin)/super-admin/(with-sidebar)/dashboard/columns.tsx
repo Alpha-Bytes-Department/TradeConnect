@@ -2,7 +2,7 @@
 "use client"
 import { type ColumnDef } from "@tanstack/react-table"
 import { Eye, SquarePen } from "lucide-react";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -72,12 +72,14 @@ export const columns: ColumnDef<dashboardLatestBusiness>[] = [
         cell: ({ row }) => {
             const business = row.original;
 
+            const router = useRouter();
+
             const handleViewDetails = () => {
-                redirect(`/super-admin/business-details/${business.id}`);
+                router.push(`/super-admin/business-details/${business.id}/`);
             };
 
             const handleEdit = () => {
-                redirect(`/super-admin/edit-business/${business.id}`);
+                router.push(`/super-admin/edit-business/${business.id}/`);
             };
 
             return (
