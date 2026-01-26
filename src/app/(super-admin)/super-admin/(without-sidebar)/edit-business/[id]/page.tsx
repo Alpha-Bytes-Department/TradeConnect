@@ -114,7 +114,6 @@ export default function EditBusiness() {
         formState: { errors: formErrors },
         setValue,
         reset,
-        watch,
     } = useForm<BusinessFormData>({
         resolver: zodResolver(businessFormSchema),
         defaultValues: {
@@ -140,8 +139,6 @@ export default function EditBusiness() {
         flag: string;
     };
 
-    const token = localStorage.getItem("accessToken");
-    if (!token) return;
 
     const [countries, setCountries] = useState<Country[]>([]);
 
@@ -185,7 +182,7 @@ export default function EditBusiness() {
 
             // membership date
             if (freshData?.business?.membership_valid_till) {
-                const dateStr = freshData.business.membership_valid_till.trim();
+                const dateStr = freshData?.business?.membership_valid_till.trim();
                 const parts = dateStr.split("/");
                 if (parts.length === 3) {
                     const [d, m, y] = parts.map(Number);
