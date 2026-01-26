@@ -7,7 +7,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue }
     from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { CalendarHeartIcon, Eye, EyeOff, LockKeyhole, MoveLeft, Save, Trash2, Upload, X }
+import { CalendarHeartIcon, Eye, EyeOff, LockKeyhole, Save, Trash2, Upload, X }
     from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
