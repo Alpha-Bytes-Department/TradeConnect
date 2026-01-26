@@ -182,7 +182,7 @@ export default function EditBusiness() {
 
             // membership date
             if (freshData?.business?.membership_valid_till) {
-                const dateStr = freshData?.business?.membership_valid_till.trim();
+                const dateStr = freshData.business.membership_valid_till.trim();
                 const parts = dateStr.split("/");
                 if (parts.length === 3) {
                     const [d, m, y] = parts.map(Number);
