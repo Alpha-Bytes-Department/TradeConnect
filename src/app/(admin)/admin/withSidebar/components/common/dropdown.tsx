@@ -25,7 +25,7 @@ export default function AccountDropdown() {
     };
 
     const handleLogOut = () => {
-        localStorage.removeItem('accessToken')
+        localStorage.removeItem('access_token')
         setIsOpen(false);
         router.push('/');
     };
