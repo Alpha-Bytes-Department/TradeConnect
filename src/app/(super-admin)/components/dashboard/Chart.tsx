@@ -13,7 +13,7 @@
 
 
 "use client";
-import axios from "axios";
+import api from "@/lib/axiosInterceptor";
 import { useEffect, useState } from "react";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis, ResponsiveContainer, Tooltip, Legend }
     from "recharts";
@@ -23,18 +23,7 @@ export default function Chart() {
 
     useEffect(() => {
         const fetchDashboardCharts = async () => {
-            const token = localStorage.getItem("accessToken");
-            if (!token) return;
-
-            const response = await axios.get(
-                `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/admin/dashboard/`,
-                {
-                    headers: {
-                        "ngrok-skip-browser-warning": "true",
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
+            const response = await api.get('/api/business/admin/dashboard/');
             setDashboardChartData(response?.data?.data?.chart_data);
         };
         fetchDashboardCharts();

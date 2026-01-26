@@ -4,29 +4,18 @@ import DashboardCard from "@/app/(super-admin)/components/dashboard/DashboardCar
 import Link from "next/link";
 import { columns, dashboardLatestBusiness } from "./columns";
 import { DataTable } from "./data-table";
-// import { allBusinessData } from "@/app/(super-admin)/data";
 import Chart from "@/app/(super-admin)/components/dashboard/Chart";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "@/lib/axiosInterceptor";
 
 export default function Dashboard() {
     const [datas, setDatas] = useState<any[]>([]);
 
     useEffect(() => {
         const fetchDashboardDatas = async () => {
-            const token = localStorage.getItem("accessToken");
-            if (!token) return;
-
-            const response = await axios.get(
-                `https://squishiest-punctually-daxton.ngrok-free.dev/api/business/admin/dashboard/`,
-                {
-                    headers: {
-                        "ngrok-skip-browser-warning": "true",
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
+            const response = await api.get('/api/business/admin/dashboard/');
             setDatas(response?.data?.data?.latest_businesses);
+            console.log(response?.data?.data?.latest_businesses);
             //setTotal(response?.data?.count);
         };
         fetchDashboardDatas();
