@@ -171,7 +171,7 @@ export default function EditBusiness() {
 
             // Re-populate ALL fields (same as in initial fetch)
             setValue('businessName', freshData?.business?.business_name || '');
-            setValue('country', freshData?.business?.country?.id || '', { shouldValidate: true });
+            setValue('country', freshData?.business?.country?.id || '');
             setValue('fullAddress', freshData?.business?.full_address || '');
             setValue('emailAddress', freshData?.business?.user_email || '');
             setValue('phoneNumber', freshData?.business?.phone_number || '');
