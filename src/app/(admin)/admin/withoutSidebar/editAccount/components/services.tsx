@@ -24,17 +24,17 @@ const Services: React.FC<ContactsProps> = ({ data, setData }) => {
     useEffect(() => {
         if (data) {
             // Only update local state if it's currently empty to avoid overwriting user typing
-            if ( data.services) {
+            if ( !services && data.services) {
                 setServices(data.services.map(s => s.title).join(', ') || '');
             }
-            if (data.about_business) {
+            if (!about && data.about_business) {
                 setAbout(data.about_business || '');
             }
         }
-    }, [data]); // Watch data for async loading
+    }, []); // Watch data for async loading
 
-    const handleServicesChange = (c) => {
-        const servicesArray: Service[] = c
+    const handleServicesChange = () => {
+        const servicesArray: Service[] = services
             .split(',')
             .map(item => item.trim())
             .filter(Boolean)
@@ -52,12 +52,18 @@ const Services: React.FC<ContactsProps> = ({ data, setData }) => {
         }));
     };
 
-    const handleAboutChange = (c) => {
+    const handleAboutChange = () => {
         setData(prev => ({
             ...prev,
-            about_business: c
+            about_business: about
         }));
     };
+
+    useEffect(()=>{
+        handleServicesChange()
+        handleAboutChange()
+        
+    },[services,about])
     return (
         <div className="space-y-6">
             {/* Services */}
@@ -70,7 +76,7 @@ const Services: React.FC<ContactsProps> = ({ data, setData }) => {
                     id="services"
                     rows={6}
                     value={services}
-                    onChange={(e) => { handleServicesChange(e.target.value);setServices(e.target.value)}}
+                    onChange={(e) => { setServices(e.target.value)}}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 outline-none"
                     placeholder="Software Development, Cloud Solutions, IT Consulting"
                 />
@@ -89,7 +95,7 @@ const Services: React.FC<ContactsProps> = ({ data, setData }) => {
                 <textarea
                     id="about"
                     value={about}
-                    onChange={(e) => { handleAboutChange(e.target.value); setAbout(e.target.value)}}
+                    onChange={(e) => { setAbout(e.target.value)}}
                     rows={6}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 resize-none outline-none"
                     placeholder="Leading technology solutions provider with 15+ years of experience."

@@ -19,7 +19,7 @@ export default function RootLayout({
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        const token = localStorage.getItem("accessToken");
+        const token = localStorage.getItem("access_token");
 
         if (!token) {
             router.push('/');
