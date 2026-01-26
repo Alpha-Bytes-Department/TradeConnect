@@ -45,8 +45,7 @@ function NavbarWithoutTrigger() {
         <div>
             <nav className="p-4 flex items-center justify-between">
                 {/*Left*/}
-                <Link href="/" className="w-44 h-16 relative transition-all 
-                group-data-[collapsible=icon]:hidden">
+                <Link href="/super-admin/dashboard" className="w-44 h-16 relative transition-all">
                     <Image src="/logos/Primary_Logo.png" alt="main-logo" fill />
                 </Link>
 
