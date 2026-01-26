@@ -127,7 +127,7 @@ export const columns: ColumnDef<allBusinessesTable>[] = [
 
             const router = useRouter();
             const handleEdit = () => {
-                router.push(`/super-admin/edit-business/${business.id}`);
+                router.push(`/super-admin/edit-business/${business.id}/`);
             };
 
             const handleDelete = async () => {

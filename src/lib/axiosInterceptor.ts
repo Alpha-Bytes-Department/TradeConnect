@@ -7,7 +7,7 @@ const api = axios.create({
 
 
 api.interceptors.request.use((config) => {
-    config.headers['ngrok-skip-browser-warning'] = 'true'; // This skips the ngrok warning page
+    // config.headers['ngrok-skip-browser-warning'] = 'true'; // This skips the ngrok warning page
     if (typeof window !== 'undefined') {
         const accessToken = localStorage.getItem('access_token');
         if (accessToken) {
