@@ -70,8 +70,7 @@ const Services: React.FC<ContactsProps> = ({ data, setData }) => {
                     id="services"
                     rows={6}
                     value={services}
-                    onChange={(e) => setServices(e.target.value)}
-                    onBlur={handleServicesChange}
+                    onChange={(e) => {handleServicesChange;setServices(e.target.value)}}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 outline-none"
                     placeholder="Software Development, Cloud Solutions, IT Consulting"
                 />
@@ -90,8 +89,7 @@ const Services: React.FC<ContactsProps> = ({ data, setData }) => {
                 <textarea
                     id="about"
                     value={about}
-                    onChange={(e) => setAbout(e.target.value)}
-                    onBlur={handleAboutChange}
+                    onChange={(e) => {handleAboutChange; setAbout(e.target.value)}}
                     rows={6}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 resize-none outline-none"
                     placeholder="Leading technology solutions provider with 15+ years of experience."
