@@ -175,6 +175,9 @@ export default function CreateBusinessForm() {
                 console.error("Error:", error?.message);
                 //alert("An error occurred. Please try again.");
             }
+            toast.error("Failed", {
+                description: "Failed to create business",
+            });
         }
     };
 

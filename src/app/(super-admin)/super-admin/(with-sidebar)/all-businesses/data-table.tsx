@@ -27,8 +27,8 @@ export function DataTable<TData>({ columns, data, total, currentPage, onPageChan
         <div>
             {list && (
                 <div>
-                    <p className="font-poppins text-[#515151] mt-6">Showing {" "}
-                        {table.getRowModel().rows.length} of {total} businesses</p>
+                    {/* <p className="font-poppins text-[#515151] mt-6">Showing {" "}
+                        {table.getRowModel().rows.length} of {total} businesses</p> */}
                     <div className="overflow-x-auto rounded-md border mt-8">
                         {/* ShadCN */}
                         <Table>
@@ -79,20 +79,23 @@ export function DataTable<TData>({ columns, data, total, currentPage, onPageChan
 
                     <div className="mt-8">
                         {/* Ant Design */}
-                        <Pagination
+                        {/* <Pagination
                             current={currentPage}
                             pageSize={8}
                             total={total}
                             align="center"
                             onChange={(page) => onPageChange(page)}
-                        />
-
-                        {/* <Pagination className="font-poppins text-[#000000]"
-                            defaultCurrent={1}
-                            total={data.length}
-                            align="center"
-                            onChange={(page) => table.setPageIndex(page - 1)}
                         /> */}
+
+                        <Pagination className="font-poppins"
+                            current={currentPage}
+                            total={total}
+                            pageSize={8}
+                            align="center"
+                            onChange={(page) => onPageChange(page)}
+                            showSizeChanger={false}
+                            showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+                        />
                         {/* Pagination should never be inside <Table>, <TableBody>, or <TableRow>. */}
                     </div>
                 </div>

@@ -78,9 +78,9 @@ export default function FilterBox({ currentPage }: FilterBoxProps) {
                 const params = new URLSearchParams({
                     page: currentPage.toString(),
                     search: Search || "",
-                    country: Country || "",
+                    country: Country === "all-countries" ? "" : Country,
                     sort_by: SortBy || "",
-                    status: Status || ""
+                    status: Status === "all-status" ? "" : Status
                 });
 
                 // Fetch data with query params
@@ -126,11 +126,12 @@ export default function FilterBox({ currentPage }: FilterBoxProps) {
                 <div>
                     <Select onValueChange={(value) => setValue("country", value)}>
                         <SelectTrigger className="w-full cursor-pointer">
-                            <SelectValue placeholder="All Countries" />
+                            <SelectValue placeholder="Select Country" />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>
-                                <SelectLabel>All Countries</SelectLabel>
+                                <SelectLabel>Select Country</SelectLabel>
+                                <SelectItem value="all-countries">All</SelectItem>
                                 {countries.map(item => (
                                     <SelectItem key={item.id} value={item.name}>
                                         {item.name}
@@ -144,11 +145,12 @@ export default function FilterBox({ currentPage }: FilterBoxProps) {
                 <div>
                     <Select onValueChange={(value) => setValue("status", value)}>
                         <SelectTrigger className="w-full cursor-pointer">
-                            <SelectValue placeholder="All Status" />
+                            <SelectValue placeholder="Select Status" />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>
-                                <SelectLabel>Status</SelectLabel>
+                                <SelectLabel>Select Status</SelectLabel>
+                                <SelectItem value="all-status">All</SelectItem>
                                 <SelectItem value="active">Active</SelectItem>
                                 <SelectItem value="locked">Locked</SelectItem>
                             </SelectGroup>
