@@ -45,7 +45,7 @@ export default function SignIn() {
           password: data.password
         },
       );
-      console.log(JSON.stringify(response?.data));
+      // console.log(response?.data);
 
       const accessToken = response?.data?.tokens?.access;
       const refreshToken = response?.data?.tokens?.refresh;

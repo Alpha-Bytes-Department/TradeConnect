@@ -27,8 +27,19 @@ type Country = {
 const businessFormSchema = z.object({
     businessName: z.string().min(1, "Business name is required"),
     emailAddress: z.string().email("Invalid email address").min(1, "Email is required"),
-    phoneNumber: z.string().min(1, "Phone number is required"),
-    password: z.string().min(8, "Password must be at least 8 characters"),
+
+    phoneNumber: z.string()
+        .min(1, "Phone number is required")
+        .regex(/^\+?\d+$/, "Phone number must contain only digits (optional + at start)")
+        .max(20, "Phone number must not exceed 20 characters"),
+
+    password: z.string()
+        .min(8, "Password must be at least 8 characters")
+        .regex(/[A-Z]/, "Password must contain at least 1 uppercase letter")
+        .regex(/[a-z]/, "Password must contain at least 1 lowercase letter")
+        .regex(/\d/, "Password must contain at least 1 number")
+        .regex(/[!@#$%^&*(),.?":{}|<>]/, "Password must contain at least 1 special character (!@#$%^&*(),.?\":{}|<>)"),
+
     country: z.string().min(1, "Country is required"),
     fullAddress: z.string().min(1, "Full address is required"),
     websiteURL: z.string().url("Invalid URL").min(1, "Website URL is required"),
@@ -37,6 +48,7 @@ const businessFormSchema = z.object({
     bannerImage: z.instanceof(File, { message: "Banner image is required" }),
     membershipValidTill: z.date({ message: "Membership date is required" })
 });
+
 
 type BusinessFormData = z.infer<typeof businessFormSchema>;
 

@@ -31,7 +31,7 @@ api.interceptors.response.use(
                 const refreshToken = localStorage.getItem('refresh_token');
 
                 // We send the refresh token to get a new access token
-                const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/token/refresh/`, {
+                const res = await axios.post(`${process.env.NEXT_PUBLIC_API}/api/auth/token/refresh/`, {
                     refresh: refreshToken
                 });
 
