@@ -120,12 +120,6 @@ export default function CreateBusinessForm() {
     const onSubmit = async (data: BusinessFormData) => {
         try {
             console.log("Form Data:", data);
-            const token = localStorage.getItem('accessToken');
-            if (!token) {
-                console.error("No access token found");
-                // alert("Please login first");
-                return;
-            }
 
             const formData = new FormData();
             formData.append("email", data.emailAddress);
@@ -152,6 +146,8 @@ export default function CreateBusinessForm() {
 
             formData.append("membership_valid_till", formattedDate);
             // console.log("Membership:", data.membershipValidTill.toISOString());
+
+            console.log("Form Data=", formData);
 
             const response = await api.post("/api/business/create-with-user/",
                 formData,
