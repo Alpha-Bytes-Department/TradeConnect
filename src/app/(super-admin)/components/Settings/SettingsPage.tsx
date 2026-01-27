@@ -133,17 +133,10 @@ export default function SettingsPage() {
     // Updated Export CSV handler - for when API returns CSV string directly
     const handleExportCSV = async () => {
         try {
-            const token = localStorage.getItem('accessToken');
-            if (!token) {
-                console.error("No access token found");
-                // alert("Please login first");
-                return;
-            }
-
             // Show loading state (optional)
             console.log("Exporting CSV...");
 
-            const response = await axios.get('/api/business/export/csv/');
+            const response = await api.get('/api/business/export/csv/');
 
             console.log("API Response:", response?.data);
 

@@ -78,7 +78,7 @@ export function ViewProvider({ children }: { children: ReactNode }) {
     // Initialize auth from localStorage
     const [auth, setAuth] = useState<AuthType>(() => {
         if (typeof window !== 'undefined') {
-            const token = localStorage.getItem('accessToken');
+            const token = localStorage.getItem('access_token');
             return token ? { accessToken: token } : {};
         }
         return {};
@@ -87,9 +87,9 @@ export function ViewProvider({ children }: { children: ReactNode }) {
     // Sync auth changes to localStorage
     useEffect(() => {
         if (auth.accessToken) {
-            localStorage.setItem('accessToken', auth.accessToken);
+            localStorage.setItem('access_token', auth.accessToken);
         } else {
-            localStorage.removeItem('accessToken');
+            localStorage.removeItem('access_token');
         }
     }, [auth]);
 
