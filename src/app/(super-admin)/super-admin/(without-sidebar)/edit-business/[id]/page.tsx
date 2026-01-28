@@ -682,7 +682,8 @@ export default function EditBusiness() {
                                     name="country"
                                     control={control}
                                     render={({ field }) => (
-                                        <Select onValueChange={field.onChange} value={field.value}>
+                                        <Select key={field.value || 'empty'}
+                                            onValueChange={field.onChange} value={field.value}>
                                             <SelectTrigger className="w-full cursor-pointer font-poppins">
                                                 <SelectValue placeholder="Countries" />
                                             </SelectTrigger>
