@@ -10,6 +10,11 @@ export default function LogOutModal() {
     const handleLogout = () => {
         console.log("Logged out successfully!");
         localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        localStorage.removeItem('user_email');
+        localStorage.removeItem('user_name');
+        localStorage.removeItem('user_phone');
+        localStorage.removeItem('user_photo');
         setIsLogoutOpen(false);
         redirect("/");
     };

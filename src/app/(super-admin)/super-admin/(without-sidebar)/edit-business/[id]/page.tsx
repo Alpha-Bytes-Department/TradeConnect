@@ -565,6 +565,7 @@ export default function EditBusiness() {
                 console.log('Failed to update business. Please try again.');
             }
         }
+        window.location.reload();
     };
 
     // Add cancel handler
@@ -590,11 +591,9 @@ export default function EditBusiness() {
     //     );
     // }
 
-    const router = useRouter();
-
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="max-w-[1300px] mx-auto">
+        <form onSubmit={handleSubmit(onSubmit)} className="max-w-7xl mx-2 xl:mx-auto">
             {/* <button className="mt-3 bg-[#BFD7FDB8] text-[#153569] px-2 py-1 
                 flex items-center gap-1.5 font-semibold font-poppins rounded-lg cursor-pointer"
                 onClick={() => router.push("/super-admin/all-businesses")}>
