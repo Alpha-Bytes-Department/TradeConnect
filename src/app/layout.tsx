@@ -12,7 +12,7 @@ const poppinsFont = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "TradeConnect",
+  title: "Coast to Coast Network",
   description: "Business Hub Platform",
 };
 
