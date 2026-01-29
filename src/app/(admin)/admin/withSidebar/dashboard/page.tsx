@@ -252,7 +252,7 @@ export default function Dashboard() {
         <div className="w-full flex flex-col justify-around gap-4 md:gap-6 my-4 md:my-6">
             <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-gradient-to-b from-[#005AF0] to-[#8A38F5] rounded-lg">
                 <h1 className="text-3xl sm:text-2xl lg:text-2xl font-semibold mb-2 tracking-tight text-white">
-                    Welcome back, Tech Solutions Inc.!
+                    Welcome back, {myData.business_name}!
                 </h1>
                 <p className="text-purple-100 text-xl sm:text-base font-light">
                     Manage your business profile and explore the directory
