@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Textarea } from "@/components/ui/textarea";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CalendarHeartIcon, Eye, EyeOff, Upload, X } from "lucide-react";
+import { CalendarHeartIcon, CloudUpload, Eye, EyeOff, Upload, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { TbCategoryPlus } from "react-icons/tb";
@@ -233,7 +233,7 @@ export default function CreateBusinessForm() {
                     <label htmlFor="phoneNumber" className="font-poppins text-[#252525]">
                         Office Phone Number*</label>
                     <div className="w-full">
-                        <Input type="text" id="phoneNumber" placeholder="Tech Solution Inc."
+                        <Input type="text" id="phoneNumber" placeholder="Phone Number"
                             className="font-poppins bg-[#FFFFFF] text-[#3F3F3F] text-base"
                             {...register("phoneNumber")}
                         />
@@ -282,7 +282,7 @@ export default function CreateBusinessForm() {
                             <SelectTrigger className="w-full cursor-pointer font-poppins">
                                 <SelectValue placeholder="Countries" />
                             </SelectTrigger>
-                            <SelectContent className="font-poppins">
+                            <SelectContent className="font-poppins !w-[116px]">
                                 <SelectGroup>
                                     <SelectLabel>Countries</SelectLabel>
                                     {countries.length > 0 ? (
@@ -313,7 +313,7 @@ export default function CreateBusinessForm() {
                     Full Address*</label>
                 <div className="w-full">
                     <Input type="text" id="fullAddress"
-                        placeholder="123 Tech street, san Francisco, CA 94105"
+                        placeholder="123 Tech Street, San Francisco, CA 94105"
                         className="font-poppins bg-[#FFFFFF] text-[#3F3F3F] text-base"
                         {...register("fullAddress")}
                     />
@@ -331,7 +331,7 @@ export default function CreateBusinessForm() {
                     <label htmlFor="websiteURL" className="font-poppins text-[#000000]">
                         Website URL*</label>
                     <div className="w-full">
-                        <Input type="text" id="websiteURL" placeholder="example.com"
+                        <Input type="text" id="websiteURL" placeholder="https://joinventureai.com/"
                             className="font-poppins bg-[#FFFFFF] text-[#3F3F3F] text-base"
                             {...register("websiteURL")}
                         />
@@ -359,7 +359,7 @@ export default function CreateBusinessForm() {
                                         id="date"
                                         className="w-full justify-between font-normal font-poppins 
                                             text-[#313131] cursor-pointer">
-                                        {field.value ? field.value.toLocaleDateString() : "DD / MM / YYYY"}
+                                        {field.value ? field.value.toLocaleDateString() : "MM / DD / YYYY"}
                                         <CalendarHeartIcon />
                                     </Button>
                                 </PopoverTrigger>
@@ -372,8 +372,8 @@ export default function CreateBusinessForm() {
                                             field.onChange(selectedDate)
                                             setOpen(false)
                                         }}
-                                        fromYear={2020}
-                                        toYear={2090}
+                                        fromYear={2025}
+                                        toYear={2150}
                                     />
                                 </PopoverContent>
                             </Popover>
@@ -461,12 +461,12 @@ export default function CreateBusinessForm() {
                             </div>
                         ) : (
                             <>
-                                <Upload className="w-12 h-12 mx-auto text-gray-400 mb-4" />
+                                <CloudUpload className="w-12 h-12 mx-auto text-gray-400 mb-4" />
                                 <p className="font-poppins text-gray-600 mb-2">
-                                    Click to upload new logo
+                                    Click to upload new Banner
                                 </p>
                                 <p className="font-poppins text-gray-400 text-sm">
-                                    PNG, JPG, up to 5MB (Square recommended)
+                                    PNG, JPG, up to 5MB (1200X400 recommended)
                                 </p>
                             </>
                         )}
