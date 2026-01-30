@@ -377,7 +377,8 @@ const ProfileLayout: React.FC = () => {
 
     const handleCancel = () => {
         // Simple refresh to discard changes
-        window.location.reload();
+        //window.location.reload();
+        router.back()
     };
 
     const renderTab = () => {
