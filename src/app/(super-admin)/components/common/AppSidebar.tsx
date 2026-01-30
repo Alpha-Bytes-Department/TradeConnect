@@ -54,8 +54,8 @@ export default function AppSidebar() {
         // Added delay to prevent tooltip from showing immediately
         <TooltipProvider delayDuration={200} skipDelayDuration={0}>
             <Sidebar collapsible="icon" side="left" className="font-poppins text-base">
-                <SidebarHeader className="h-20 py-1 flex items-center justify-center">
-                    <Link href="/super-admin/dashboard" className="w-44 h-16 relative transition-all 
+                <SidebarHeader className="h-20 flex items-center justify-center">
+                    <Link href="/super-admin/dashboard" className="relative w-32 h-24 transition-all 
                     group-data-[collapsible=icon]:hidden">
                         <Image src="/logos/Primary_Logo.png" alt="main-logo" fill />
                     </Link>
