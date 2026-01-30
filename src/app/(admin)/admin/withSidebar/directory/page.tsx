@@ -145,7 +145,7 @@ useEffect(() => {
 
     const fetchUsers = async () => {
       try {
-          const res: any = await api.get(`business/all/?country=${selectedCountry}&search=${searchTerm}&service=${selectedService}&page=${page}&sort_by=${sortBy}`, { signal: controller.signal });
+          const res: any = await api.get(`business/all/?country=${selectedCountry}&search=${searchTerm}&service=${selectedService}&page=${1}&sort_by=${sortBy}`, { signal: controller.signal });
         
           
         if (controller) {
@@ -189,7 +189,61 @@ useEffect(() => {
     return () => {
       controller.abort();
     };
-}, [page, searchTerm, selectedCountry,selectedService, sortBy]);
+}, [searchTerm, selectedCountry,selectedService, sortBy]);
+
+
+
+
+    useEffect(() => {
+        let controller = new AbortController()
+
+        const fetchUsers = async () => {
+            try {
+                const res: any = await api.get(`business/all/?country=${selectedCountry}&search=${searchTerm}&service=${selectedService}&page=${page}&sort_by=${sortBy}`, { signal: controller.signal });
+
+
+                if (controller) {
+
+                    const businesses: CompanyProfile[] = res.data.results.businesses.map((b: any) => ({
+                        id: b.id,
+                        headerImage: b.logo,
+                        title: b.business_name,
+                        location: b.full_address,
+                        joined: b.created_at,
+                        description: b.about_business,
+                        services: b.services,
+                        country: b.country?.name,
+                        website: b.website,
+                        phone: b.phone_number,
+                        seenBy: b.seen_by ?? 0,
+                    }));
+
+                    setData(businesses);
+
+                    setTotal(res.data.results.count)
+
+
+                    const countr: any = await api.get(`core/countries/`, { signal: controller.signal });
+                    const serv: any = await api.get(`core/services/`, { signal: controller.signal });
+
+                    setCountries([{ id: '', name: 'No Selection', flag: '' }, ...countr.data.countries])
+                    setServices([{ id: '', title: 'No Selection' }, ...serv.data.services,])
+
+
+
+                }
+
+            } catch (err: any) {
+
+            }
+        };
+
+        fetchUsers();
+
+        return () => {
+            controller.abort();
+        };
+    }, [page]);
 
 //console.log('************************************************',data)
     return (
