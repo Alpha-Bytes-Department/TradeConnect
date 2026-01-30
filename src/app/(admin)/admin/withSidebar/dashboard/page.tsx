@@ -448,10 +448,10 @@ export default function Dashboard() {
                     Recently Viewed Business
                 </h2>
 
-                <div className="overflow-hidden border border-slate-100 bg-[#FEF3EB] rounded-lg">
+                <div className=" w-full border border-slate-100 bg-[#FEF3EB] rounded-lg">
                     {/* Desktop Table View */}
-                    <div className="hidden lg:block overflow-x-auto">
-                        <table className="w-full">
+                    <div className="w-full overflow-x-auto">
+                        <table className="w-full min-w-4xl">
                             <thead>
                                 <tr className="bg-slate-50 border-b border-slate-200">
                                     <th className="text-left py-4 px-6 text-xs font-bold text-slate-600 uppercase tracking-wider">Business</th>
@@ -501,30 +501,7 @@ export default function Dashboard() {
                         </table>
                     </div>
 
-                    {/* Mobile Card View */}
-                    <div className="lg:hidden divide-y divide-slate-100">
-                        {recentlyViewedBusinesses.map((business) => (
-                            <div key={business.id} className="p-6 hover:bg-slate-50 transition-colors">
-                                <div className="flex items-start gap-4 mb-4">
-                                    <div className={`${business.logoColor} w-14 h-14 rounded-xl flex items-center justify-center font-bold shadow-sm flex-shrink-0`}>
-                                        {business.logo}
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <h3 className="font-semibold text-slate-800 mb-1">{business.name}</h3>
-                                        <p className="text-sm text-slate-600">{business.country}</p>
-                                    </div>
-                                </div>
-                                <p className="text-sm text-slate-700 mb-4 line-clamp-2">{business.services}</p>
-                                <button
-                                    onClick={() => router.push(`/admin/accounts/${business.id}`)}
-                                    className="w-full bg-blue-50 text-blue-600 py-2.5 px-4 rounded-lg font-semibold hover:bg-blue-100 transition-colors flex items-center justify-center gap-2"
-                                >
-                                    View
-                                    <ExternalLink className="w-4 h-4" />
-                                </button>
-                            </div>
-                        ))}
-                    </div>
+                    
                 </div>
             </div>
 
