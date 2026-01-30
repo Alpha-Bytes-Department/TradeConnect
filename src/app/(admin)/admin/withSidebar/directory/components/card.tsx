@@ -83,11 +83,13 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                 {/* Title Section */}
                 <div className="fc items-start gap-4 mb-4">
                     
-                    <div className="flex-1 flex flex-col">
-                        <div className="flex flex-row items-center gap-2">
-                            <h2 className="text-lg md:text-xl font-semibold text-gray-800 mb-1">
-                            {title}
-                            </h2>
+                    <div className="max-w-full flex-1 flex flex-col">
+                        <div className=" max-w-full flex flex-row items-center gap-2">
+                            <button className=" max-w-[90%] " onClick={async () => { await increaseBusinessView(id); router.push(`/admin/withoutSidebar/accounts/${id}/`) }}>
+                                <h2 className="text-lg md:text-xl font-semibold text-gray-800 mb-1 truncate hover:text-blue-800">
+                                {title}
+                                </h2>
+                            </button>
                             <Flag id={country} h={16} w={16}/>
                         </div>
                         
@@ -111,7 +113,7 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                                     d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                                 />
                             </svg>
-                            <span className="text-md md:text-md">{location}</span>
+                            <span className="text-md md:text-md max-w-[90%] truncate">{location}</span>
                         </div>
                     </div>
                 </div>
@@ -130,7 +132,7 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                         {displayedServices?.map((service) => (
                             <span
                                 key={service.id}
-                                className="px-3 py-1 bg-blue-100 text-blue-900 text-base rounded-full shadow-md shadow-blue-300"
+                                className="truncate max-w-[90%] px-3 py-1 bg-blue-100 text-blue-900 text-base rounded-full shadow-md shadow-blue-300"
                             >
                                 {service.title}
                             </span>
@@ -146,8 +148,8 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                 {/* Action Buttons */}
                 <div className="mt-auto flex items-center gap-3">
                     <Button
-                        onClick={async()=>{await increaseBusinessView(id); router.replace(`/admin/withoutSidebar/accounts/${id}/`)}}
-                        className="fc flex-1 bg-blue-600 hover:bg-blue-700 text-white text-lg font-medium py-1 rounded-xl transition-colors"
+                        onClick={async()=>{await increaseBusinessView(id); router.push(`/admin/withoutSidebar/accounts/${id}/`)}}
+                        className="fc flex-1 bg-blue-600 hover:bg-blue-800 text-white text-lg font-medium py-1 rounded-xl transition-colors"
                     >
                         View Profile
                     </Button>
@@ -156,10 +158,10 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                         href={website?website:''}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-10 h-10 border-2 border-gray-300 hover:border-blue-600 rounded-xl flex items-center justify-center transition-colors group"
+                        className="w-10 h-10 border-2 border-gray-300 hover:border-blue-800 rounded-xl flex items-center justify-center transition-colors group"
                     >
                         <svg
-                            className="w-5 h-5 text-gray-600 group-hover:text-blue-600 transition-colors"
+                            className="w-5 h-5 text-gray-600 group-hover:text-blue-800 transition-colors"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"

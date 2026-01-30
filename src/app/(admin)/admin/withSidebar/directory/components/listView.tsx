@@ -96,11 +96,11 @@ const ListView: React.FC<DirectoryListProps> = ({ companies }) => {
                     <div className="min-w-[950px]">
                         {/* Header */}
                         <div className="grid grid-cols-[2fr_1.2fr_1.5fr_1.5fr_0.8fr] gap-6 px-8 py-5 bg-[#fff3e3] border-b border-slate-200">
-                            <div className="text-lg font-semibold text-slate-800 tracking-wide">Business</div>
-                            <div className="text-lg font-semibold text-slate-800 tracking-wide">Country</div>
-                            <div className="text-lg font-semibold text-slate-800 tracking-wide">Services</div>
-                            <div className="text-lg font-semibold text-slate-800 tracking-wide">Contact</div>
-                            <div className="text-lg font-semibold text-slate-800 tracking-wide">Action</div>
+                            <div className="fc text-lg font-semibold text-slate-800 tracking-wide">Business</div>
+                            <div className="fc text-lg font-semibold text-slate-800 tracking-wide">Country</div>
+                            <div className="fc text-lg font-semibold text-slate-800 tracking-wide">Services</div>
+                            <div className="fc text-lg font-semibold text-slate-800 tracking-wide">Contact</div>
+                            <div className="fc text-lg font-semibold text-slate-800 tracking-wide">Action</div>
                         </div>
 
                         {/* Rows */}
@@ -108,10 +108,11 @@ const ListView: React.FC<DirectoryListProps> = ({ companies }) => {
                             {companies.map((item) => (
                                 <div
                                     key={item.id}
-                                    className="grid grid-cols-[2fr_1.2fr_1.5fr_1.5fr_0.8fr] gap-6 px-8 py-6 hover:bg-slate-50 transition-all duration-300 group"
+                                    /* 1. Added w-full and min-w-max to ensure the row doesn't collapse smaller than its content needs */
+                                    className="grid grid-cols-[2fr_1.2fr_1.5fr_1.5fr_0.8fr] gap-6 px-8 py-6 hover:bg-slate-50 transition-all duration-300 group items-center min-w-[900px]"
                                 >
                                     {/* Business Column */}
-                                    <div className="flex items-center gap-4 overflow-hidden">
+                                    <div className="flex items-center gap-4 min-w-0"> {/* min-w-0 is vital for truncate to work in flex/grid */}
                                         <div className="relative w-16 h-16 rounded-xl overflow-hidden shadow-md flex-shrink-0 group-hover:shadow-lg transition-shadow duration-300">
                                             <img
                                                 src={item?.headerImage}
@@ -119,57 +120,67 @@ const ListView: React.FC<DirectoryListProps> = ({ companies }) => {
                                                 className="w-full h-full object-cover"
                                             />
                                         </div>
-                                        <div className="min-w-0">
-                                            <h3 className="text-lg font-semibold text-slate-900 truncate group-hover:text-blue-600 transition-colors duration-200">
-                                                {item.title}
-                                            </h3>
+                                        <div className="min-w-0 flex-1">
+                                            <button
+                                                className="text-left w-full"
+                                                onClick={async () => {
+                                                    await increaseBusinessView(item.id);
+                                                    router.push(`/admin/withoutSidebar/accounts/${item.id}/`);
+                                                }}
+                                            >
+                                                <h3 className="text-lg font-semibold text-slate-800 truncate group-hover:text-blue-700 transition-colors duration-200">
+                                                    {item.title}
+                                                </h3>
+                                            </button>
                                         </div>
                                     </div>
 
                                     {/* Country Column */}
-                                    <div className="flex items-center">
-                                        <p className="text-md font-semibold text-slate-500 truncate">{item.country ? item.country : '-'}</p>
+                                    <div className="fc min-w-0">
+                                        <p className="text-md font-semibold text-slate-500 truncate whitespace-nowrap">
+                                            {item.country ? item.country : '-'}
+                                        </p>
                                     </div>
 
                                     {/* Services Column */}
-                                    <div className="flex items-center">
-                                        <div className="space-y-1 overflow-hidden">
+                                    <div className="fc min-w-0">
+                                        <div className="flex flex-col min-w-0 ">
                                             {item.services?.slice(0, 2).map((service, idx) => (
-                                                <p key={idx} className="text-sm font-semibold text-slate-700 truncate whitespace-nowrap">
+                                                <p key={idx} className="m-auto max-w-full text-sm font-semibold text-slate-700 truncate whitespace-nowrap">
                                                     {service?.title}
                                                 </p>
                                             ))}
                                             {item.services && item.services.length > 2 && (
-                                                <p className="text-md font-semibold text-slate-500 mt-1">
-                                                    {item.services.length - 2}+
+                                                <p className="m-auto text-xs font-bold text-slate-700 mt-1 uppercase">
+                                                    +{item.services.length - 2}
                                                 </p>
                                             )}
                                         </div>
                                     </div>
 
                                     {/* Contact Column */}
-                                    <div className="flex items-center">
-                                        <div className="space-y-1 min-w-0 w-full">
-                                            <p className="text-md font-semibold text-slate-700 truncate">
+                                    <div className="fc min-w-0">
+                                        <div className="fc flex-col space-y-1 min-w-0">
+                                            <p className="text-md font-semibold text-slate-700 truncate whitespace-nowrap">
                                                 {item?.website || 'info@company.com'}
                                             </p>
-                                            <p className="text-md font-semibold text-slate-500 truncate">
+                                            <p className="text-md font-semibold text-slate-500 truncate whitespace-nowrap">
                                                 {item.phone || '+971 544 4546 4641'}
                                             </p>
                                         </div>
                                     </div>
 
                                     {/* Action Column */}
-                                    <div className="flex items-center justify-start">
+                                    <div className="flex items-center justify-center">
                                         <button
                                             onClick={async () => {
                                                 await increaseBusinessView(item.id);
-                                                router.replace(`/admin/withoutSidebar/accounts/${item.id}/`);
+                                                router.push(`/admin/withoutSidebar/accounts/${item.id}/`);
                                             }}
-                                            className="flex items-center gap-3 bg-blue-100 hover:bg-blue-700 text-blue-700 hover:text-white text-md font-semibold py-2 px-4 rounded-xl transition-colors border border-blue-600 whitespace-nowrap"
+                                            className="flex items-center gap-2 bg-blue-50 hover:bg-blue-900 text-blue-900 hover:text-white text-sm font-semibold py-2 px-4 rounded-lg transition-all border border-blue-900 hover:border-blue-300 whitespace-nowrap"
                                         >
                                             <span>View</span>
-                                            <ExternalLink className="w-5 h-5" />
+                                            <ExternalLink className="w-4 h-4" />
                                         </button>
                                     </div>
                                 </div>
