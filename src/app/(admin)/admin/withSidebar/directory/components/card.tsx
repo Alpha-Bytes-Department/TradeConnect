@@ -138,7 +138,7 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                             </span>
                         ))}
                         {remainingCount > 0 && (
-                            <span className="px-3 py-1 bg-blue-100 text-blue-900 text-base rounded-full shadow-md shadow-blue-200">
+                            <span className="px-3 py-1 bg-blue-100 text-blue-900 text-base rounded-full shadow-md shadow-blue-300">
                                 {remainingCount}+
                             </span>
                         )}
