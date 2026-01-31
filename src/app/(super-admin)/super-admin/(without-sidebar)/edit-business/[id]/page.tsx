@@ -568,16 +568,19 @@ export default function EditBusiness() {
         window.location.reload();
     };
 
+
     // Add cancel handler
+    const router = useRouter();
+
     const handleCancel = () => {
         // Reset form to original values
-        reset();
+        reset(); // The reset() function is from React Hook Form - it resets the form fields to their default/initial values.
         setBannerImage(null);
         setBannerPreview(null);
         setGalleryImages([]);
         setDate(undefined);
         // Optionally redirect back
-        // router.back();
+        router.back();
     };
 
     // Show loading state while fetching

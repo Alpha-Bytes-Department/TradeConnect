@@ -2,10 +2,10 @@
 "use client"
 import { type ColumnDef } from "@tanstack/react-table"
 import { LockKeyhole, LockOpen, SquarePen, Trash2 } from "lucide-react";
-import axios from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import api from "@/lib/axiosInterceptor";
+import Image from "next/image";
 
 // This type is used to define the shape of our data.
 // We can use a Zod schema here if we want.
@@ -34,14 +34,24 @@ export const columns: ColumnDef<allBusinessesTable>[] = [
         header: "Business Name",
         cell: ({ row }) => {
             const businessName = row.getValue("business_name") as string;
-            const businessPhoto = row.original.logo;
+            const businessLogo = row.original.logo;
+            const businessId = row.original.id;
+            const router = useRouter();
+
+            const handleNavigate = () => {
+                router.push(`/super-admin/business-details/${businessId}`);
+            };
             return (
-                <div className="flex items-center gap-3">
-                    <img
-                        src={businessPhoto || "/placeholder-business.png"}
-                        alt={businessName}
-                        className="w-10 h-10 rounded-full object-cover"
-                    />
+                <div className="flex items-center gap-3 cursor-pointer"
+                    onClick={handleNavigate}>
+                    <div className="relative w-10 h-10 flex-shrink-0">
+                        <Image
+                            src={businessLogo || "/placeholder-business.png"}
+                            alt={businessName}
+                            fill
+                            className="rounded-full object-cover object-center"
+                        />
+                    </div>
                     <p>{businessName}</p>
                 </div>
             );

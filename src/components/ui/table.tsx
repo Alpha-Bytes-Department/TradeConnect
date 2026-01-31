@@ -57,13 +57,14 @@ function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
     <tr
       data-slot="table-row"
       className={cn(
-        "hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors",
+        "hover:bg-muted/50 data-[state=selected]:bg-muted border-b border-gray-300 transition-colors",
         className
       )}
       {...props}
     />
   )
 }
+// Modified. Added border-gray-300 on TableRow.
 
 function TableHead({ className, ...props }: React.ComponentProps<"th">) {
   return (
@@ -83,13 +84,16 @@ function TableCell({ className, ...props }: React.ComponentProps<"td">) {
     <td
       data-slot="table-cell"
       className={cn(
-        "p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+        "p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
         className
       )}
       {...props}
     />
   )
 }
+
+// Modified. Removed whitespace-nowrap from TableCell.
+
 
 function TableCaption({
   className,
