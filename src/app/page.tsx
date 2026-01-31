@@ -119,17 +119,18 @@ export default function SignIn() {
       <div className="hidden sm:block absolute top-7 left-12 w-28 h-28 z-40">
         <Image src="/logos/Login_Logo.png" alt="login-logo" fill />
       </div>
-      <div className="max-w-[480px] flex flex-col items-center justify-center gap-12 m-3 z-40">
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full p-6 bg-[#F6F6F6] 
+      <div className="max-w-[450px] flex flex-col items-center justify-center gap-9 m-3 z-40">
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full h-[370px] p-5 bg-[#F6F6F6] 
         border rounded-lg">
           <div className="w-full flex flex-col gap-2">
-            <h1 className="font-bold font-poppins text-[#0E0E0E] text-3xl">Welcome Back!</h1>
-            <p className="font-poppins text-[#7A7A7A]">Sign in to access the business directory</p>
+            <h1 className="font-bold font-poppins text-[#0E0E0E] text-2xl">Welcome Back!</h1>
+            <p className="font-poppins text-[#7A7A7A] text-sm">Sign in to access the business directory</p>
           </div>
 
           {/* shadcn */}
-          <div className="w-full grid gap-3 items-center mt-5">
-            <label htmlFor="emailAddress" className="font-poppins text-[#252525]">Email Address</label>
+          <div className="w-full grid gap-3 items-center mt-4">
+            <label htmlFor="emailAddress" className="font-poppins text-[#252525] text-sm">
+              Email Address</label>
             <div className="relative w-full">
               <Input type="text" id="emailAddress" placeholder="admin@business.com"
                 className="font-poppins bg-[#F2F2F2] text-[#3F3F3F] text-base pl-10"
@@ -141,8 +142,8 @@ export default function SignIn() {
             )}
           </div>
 
-          <div className="w-full grid gap-3 items-center mt-5">
-            <label htmlFor="password" className="text-[#252525] font-poppins">Password</label>
+          <div className="w-full grid gap-3 items-center mt-4">
+            <label htmlFor="password" className="font-poppins text-[#252525] text-sm">Password</label>
             <div className="relative w-full">
               <Input
                 type={showPassword ? "text" : "password"}
@@ -180,21 +181,21 @@ export default function SignIn() {
 
         <div className="w-full inset-0 flex flex-col gap-1">
           {/* <h1 className="text-[#1C4589] text-5xl font-bold font-poppins">TradeConnect</h1> */}
-          <h1 className="font-medium font-poppins text-[#FEF3EB] text-3xl">Business Directory
+          <h1 className="font-medium font-poppins text-[#FEF3EB] text-2xl">Business Directory
             Network</h1>
-          <p className="font-poppins text-[#EBF2FE]">Connect with trusted business worldwide. Access
-            exclusive partnerships and grow your network.</p>
+          <p className="font-poppins text-[#EBF2FE] text-sm">Connect with trusted business worldwide.
+            Access exclusive partnerships and grow your network.</p>
           <div className="flex gap-2 items-center">
             <FaArrowRight className="text-[#EBF2FE]" />
-            <p className="font-poppins text-[#EBF2FE]">Secure Access Management.</p>
+            <p className="font-poppins text-[#EBF2FE] text-sm">Secure Access Management.</p>
           </div>
           <div className="flex gap-2 items-center">
             <FaArrowRight className="text-[#EBF2FE]" />
-            <p className="font-poppins text-[#EBF2FE]">Verified Business Profiles</p>
+            <p className="font-poppins text-[#EBF2FE] text-sm">Verified Business Profiles</p>
           </div>
           <div className="flex gap-2 items-center">
             <FaArrowRight className="text-[#EBF2FE]" />
-            <p className="font-poppins text-[#EBF2FE]">Global network Access</p>
+            <p className="font-poppins text-[#EBF2FE] text-sm">Global network Access</p>
           </div>
         </div>
       </div>
