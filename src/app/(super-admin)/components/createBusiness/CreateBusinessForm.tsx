@@ -306,7 +306,7 @@ export default function CreateBusinessForm() {
                             <SelectTrigger className="w-full cursor-pointer font-poppins">
                                 <SelectValue placeholder="Countries" />
                             </SelectTrigger>
-                            <SelectContent className="font-poppins !w-[116px]">
+                            <SelectContent className="font-poppins">
                                 <SelectGroup>
                                     <SelectLabel>Countries</SelectLabel>
                                     {countries.length > 0 ? (
