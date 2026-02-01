@@ -10,7 +10,6 @@ import { CalendarHeartIcon, CloudUpload, Eye, EyeOff, Upload, X } from "lucide-r
 import { useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { TbCategoryPlus } from "react-icons/tb";
-import { useView } from "../../ListGridContext";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -58,8 +57,8 @@ export default function CreateBusinessForm() {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [error, setError] = useState<string>('');
-    const { auth, setAuth } = useView();
     const [open, setOpen] = useState(false);
+    const [date, setDate] = useState<Date | undefined>(undefined);
     const [countries, setCountries] = useState<Country[]>([]);
 
     const {
@@ -332,6 +331,9 @@ export default function CreateBusinessForm() {
                 )}
             </div>
 
+            {/* <Select value={...}> → "What is currently selected?"
+            <SelectItem value={...}> → "What is THIS option's value?" */}
+
             <div className="w-full grid gap-2 items-center mt-4">
                 <label htmlFor="fullAddress" className="font-poppins text-[#000000]">
                     Full Address*</label>
@@ -373,9 +375,9 @@ export default function CreateBusinessForm() {
                     Membership Valid Till*</label>
                 <div className="w-full">
                     <Controller
-                        name="membershipValidTill"
-                        control={control}
-                        render={({ field }) => (
+                        name="membershipValidTill" // Field name in the form. This is the field name in your form data.
+                        control={control} // This connects the Controller to React Hook Form.
+                        render={({ field }) => (  // Gives you "field" object to work with
                             <Popover open={open} onOpenChange={setOpen}>
                                 <PopoverTrigger asChild>
                                     <Button
@@ -383,18 +385,27 @@ export default function CreateBusinessForm() {
                                         id="date"
                                         className="w-full justify-between font-normal font-poppins 
                                             text-[#313131] cursor-pointer">
-                                        {field.value ? field.value.toLocaleDateString() : "MM / DD / YYYY"}
+                                        {date ? date.toLocaleDateString('en-GB') :
+                                            "DD / MM / YYYY"}
+                                        {/* (en-GB → 12/04/2027 style) */}
                                         <CalendarHeartIcon />
                                     </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-auto overflow-hidden p-0" align="start">
                                     <Calendar
-                                        mode="single"
-                                        selected={field.value}
+                                        mode="single" // User can pick only ONE date
+                                        selected={date} // Shows which date is currently selected
                                         captionLayout="dropdown"
                                         onSelect={(selectedDate) => {
-                                            field.onChange(selectedDate)
-                                            setOpen(false)
+                                            if (selectedDate) {
+                                                setDate(selectedDate); // Save to local state (shows on button)
+                                                field.onChange(selectedDate); // Save to form (for validation & submission), Sends Date object
+                                                // important for RHF
+                                            } else {
+                                                setDate(undefined);  // Clear the display
+                                                field.onChange(undefined); // Clear the form
+                                            }
+                                            setOpen(false); // Close the calendar popup
                                         }}
                                         fromYear={2025}
                                         toYear={2150}
