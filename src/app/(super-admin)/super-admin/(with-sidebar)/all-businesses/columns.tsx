@@ -142,7 +142,7 @@ export const columns: ColumnDef<allBusinessesTable>[] = [
 
             const handleDelete = async () => {
                 try {
-                    const response = await api.delete(`/api/business/${business.id}/delete/`);
+                    const response = await api.delete(`/api/business/${business.id}/delete/?delete_user=true`);
                     window.location.reload(); // Simple reload
                     toast.success("Deleted", {
                         description: "Business Deleted.",

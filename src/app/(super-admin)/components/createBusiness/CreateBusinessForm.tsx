@@ -138,28 +138,21 @@ export default function CreateBusinessForm() {
             formData.append("password", data.password);
             formData.append("business_name", data.businessName);
             formData.append("phone_number", data.phoneNumber);
-            formData.append("country", data.country); // Now sends UUID instead of name
+            formData.append("country", data.country);
             formData.append("full_address", data.fullAddress);
             formData.append("website", data.websiteURL);
             formData.append("services", data.servicesOffered);
             formData.append("about_business", data.aboutBusiness);
             formData.append("logo", data.bannerImage);
-            // formData.append("membership_valid_till", data.membershipValidTill.toISOString());
-            // 2026-01-15T01:38:58.016109Z
 
-            const isoDate = data.membershipValidTill;
-            const date = new Date(isoDate);
+            // Fix date formatting
+            const date = data.membershipValidTill; // Already a Date object
             const day = String(date.getDate()).padStart(2, '0');
-            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+            const month = String(date.getMonth() + 1).padStart(2, '0');
             const year = date.getFullYear();
-
             const formattedDate = `${day}/${month}/${year}`;
-            console.log(formattedDate); // "23/01/2026"
 
             formData.append("membership_valid_till", formattedDate);
-            // console.log("Membership:", data.membershipValidTill.toISOString());
-
-            console.log("Form Data=", formData);
 
             const response = await api.post("/api/business/create-with-user/",
                 formData,
@@ -169,27 +162,58 @@ export default function CreateBusinessForm() {
                     }
                 }
             );
+
             console.log("Success:", response?.data);
-            // alert("Business created successfully!");
             toast.success("Success", {
-                description: "Business Created Successfullly",
+                description: "Business Created Successfully",
             });
+
+            // Optionally reset form or redirect
+            // reset(); // If you want to clear the form
+
         }
-        catch (error: any) { // Error handling
+        catch (error: any) {
             console.error("Error creating business:", error);
-            if (error?.response) {
-                console.error("Response error:", error?.response?.data);
-                //alert(`Error: ${JSON.stringify(error.response.data.errors || error.response.data.message)}`);
-            } else if (error?.request) {
-                console.error("No response:", error?.request);
-                //alert("Network error. Please check your connection.");
-            } else {
-                console.error("Error:", error?.message);
-                //alert("An error occurred. Please try again.");
+
+            // Better error handling with specific messages
+            if (error?.response?.data) {
+                const errorData = error.response.data;
+
+                // Handle validation errors
+                if (errorData.errors) {
+                    const errorMessages = Object.entries(errorData.errors).map(([field, messages]) => {
+                        const messageArray = messages as string[];
+                        return `${field}: ${messageArray.join(', ')}`;
+                    })
+                        .join('\n');
+
+                    toast.error("Validation Error", {
+                        description: errorMessages,
+                    });
+                }
+                // Handle email already exists error
+                else if (errorData.email) {
+                    toast.error("Email Already Exists", {
+                        description: errorData.email[0] || "This email is already registered",
+                    });
+                }
+                // Handle other errors
+                else {
+                    toast.error("Failed", {
+                        description: errorData.message || "Failed to create business",
+                    });
+                }
             }
-            toast.error("Failed", {
-                description: "Failed to create business",
-            });
+            else if (error?.request) {
+                toast.error("Network Error", {
+                    description: "Please check your internet connection",
+                });
+            }
+            else {
+                toast.error("Error", {
+                    description: "An unexpected error occurred",
+                });
+            }
         }
     };
 

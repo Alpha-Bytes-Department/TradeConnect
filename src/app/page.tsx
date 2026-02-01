@@ -7,7 +7,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { FaArrowRight } from "react-icons/fa6";
-import { useView } from "./(super-admin)/ListGridContext";
 import Image from "next/image";
 import { toast } from "sonner";
 import api from "@/lib/axiosInterceptor";
@@ -22,7 +21,6 @@ type SignInFormData = {
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
-  const { auth, setAuth } = useView();
   const router = useRouter();
   const {
     register,
