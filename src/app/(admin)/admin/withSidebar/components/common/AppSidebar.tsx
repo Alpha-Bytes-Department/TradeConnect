@@ -85,7 +85,7 @@ export default function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton className="text-red-600 hover:text-red-600 cursor-pointer
-                        flex items-center justify-center" onClick={() => setIsLogoutOpen(true)}>
+                        flex items-center justify-center" onClick={() => {localStorage.removeItem('access_token');router.push('/')}}>
                             <TbLogout />
                             Log Out
                         </SidebarMenuButton>
