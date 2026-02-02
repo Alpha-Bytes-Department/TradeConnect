@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import api from "@/lib/axiosInterceptor";
 import { toast } from "sonner";
+import { Checkbox } from "@/components/ui/checkbox";
 
 // Country type definition
 type Country = {
@@ -217,7 +218,7 @@ export default function CreateBusinessForm() {
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="p-4 mt-4 bg-[#FFFFFF] rounded-lg">
+        <form onSubmit={handleSubmit(onSubmit)} className="p-4 xl:p-8 mt-4 bg-[#FFFFFF] rounded-lg">
             <h1 className="font-poppins font-medium text-[#000000]">Basic Information</h1>
             <div className="flex flex-col lg:flex-row gap-2 lg:gap-6">
                 <div className="w-full grid gap-2 items-center mt-4">
@@ -251,8 +252,9 @@ export default function CreateBusinessForm() {
                     )}
                 </div>
             </div>
-            <div className="flex flex-col lg:flex-row gap-2 lg:gap-6">
-                <div className="w-full grid gap-2 items-center mt-4">
+
+            <div className="flex flex-col lg:flex-row gap-2 lg:gap-6 mt-4">
+                <div className="w-full grid gap-2 items-center">
                     <label htmlFor="phoneNumber" className="font-poppins text-[#252525]">
                         Office Phone Number*</label>
                     <div className="w-full">
@@ -267,7 +269,7 @@ export default function CreateBusinessForm() {
                         </p>
                     )}
                 </div>
-                <div className="w-full grid gap-3 items-center mt-6">
+                <div className="w-full grid gap-2 items-center">
                     <label htmlFor="password" className="text-[#252525] font-poppins">
                         Initial Password*</label>
                     <div className="relative w-full">
@@ -293,7 +295,7 @@ export default function CreateBusinessForm() {
                 </div>
             </div>
 
-            <h1 className="font-poppins font-medium text-[#000000] mt-4">Location Information</h1>
+            <h1 className="font-poppins font-medium text-[#000000] mt-8">Location Information</h1>
             <div className="w-full lg:w-1/2 grid gap-2 items-center mt-4">
                 <label htmlFor="country" className="font-poppins text-[#252525]">
                     Country*</label>
@@ -351,9 +353,9 @@ export default function CreateBusinessForm() {
                 )}
             </div>
 
-            <h1 className="font-poppins font-medium text-[#000000] mt-4">Business Details</h1>
-            <div className="flex flex-col lg:flex-row gap-2 lg:gap-6">
-                <div className="w-full lg:w-1/2 grid gap-2 items-center mt-4">
+            <h1 className="font-poppins font-medium text-[#000000] mt-8">Business Details</h1>
+            <div className="flex flex-col lg:flex-row gap-2 lg:gap-6 mt-4">
+                <div className="w-full lg:w-1/2 grid gap-2 items-center">
                     <label htmlFor="websiteURL" className="font-poppins text-[#000000]">
                         Website URL*</label>
                     <div className="w-full">
@@ -422,7 +424,58 @@ export default function CreateBusinessForm() {
                 )}
             </div>
 
-            <div className="w-full grid gap-2 items-center mt-4">
+            <h1 className="font-poppins font-medium text-[#000000] mt-8">Business Certifications</h1>
+            <label htmlFor="" className="font-poppins text-[#595959]">
+                Select all certifications that apply to your business</label>
+            <div className="w-full flex flex-col md:flex-row gap-4 mt-4">
+                <div className="w-1/2 p-2 flex items-center gap-2 border border-gray-300 rounded-sm">
+                    <Checkbox id="ata" name="ata" />
+                    <label htmlFor="ata" className="font-poppins">ATA</label>
+                </div>
+                <div className="w-1/2 p-2 flex items-center gap-2 border border-gray-300 rounded-sm">
+                    <Checkbox id="fiata" name="fiata" />
+                    <label htmlFor="fiata" className="font-poppins">FIATA</label>
+                </div>
+            </div>
+            <div className="w-full flex flex-col md:flex-row gap-4 mt-4">
+                <div className="w-1/2 p-2 flex items-center gap-2 border border-gray-300 rounded-sm">
+                    <Checkbox id="nvocc" name="nvocc" />
+                    <label htmlFor="nvocc" className="font-poppins">NVOCC</label>
+                </div>
+                <div className="w-1/2 p-2 flex items-center gap-2 border border-gray-300 rounded-sm">
+                    <Checkbox id="customs" name="customs" />
+                    <label htmlFor="customs" className="font-poppins">Customs</label>
+                </div>
+            </div>
+            <div className="w-full flex flex-col md:flex-row gap-4 mt-4">
+                <div className="w-1/2 p-2 flex items-center gap-2 border border-gray-300 rounded-sm">
+                    <Checkbox id="local" name="local" />
+                    <label htmlFor="local" className="font-poppins">Local Association</label>
+                </div>
+                <div className="w-1/2 p-2 flex items-center gap-2 border border-gray-300 rounded-sm">
+                    <Checkbox id="iso9001:2015" name="iso9001:2015" />
+                    <label htmlFor="iso9001:2015" className="font-poppins">ISO 9001:2015</label>
+                </div>
+            </div>
+            <div className="w-full flex flex-col md:flex-row gap-4 mt-4">
+                <div className="w-1/2 p-2 flex items-center gap-2 border border-gray-300 rounded-sm">
+                    <Checkbox id="iso9002" name="iso9002" />
+                    <label htmlFor="iso9002" className="font-poppins">ISO 9002</label>
+                </div>
+                <div className="w-1/2 p-2 flex items-center gap-2 border border-gray-300 rounded-sm">
+                    <Checkbox id="fmc" name="fmc" />
+                    <label htmlFor="fmc" className="font-poppins">FMC</label>
+                </div>
+            </div>
+            <div className="w-full flex flex-col md:flex-row gap-4 mt-4">
+                <div className="w-1/2 p-2 flex items-center gap-2 border border-gray-300 rounded-sm">
+                    <Checkbox id="iso9001/9002" name="iso9001/9002" />
+                    <label htmlFor="iso9001/9002" className="font-poppins">ISO 9001/9002</label>
+                </div>
+            </div>
+
+
+            <div className="w-full grid gap-2 items-center mt-8">
                 <label htmlFor="servicesOffered" className="font-poppins text-[#000000]">
                     Services Offered*</label>
                 <div className="w-full">
@@ -438,7 +491,7 @@ export default function CreateBusinessForm() {
                 )}
             </div>
 
-            <div className="w-full grid gap-2 items-center mt-4">
+            <div className="w-full grid gap-2 items-center mt-8">
                 <label htmlFor="aboutBusiness" className="font-poppins text-[#000000]">
                     About Business*</label>
                 <div className="relative w-full">
@@ -453,8 +506,8 @@ export default function CreateBusinessForm() {
                 )}
             </div>
 
-            <h1 className="font-poppins font-medium text-[#000000] mt-4">Image</h1>
-            <div className="w-full grid gap-2 items-center mt-4">
+            <h1 className="font-poppins font-medium text-[#000000] mt-8">Image</h1>
+            <div className="w-full grid gap-2 items-center mt-2">
                 <label htmlFor="" className="font-poppins text-[#000000]">
                     Banner Image*</label>
                 <div className="relative w-full">
