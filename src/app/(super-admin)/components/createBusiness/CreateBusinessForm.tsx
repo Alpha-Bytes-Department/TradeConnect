@@ -6,22 +6,27 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Textarea } from "@/components/ui/textarea";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CalendarHeartIcon, CloudUpload, Eye, EyeOff, Upload, X } from "lucide-react";
+import { CalendarHeartIcon, CloudUpload, Eye, EyeOff, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { TbCategoryPlus } from "react-icons/tb";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import api from "@/lib/axiosInterceptor";
 import { toast } from "sonner";
 import { Checkbox } from "@/components/ui/checkbox";
+import api from "@/lib/axiosInterceptor";
 
 // Country type definition
 type Country = {
     id: string;
     name: string;
     flag: string;
+};
+
+type Certificate = {
+    id: string;
+    name: string;
 };
 
 const businessFormSchema = z.object({
@@ -46,7 +51,8 @@ const businessFormSchema = z.object({
     servicesOffered: z.string().min(1, "Services offered is required"),
     aboutBusiness: z.string().min(1, "About business is required"),
     bannerImage: z.instanceof(File, { message: "Banner image is required" }),
-    membershipValidTill: z.date({ message: "Membership date is required" })
+    membershipValidTill: z.date({ message: "Membership date is required" }),
+    certifications: z.array(z.string())
 });
 
 
@@ -61,6 +67,7 @@ export default function CreateBusinessForm() {
     const [open, setOpen] = useState(false);
     const [date, setDate] = useState<Date | undefined>(undefined);
     const [countries, setCountries] = useState<Country[]>([]);
+    const [certificates, setCertificates] = useState<Certificate[]>([]);
 
     const {
         register,
@@ -71,6 +78,7 @@ export default function CreateBusinessForm() {
     } = useForm<BusinessFormData>({
         resolver: zodResolver(businessFormSchema),
     });
+
 
     // Fetch countries from API on component mount
     useEffect(() => {
@@ -86,6 +94,22 @@ export default function CreateBusinessForm() {
             }
         };
         fetchCountries();
+    }, []);
+
+
+    useEffect(() => {
+        const fetchCertifications = async () => {
+            try {
+                const response = await api.get('/api/core/certifications/');
+                setCertificates(response?.data?.certifications);
+                console.log("Certificates loaded:", response?.data?.certifications);
+            }
+            catch (error) {
+                console.error("Failed to fetch Certificates:", error);
+                setCertificates([]);
+            }
+        };
+        fetchCertifications();
     }, []);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -153,6 +177,10 @@ export default function CreateBusinessForm() {
             const formattedDate = `${day}/${month}/${year}`;
 
             formData.append("membership_valid_till", formattedDate);
+
+            data.certifications.forEach(certId => {
+                formData.append("certifications", certId);
+            });
 
             const response = await api.post("/api/business/create-with-user/",
                 formData,
@@ -427,53 +455,36 @@ export default function CreateBusinessForm() {
             <h1 className="font-poppins font-medium text-[#000000] mt-8">Business Certifications</h1>
             <label htmlFor="" className="font-poppins text-[#595959]">
                 Select all certifications that apply to your business</label>
-            <div className="w-full flex flex-col md:flex-row gap-4 mt-4">
-                <div className="w-1/2 p-2 flex items-center gap-2 border border-gray-300 rounded-sm">
-                    <Checkbox id="ata" name="ata" />
-                    <label htmlFor="ata" className="font-poppins">ATA</label>
-                </div>
-                <div className="w-1/2 p-2 flex items-center gap-2 border border-gray-300 rounded-sm">
-                    <Checkbox id="fiata" name="fiata" />
-                    <label htmlFor="fiata" className="font-poppins">FIATA</label>
-                </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4 mt-4">
+                {
+                    certificates.map(item => (
+                        <div key={item.id} className="p-2 flex items-center gap-2 border border-gray-300 rounded-sm">
+                            <Controller
+                                name="certifications"
+                                control={control}
+                                render={({ field }) => (
+                                    <Checkbox
+                                        id={item.id}
+                                        onCheckedChange={(checked) => {
+                                            const current = field.value;
+                                            const updated = checked ?
+                                                [...current, item.id] // add
+                                                : current.filter(id => id !== item.id); // remove
+                                            field.onChange(updated);
+                                        }}
+                                    />
+                                )}
+                            />
+                            <label
+                                htmlFor={item.id}
+                                className="font-poppins cursor-pointer"
+                            >
+                                {item.name}
+                            </label>
+                        </div>
+                    ))
+                }
             </div>
-            <div className="w-full flex flex-col md:flex-row gap-4 mt-4">
-                <div className="w-1/2 p-2 flex items-center gap-2 border border-gray-300 rounded-sm">
-                    <Checkbox id="nvocc" name="nvocc" />
-                    <label htmlFor="nvocc" className="font-poppins">NVOCC</label>
-                </div>
-                <div className="w-1/2 p-2 flex items-center gap-2 border border-gray-300 rounded-sm">
-                    <Checkbox id="customs" name="customs" />
-                    <label htmlFor="customs" className="font-poppins">Customs</label>
-                </div>
-            </div>
-            <div className="w-full flex flex-col md:flex-row gap-4 mt-4">
-                <div className="w-1/2 p-2 flex items-center gap-2 border border-gray-300 rounded-sm">
-                    <Checkbox id="local" name="local" />
-                    <label htmlFor="local" className="font-poppins">Local Association</label>
-                </div>
-                <div className="w-1/2 p-2 flex items-center gap-2 border border-gray-300 rounded-sm">
-                    <Checkbox id="iso9001:2015" name="iso9001:2015" />
-                    <label htmlFor="iso9001:2015" className="font-poppins">ISO 9001:2015</label>
-                </div>
-            </div>
-            <div className="w-full flex flex-col md:flex-row gap-4 mt-4">
-                <div className="w-1/2 p-2 flex items-center gap-2 border border-gray-300 rounded-sm">
-                    <Checkbox id="iso9002" name="iso9002" />
-                    <label htmlFor="iso9002" className="font-poppins">ISO 9002</label>
-                </div>
-                <div className="w-1/2 p-2 flex items-center gap-2 border border-gray-300 rounded-sm">
-                    <Checkbox id="fmc" name="fmc" />
-                    <label htmlFor="fmc" className="font-poppins">FMC</label>
-                </div>
-            </div>
-            <div className="w-full flex flex-col md:flex-row gap-4 mt-4">
-                <div className="w-1/2 p-2 flex items-center gap-2 border border-gray-300 rounded-sm">
-                    <Checkbox id="iso9001/9002" name="iso9001/9002" />
-                    <label htmlFor="iso9001/9002" className="font-poppins">ISO 9001/9002</label>
-                </div>
-            </div>
-
 
             <div className="w-full grid gap-2 items-center mt-8">
                 <label htmlFor="servicesOffered" className="font-poppins text-[#000000]">

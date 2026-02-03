@@ -4,7 +4,7 @@ import { ChevronDown, LogOut, Settings } from "lucide-react";
 import { SidebarSeparator, SidebarTrigger } from '@/components/ui/sidebar';
 import Image from "next/image";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import LogOutModal from "./LogOutModal";
 import { useView } from "../../ListGridContext";
 import { useState, useEffect } from "react";
@@ -13,13 +13,15 @@ export default function NavBarWithTrigger() {
     const { isLogoutOpen, setIsLogoutOpen } = useView();
 
     // Local state to store data from localStorage
-    const [userPhoto, setUserPhoto] = useState<string>("");
+    const [userPhoto, setUserPhoto] = useState<string | null>(null); // Changed to null initially
     const [userName, setUserName] = useState<string>("");
     const [userEmail, setUserEmail] = useState<string>("");
 
+    const router = useRouter();
+
     useEffect(() => {
         // This runs only on client side
-        setUserPhoto(localStorage.getItem('user_photo') || '');
+        setUserPhoto(localStorage.getItem('user_photo') || null); // Set to null if empty
         // console.log("up", userPhoto);
         setUserName(localStorage.getItem('user_name') || '');
         setUserEmail(localStorage.getItem('user_email') || '');
@@ -35,7 +37,8 @@ export default function NavBarWithTrigger() {
                 <div className="flex justify-end items-center gap-3">
                     <div className="relative w-12 h-12">
                         {userPhoto ? (
-                            <Image src={userPhoto} alt="admin-photo" fill className="rounded-full" />
+                            <Image src={userPhoto} alt="admin-photo" fill className="rounded-full
+                            object-cover" unoptimized />
                         ) : (
                             <div className="w-full h-full bg-gray-200 rounded-full" />
                         )}
@@ -50,7 +53,7 @@ export default function NavBarWithTrigger() {
                         </PopoverTrigger>
                         <PopoverContent className="w-64 mr-4 flex flex-col gap-4 bg-white">
                             <button className="font-poppins text-[#252525] cursor-pointer flex items-center 
-                            gap-3" onClick={() => redirect("/super-admin/settings")}>
+                            gap-3" onClick={() => router.push("/super-admin/settings")}>
                                 <Settings className="w-5 h-5" />
                                 Settings
                             </button>
