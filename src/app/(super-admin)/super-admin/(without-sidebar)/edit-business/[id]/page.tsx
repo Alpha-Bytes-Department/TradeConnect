@@ -16,6 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import api from "@/lib/axiosInterceptor";
 import axios from "axios";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface GalleryImage {
     id?: string;           // ← নতুন: backend থেকে আসা image এর id/uuid
@@ -34,6 +35,7 @@ interface BusinessFormData {
     country: string;
     fullAddress: string;
     membershipValidTill: string;
+    featuredBusiness: boolean;
     emailAddress: string;
     phoneNumber: string;
     websiteURL: string;
@@ -79,12 +81,12 @@ const businessFormSchema = z
         country: z.string().min(1, "Country is required"),
         fullAddress: z.string().min(1, "Full address is required"),
         membershipValidTill: z.string().min(1, "Membership date is required"),
+        featuredBusiness: z.boolean(),
         emailAddress: z.string().email().optional(),
         phoneNumber: z.string().optional(),
         websiteURL: z.string().optional(),
         servicesOffered: z.string().min(1, "Services are required"),
         aboutBusiness: z.string().min(1, "About business is required"),
-
         newPassword: z.string().optional(),
         confirmPassword: z.string().optional(),
     })
@@ -121,6 +123,7 @@ export default function EditBusiness() {
             country: "",
             fullAddress: "",
             membershipValidTill: "",
+            featuredBusiness: false,
             emailAddress: "",
             phoneNumber: "",
             websiteURL: "",
@@ -466,6 +469,7 @@ export default function EditBusiness() {
             formData1.append('business_name', data.businessName);
             formData1.append('country', data.country);
             formData1.append('full_address', data.fullAddress);
+            formData1.append('is_featured', data.featuredBusiness || '');
             formData1.append('user_email', data.emailAddress || '');
             formData1.append('phone_number', data.phoneNumber || '');
             formData1.append('website', data.websiteURL || '');
@@ -565,7 +569,7 @@ export default function EditBusiness() {
                 console.log('Failed to update business. Please try again.');
             }
         }
-        window.location.reload();
+        // window.location.reload();
     };
 
 
@@ -1089,6 +1093,26 @@ export default function EditBusiness() {
                         onClick={handleCancel}>
                         <X className="text-[#EBF2FE] w-5 h-5" />
                         Cancel
+                    </button>
+                    <button type="button" className="flex items-center justify-center gap-2 cursor-pointer">
+                        <Controller
+                            name="featuredBusiness"
+                            control={control}
+                            render={({ field }) => (
+                                <Checkbox
+                                    id="featured-business"
+                                    onCheckedChange={(checked) => {
+                                        field.onChange(checked);
+                                    }}
+                                />
+                            )}
+                        />
+                        <label
+                            htmlFor="featured-business"
+                            className="font-poppins text-[#313131] cursor-pointer"
+                        >
+                            Featured business
+                        </label>
                     </button>
                 </div>
 
