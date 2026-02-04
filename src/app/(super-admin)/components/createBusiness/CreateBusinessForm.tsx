@@ -338,7 +338,7 @@ export default function CreateBusinessForm() {
                             <SelectContent className="font-poppins">
                                 <SelectGroup>
                                     <SelectLabel>Countries</SelectLabel>
-                                    {countries.length > 0 ? (
+                                    {countries?.length > 0 ? (
                                         countries.map((country) => (
                                             <SelectItem key={country.id} value={country.id}>
                                                 {country.name}
@@ -457,7 +457,7 @@ export default function CreateBusinessForm() {
                 Select all certifications that apply to your business</label>
             <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4 mt-4">
                 {
-                    certificates.map(item => (
+                    certificates?.map(item => (
                         <div key={item.id} className="p-2 flex items-center gap-2 border border-gray-300 rounded-sm">
                             <Controller
                                 name="certifications"
