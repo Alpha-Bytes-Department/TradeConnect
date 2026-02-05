@@ -21,7 +21,8 @@ export type allBusinessesTable = {
     created_at: string,
     last_login: string,
     is_locked: boolean,
-    logo: string
+    logo: string,
+    is_featured: boolean
 };
 
 export const columns: ColumnDef<allBusinessesTable>[] = [

@@ -1094,7 +1094,7 @@ export default function EditBusiness() {
                         <X className="text-[#EBF2FE] w-5 h-5" />
                         Cancel
                     </button>
-                    <button type="button" className="flex items-center justify-center gap-2 cursor-pointer">
+                    <div className="flex items-center justify-center gap-2 cursor-pointer">
                         <Controller
                             name="featuredBusiness"
                             control={control}
@@ -1114,7 +1114,7 @@ export default function EditBusiness() {
                         >
                             Featured business
                         </label>
-                    </button>
+                    </div>
                 </div>
 
                 <div className="flex flex-col lg:flex-row gap-6 mt-6">

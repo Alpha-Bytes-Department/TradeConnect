@@ -41,6 +41,30 @@ export default function RootLayout({
 function NavbarWithoutTrigger() {
     const { isLogoutOpen, setIsLogoutOpen } = useView();
     const router = useRouter();
+
+    const userPhoto = typeof window !== 'undefined'
+        ? (localStorage.getItem('user_photo') &&
+            localStorage.getItem('user_photo') !== 'null' &&
+            localStorage.getItem('user_photo') !== ''
+            ? localStorage.getItem('user_photo')
+            : null)
+        : null;
+
+    const userName = typeof window !== 'undefined'
+        ? (localStorage.getItem("user_name") &&
+            localStorage.getItem("user_name") !== 'null'
+            ? localStorage.getItem("user_name")
+            : '')
+        : '';
+
+    const userEmail = typeof window !== 'undefined'
+        ? (localStorage.getItem("user_email") &&
+            localStorage.getItem("user_email") !== 'null'
+            ? localStorage.getItem("user_email")
+            : '')
+        : '';
+
+
     return (
         <div>
             <nav className="p-4 flex items-center justify-between">
@@ -52,14 +76,16 @@ function NavbarWithoutTrigger() {
                 {/*Right*/}
                 <div className="flex justify-end items-center gap-3">
                     <div className="relative w-12 h-12">
-                        <Image src={localStorage.getItem('user_photo') || ''} alt="admin-photo" fill
-                            className="rounded-full" />
+                        {userPhoto ? (
+                            <Image src={userPhoto} alt="admin-photo" fill className="rounded-full
+                                object-cover" unoptimized />
+                        ) : (
+                            <div className="w-full h-full bg-gray-200 rounded-full" />
+                        )}
                     </div>
                     <div>
-                        <h1 className="font-poppins text-[#252525]">
-                            {localStorage.getItem("user_name")}</h1>
-                        <p className="font-poppins text-[#595959]">
-                            {localStorage.getItem("user_email")}</p>
+                        <h1 className="font-poppins text-[#252525]">{userName}</h1>
+                        <p className="font-poppins text-[#595959]">{userEmail}</p>
                     </div>
                     <Popover>
                         <PopoverTrigger asChild>
