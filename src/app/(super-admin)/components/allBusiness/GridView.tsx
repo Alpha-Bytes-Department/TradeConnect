@@ -34,9 +34,9 @@ export default function GridView({ total, currentPage, onPageChange }: GridViewP
                 <div>
                     <div className="grid sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 
                     gap-8 mt-8">
-                        {businesses.map(item => (
-                            <div key={item?.id} className="h-[460px] rounded-lg border bg-[#FFFFFF] 
-                            shadow-lg relative">
+                        {businesses?.map(item => (
+                            <div key={item?.id} className={`h-[460px] rounded-lg border ${item?.is_featured ?
+                                "bg-[#FFF5E9]" : "bg-[#FFFFFF]"} shadow-lg relative`}>
                                 <div className="relative h-1/3">
                                     {item?.logo ? (
                                         <Image

@@ -14,23 +14,19 @@ interface DataTableProps<TData> {
     onPageChange: (page: number) => void;
 }
 
-
 export function DataTable<TData>({ columns, data, total, currentPage, onPageChange }: DataTableProps<TData>) {
     const table = useReactTable({
         data: data,
         columns: columns,
         getCoreRowModel: getCoreRowModel(),
-        // getPaginationRowModel: getPaginationRowModel()
     });
     const { grid, list } = useView();
+
     return (
         <div>
             {list && (
                 <div>
-                    {/* <p className="font-poppins text-[#515151] mt-6">Showing {" "}
-                        {table.getRowModel().rows.length} of {total} businesses</p> */}
                     <div className="overflow-x-auto rounded-md border mt-8">
-                        {/* ShadCN */}
                         <Table>
                             <TableHeader className="bg-[#BFD7FD] text-[#000000] font-poppins">
                                 {table.getHeaderGroups().map((headerGroup) => (
@@ -52,19 +48,26 @@ export function DataTable<TData>({ columns, data, total, currentPage, onPageChan
                             </TableHeader>
                             <TableBody className="font-poppins">
                                 {table.getRowModel().rows?.length ? (
-                                    table.getRowModel().rows.map((row) => (
-                                        <TableRow
-                                            key={row.id}
-                                            data-state={row.getIsSelected() && "selected"}
-                                        >
-                                            {row.getVisibleCells().map((cell) => (
-                                                <TableCell key={cell.id}>
-                                                    {flexRender(cell.column.columnDef.cell,
-                                                        cell.getContext())}
-                                                </TableCell>
-                                            ))}
-                                        </TableRow>
-                                    ))
+                                    table.getRowModel().rows.map((row) => {
+                                        // Check if business is featured
+                                        const isFeatured = (row.original as any).is_featured === true;
+
+                                        return (
+                                            <TableRow
+                                                key={row.id}
+                                                data-state={row.getIsSelected() && "selected"}
+                                                // Conditional golden background
+                                                className={isFeatured ? "bg-[#FFF5E9] hover:bg-[#FFF5E9]" : ""}
+                                            >
+                                                {row.getVisibleCells().map((cell) => (
+                                                    <TableCell key={cell.id}>
+                                                        {flexRender(cell.column.columnDef.cell,
+                                                            cell.getContext())}
+                                                    </TableCell>
+                                                ))}
+                                            </TableRow>
+                                        );
+                                    })
                                 ) : (
                                     <TableRow>
                                         <TableCell colSpan={columns.length} className="h-24 text-center
@@ -78,15 +81,6 @@ export function DataTable<TData>({ columns, data, total, currentPage, onPageChan
                     </div>
 
                     <div className="mt-8">
-                        {/* Ant Design */}
-                        {/* <Pagination
-                            current={currentPage}
-                            pageSize={8}
-                            total={total}
-                            align="center"
-                            onChange={(page) => onPageChange(page)}
-                        /> */}
-
                         <Pagination className="font-poppins"
                             current={currentPage}
                             total={total}
@@ -96,14 +90,12 @@ export function DataTable<TData>({ columns, data, total, currentPage, onPageChan
                             showSizeChanger={false}
                             showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
                         />
-                        {/* Pagination should never be inside <Table>, <TableBody>, or <TableRow>. */}
                     </div>
                 </div>
             )}
         </div>
     )
 }
-
 
 
 

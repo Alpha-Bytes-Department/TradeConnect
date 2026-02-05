@@ -233,7 +233,7 @@ export default function SettingsPage() {
                                 disabled
                                 type="email"
                                 id="emailAddress"
-                                placeholder="admin@business.com"
+                                placeholder="abc@gmail.com"
                                 className="font-poppins bg-[#FFFFFF] text-[#3F3F3F] text-base"
                             />
                         </div>

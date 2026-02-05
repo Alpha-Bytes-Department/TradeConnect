@@ -2,9 +2,9 @@
 "use client"
 import Modal from "@/components/ui/modal";
 import api from "@/lib/axiosInterceptor";
-import { Globe, Mail, MapPin, MoveLeft, Phone } from "lucide-react";
+import { Globe, Mail, MapPin, Phone } from "lucide-react";
 import Image from "next/image";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IoInformationCircleOutline } from "react-icons/io5";
 
@@ -30,38 +30,54 @@ export default function BusinessDetails() {
         setActiveModal(null);
     };
 
-    const router = useRouter();
-    const { id } = useParams(); // Extract id from URL
+    const { id } = useParams();
     const [data, setData] = useState<any>(null);
+
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchBusinessDatas = async () => {
-            const response = await api.get(`/api/business/${id}/`);
-            setData(response?.data?.business);
-            // console.log("response =", response?.data?.business);
-            // console.log(data);
+            try {
+                const response = await api.get(`/api/business/${id}/`);
+                setData(response?.data?.business);
+            }
+            catch (error) {
+                console.error("Error fetching business data:", error);
+            }
+            finally {
+                setIsLoading(false);
+            }
         };
         fetchBusinessDatas();
     }, [id]);
 
+    // Loading state
+    if (isLoading) {
+        return (
+            <div className="max-w-[1300px] mx-auto p-3 flex items-center justify-center h-screen">
+                <p className="font-poppins text-lg">Loading...</p>
+            </div>
+        );
+    }
+
+    // No data state
+    if (!data) {
+        return (
+            <div className="max-w-[1300px] mx-auto p-3 flex items-center justify-center h-screen">
+                <p className="font-poppins text-lg text-red-500">Business not found</p>
+            </div>
+        );
+    }
+
     return (
         <div className="max-w-[1300px] mx-auto p-3">
-            <div className="relative w-full h-[350px] px-4 flex items-center justify-center">
-                <Image src={data?.logo} alt="business-logo" fill
-                    className="object-cover object-center" />
-                {/* <button className="absolute top-2 left-2 bg-[#BFD7FDB8] text-[#153569] px-2 py-1 
-                flex items-center gap-1.5 font-semibold font-poppins rounded-lg cursor-pointer"
-                    onClick={() => router.push("/super-admin/all-businesses")}>
-                    <MoveLeft />
-                    Back
-                </button> */}
-            </div>
-
-            {/* <div className="max-w-[300px] h-[150px] mx-auto -mt-16 relative">
-                <Image src="/all-business-card-banners/2.jpg" alt="" fill
-                    className="rounded-lg object-cover object-center
-                    hover:scale-110 transition-transform duration-300 ease-in-out" />
-            </div> */}
+            {/* Added conditional rendering for logo */}
+            {data?.logo && (
+                <div className="relative w-full h-[350px] px-4 flex items-center justify-center">
+                    <Image src={data.logo} alt="business-logo" fill
+                        className="object-cover object-center" />
+                </div>
+            )}
 
             <div className="flex flex-col items-center justify-center gap-2 mt-12">
                 <div className="flex items-center gap-2">
@@ -79,22 +95,28 @@ export default function BusinessDetails() {
                 </div>
 
                 <div className="flex flex-col md:flex-row gap-8 mt-2">
-                    <a href={`mailto:${data?.user_email}`}>
-                        <button className="bg-[#F6F6F6] text-[#153569] hover:bg-[#327EF9] 
-                        hover:text-[#EBF2FE] flex items-center gap-3 px-8 py-2 rounded-sm 
-                        cursor-pointer font-poppins border border-[#153569]">
-                            <Mail className="w-5 h-5 text-[#153569] hover:text-[#EBF2FE]" />
-                            Email
-                        </button>
-                    </a>
-                    <a href={data?.website} target="_blank" rel="noopener noreferrer">
-                        <button className="bg-[#F6F6F6] text-[#153569] hover:bg-[#327EF9] 
-                        hover:text-[#EBF2FE] flex items-center gap-3 px-8 py-2 rounded-sm 
-                        cursor-pointer font-poppins border border-[#153569]">
-                            <Globe className="w-5 h-5 text-[#153569] hover:text-[#EBF2FE]" />
-                            Website
-                        </button>
-                    </a>
+                    {/* Added conditional rendering */}
+                    {data?.user_email && (
+                        <a href={`mailto:${data?.user_email}`}>
+                            <button className="bg-[#F6F6F6] text-[#153569] hover:bg-[#327EF9] 
+                            hover:text-[#EBF2FE] flex items-center gap-3 px-8 py-2 rounded-sm 
+                            cursor-pointer font-poppins border border-[#153569]">
+                                <Mail className="w-5 h-5 text-[#153569] hover:text-[#EBF2FE]" />
+                                Email
+                            </button>
+                        </a>
+                    )}
+                    {/* Added conditional rendering */}
+                    {data?.website && (
+                        <a href={data?.website} target="_blank" rel="noopener noreferrer">
+                            <button className="bg-[#F6F6F6] text-[#153569] hover:bg-[#327EF9] 
+                            hover:text-[#EBF2FE] flex items-center gap-3 px-8 py-2 rounded-sm 
+                            cursor-pointer font-poppins border border-[#153569]">
+                                <Globe className="w-5 h-5 text-[#153569] hover:text-[#EBF2FE]" />
+                                Website
+                            </button>
+                        </a>
+                    )}
                 </div>
             </div>
 
@@ -264,7 +286,7 @@ export default function BusinessDetails() {
             <div className="p-4 rounded-lg border shadow-lg bg-[#FFFFFF] mt-16 mb-16">
                 <h1 className="font-medium font-poppins text-[#121212]">Gallery</h1>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-3">
-                    {data?.gallery?.map((item) =>
+                    {data?.gallery?.map((item: { id: string; image: string }) =>
                         <div key={item?.id} className="relative h-[160px]"
                             onClick={() => openModal(animations[0]?.type, item?.image)}
                         >
@@ -273,16 +295,16 @@ export default function BusinessDetails() {
                         </div>
                     )}
 
-                    {activeModal &&
+                    {/* Added null check for selectedImage */}
+                    {activeModal && selectedImage &&
                         <Modal
                             isOpen={activeModal === "fade"}
                             onClose={closeModal}
-                            // title={`${animations[0].name} Animation`}
                             animation="fade"
                             size="md"
                         >
                             <div className="max-w-[500px] h-[300px] relative">
-                                <Image src={selectedImage} alt={selectedImage} fill
+                                <Image src={selectedImage} alt="Gallery image" fill
                                     className="object-cover rounded-lg cursor-pointer" />
                             </div>
                         </Modal>
