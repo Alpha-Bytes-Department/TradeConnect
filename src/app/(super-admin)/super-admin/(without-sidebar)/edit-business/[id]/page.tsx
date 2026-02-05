@@ -74,6 +74,7 @@ const passwordSchema = z
         }
     );
 
+
 // Full form schema
 const businessFormSchema = z
     .object({
@@ -162,6 +163,7 @@ export default function EditBusiness() {
             });
     }, []);
 
+
     const refreshBusinessData = async () => {
         try {
             const res = await api.get(`/api/business/${id}/`);
@@ -172,6 +174,7 @@ export default function EditBusiness() {
             // Re-populate ALL fields (same as in initial fetch)
             setValue('businessName', freshData?.business?.business_name || '');
             setValue('country', freshData?.business?.country?.id || '');
+            setValue('featuredBusiness', freshData?.business?.is_featured);
             setValue('fullAddress', freshData?.business?.full_address || '');
             setValue('emailAddress', freshData?.business?.user_email || '');
             setValue('phoneNumber', freshData?.business?.phone_number || '');
@@ -217,6 +220,7 @@ export default function EditBusiness() {
         }
     };
 
+
     // Fetch data from API on component mount using Axios
     useEffect(() => {
         const fetchBusinessData = async () => {
@@ -229,6 +233,7 @@ export default function EditBusiness() {
                 // Populate form fields with fetched data
                 setValue('businessName', data?.business?.business_name || '');
                 setValue('country', data?.business?.country?.id || '');
+                setValue('featuredBusiness', data?.business?.is_featured);
                 setValue('fullAddress', data?.business?.full_address || '');
                 setValue('emailAddress', data?.business?.user_email || '');
                 setValue('phoneNumber', data?.business?.phone_number || '');
@@ -239,14 +244,6 @@ export default function EditBusiness() {
                 const servicesString = data?.business?.services?.map((service: any) => service.title)
                     .join(', ') || '';
                 setValue('servicesOffered', servicesString);
-
-                // // Set date if available
-                // if (data?.business?.membership_valid_till) {
-                //     const dateValue = data.business.membership_valid_till;
-                //     const parsedDate = new Date(dateValue);
-                //     setValue('membershipValidTill', parsedDate.toISOString());
-                //     setDate(parsedDate);
-                // }
 
                 if (data?.business?.membership_valid_till) {
                     const dateStr = data.business.membership_valid_till.trim(); // "12/04/2027"
@@ -322,6 +319,7 @@ export default function EditBusiness() {
         }
     };
 
+
     // Type annotation for validation function
     const validateFile = (file: File): string | null => {
         const validTypes = ['image/png', 'image/jpeg', 'image/jpg'];
@@ -333,6 +331,7 @@ export default function EditBusiness() {
         }
         return null;
     };
+
 
     // Type annotation for event handler
     const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -354,6 +353,7 @@ export default function EditBusiness() {
             reader.readAsDataURL(file);
         }
     };
+
 
     // Type annotation for event handler
     const handleGalleryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -392,6 +392,7 @@ export default function EditBusiness() {
         });
     };
 
+
     // Type annotation for event handler
     const removeBanner = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
@@ -401,6 +402,7 @@ export default function EditBusiness() {
         const input = document.getElementById('banner-input') as HTMLInputElement;
         if (input) input.value = '';
     };
+
 
     const removeGalleryImage = async (index: number, e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
@@ -433,6 +435,7 @@ export default function EditBusiness() {
         }
     };
 
+
     const handleToggleLock = async () => {
         try {
             const newLockStatus = !datas?.business?.is_locked;
@@ -460,16 +463,18 @@ export default function EditBusiness() {
         }
     };
 
+
     // Add form submission handler using Axios
     const onSubmit = async (data: BusinessFormData) => {
         try {
+            //console.log(data);
             // Create FormData
             const formData1 = new FormData();
             // Append text fields
             formData1.append('business_name', data.businessName);
             formData1.append('country', data.country);
             formData1.append('full_address', data.fullAddress);
-            formData1.append('is_featured', data.featuredBusiness || '');
+            formData1.append('is_featured', String(data.featuredBusiness));
             formData1.append('user_email', data.emailAddress || '');
             formData1.append('phone_number', data.phoneNumber || '');
             formData1.append('website', data.websiteURL || '');
@@ -549,7 +554,8 @@ export default function EditBusiness() {
                         console.log(`Failed to change password: ${error.response?.data?.message || error.message}`);
                     }
                 }
-            } else {
+            }
+            else {
                 console.log("No password provided, skipping password change");
             }
 
@@ -560,8 +566,8 @@ export default function EditBusiness() {
             await refreshBusinessData();
 
             console.log("Business updated successfully!");
-
-        } catch (error) {
+        }
+        catch (error) {
             console.error('Error updating business:', error);
             if (axios.isAxiosError(error)) {
                 console.log(`Failed to update business: ${error.response?.data?.message || error.message}`);
@@ -569,7 +575,7 @@ export default function EditBusiness() {
                 console.log('Failed to update business. Please try again.');
             }
         }
-        // window.location.reload();
+        window.location.reload();
     };
 
 
@@ -586,17 +592,6 @@ export default function EditBusiness() {
         // Optionally redirect back
         router.back();
     };
-
-    // Show loading state while fetching
-    // if (isFetching) {
-    //     return (
-    //         <div className="max-w-[1300px] mx-auto p-8">
-    //             <div className="text-center py-12">
-    //                 <p className="text-gray-600 font-poppins">Loading business data...</p>
-    //             </div>
-    //         </div>
-    //     );
-    // }
 
 
     return (
@@ -810,6 +805,7 @@ export default function EditBusiness() {
                     </div>
                 }
 
+
                 {activeTab === 'contact' &&
                     <div className="p-3">
                         <div className="w-full grid gap-2 items-center mt-4">
@@ -860,6 +856,7 @@ export default function EditBusiness() {
                     </div>
                 }
 
+
                 {activeTab === 'services' &&
                     <div className="p-3">
                         <div className="w-full grid gap-2 items-center mt-4">
@@ -897,6 +894,7 @@ export default function EditBusiness() {
                         </div>
                     </div>
                 }
+
 
                 {activeTab === 'images' &&
                     <div className="max-w-7xl mx-auto p-6 space-y-8">
@@ -1020,6 +1018,7 @@ export default function EditBusiness() {
                     </div>
                 }
 
+
                 {activeTab === 'changePassword' &&
                     <div className="p-3">
                         <div className="w-1/2 grid gap-3 items-center mt-5">
@@ -1081,6 +1080,7 @@ export default function EditBusiness() {
                 }
             </div>
 
+
             <div className="flex justify-between">
                 <div className="flex flex-col lg:flex-row gap-6 mt-6">
                     <button type="submit" className="flex items-center justify-center gap-2 bg-[#327EF9] 
@@ -1101,6 +1101,7 @@ export default function EditBusiness() {
                             render={({ field }) => (
                                 <Checkbox
                                     id="featured-business"
+                                    checked={field.value} // needed for populating value
                                     onCheckedChange={(checked) => {
                                         field.onChange(checked);
                                     }}
@@ -1152,187 +1153,3 @@ export default function EditBusiness() {
 }
 
 
-
-
-
-// "use client"
-// import React, { useState } from 'react';
-
-// export default function EditProfileForm() {
-//     const [activeTab, setActiveTab] = useState('basic');
-//     const [businessName, setBusinessName] = useState('Tech Solution Inc.');
-//     const [country, setCountry] = useState('United States');
-//     const [address, setAddress] = useState('123 Tech street, san Francisco, CA 94105');
-
-//     return (
-//         <div className="min-h-screen bg-gray-50 p-8">
-//             <div className="max-w-6xl mx-auto">
-//                 {/* Header */}
-//                 <div className="mb-8">
-//                     <h1 className="text-3xl font-bold text-gray-900 mb-2">Edit Profile</h1>
-//                     <p className="text-gray-600">Update your business information and images</p>
-//                 </div>
-
-//                 {/* Form Card */}
-//                 <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-//                     {/* Tabs */}
-//                     <div className="border-b border-gray-200">
-//                         <div className="flex">
-//                             <button
-//                                 onClick={() => setActiveTab('basic')}
-//                                 className={`px-8 py-4 text-sm font-medium border-b-2 transition-colors ${activeTab === 'basic'
-//                                     ? 'border-blue-600 text-gray-900'
-//                                     : 'border-transparent text-gray-500 hover:text-gray-700'
-//                                     }`}
-//                             >
-//                                 Basic Information
-//                             </button>
-//                             <button
-//                                 onClick={() => setActiveTab('contact')}
-//                                 className={`px-8 py-4 text-sm font-medium border-b-2 transition-colors ${activeTab === 'contact'
-//                                     ? 'border-blue-600 text-gray-900'
-//                                     : 'border-transparent text-gray-500 hover:text-gray-700'
-//                                     }`}
-//                             >
-//                                 Contact Information
-//                             </button>
-//                             <button
-//                                 onClick={() => setActiveTab('services')}
-//                                 className={`px-8 py-4 text-sm font-medium border-b-2 transition-colors ${activeTab === 'services'
-//                                     ? 'border-blue-600 text-gray-900'
-//                                     : 'border-transparent text-gray-500 hover:text-gray-700'
-//                                     }`}
-//                             >
-//                                 Services & About
-//                             </button>
-//                             <button
-//                                 onClick={() => setActiveTab('images')}
-//                                 className={`px-8 py-4 text-sm font-medium border-b-2 transition-colors ${activeTab === 'images'
-//                                     ? 'border-blue-600 text-gray-900'
-//                                     : 'border-transparent text-gray-500 hover:text-gray-700'
-//                                     }`}
-//                             >
-//                                 Images
-//                             </button>
-//                         </div>
-//                     </div>
-
-//                     {/* Form Content */}
-//                     <div className="p-8">
-//                         {activeTab === 'basic' && (
-//                             <div className="space-y-6">
-//                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-//                                     {/* Business Name */}
-//                                     <div>
-//                                         <label className="block text-sm font-medium text-gray-700 mb-2">
-//                                             Business Name*
-//                                         </label>
-//                                         <input
-//                                             type="text"
-//                                             value={businessName}
-//                                             onChange={(e) => setBusinessName(e.target.value)}
-//                                             className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-//                                         />
-//                                     </div>
-
-//                                     {/* Country */}
-//                                     <div>
-//                                         <label className="block text-sm font-medium text-gray-700 mb-2">
-//                                             Country*
-//                                         </label>
-//                                         <select
-//                                             value={country}
-//                                             onChange={(e) => setCountry(e.target.value)}
-//                                             className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all appearance-none bg-white"
-//                                             style={{
-//                                                 backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
-//                                                 backgroundRepeat: 'no-repeat',
-//                                                 backgroundPosition: 'right 0.75rem center',
-//                                                 backgroundSize: '1.5rem'
-//                                             }}
-//                                         >
-//                                             <option>United States</option>
-//                                             <option>Canada</option>
-//                                             <option>United Kingdom</option>
-//                                             <option>Australia</option>
-//                                         </select>
-//                                     </div>
-//                                 </div>
-
-//                                 {/* Full Address */}
-//                                 <div>
-//                                     <label className="block text-sm font-medium text-gray-700 mb-2">
-//                                         Full Address*
-//                                     </label>
-//                                     <input
-//                                         type="text"
-//                                         value={address}
-//                                         onChange={(e) => setAddress(e.target.value)}
-//                                         className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-//                                     />
-//                                 </div>
-//                             </div>
-//                         )}
-
-//                         {activeTab === 'contact' && (
-//                             <div className="text-center py-12 text-gray-500">
-//                                 Contact Information content
-//                             </div>
-//                         )}
-
-//                         {activeTab === 'services' && (
-//                             <div className="text-center py-12 text-gray-500">
-//                                 Services & About content
-//                             </div>
-//                         )}
-
-//                         {activeTab === 'images' && (
-//                             <div className="text-center py-12 text-gray-500">
-//                                 Images content
-//                             </div>
-//                         )}
-//                     </div>
-//                 </div>
-
-//                 {/* Action Buttons */}
-//                 <div className="flex justify-between items-center mt-6">
-//                     <div className="flex gap-3">
-//                         <button className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 font-medium">
-//                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-//                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-//                             </svg>
-//                             Save Changes
-//                         </button>
-//                         <button className="px-6 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2 font-medium">
-//                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-//                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-//                             </svg>
-//                             Cancel
-//                         </button>
-//                     </div>
-
-//                     <div className="flex gap-3">
-//                         <button className="px-6 py-2.5 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors flex items-center gap-2 font-medium">
-//                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-//                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
-//                             </svg>
-//                             Unlock Account
-//                         </button>
-//                         <button className="px-6 py-2.5 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors flex items-center gap-2 font-medium">
-//                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-//                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-//                             </svg>
-//                             Delete Business
-//                         </button>
-//                     </div>
-//                 </div>
-
-//                 {/* Info Note */}
-//                 <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-//                     <p className="text-sm text-blue-800">
-//                         <span className="font-semibold">Note:</span> Your profile information is visible to all logged-in users in the directory. Make sure all information is accurate and up-to date.
-//                     </p>
-//                 </div>
-//             </div>
-//         </div>
-//     );
