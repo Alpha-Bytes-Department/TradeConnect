@@ -46,6 +46,7 @@ export function DataTable<TData>({ columns, data, total, currentPage, onPageChan
                                     </TableRow>
                                 ))}
                             </TableHeader>
+
                             <TableBody className="font-poppins">
                                 {table.getRowModel().rows?.length ? (
                                     table.getRowModel().rows.map((row) => {

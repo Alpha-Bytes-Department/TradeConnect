@@ -26,17 +26,14 @@ export type allBusinessesTable = {
 };
 
 export const columns: ColumnDef<allBusinessesTable>[] = [
-    // {
-    //     accessorKey: "business_name",
-    //     header: "Business Name",
-    // },
     {
         accessorKey: "business_name",
         header: "Business Name",
         cell: ({ row }) => {
+            const businessId = row.original?.id;
             const businessName = row.getValue("business_name") as string;
-            const businessLogo = row.original.logo;
-            const businessId = row.original.id;
+            const businessLogo = row.original?.logo;
+            const isFeatured = row.original?.is_featured;
             const router = useRouter();
 
             const handleNavigate = () => {
@@ -46,14 +43,16 @@ export const columns: ColumnDef<allBusinessesTable>[] = [
                 <div className="flex items-center gap-3 cursor-pointer"
                     onClick={handleNavigate}>
                     <div className="relative w-10 h-10 flex-shrink-0">
-                        <Image
-                            src={businessLogo || "/placeholder-business.png"}
-                            alt={businessName}
-                            fill
-                            className="rounded-full object-cover object-center"
-                        />
+                        {businessLogo ? (
+                            <Image
+                                src={businessLogo}
+                                alt={businessName}
+                                fill
+                                className="rounded-full object-cover object-center"
+                            />) : (<div className="w-full h-full bg-gray-200 rounded-full" />)}
                     </div>
                     <p>{businessName}</p>
+                    {isFeatured && <p className="bg-orange-300 text-black px-1">Featured</p>}
                 </div>
             );
         },

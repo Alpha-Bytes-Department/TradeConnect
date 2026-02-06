@@ -2,7 +2,8 @@
 "use client"
 import { type ColumnDef } from "@tanstack/react-table"
 import { Eye, SquarePen } from "lucide-react";
-import { redirect, useRouter } from "next/navigation";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -10,6 +11,7 @@ import { redirect, useRouter } from "next/navigation";
 export type dashboardLatestBusiness = {
     id: string;
     business_name: string,
+    is_featured: boolean
     country: string,
     last_login: string,
     logo: string,
@@ -17,24 +19,33 @@ export type dashboardLatestBusiness = {
 };
 
 export const columns: ColumnDef<dashboardLatestBusiness>[] = [
-    // {
-    //     accessorKey: "business_name",
-    //     header: "Business Name",
-    // },
     {
         accessorKey: "business_name",
         header: "Business Name",
         cell: ({ row }) => {
+            const businessId = row.original?.id;
             const businessName = row.getValue("business_name") as string;
-            const businessPhoto = row.original.logo;
+            const businessLogo = row.original?.logo;
+            const isFeatured = row.original?.is_featured;
+            const router = useRouter();
+
+            const handleNavigate = () => {
+                router.push(`/super-admin/business-details/${businessId}`);
+            };
             return (
-                <div className="flex items-center gap-3">
-                    <img
-                        src={businessPhoto || "/placeholder-business.png"}
-                        alt={businessName}
-                        className="w-10 h-10 rounded-full object-cover"
-                    />
+                <div className="flex items-center gap-3 cursor-pointer"
+                    onClick={handleNavigate}>
+                    <div className="relative w-10 h-10 flex-shrink-0">
+                        {businessLogo ? (
+                            <Image
+                                src={businessLogo}
+                                alt={businessName}
+                                fill
+                                className="rounded-full object-cover object-center"
+                            />) : (<div className="w-full h-full bg-gray-200 rounded-full" />)}
+                    </div>
                     <p>{businessName}</p>
+                    {isFeatured && <p className="bg-orange-300 text-black px-1">Featured</p>}
                 </div>
             );
         },
