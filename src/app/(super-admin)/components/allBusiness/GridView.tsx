@@ -35,7 +35,7 @@ export default function GridView({ total, currentPage, onPageChange }: GridViewP
                     <div className="grid sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 
                     gap-8 mt-8">
                         {businesses?.map(item => (
-                            <div key={item?.id} className={`h-[460px] rounded-lg border ${item?.is_featured ?
+                            <div key={item?.id} className={`h-[480px] rounded-lg border ${item?.is_featured ?
                                 "bg-[#FFF5E9]" : "bg-[#FFFFFF]"} shadow-lg relative`}>
                                 <div className="relative h-1/3">
                                     {item?.logo ? (
@@ -48,20 +48,26 @@ export default function GridView({ total, currentPage, onPageChange }: GridViewP
                                     ) : (
                                         <div className="w-full h-full bg-gray-200 rounded-t-lg" />
                                     )}
+
                                     {item?.is_locked === false ? (<p className="absolute top-4 right-4 
                                 inline-block px-2 py-1 bg-[#BAFFB4] text-[#1A6300] border-[#279300]  
                                 rounded-full font-poppins text-sm">Active</p>)
                                         : (<p className="absolute top-4 right-4 
                                 inline-block px-2 py-1 bg-[#FDBABA] text-[#B3261E] border-red-600  
                                 rounded-full font-poppins text-sm">Locked</p>)}
+
+                                    {item?.is_featured &&
+                                        <div className="absolute top-4 left-4">
+                                            <Image src="/Featured-Business-Badge.svg" alt="badge"
+                                                width={45} height={45} />
+                                        </div>
+                                    }
                                 </div>
 
                                 <div className="h-2/3 p-4">
                                     <div className="flex gap-3">
-                                        <div className="">
-                                            <h1 className="font-poppins font-semibold text-[#434343]">
-                                                {item?.business_name}</h1>
-                                        </div>
+                                        <h1 className="font-poppins font-semibold text-[#434343]">
+                                            {item?.business_name}</h1>
                                         {item?.country?.flag &&
                                             <Image src={item?.country?.flag} alt={item?.country?.name}
                                                 width={24} height={24} />
@@ -69,13 +75,13 @@ export default function GridView({ total, currentPage, onPageChange }: GridViewP
                                     </div>
                                     <div className="flex items-center gap-1">
                                         <MapPin className="text-[#909090] w-4 h-4" />
-                                        <p className="font-poppins text-[#909090] text-sm">
+                                        <p className="font-poppins text-[#909090] text-xs">
                                             {item?.full_address}{", "}{item?.country?.name}</p>
                                     </div>
                                     <div className="mt-2">
-                                        <p className="font-poppins text-[#3F3F3F] text-sm">
+                                        <p className="font-poppins text-[#3F3F3F] text-xs">
                                             {item?.about_business?.length > 70
-                                                ? `${item?.about_business.substring(0, 70)}......`
+                                                ? `${item?.about_business.substring(0, 45)} . . . .`
                                                 : item?.about_business}
                                         </p>
                                     </div>

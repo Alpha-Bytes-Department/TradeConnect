@@ -161,7 +161,7 @@ export default function FilterBox({ currentPage }: FilterBoxProps) {
 
             <div className="flex flex-col md:flex-row justify-between gap-4 mt-5">
                 <div className="flex items-center gap-2">
-                    <p>Sort by:</p>
+                    <p>Sort by :</p>
                     <Select onValueChange={(value) => setValue("sortBy", value)}>
                         <SelectTrigger className="w-[200px] cursor-pointer">
                             <SelectValue placeholder="A-Z" />
