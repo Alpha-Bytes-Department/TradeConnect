@@ -65,6 +65,7 @@ interface CompanyProfile {
         phone: string;
         joined: string;
         seenBy?: number;
+        is_featured: boolean;
 }
 
 const page = () => {
@@ -162,6 +163,7 @@ useEffect(() => {
                 website: b.website,
                 phone: b.phone_number,
                 seenBy: b.seen_by ?? 0,
+                is_featured: b.is_featured,
             }));
 
             setData(businesses);
@@ -216,6 +218,8 @@ useEffect(() => {
                         website: b.website,
                         phone: b.phone_number,
                         seenBy: b.seen_by ?? 0,
+                        is_featured: b.is_featured,
+
                     }));
 
                     setData(businesses);

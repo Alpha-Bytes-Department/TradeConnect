@@ -58,6 +58,7 @@ interface CompanyProfile {
       phone: string;
       joined: string;
       seenBy?: number;
+      is_featured: boolean;
 }
 interface CardView {
   companies: CompanyProfile[];
@@ -68,9 +69,15 @@ const cardView: React.FC<CardView> = ({ companies }) => {
     <div className="w-full flex flex-col">
       
       <div className=" grid grid-cols-4 gap-6 items-stretch">
-        {companies.map((company, i) => (
-          <Card key={company.id} prop={company} />
-        ))}
+        {companies.map((company, i) => {
+          if(company.is_featured){
+          return <Card key={company.id} prop={company} />}
+        } )}
+        {companies.map((company, i) => {
+          if (!company.is_featured) {
+            return <Card key={company.id} prop={company} />
+          }
+        })}
       </div>
     </div>
   );

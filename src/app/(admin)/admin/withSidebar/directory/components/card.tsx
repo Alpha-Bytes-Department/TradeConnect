@@ -25,6 +25,7 @@ export interface CompanyData {
     phone: string;
     joined: string;
     seenBy?: number;
+    is_featured: boolean;
 }
 
 interface CardProps {
@@ -44,6 +45,7 @@ const Card: React.FC<CardProps> = ({ prop }) => {
         services,
         website,
         country,
+        is_featured,
     } = prop;
     const displayedServices = services?.slice(0, 3);
     const remainingCount = services ? services.length - 3 : 0;
@@ -67,7 +69,7 @@ const Card: React.FC<CardProps> = ({ prop }) => {
 
 
     return (
-        <div className="flex flex-col h-full col-span-4 md:col-span-1 w-full bg-white rounded-2xl shadow-lg overflow-hidden border ">
+        <div className={`flex flex-col h-full col-span-4 md:col-span-1 w-full ${is_featured ?'bg-[#FFF5E9]':'bg-white'} rounded-2xl shadow-lg overflow-hidden border `}>
             {/* Header Image */}
             <div className="relative w-full h-[143px]">
                 <Image
@@ -87,7 +89,7 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                         <div className=" max-w-full flex flex-row items-center gap-2">
                             <button className=" max-w-[90%] " onClick={async () => { await increaseBusinessView(id); router.push(`/admin/withoutSidebar/accounts/${id}/`) }}>
                                 <h2 className="text-lg md:text-xl font-semibold text-gray-800 mb-1 truncate hover:text-blue-800">
-                                {title}
+                                {title+is_featured}
                                 </h2>
                             </button>
                             <Flag id={country} h={16} w={16}/>
