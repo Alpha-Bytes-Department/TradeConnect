@@ -74,7 +74,7 @@ const Card: React.FC<CardProps> = ({ prop }) => {
             <div className="relative w-full h-[143px]">
                 <div className="fc relative h-8 w-8 z-99 left-5 top-5">
                     {is_featured && (
-                        <Image src={"/Frame.svg"} alt="badge" height={36} width={36} />
+                        <Image src={"/Frame.svg"} alt="badge" height={40} width={40} />
 
                     )}
                 </div>
