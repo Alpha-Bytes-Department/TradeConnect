@@ -58,19 +58,27 @@ export default function GridView({ total, currentPage, onPageChange }: GridViewP
 
                                     {item?.is_featured &&
                                         <div className="absolute top-4 left-4">
-                                            <Image src="/Featured-Business-Badge.svg" alt="badge"
-                                                width={45} height={45} />
+                                            <Image src="/Frame.svg" alt="badge"
+                                                width={40} height={40} />
                                         </div>
                                     }
                                 </div>
 
                                 <div className="h-2/3 p-4">
-                                    <div className="flex gap-3">
-                                        <h1 className="font-poppins font-semibold text-[#434343]">
-                                            {item?.business_name}</h1>
+                                    <div className="flex gap-3 items-start">
+                                        <h1 className="font-poppins font-semibold text-[#434343] 
+                                        line-clamp-2">
+                                            {item?.business_name}
+                                        </h1>
                                         {item?.country?.flag &&
-                                            <Image src={item?.country?.flag} alt={item?.country?.name}
-                                                width={24} height={24} />
+                                            <div className="flex-shrink-0">
+                                                <Image
+                                                    src={item?.country?.flag}
+                                                    alt={item?.country?.name}
+                                                    width={24}
+                                                    height={24}
+                                                />
+                                            </div>
                                         }
                                     </div>
                                     <div className="flex items-center gap-1">

@@ -51,8 +51,9 @@ export const columns: ColumnDef<allBusinessesTable>[] = [
                                 className="rounded-full object-cover object-center"
                             />) : (<div className="w-full h-full bg-gray-200 rounded-full" />)}
                     </div>
-                    <p>{businessName}</p>
-                    {isFeatured && <p className="bg-orange-300 text-black px-1">Featured</p>}
+                    <p className="font-poppins">{businessName}</p>
+                    {isFeatured && <p className="px-3 py-1 rounded-full inline-block text-sm 
+                    bg-[#EBB800] text-[#6A5300]">Featured</p>}
                 </div>
             );
         },
