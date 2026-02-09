@@ -87,11 +87,17 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                     
                     <div className="max-w-full flex-1 flex flex-col">
                         <div className=" max-w-full flex flex-row items-center gap-2">
-                            <button className=" max-w-[90%] " onClick={async () => { await increaseBusinessView(id); router.push(`/admin/withoutSidebar/accounts/${id}/`) }}>
+                            <button className=" max-w-[calc(100%-50px)] " onClick={async () => { await increaseBusinessView(id); router.push(`/admin/withoutSidebar/accounts/${id}/`) }}>
                                 <h2 className="text-lg md:text-xl font-semibold text-gray-800 mb-1 truncate hover:text-blue-800">
-                                {title+is_featured}
+                                {title}
                                 </h2>
                             </button>
+                            <div className="fc max-h-6 max-w-6">
+                                {is_featured && (
+                                <Image src={"/Featured-Business-Badge.svg"} alt="badge" height={16} width={16} />
+
+                            )}
+                            </div>
                             <Flag id={country} h={16} w={16}/>
                         </div>
                         

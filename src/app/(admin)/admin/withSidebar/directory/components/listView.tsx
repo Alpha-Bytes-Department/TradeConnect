@@ -105,7 +105,7 @@ const ListView: React.FC<DirectoryListProps> = ({ companies }) => {
                         </div>
 
                         {/* Rows */}
-                        <div className="divide-y divide-slate-100">
+                        <div className="divide-y divide-slate-300">
                             {companies.map((item) => {
 
                                 if (item.is_featured)
@@ -126,15 +126,16 @@ const ListView: React.FC<DirectoryListProps> = ({ companies }) => {
                                         </div>
                                         <div className="min-w-0 flex-1">
                                             <button
-                                                className="text-left w-full"
+                                                className="flex flex-row items-center text-left w-full"
                                                 onClick={async () => {
                                                     await increaseBusinessView(item.id);
                                                     router.push(`/admin/withoutSidebar/accounts/${item.id}/`);
                                                 }}
                                             >
-                                                <h3 className="text-lg font-semibold text-slate-800 truncate group-hover:text-blue-700 transition-colors duration-200">
-                                                    {item.title}
+                                                <h3 className=" max-w-[calc(100%-40px)] text-lg font-semibold text-slate-800 truncate group-hover:text-blue-700 transition-colors duration-200">
+                                                    {item.title} 
                                                 </h3>
+                                                <div className='bg-yellow-300 text-yellow-600 mx-2 px-2 rounded-full text-sm font-semibold'>Featured</div>
                                             </button>
                                         </div>
                                     </div>
