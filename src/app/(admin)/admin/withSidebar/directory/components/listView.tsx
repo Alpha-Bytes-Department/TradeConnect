@@ -60,6 +60,7 @@ interface CompanyProfile {
     phone: string;
     joined: string;
     seenBy?: number;
+    is_featured: boolean;
 }
 
 interface DirectoryListProps {
@@ -104,12 +105,98 @@ const ListView: React.FC<DirectoryListProps> = ({ companies }) => {
                         </div>
 
                         {/* Rows */}
-                        <div className="divide-y divide-slate-100">
-                            {companies.map((item) => (
+                        <div className="divide-y divide-slate-300">
+                            {companies.map((item) => {
+
+                                if (item.is_featured)
+                            return (
                                 <div
                                     key={item.id}
                                     /* 1. Added w-full and min-w-max to ensure the row doesn't collapse smaller than its content needs */
-                                    className="grid grid-cols-[2fr_1.2fr_1.5fr_1.5fr_0.8fr] gap-6 px-8 py-6 hover:bg-slate-50 transition-all duration-300 group items-center min-w-[900px]"
+                                    className={`grid grid-cols-[2fr_1.2fr_1.5fr_1.5fr_0.8fr] gap-6 px-8 py-6 ${item.is_featured ? 'bg-[#FFF5E9]' : 'bg-white'} ${item.is_featured ? 'hover:bg-slate-200' : 'hover:bg-slate-200'} transition-all duration-300 group items-center min-w-[900px]`}
+                                >
+                                    {/* Business Column */}
+                                    <div className="flex items-center gap-4 min-w-0"> {/* min-w-0 is vital for truncate to work in flex/grid */}
+                                        <div className="relative w-16 h-16 rounded-xl overflow-hidden shadow-md flex-shrink-0 group-hover:shadow-lg transition-shadow duration-300">
+                                            <img
+                                                src={item?.headerImage}
+                                                alt={item.title}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                        <div className="min-w-0 flex-1">
+                                            <button
+                                                className="flex flex-row items-center text-left w-full"
+                                                onClick={async () => {
+                                                    await increaseBusinessView(item.id);
+                                                    router.push(`/admin/withoutSidebar/accounts/${item.id}/`);
+                                                }}
+                                            >
+                                                <h3 className=" max-w-[calc(100%-40px)] text-lg font-semibold text-slate-800 truncate group-hover:text-blue-700 transition-colors duration-200">
+                                                    {item.title} 
+                                                </h3>
+                                                <div className='bg-yellow-300 text-yellow-600 mx-2 px-2 rounded-full text-sm font-semibold'>Featured</div>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* Country Column */}
+                                    <div className="fc min-w-0">
+                                        <p className="text-md font-semibold text-slate-500 truncate whitespace-nowrap">
+                                            {item.country ? item.country : '-'}
+                                        </p>
+                                    </div>
+
+                                    {/* Services Column */}
+                                    <div className="fc min-w-0">
+                                        <div className="flex flex-col min-w-0 ">
+                                            {item.services?.slice(0, 2).map((service, idx) => (
+                                                <p key={idx} className="m-auto max-w-full text-sm font-semibold text-slate-700 truncate whitespace-nowrap">
+                                                    {service?.title}
+                                                </p>
+                                            ))}
+                                            {item.services && item.services.length > 2 && (
+                                                <p className="m-auto text-xs font-bold text-slate-700 mt-1 uppercase">
+                                                    +{item.services.length - 2}
+                                                </p>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Contact Column */}
+                                    <div className="fc min-w-0">
+                                        <div className="fc flex-col space-y-1 min-w-0">
+                                            <p className="text-md font-semibold text-slate-700 truncate whitespace-nowrap">
+                                                {item?.website || 'info@company.com'}
+                                            </p>
+                                            <p className="text-md font-semibold text-slate-500 truncate whitespace-nowrap">
+                                                {item.phone || '+971 544 4546 4641'}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    {/* Action Column */}
+                                    <div className="flex items-center justify-center">
+                                        <button
+                                            onClick={async () => {
+                                                await increaseBusinessView(item.id);
+                                                router.push(`/admin/withoutSidebar/accounts/${item.id}/`);
+                                            }}
+                                            className="flex items-center gap-2 bg-blue-50 hover:bg-blue-900 text-blue-900 hover:text-white text-sm font-semibold py-2 px-4 rounded-lg transition-all border border-blue-900 hover:border-blue-300 whitespace-nowrap"
+                                        >
+                                            <span>View</span>
+                                            <ExternalLink className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                </div>
+                            )})}
+                            {companies.map((item) => {
+                                if (!item.is_featured)
+                                return (
+                                <div
+                                    key={item.id}
+                                    /* 1. Added w-full and min-w-max to ensure the row doesn't collapse smaller than its content needs */
+                                    className={`grid grid-cols-[2fr_1.2fr_1.5fr_1.5fr_0.8fr] gap-6 px-8 py-6 ${item.is_featured ? 'bg-[#FFF5E9]' : 'bg-white'} ${item.is_featured ? 'hover:bg-slate-200' : 'hover:bg-slate-200'} transition-all duration-300 group items-center min-w-[900px]`}
                                 >
                                     {/* Business Column */}
                                     <div className="flex items-center gap-4 min-w-0"> {/* min-w-0 is vital for truncate to work in flex/grid */}
@@ -184,7 +271,7 @@ const ListView: React.FC<DirectoryListProps> = ({ companies }) => {
                                         </button>
                                     </div>
                                 </div>
-                            ))}
+                            )})}
                         </div>
                     </div>
                 </div>
