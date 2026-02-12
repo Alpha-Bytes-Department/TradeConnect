@@ -458,28 +458,28 @@ export default function CreateBusinessForm() {
             <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4 mt-4">
                 {
                     certificates?.map(item => (
-                        <div key={item.id} className="p-2 flex items-center gap-2 border border-gray-300 rounded-sm">
+                        <div key={item?.id} className="p-2 flex items-center gap-2 border border-gray-300 rounded-sm">
                             <Controller
                                 name="certifications"
                                 control={control}
                                 render={({ field }) => (
                                     <Checkbox
-                                        id={item.id}
+                                        id={item?.id}
                                         onCheckedChange={(checked) => {
-                                            const current = field.value;
+                                            const current = field.value || [];
                                             const updated = checked ?
-                                                [...current, item.id] // add
-                                                : current.filter(id => id !== item.id); // remove
+                                                [...current, item?.id] // add
+                                                : current.filter(id => id !== item?.id); // remove
                                             field.onChange(updated);
                                         }}
                                     />
                                 )}
                             />
                             <label
-                                htmlFor={item.id}
+                                htmlFor={item?.id}
                                 className="font-poppins cursor-pointer"
                             >
-                                {item.name}
+                                {item?.name}
                             </label>
                         </div>
                     ))
