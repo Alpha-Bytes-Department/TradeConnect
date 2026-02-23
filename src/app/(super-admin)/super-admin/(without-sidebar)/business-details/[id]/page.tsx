@@ -123,7 +123,7 @@ export default function BusinessDetails() {
             <div className="flex flex-col lg:flex-row gap-6 mt-8 lg:h-[900px]">
                 <div className="w-full lg:w-1/2 h-full flex flex-col gap-8">
                     {/* About */}
-                    <div className="lg:h-[240px] p-4 border rounded-lg bg-[#FFFFFF] shadow-lg">
+                    <div className="lg:h-[240px] overflow-y-auto p-4 border rounded-lg bg-[#FFFFFF] shadow-lg">
                         <h1 className="font-poppins font-semibold 
                         text-[#121212] text-xl">About</h1>
                         <p className="font-poppins text-[#3F3F3F] text-sm">{data?.about_business}</p>
