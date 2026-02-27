@@ -17,6 +17,7 @@ import * as z from "zod";
 import api from "@/lib/axiosInterceptor";
 import axios from "axios";
 import { Checkbox } from "@/components/ui/checkbox";
+import { se } from "date-fns/locale";
 
 interface GalleryImage {
     id?: string;           // ← নতুন: backend থেকে আসা image এর id/uuid
@@ -32,6 +33,7 @@ interface Errors {
 // Add interface for form data
 interface BusinessFormData {
     businessName: string;
+    city: string;
     country: string;
     fullAddress: string;
     membershipValidTill: string;
@@ -79,6 +81,7 @@ const passwordSchema = z
 const businessFormSchema = z
     .object({
         businessName: z.string().min(1, "Business name is required"),
+        city: z.string().min(1, "City is required"),
         country: z.string().min(1, "Country is required"),
         fullAddress: z.string().min(1, "Full address is required"),
         membershipValidTill: z.string().min(1, "Membership date is required"),
@@ -121,6 +124,7 @@ export default function EditBusiness() {
         resolver: zodResolver(businessFormSchema),
         defaultValues: {
             businessName: "",
+            city: "",
             country: "",
             fullAddress: "",
             membershipValidTill: "",
@@ -173,6 +177,7 @@ export default function EditBusiness() {
 
             // Re-populate ALL fields (same as in initial fetch)
             setValue('businessName', freshData?.business?.business_name || '');
+            setValue('city', freshData?.business?.city || '');
             setValue('country', freshData?.business?.country?.id || '');
             setValue('featuredBusiness', freshData?.business?.is_featured);
             setValue('fullAddress', freshData?.business?.full_address || '');
@@ -232,6 +237,7 @@ export default function EditBusiness() {
 
                 // Populate form fields with fetched data
                 setValue('businessName', data?.business?.business_name || '');
+                setValue('city', data?.business?.city || '');
                 setValue('country', data?.business?.country?.id || '');
                 setValue('featuredBusiness', data?.business?.is_featured);
                 setValue('fullAddress', data?.business?.full_address || '');
@@ -467,11 +473,12 @@ export default function EditBusiness() {
     // Add form submission handler using Axios
     const onSubmit = async (data: BusinessFormData) => {
         try {
-            //console.log(data);
+            // console.log(data);
             // Create FormData
             const formData1 = new FormData();
             // Append text fields
             formData1.append('business_name', data.businessName);
+            formData1.append('city', data.city);
             formData1.append('country', data.country);
             formData1.append('full_address', data.fullAddress);
             formData1.append('is_featured', String(data.featuredBusiness));
@@ -676,6 +683,25 @@ export default function EditBusiness() {
                                     </p>
                                 )}
                             </div>
+
+                            <div className="w-full lg:w-1/2 grid gap-2 items-center mt-4">
+                                <label htmlFor="city" className="font-poppins text-[#252525]">
+                                    City*</label>
+                                <div className="w-full">
+                                    <Input type="text" id="city" placeholder="Enter City"
+                                        className="font-poppins bg-[#FFFFFF] text-[#3F3F3F] text-base"
+                                        {...register("city")}
+                                    />
+                                </div>
+                                {formErrors.city && (
+                                    <p className="text-red-500 text-sm font-poppins mt-1">
+                                        {formErrors.city.message}
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col lg:flex-row gap-2 lg:gap-6">
                             <div className="w-full lg:w-1/2 grid gap-2 items-center mt-4">
                                 <label htmlFor="country" className="font-poppins text-[#252525]">
                                     Country*</label>
@@ -725,25 +751,6 @@ export default function EditBusiness() {
                                         </SelectContent>
                                     </Select>
                                 </div> */}
-                            </div>
-                        </div>
-
-                        <div className="flex flex-col lg:flex-row gap-2 lg:gap-6">
-                            <div className="w-full lg:w-1/2 grid gap-2 items-center mt-4">
-                                <label htmlFor="fullAddress" className="font-poppins text-[#000000]">
-                                    Full Address*</label>
-                                <div className="w-full">
-                                    <Input type="text" id="fullAddress"
-                                        placeholder="123 Tech street, san Francisco, CA 94105"
-                                        className="font-poppins bg-[#FFFFFF] text-[#3F3F3F] text-base"
-                                        {...register("fullAddress")}
-                                    />
-                                </div>
-                                {formErrors.fullAddress && (
-                                    <p className="text-red-500 text-sm font-poppins mt-1">
-                                        {formErrors.fullAddress.message}
-                                    </p>
-                                )}
                             </div>
 
                             <div className="w-full lg:w-1/2 grid gap-2 items-center mt-4">
@@ -801,6 +808,23 @@ export default function EditBusiness() {
                                     </p>
                                 )}
                             </div>
+                        </div>
+
+                        <div className="w-full lg:w-1/2 grid gap-2 items-center mt-4">
+                            <label htmlFor="fullAddress" className="font-poppins text-[#000000]">
+                                Full Address*</label>
+                            <div className="w-full">
+                                <Input type="text" id="fullAddress"
+                                    placeholder="123 Tech street, san Francisco, CA 94105"
+                                    className="font-poppins bg-[#FFFFFF] text-[#3F3F3F] text-base"
+                                    {...register("fullAddress")}
+                                />
+                            </div>
+                            {formErrors.fullAddress && (
+                                <p className="text-red-500 text-sm font-poppins mt-1">
+                                    {formErrors.fullAddress.message}
+                                </p>
+                            )}
                         </div>
                     </div>
                 }

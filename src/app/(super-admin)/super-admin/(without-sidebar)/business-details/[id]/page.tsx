@@ -221,9 +221,12 @@ export default function BusinessDetails() {
                                         backgroundColor: contact.is_primary === true ? '#EBF2FE' : '#FFFFFF'
                                     }}>
                                     <p className="font-medium font-poppins">{contact?.full_name}</p>
-                                    <p className="font-poppins text-[#909090]">{contact?.role}</p>
+                                    <p className="font-poppins text-[#909090]">
+                                        {contact?.role.charAt(0).toUpperCase() + contact?.role.slice(1)}
+                                    </p>
                                     <div className="flex items-center gap-2 mt-2">
                                         <Mail className="w-5 h-5 text-[#327EF9]" />
+
                                         <p className="font-poppins text-[#327EF9]">
                                             {contact?.email}
                                         </p>
