@@ -45,6 +45,7 @@ const businessFormSchema = z.object({
         .regex(/\d/, "Password must contain at least 1 number")
         .regex(/[!@#$%^&*(),.?":{}|<>]/, "Password must contain at least 1 special character (!@#$%^&*(),.?\":{}|<>)"),
 
+    city: z.string().min(1, "City is required"),
     country: z.string().min(1, "Country is required"),
     fullAddress: z.string().min(1, "Full address is required"),
     websiteURL: z.string().url("Invalid URL").min(1, "Website URL is required"),
@@ -52,7 +53,7 @@ const businessFormSchema = z.object({
     aboutBusiness: z.string().min(1, "About business is required"),
     bannerImage: z.instanceof(File, { message: "Banner image is required" }),
     membershipValidTill: z.date({ message: "Membership date is required" }),
-    certifications: z.array(z.string())
+    certifications: z.array(z.string()).optional().default([])
 });
 
 
@@ -76,7 +77,10 @@ export default function CreateBusinessForm() {
         setValue,
         formState: { errors },
     } = useForm<BusinessFormData>({
-        resolver: zodResolver(businessFormSchema),
+        resolver: zodResolver(businessFormSchema) as any,
+        defaultValues: {
+            certifications: []
+        }
     });
 
 
@@ -324,6 +328,21 @@ export default function CreateBusinessForm() {
             </div>
 
             <h1 className="font-poppins font-medium text-[#000000] mt-8">Location Information</h1>
+            <div className="w-full lg:w-1/2 grid gap-2 items-center mt-4">
+                <label htmlFor="city" className="font-poppins text-[#252525]">
+                    City*</label>
+                <div className="w-full">
+                    <Input type="text" id="city" placeholder="Enter City"
+                        className="font-poppins bg-[#FFFFFF] text-[#3F3F3F] text-base"
+                        {...register("city")}
+                    />
+                </div>
+                {errors.city && (
+                    <p className="text-red-500 text-sm font-poppins mt-1">
+                        {errors.city.message}
+                    </p>
+                )}
+            </div>
             <div className="w-full lg:w-1/2 grid gap-2 items-center mt-4">
                 <label htmlFor="country" className="font-poppins text-[#252525]">
                     Country*</label>
