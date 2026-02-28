@@ -75,7 +75,7 @@ export default function BusinessDetails() {
             {data?.logo && (
                 <div className="relative w-full h-[350px] px-4 flex items-center justify-center">
                     <Image src={data.logo} alt="business-logo" fill
-                        className="object-cover object-center" />
+                        className="object-contain object-center" />
                 </div>
             )}
 
@@ -130,7 +130,7 @@ export default function BusinessDetails() {
                     </div>
 
                     {/* Services */}
-                    <div className="lg:h-[240px] p-4 border rounded-lg bg-[#FFFFFF] shadow-lg">
+                    <div className="lg:h-[240px] overflow-y-auto p-4 border rounded-lg bg-[#FFFFFF] shadow-lg">
                         <h1 className="font-poppins font-semibold 
                         text-[#121212] text-xl">Services</h1>
                         <div className="flex flex-wrap gap-2 mt-1">
@@ -148,7 +148,7 @@ export default function BusinessDetails() {
                     </div>
 
                     {/* Certifications */}
-                    <div className="lg:h-[240px] p-4 border rounded-lg bg-[#FFFFFF] shadow-lg">
+                    <div className="lg:h-[240px] overflow-y-auto p-4 border rounded-lg bg-[#FFFFFF] shadow-lg">
                         <h1 className="font-poppins font-semibold 
                         text-[#121212] text-xl">Certifications</h1>
                         <div className="flex flex-wrap gap-2 mt-1">
@@ -166,7 +166,7 @@ export default function BusinessDetails() {
                     </div>
 
                     {/* Branch Locations */}
-                    <div className="lg:h-[240px] p-4 border rounded-lg bg-[#FFFFFF] shadow-lg
+                    <div className="lg:h-[240px] overflow-y-auto p-4 border rounded-lg bg-[#FFFFFF] shadow-lg
                     overflow-y-auto">
                         <h1 className="font-poppins font-semibold 
                         text-[#121212] text-xl">Branch Locations</h1>
@@ -196,7 +196,7 @@ export default function BusinessDetails() {
 
                 <div className="w-full lg:w-1/2 h-full flex flex-col gap-3">
                     {/* Contact Information */}
-                    <div className="lg:h-[690px] flex flex-col gap-3 p-4 border rounded-lg 
+                    <div className="lg:h-[690px] overflow-y-auto flex flex-col gap-3 p-4 border rounded-lg 
                     bg-[#FFFFFF] shadow-lg overflow-y-auto">
                         <h1 className="font-poppins font-semibold 
                         text-[#121212] text-xl">Contact Information</h1>
@@ -242,7 +242,7 @@ export default function BusinessDetails() {
                     </div>
 
                     {/* Activity */}
-                    <div className="lg:h-[200px] p-4 border rounded-lg bg-[#FFFFFF] shadow-lg">
+                    <div className="lg:h-[200px] overflow-y-auto p-4 border rounded-lg bg-[#FFFFFF] shadow-lg">
                         <h1 className="font-poppins font-semibold 
                         text-[#121212] text-xl">Verified Member</h1>
                         <div className="flex items-center gap-3 mt-3">
