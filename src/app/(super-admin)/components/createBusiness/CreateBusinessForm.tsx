@@ -164,6 +164,7 @@ export default function CreateBusinessForm() {
             const formData = new FormData();
             formData.append("email", data.emailAddress);
             formData.append("password", data.password);
+            formData.append("city", data.city);
             formData.append("business_name", data.businessName);
             formData.append("phone_number", data.phoneNumber);
             formData.append("country", data.country);
