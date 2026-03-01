@@ -15,7 +15,7 @@ interface BusinessProfile {
 
 export default function Navbar() {
 
-    const router =useRouter()
+    const router = useRouter()
 
     /* ✅ FIXED TYPE */
     const [data, setData] = useState<BusinessProfile | null>(null);
@@ -24,9 +24,11 @@ export default function Navbar() {
         const fetchData = async () => {
             try {
                 const response = await api.get("business/my/");
-                setData({logo:response?.data?.business.logo,
-                user_email : response?.data?.business.user_email,
-                    user_full_name: response?.data?.business.user_full_name });
+                setData({
+                    logo: response?.data?.business.logo,
+                    user_email: response?.data?.business.user_email,
+                    user_full_name: response?.data?.business.user_full_name
+                });
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -39,8 +41,8 @@ export default function Navbar() {
         <div>
             <nav className="flex items-center justify-between min-h-21 px-8">
                 <a className="relative fc pl-3 " href={'/admin/withSidebar/dashboard'} >
-                                                                           <Image src={'/primaryLogo.png'} alt={'logo'} height={100} width={120} className="object-cover"/>
-                                                                       </a>
+                    <Image src={'/primaryLogo.png'} alt={'logo'} height={100} width={120} className="object-cover" />
+                </a>
 
                 <div className="flex justify-end items-center gap-3">
                     <div className="relative w-12 h-12">
@@ -54,7 +56,7 @@ export default function Navbar() {
                     <div>
                         <h1 className="font-poppins text-[#252525] text-md">
                             {data?.user_full_name}
-                            </h1>
+                        </h1>
                         <p className="font-poppins text-[#595959] text-sm">
                             {data?.user_email}
                         </p>

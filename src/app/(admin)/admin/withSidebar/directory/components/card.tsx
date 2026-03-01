@@ -77,7 +77,6 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                 <div className="fc relative h-8 w-8 z-99 left-5 top-5">
                     {is_featured && (
                         <Image src={"/Frame.svg"} alt="badge" height={40} width={40} />
-
                     )}
                 </div>
                 <Image
@@ -124,7 +123,9 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                                     d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                                 />
                             </svg>
-                            <span className="text-md md:text-md max-w-[90%] truncate">{city}, {country}</span>
+                            <span className="text-md md:text-md max-w-[90%] truncate">
+                                {city}{city && ", "}{country}
+                            </span>
                         </div>
                     </div>
                 </div>

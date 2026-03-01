@@ -91,7 +91,8 @@ export default function BusinessDetails() {
                 <div className="flex items-center gap-2">
                     <MapPin className="text-[#909090] text-sm" />
                     <p className="font-poppins text-[#909090] text-sm">
-                        {data?.city}{", "}{data?.country?.name}</p>
+                        {data?.city}{data?.city && ", "}{data?.country?.name}
+                    </p>
                 </div>
 
                 <div className="flex flex-col md:flex-row gap-8 mt-2">
@@ -213,7 +214,7 @@ export default function BusinessDetails() {
                         <p className="font-poppins font-medium text-[#595959] text-sm">Contact Persons</p>
                         {data?.contacts?.map(
                             (contact: {
-                                id: string; full_name: string; role: string; email: string;
+                                id: string; full_name: string; role: string; custom_role: string; email: string;
                                 phone_number: string; is_primary: boolean
                             }) => (
                                 <div key={contact.id} className="p-2 border rounded-lg"
@@ -222,9 +223,13 @@ export default function BusinessDetails() {
                                     }}>
                                     <p className="font-medium font-poppins">{contact?.full_name}</p>
                                     <p className="font-poppins text-[#909090]">
-                                        {contact?.role === "other" ?
-                                            contact?.custom_role?.charAt(0).toUpperCase() + contact?.custom_role?.slice(1) :
-                                            contact?.role.charAt(0).toUpperCase() + contact?.role.slice(1)
+                                        {contact?.role === "other"
+                                            ? contact?.custom_role
+                                            : contact?.role
+                                                .replace(/_/g, ' ')
+                                                .split(' ')
+                                                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                                                .join(' ')
                                         }
                                     </p>
                                     <div className="flex items-center gap-2 mt-2">
