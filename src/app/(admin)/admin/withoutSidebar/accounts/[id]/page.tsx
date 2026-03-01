@@ -97,16 +97,18 @@ export interface ApiBranch {
     full_name: string;
     full_address: string;
     city?: string;
-    country?: {id:string;
+    country?: {
+        id: string;
         name: string;
-        file:string;
+        file: string;
     };
 }
 
 export interface ApiContact {
     id: string;
     full_name: string;
-    position: string;
+    role: string;
+    custom_role?: string;
     email: string;
     phone_number: string;
     is_primary: boolean;
@@ -132,6 +134,7 @@ export interface BusinessProfile {
         name: string;
         file: string;
     };
+    city: string;
     country_name?: string;
     logo: string | null;
     is_locked: boolean;
@@ -143,8 +146,9 @@ export interface BusinessProfile {
     branches: ApiBranch[];
     contacts: ApiContact[];
     certifications: ApiCertification[];
-    gallery: {id:string,
-        image:string,
+    gallery: {
+        id: string,
+        image: string,
     }[];
 }
 
@@ -155,9 +159,9 @@ export default function AccountPage({
 }) {
     const [activeService, setActiveService] = useState<string | null>(null);
     const [modal, setModal] = useState<number | undefined>(undefined);
-    const {id} = use(params)
+    const { id } = use(params)
     const router = useRouter()
-    
+
 
     const activities = {
         active: true,
@@ -165,16 +169,16 @@ export default function AccountPage({
         lastUpdated: crypto.randomUUID(),
     }
 
-    
+
 
     const [businesses, setBusinesses] = useState<BusinessProfile>();
-    
+
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     function getActiveMonths(): number {
-        const createdAt = new Date(businesses?businesses.created_at:'');
-        const now = new Date(); 
+        const createdAt = new Date(businesses ? businesses.created_at : '');
+        const now = new Date();
 
         let months =
             (now.getFullYear() - createdAt.getFullYear()) * 12 +
@@ -193,7 +197,7 @@ export default function AccountPage({
         const date = businesses ? businesses.updated_at : ''
 
         const formattedDate = date.slice(0, 10);
-        const formattedTime = date.slice(11, 16); 
+        const formattedTime = date.slice(11, 16);
 
         return {
             date: formattedDate,
@@ -213,20 +217,20 @@ export default function AccountPage({
                 setLoading(true);
                 setError(null);
 
-                const response:any = await api.get(`business/${id}/`, {
+                const response: any = await api.get(`business/${id}/`, {
                     signal: controller.signal
                 });
 
-               
+
 
                 const data = response.data.business
-                
+
                 setBusinesses(data);
 
             } catch (err: any) {
                 if (err.name !== 'CanceledError') {
                     setError("Failed to load services. Please try again later.");
-                    
+
                 }
             } finally {
                 setLoading(false);
@@ -234,13 +238,13 @@ export default function AccountPage({
         };
 
 
-        
+
 
         fetchBusinesses();
-        
+
 
         return () => controller.abort();
-    }, [id]); 
+    }, [id]);
 
 
 
@@ -251,7 +255,7 @@ export default function AccountPage({
                     <img
                         src={`${businesses?.logo}`}
                         alt="accounts"
-                        className="w-[170%] "
+                        className="w-[100%] object-cover object-center"
                     ></img>
                 </div>
                 <button
@@ -262,7 +266,7 @@ export default function AccountPage({
                 >
                     <ArrowLeft color={"#001a81ff"} />
                     <p className="text-blue-900 text-md font-semibold">
-                        Back 
+                        Back
                     </p>
                 </button>
 
@@ -283,12 +287,14 @@ export default function AccountPage({
                             <span className=" text-black">
                                 {businesses?.business_name}
                             </span>
-                            <Flag id={businesses?.country?.id} h={28} w={28}/>
+                            <Flag id={businesses?.country?.id} h={28} w={28} />
                         </h1>
 
                         <div className="flex items-center justify-center gap-2 text-[#909090] mb-4">
                             <MapPin className="w-4 h-4" />
-                            <span className="text-md font-medium">{businesses?.full_address}</span>
+                            <span className="text-md font-medium">
+                                {businesses?.city}{businesses?.city && ", "}{businesses?.country?.name}
+                            </span>
                         </div>
 
 
@@ -361,12 +367,12 @@ export default function AccountPage({
 
                                 <div className="flex max-h-22 flex-wrap overflow-auto gap-3 pl-4 pb-4">
                                     {businesses?.certifications?.map((award, index) => (
-                                        
+
                                         <span
                                             key={award.id}
                                             className="fc gap-1 px-3 py-1 bg-[#27930033] font-semibold text-[#279300] text-base rounded-full shadow-md shadow-[#27930088] "
                                         >
-                                            <AwardIcon size={16}/>{award.name}
+                                            <AwardIcon size={16} />{award.name}
                                         </span>
                                     ))}
                                     {/*(companyData.services.length -5) > 0 && (
@@ -419,14 +425,11 @@ export default function AccountPage({
                                     </div>
                                     <div>
                                         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
-                                            Email
+                                            Ofice Address
                                         </p>
-                                        <a
-                                            href={`mailto:${businesses?.user_email}`}
-                                            className="text-[#327EF9] hover:text-blue-700 font-medium transition-colors"
-                                        >
-                                            {businesses?.user_email}
-                                        </a>
+                                        <span className="text-gray-700">
+                                            {businesses?.full_address}
+                                        </span>
                                     </div>
                                 </div>
 
@@ -434,25 +437,32 @@ export default function AccountPage({
                                     Contact Persons
                                 </h3>
 
-                                {businesses?.contacts.map((item, index) => (item.is_primary===false? null:
-                                   ( <div
+                                {businesses?.contacts.map((item, index) => (item.is_primary === false ? null :
+                                    (<div
                                         key={index}
                                         className="border border-[#327EF9] hover:bg-[#327EF922] px-4 p-2 mb-2 rounded-lg"
                                     >
                                         <div>
                                             <span className="flex flex-row items-center gap-4 text-[#000000] text-lg font-medium transition-colors">
                                                 {item.full_name}{item.is_primary && (
-                                                <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-orange-100 text-orange-400 border border-orange-400 rounded-full text-xs font-medium">
-                                                    <Star className="w-3 h-3 fill-orange-400" />
-                                                    Primary
-                                                </span>
-                                            )}
+                                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-orange-100 text-orange-400 border border-orange-400 rounded-full text-xs font-medium">
+                                                        <Star className="w-3 h-3 fill-orange-400" />
+                                                        Primary
+                                                    </span>
+                                                )}
                                             </span>
-                                            
+
                                         </div>
                                         <div>
                                             <span className="flex flex-row items-center gap-2 text-gray-500 text-md font-medium transition-colors">
-                                                {item.position}
+                                                {item?.role === "other"
+                                                    ? item?.custom_role
+                                                    : item?.role
+                                                        .replace(/_/g, ' ')
+                                                        .split(' ')
+                                                        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                                                        .join(' ')
+                                                }
                                             </span>
                                         </div>
                                         <div>
@@ -482,11 +492,18 @@ export default function AccountPage({
                                             <span className="flex flex-row items-center gap-2 text-[#000000] text-lg font-medium transition-colors">
                                                 {item.full_name}
                                             </span>
-                                            
+
                                         </div>
                                         <div>
                                             <span className="flex flex-row items-center gap-2 text-gray-500 text-md font-medium transition-colors">
-                                                {item.position}
+                                                {item?.role === "other"
+                                                    ? item?.custom_role
+                                                    : item?.role
+                                                        .replace(/_/g, ' ')
+                                                        .split(' ')
+                                                        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                                                        .join(' ')
+                                                }
                                             </span>
                                         </div>
                                         <div>
@@ -559,10 +576,10 @@ export default function AccountPage({
                                 Gallery{modal}
                             </h2>
                             <div className="grid grid-cols-1 md:grid-cols-4 gap-2 md:gap-6 overflow-y-scroll scrollbar-hide max-h-88">
-                                {businesses?.gallery.map((item:any,index) => (
+                                {businesses?.gallery.map((item: any, index) => (
                                     <button
                                         key={item.id}
-                                        onClick={() => setModal(index+ 1)}
+                                        onClick={() => setModal(index + 1)}
                                         className="fc col-span-1 overflow-hidden bg-black aspect-[16/9] rounded-sm"
                                     >
                                         <img
