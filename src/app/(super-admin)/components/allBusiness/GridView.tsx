@@ -84,7 +84,7 @@ export default function GridView({ total, currentPage, onPageChange }: GridViewP
                                     <div className="flex items-center gap-1">
                                         <MapPin className="text-[#909090] w-4 h-4" />
                                         <p className="font-poppins text-[#909090] text-xs">
-                                            {item?.full_address}{", "}{item?.country?.name}</p>
+                                            {item?.city}{", "}{item?.country?.name}</p>
                                     </div>
                                     <div className="mt-2">
                                         <p className="font-poppins text-[#3F3F3F] text-xs">

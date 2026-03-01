@@ -54,18 +54,19 @@ interface ContactInfo {
 
 interface CompanyProfile {
     id: string,
-        headerImage: string;
-        flagIcon?: string;
-        title: string;
-        location: string;
-        description: string;
-        services: Service[];
-        website: string;
-        country: string;
-        phone: string;
-        joined: string;
-        seenBy?: number;
-        is_featured: boolean;
+    headerImage: string;
+    flagIcon?: string;
+    title: string;
+    location: string;
+    description: string;
+    services: Service[];
+    website: string;
+    city: string;
+    country: string;
+    phone: string;
+    joined: string;
+    seenBy?: number;
+    is_featured: boolean;
 }
 
 const page = () => {
@@ -74,10 +75,10 @@ const page = () => {
     const [selectedService, setSelectedService] = useState('');
     const [sortBy, setSortBy] = useState("A-Z");
     const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-    const [total,setTotal]= useState<number>(0)
+    const [total, setTotal] = useState<number>(0)
 
-    const [countries, setCountries] = useState<{ id: string, name: string,flag: string }[]>([{ id: '', name: 'No Selection',flag:'' }]);
-    const [services, setServices] = useState<{ id: string, title: string }[]>([{ id:'', title:'No Selection'}]);
+    const [countries, setCountries] = useState<{ id: string, name: string, flag: string }[]>([{ id: '', name: 'No Selection', flag: '' }]);
+    const [services, setServices] = useState<{ id: string, title: string }[]>([{ id: '', title: 'No Selection' }]);
     const sortOptions = ["A-Z", "Newest"];
 
 
@@ -91,107 +92,107 @@ const page = () => {
 
     let temp: CompanyProfile[] = Array.isArray(data) ? [...data] : [];
 
-   /* // Filter by service
-    if (selectedService !== 'No Selection') {
-        temp = temp.filter(item =>
-            item.services?.some(service =>
-                service.title
-                    .toLowerCase()
-                    .includes(selectedService.toLowerCase())
-            )
-        );
-    }
-
-
-    // Filter by country
-    if (selectedCountry !== 'No Selection') {
-        temp = temp.filter(item =>
-            item.country?.toLowerCase() === selectedCountry.toLowerCase()
-        );
-    }
-
-    // Filter by search
-    if (searchTerm) {
-        temp = temp.filter(item =>
-            item.title?.toLowerCase().startsWith(searchTerm.toLowerCase())
-        );
-    }
-
-    // Sort (SAFE)
-    switch (sortBy) {
-        case 'A-Z':
-            temp.sort((a, b) => a.title.localeCompare(b.title));
-            break;
-
-        case 'Z-A':
-            temp.sort((a, b) => b.title.localeCompare(a.title));
-            break;
-
-        case 'Most Recent':
-            temp.sort(
-                (a, b) =>
-                    new Date(b.joined).getTime() -
-                    new Date(a.joined).getTime()
-            );
-            break;
-    }
-    */
+    /* // Filter by service
+     if (selectedService !== 'No Selection') {
+         temp = temp.filter(item =>
+             item.services?.some(service =>
+                 service.title
+                     .toLowerCase()
+                     .includes(selectedService.toLowerCase())
+             )
+         );
+     }
+ 
+ 
+     // Filter by country
+     if (selectedCountry !== 'No Selection') {
+         temp = temp.filter(item =>
+             item.country?.toLowerCase() === selectedCountry.toLowerCase()
+         );
+     }
+ 
+     // Filter by search
+     if (searchTerm) {
+         temp = temp.filter(item =>
+             item.title?.toLowerCase().startsWith(searchTerm.toLowerCase())
+         );
+     }
+ 
+     // Sort (SAFE)
+     switch (sortBy) {
+         case 'A-Z':
+             temp.sort((a, b) => a.title.localeCompare(b.title));
+             break;
+ 
+         case 'Z-A':
+             temp.sort((a, b) => b.title.localeCompare(a.title));
+             break;
+ 
+         case 'Most Recent':
+             temp.sort(
+                 (a, b) =>
+                     new Date(b.joined).getTime() -
+                     new Date(a.joined).getTime()
+             );
+             break;
+     }
+     */
 
     const modifiedData = temp;
 
 
 
-useEffect(() => {
-    let controller=new AbortController()
+    useEffect(() => {
+        let controller = new AbortController()
 
-    const fetchUsers = async () => {
-      try {
-          const res: any = await api.get(`business/all/?country=${selectedCountry}&search=${searchTerm}&service=${selectedService}&page=${1}&sort_by=${sortBy}`, { signal: controller.signal });
-        
-          
-        if (controller) {
-            
-            const businesses: CompanyProfile[] = res.data.results.businesses.map((b: any) => ({
-                id:b.id,
-                headerImage: b.logo,
-                title: b.business_name,
-                location: b.full_address,
-                joined: b.created_at,
-                description: b.about_business,
-                services: b.services,
-                country: b.country?.name,
-                website: b.website,
-                phone: b.phone_number,
-                seenBy: b.seen_by ?? 0,
-                is_featured: b.is_featured,
-            }));
-
-            setData(businesses);
-
-            setTotal(res.data.results.count)
-
-            
-            const countr:any = await api.get(`core/countries/`, { signal: controller.signal });
-            const serv: any = await api.get(`core/services/`, { signal: controller.signal });
-
-            setCountries([{ id: '', name: 'No Selection', flag: '' },...countr.data.countries])
-            setServices([{ id: '', title: 'No Selection' }, ...serv.data.services, ])
+        const fetchUsers = async () => {
+            try {
+                const res: any = await api.get(`business/all/?country=${selectedCountry}&search=${searchTerm}&service=${selectedService}&page=${1}&sort_by=${sortBy}`, { signal: controller.signal });
 
 
+                if (controller) {
+
+                    const businesses: CompanyProfile[] = res.data.results.businesses.map((b: any) => ({
+                        id: b.id,
+                        headerImage: b.logo,
+                        title: b.business_name,
+                        location: b.full_address,
+                        joined: b.created_at,
+                        description: b.about_business,
+                        services: b.services,
+                        country: b.country?.name,
+                        website: b.website,
+                        phone: b.phone_number,
+                        seenBy: b.seen_by ?? 0,
+                        is_featured: b.is_featured,
+                    }));
+
+                    setData(businesses);
+
+                    setTotal(res.data.results.count)
+
+
+                    const countr: any = await api.get(`core/countries/`, { signal: controller.signal });
+                    const serv: any = await api.get(`core/services/`, { signal: controller.signal });
+
+                    setCountries([{ id: '', name: 'No Selection', flag: '' }, ...countr.data.countries])
+                    setServices([{ id: '', title: 'No Selection' }, ...serv.data.services,])
+
+
+
+                }
+
+            } catch (err: any) {
 
             }
-        
-      } catch (err: any) {
-        
-      } 
-    };
+        };
 
-    fetchUsers();
+        fetchUsers();
 
-    return () => {
-      controller.abort();
-    };
-}, [searchTerm, selectedCountry,selectedService, sortBy]);
+        return () => {
+            controller.abort();
+        };
+    }, [searchTerm, selectedCountry, selectedService, sortBy]);
 
 
 
@@ -214,6 +215,7 @@ useEffect(() => {
                         joined: b.created_at,
                         description: b.about_business,
                         services: b.services,
+                        city: b.city,
                         country: b.country?.name,
                         website: b.website,
                         phone: b.phone_number,
@@ -249,7 +251,7 @@ useEffect(() => {
         };
     }, [page]);
 
-//console.log('************************************************',data)
+    //console.log('************************************************',data)
     return (
         <div className="w-full bg-gray-50 min-h-screen">
             <div className=" mx-auto px-4 py-8">
@@ -283,7 +285,7 @@ useEffect(() => {
                         <div className="w-full lg:w-56">
                             <select
                                 value={selectedCountry}
-                                onChange={(e) => setSelectedCountry(e.target.value==='No Selection'?'':e.target.value)}
+                                onChange={(e) => setSelectedCountry(e.target.value === 'No Selection' ? '' : e.target.value)}
                                 className="truncate w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white cursor-pointer"
                                 style={{
                                     backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
@@ -296,7 +298,7 @@ useEffect(() => {
                                     Select a country
                                 </option>
                                 {countries.map((country) => (
-                                    
+
                                     <option key={country.id} value={country.name}>
                                         {country.name}
                                     </option>
@@ -307,7 +309,7 @@ useEffect(() => {
                         {/* Services Dropdown */}
                         <div className="w-full lg:w-56">
                             <select
-                                
+
                                 value={selectedService}
                                 onChange={(e) => setSelectedService(e.target.value === 'No Selection' ? '' : e.target.value)}
                                 className="truncate w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white cursor-pointer"
@@ -317,7 +319,7 @@ useEffect(() => {
                                     backgroundPosition: "right 0.75rem center",
                                     backgroundSize: "1.25rem",
                                 }}
-                                
+
                             >
                                 <option value="" disabled hidden>
                                     Select a Service
@@ -327,7 +329,7 @@ useEffect(() => {
                                         {service.title}
                                     </option>
                                 ))}
-                                
+
                             </select>
                         </div>
                     </div>
@@ -376,8 +378,8 @@ useEffect(() => {
                             <button
                                 onClick={() => setViewMode("grid")}
                                 className={`p-2 rounded-lg transition-colors ${viewMode === "grid"
-                                        ? "bg-blue-100 text-blue-600"
-                                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                                    ? "bg-blue-100 text-blue-600"
+                                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                                     }`}
                                 aria-label="Grid view"
                             >
@@ -386,8 +388,8 @@ useEffect(() => {
                             <button
                                 onClick={() => setViewMode("list")}
                                 className={`p-2 rounded-lg transition-colors ${viewMode === "list"
-                                        ? "bg-blue-100 text-blue-600"
-                                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                                    ? "bg-blue-100 text-blue-600"
+                                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                                     }`}
                                 aria-label="List view"
                             >
@@ -423,8 +425,8 @@ useEffect(() => {
                             key={pageNum}
                             onClick={() => setPage(pageNum)}
                             className={`w-14 h-14 rounded-xl font-semibold text-lg transition-colors ${page === pageNum
-                                    ? 'bg-blue-500 text-white'
-                                    : 'bg-blue-500/10 text-blue-500 hover:bg-blue-500/20'
+                                ? 'bg-blue-500 text-white'
+                                : 'bg-blue-500/10 text-blue-500 hover:bg-blue-500/20'
                                 }`}
                         >
                             {pageNum}
@@ -432,7 +434,7 @@ useEffect(() => {
                     ))}
 
                     <button
-                        onClick={() => setPage(Math.min(Math.ceil(total /8), page + 1))}
+                        onClick={() => setPage(Math.min(Math.ceil(total / 8), page + 1))}
                         disabled={page === Math.ceil(total / 8)}
                         className="px-6 py-3 rounded-lg border-2 border-gray-300 text-gray-700 font-medium hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors active:border-blue-300 active:text-blue-700"
                     >
