@@ -91,7 +91,7 @@ export default function BusinessDetails() {
                 <div className="flex items-center gap-2">
                     <MapPin className="text-[#909090] text-sm" />
                     <p className="font-poppins text-[#909090] text-sm">
-                        {data?.full_address}{", "}{data?.country?.name}</p>
+                        {data?.city}{", "}{data?.country?.name}</p>
                 </div>
 
                 <div className="flex flex-col md:flex-row gap-8 mt-2">
@@ -200,17 +200,17 @@ export default function BusinessDetails() {
                     bg-[#FFFFFF] shadow-lg overflow-y-auto">
                         <h1 className="font-poppins font-semibold 
                         text-[#121212] text-xl">Contact Information</h1>
-                        <div className="mt-3">
-                            <p className="font-poppins text-[#595959] text-sm">Office number</p>
+                        <div>
+                            <p className="font-poppins text-[#595959] text-sm">Office Number</p>
                             <p className="font-poppins text-[#327EF9] text-sm">{data?.phone_number}</p>
                         </div>
                         <div>
-                            <p className="font-poppins text-[#595959] text-sm">Office Email</p>
-                            <p className="font-poppins text-[#327EF9] text-sm">{data?.user_email}</p>
+                            <p className="font-poppins text-[#595959] text-sm">Office Address</p>
+                            <p className="font-poppins text-[#327EF9] text-sm">{data?.full_address}</p>
                         </div>
                         <div className="w-full h-[1px] bg-gray-300 mt-3" />
 
-                        <p className="font-poppins text-[#595959] text-sm">Contact Persons</p>
+                        <p className="font-poppins font-medium text-[#595959] text-sm">Contact Persons</p>
                         {data?.contacts?.map(
                             (contact: {
                                 id: string; full_name: string; role: string; email: string;
@@ -222,11 +222,13 @@ export default function BusinessDetails() {
                                     }}>
                                     <p className="font-medium font-poppins">{contact?.full_name}</p>
                                     <p className="font-poppins text-[#909090]">
-                                        {contact?.role.charAt(0).toUpperCase() + contact?.role.slice(1)}
+                                        {contact?.role === "other" ?
+                                            contact?.custom_role?.charAt(0).toUpperCase() + contact?.custom_role?.slice(1) :
+                                            contact?.role.charAt(0).toUpperCase() + contact?.role.slice(1)
+                                        }
                                     </p>
                                     <div className="flex items-center gap-2 mt-2">
                                         <Mail className="w-5 h-5 text-[#327EF9]" />
-
                                         <p className="font-poppins text-[#327EF9]">
                                             {contact?.email}
                                         </p>

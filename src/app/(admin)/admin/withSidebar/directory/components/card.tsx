@@ -21,6 +21,7 @@ export interface CompanyData {
     description: string;
     services: Service[];
     website: string;
+    city: string;
     country: string;
     phone: string;
     joined: string;
@@ -33,7 +34,7 @@ interface CardProps {
 }
 const Card: React.FC<CardProps> = ({ prop }) => {
 
-    
+
     // Display first 3 services, and show "+N" for remaining
     const {
         id,
@@ -44,13 +45,14 @@ const Card: React.FC<CardProps> = ({ prop }) => {
         description,
         services,
         website,
+        city,
         country,
         is_featured,
     } = prop;
     const displayedServices = services?.slice(0, 3);
     const remainingCount = services ? services.length - 3 : 0;
-    const router=useRouter()
-    const increaseBusinessView = async (id:string) => {
+    const router = useRouter()
+    const increaseBusinessView = async (id: string) => {
         try {
             const response = await api.post(`/business/${id}/increase-view/`);
 
@@ -58,18 +60,18 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                 throw new Error(`HTTP error! status: ${response}`);
             }
 
-            
+
         } catch (error) {
             console.error('Error increasing business view:', error);
             throw error;
         }
-        
+
     };
 
 
 
     return (
-        <div className={`flex flex-col h-full col-span-4 md:col-span-1 w-full ${is_featured ?'bg-[#FFF5E9]':'bg-white'} rounded-2xl shadow-lg overflow-hidden border `}>
+        <div className={`flex flex-col h-full col-span-4 md:col-span-1 w-full ${is_featured ? 'bg-[#FFF5E9]' : 'bg-white'} rounded-2xl shadow-lg overflow-hidden border `}>
             {/* Header Image */}
             <div className="relative w-full h-[143px]">
                 <div className="fc relative h-8 w-8 z-99 left-5 top-5">
@@ -90,18 +92,18 @@ const Card: React.FC<CardProps> = ({ prop }) => {
             <div className="p-4 flex flex-col flex-1 ">
                 {/* Title Section */}
                 <div className="fc items-start gap-4 mb-4">
-                    
+
                     <div className="max-w-full flex-1 flex flex-col">
                         <div className=" max-w-full flex flex-row items-center gap-2">
                             <button className=" max-w-[calc(100%-30px)] " onClick={async () => { await increaseBusinessView(id); router.push(`/admin/withoutSidebar/accounts/${id}/`) }}>
                                 <h2 className="text-lg md:text-xl font-semibold text-gray-800 mb-1 truncate hover:text-blue-800">
-                                {title}
+                                    {title}
                                 </h2>
                             </button>
-                            
-                            <Flag id={country} h={16} w={16}/>
+
+                            <Flag id={country} h={16} w={16} />
                         </div>
-                        
+
                         <div className="flex items-center gap-2 text-gray-400">
                             <svg
                                 className="w-5 h-5"
@@ -122,7 +124,7 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                                     d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                                 />
                             </svg>
-                            <span className="text-md md:text-md max-w-[90%] truncate">{location}</span>
+                            <span className="text-md md:text-md max-w-[90%] truncate">{city}, {country}</span>
                         </div>
                     </div>
                 </div>
@@ -135,7 +137,7 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                 </div>
 
                 {/* Services */}
-                {services.length >0 && (<div className="mb-4 ">
+                {services.length > 0 && (<div className="mb-4 ">
                     <h3 className="text-gray-700 text-lg font-medium mb-2">Services:</h3>
                     <div className="flex flex-wrap gap-3">
                         {displayedServices?.map((service) => (
@@ -157,14 +159,14 @@ const Card: React.FC<CardProps> = ({ prop }) => {
                 {/* Action Buttons */}
                 <div className="mt-auto flex items-center gap-3">
                     <Button
-                        onClick={async()=>{await increaseBusinessView(id); router.push(`/admin/withoutSidebar/accounts/${id}/`)}}
+                        onClick={async () => { await increaseBusinessView(id); router.push(`/admin/withoutSidebar/accounts/${id}/`) }}
                         className="fc flex-1 bg-blue-600 hover:bg-blue-800 text-white text-lg font-medium py-1 rounded-xl transition-colors"
                     >
                         View Profile
                     </Button>
 
                     <Link
-                        href={website?website:''}
+                        href={website ? website : ''}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="w-10 h-10 border-2 border-gray-300 hover:border-blue-800 rounded-xl flex items-center justify-center transition-colors group"

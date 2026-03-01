@@ -47,18 +47,19 @@ interface ContactInfo {
 
 interface CompanyProfile {
   id: string,
-      headerImage: string;
-      flagIcon?: string;
-      title: string;
-      location: string;
-      description: string;
-      services: Service[];
-      website: string;
-      country: string;
-      phone: string;
-      joined: string;
-      seenBy?: number;
-      is_featured: boolean;
+  headerImage: string;
+  flagIcon?: string;
+  title: string;
+  location: string;
+  description: string;
+  services: Service[];
+  website: string;
+  city: string;
+  country: string;
+  phone: string;
+  joined: string;
+  seenBy?: number;
+  is_featured: boolean;
 }
 interface CardView {
   companies: CompanyProfile[];
@@ -67,12 +68,13 @@ interface CardView {
 const cardView: React.FC<CardView> = ({ companies }) => {
   return (
     <div className="w-full flex flex-col">
-      
+
       <div className=" grid grid-cols-4 gap-6 items-stretch">
         {companies.map((company, i) => {
-          if(company.is_featured){
-          return <Card key={company.id} prop={company} />}
-        } )}
+          if (company.is_featured) {
+            return <Card key={company.id} prop={company} />
+          }
+        })}
         {companies.map((company, i) => {
           if (!company.is_featured) {
             return <Card key={company.id} prop={company} />
