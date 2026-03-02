@@ -26,6 +26,7 @@ interface Business {
     user_email: string;
     user_full_name: string;
     business_name: string;
+    city: string;
     phone_number: string;
     country: Country;
     full_address: string;
@@ -54,7 +55,7 @@ const ProfileLayout: React.FC = () => {
     const [error, setError] = useState(false);
 
     // Sub-states for tabs
-    const [basic, setBasic] = useState<any>({ business_name: "", full_address: "", country: { id: '', name: "", flag: '' } });
+    const [basic, setBasic] = useState<any>({ business_name: "", city: "", full_address: "", country: { id: '', name: "", flag: '' } });
     const [contact, setContact] = useState<any>({ office: { phone: "", email: "", website: "" }, contacts: [] });
     const [branch, setBranch] = useState<Branch[]>([]);
     const [certification, setCertification] = useState<Certification[]>([]);
@@ -76,6 +77,7 @@ const ProfileLayout: React.FC = () => {
         if (data) {
             setBasic({
                 business_name: data.business_name || "",
+                city: data.city || "",
                 full_address: data.full_address || "",
                 country: data.country || { id: '', name: "", flag: '' },
             });
@@ -120,59 +122,59 @@ const ProfileLayout: React.FC = () => {
         return () => controller.abort();
     }, []);
 
-/*    const handleSave = async () => {
-        setIsSaving(true);
-        // Construct payload from sub-states
-        const payload = {
-            business_name: basic.business_name,
-            full_address: basic.full_address,
-            country: basic.country?.id ? basic.country.id : basic.country, // Handle object or ID
-            phone_number: contact.office.phone,
-            user_email: contact.office.email,
-            website: contact.office.website,
-            contacts: contact.contacts,
-            branches: branch.flat(),
-            about_business: services.about_business,
-            services: services.services,
-            certifications: certification,
-            logo: images.logo,
-            gallery: images.gallery
-        };
-
-        try {
-            // PATCH request to specific endpoint
-            const res: any = await api.patch(`business/${data?.id}/update/`, {
-                business_name: payload.business_name,
-                full_address: payload.full_address,
-                country: payload.country?.id ? payload.country.id : payload.country, // Handle object or ID
-                phone_number: payload.phone_number,
-                user_email: payload.user_email,
-                website: payload.website,
-                about_business: payload.about_business,
-                services: payload.services.map((s: any) => s.title).join(','),
-                certifications: payload.certifications.map((s: any) => s.id),
-                ...(payload?.logo instanceof File && ['image/jpeg', 'image/png', 'image/jpg'].includes(payload.logo.type)
-                    ? { logo: payload.logo }
-                    : payload.logo === null
-                        ? { logo: null }
-                        : {} // Omitted from payload if it's an existing string/URL
-                ),
-               
-});
-
-            if (res) {
-                // Update local data with backend response to reflect new ID/timestamps
-                setData(res.business || { ...data, ...payload });
-                alert("Profile updated successfully!");
+    /*    const handleSave = async () => {
+            setIsSaving(true);
+            // Construct payload from sub-states
+            const payload = {
+                business_name: basic.business_name,
+                full_address: basic.full_address,
+                country: basic.country?.id ? basic.country.id : basic.country, // Handle object or ID
+                phone_number: contact.office.phone,
+                user_email: contact.office.email,
+                website: contact.office.website,
+                contacts: contact.contacts,
+                branches: branch.flat(),
+                about_business: services.about_business,
+                services: services.services,
+                certifications: certification,
+                logo: images.logo,
+                gallery: images.gallery
+            };
+    
+            try {
+                // PATCH request to specific endpoint
+                const res: any = await api.patch(`business/${data?.id}/update/`, {
+                    business_name: payload.business_name,
+                    full_address: payload.full_address,
+                    country: payload.country?.id ? payload.country.id : payload.country, // Handle object or ID
+                    phone_number: payload.phone_number,
+                    user_email: payload.user_email,
+                    website: payload.website,
+                    about_business: payload.about_business,
+                    services: payload.services.map((s: any) => s.title).join(','),
+                    certifications: payload.certifications.map((s: any) => s.id),
+                    ...(payload?.logo instanceof File && ['image/jpeg', 'image/png', 'image/jpg'].includes(payload.logo.type)
+                        ? { logo: payload.logo }
+                        : payload.logo === null
+                            ? { logo: null }
+                            : {} // Omitted from payload if it's an existing string/URL
+                    ),
+                   
+    });
+    
+                if (res) {
+                    // Update local data with backend response to reflect new ID/timestamps
+                    setData(res.business || { ...data, ...payload });
+                    alert("Profile updated successfully!");
+                }
+            } catch (err) {
+                console.error("Save failed:", err);
+                alert("Failed to save changes. Please check your connection.");
+            } finally {
+                setIsSaving(false);
             }
-        } catch (err) {
-            console.error("Save failed:", err);
-            alert("Failed to save changes. Please check your connection.");
-        } finally {
-            setIsSaving(false);
-        }
-    };
-*/
+        };
+    */
     const normalizeArray = (arr: any[]) =>
         JSON.stringify([...arr].sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b))));
 
@@ -201,6 +203,7 @@ const ProfileLayout: React.FC = () => {
         /* ---------- BASIC ---------- */
         if (
             basic.business_name !== data.business_name ||
+            basic.city !== data.city ||
             basic.full_address !== data.full_address ||
             (basic.country?.id ?? basic.country) !== data.country?.id
         ) return true;
@@ -287,62 +290,84 @@ const ProfileLayout: React.FC = () => {
 
     const handleSave = async () => {
         setIsSaving(true);
-        const formData = new FormData();
 
-        // 1. Basic Text Fields
-        formData.append("business_name", basic.business_name || "");
-        formData.append("full_address", basic.full_address || "");
-        formData.append("phone_number", contact.office.phone || "");
-        formData.append("user_email", contact.office.email || "");
-        formData.append("website", contact.office.website || "");
-        formData.append("about_business", services.about_business || "");
-
-        // 2. Handle Country (Send as a single string ID)
-        const countryId =  basic?.country?.id;
-        if (countryId) formData.append("country", countryId);
-
-        // 3. FIX: Handle Certifications (ManyToMany)
-        // We must append each ID individually to the same key
-        certification.forEach((cert: any) => {
-            const id = cert.id || cert;
-            if (id) formData.append("certifications", id);
-        });
-
-        // 4. Handle Services 
-        // If your backend expects a list of IDs/Titles, append individually:
-        
-            
-        formData.append("services", services.services.map((s: any) => s.title).join(', '));
-        ;
-
-        // 5. FIX: Logo Logic
-        // Only send if it's a new file. If null, send null/empty to clear it.
-        if (images?.logo instanceof File) {
-            formData.append("logo", images.logo);
-        } else if (images.logo === null) {
-            formData.append("logo", ""); // Backend sees this as clearing the file
-        }
-        // Note: If images.logo is a URL (string), we don't append it, 
-        // so PATCH won't overwrite the existing image on the server.
-
-        // 6. Handle Gallery (Multiple Files)
-        images.gallery.forEach((item: any) => {
-            if (item instanceof File) {
-                formData.append("gallery", item);
-            }
-        });
+        // Check if there are any files to upload
+        const hasLogoFile = images?.logo instanceof File;
+        const hasGalleryFiles = images.gallery.some((item: any) => item instanceof File);
 
         try {
-            const res: any = await api.patch(`business/${data?.id}/update/`, formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
+            // If there are files, use FormData. Otherwise, use JSON.
+            if (hasLogoFile || hasGalleryFiles || images.logo === null) {
+                // Use FormData for file uploads
+                const formData = new FormData();
 
-            if (res) {
-                // Update the main data state with the response from server
-                setData(res.data.business || { ...data, ...Object.fromEntries(formData) });
-                alert("Profile updated successfully!");
+                // 1. Basic Text Fields
+                formData.append("business_name", basic.business_name || "");
+                formData.append("city", basic.city || "");
+                formData.append("full_address", basic.full_address || "");
+                formData.append("phone_number", contact.office.phone || "");
+                formData.append("user_email", contact.office.email || "");
+                formData.append("website", contact.office.website || "");
+                formData.append("about_business", services.about_business || "");
+
+                // 2. Handle Country
+                const countryId = basic?.country?.id;
+                if (countryId) formData.append("country", countryId);
+
+                // 3. Handle Certifications - Always send, even if empty
+                const certIds = certification.map((cert: any) => cert.id || cert).filter(Boolean);
+                certIds.forEach((id: string) => {
+                    formData.append("certifications", id);
+                });
+
+                // 4. Handle Services
+                formData.append("services", services.services.map((s: any) => s.title).join(', '));
+
+                // 5. Logo Logic
+                if (images?.logo instanceof File) {
+                    formData.append("logo", images.logo);
+                } else if (images.logo === null) {
+                    formData.append("logo", "");
+                }
+
+                // 6. Handle Gallery
+                images.gallery.forEach((item: any) => {
+                    if (item instanceof File) {
+                        formData.append("gallery", item);
+                    }
+                });
+
+                const res: any = await api.patch(`business/${data?.id}/update/`, formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
+
+                if (res) {
+                    setData(res.data.business || { ...data });
+                    alert("Profile updated successfully!");
+                }
+            } else {
+                // Use JSON for non-file data
+                const payload = {
+                    business_name: basic.business_name || "",
+                    city: basic.city || "",
+                    full_address: basic.full_address || "",
+                    phone_number: contact.office.phone || "",
+                    user_email: contact.office.email || "",
+                    website: contact.office.website || "",
+                    about_business: services.about_business || "",
+                    country: basic?.country?.id,
+                    certifications: certification.map((cert: any) => cert.id || cert),
+                    services: services.services.map((s: any) => s.title).join(', '),
+                };
+
+                const res: any = await api.patch(`business/${data?.id}/update/`, payload);
+
+                if (res) {
+                    setData(res.data.business || { ...data });
+                    alert("Profile updated successfully!");
+                }
             }
         } catch (err: any) {
             console.error("Save failed:", err.response?.data || err);
@@ -393,7 +418,7 @@ const ProfileLayout: React.FC = () => {
         }
     };
 
-    useEffect(()=>{
+    useEffect(() => {
         const hasChanges = hasProfileChanges({
             data,
             basic,
@@ -414,7 +439,7 @@ const ProfileLayout: React.FC = () => {
         services,
         images])
 
-   
+
 
     if (isLoading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
     if (error || !data) return <div className="min-h-screen flex items-center justify-center">Error loading profile</div>;
@@ -466,7 +491,7 @@ const ProfileLayout: React.FC = () => {
                         <div className="flex flex-col md:flex-row gap-4 mt-8">
                             <button
                                 onClick={handleSave}
-                                disabled={ isSaving || cache}
+                                disabled={isSaving || cache}
                                 className={`flex items-center justify-center gap-2 px-6 py-3 bg-[#327EF9] text-white rounded-lg font-medium transition-opacity ${isSaving || cache ? 'bg-gray-400 cursor-not-allowed' : 'hover:bg-blue-600'}`}
                             >
                                 <Save size={20} />

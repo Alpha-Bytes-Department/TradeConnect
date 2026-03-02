@@ -22,7 +22,7 @@ const Certifications: React.FC<BusinessCertificationsProps> = ({
     setData,
 }) => {
 
-    const [certifications,setCertifications]=useState<Certification[]>([])
+    const [certifications, setCertifications] = useState<Certification[]>([])
 
     const handleToggle = (certification: Certification) => {
         const isSelected = data.some((cert) => cert.id === certification.id);
@@ -40,26 +40,26 @@ const Certifications: React.FC<BusinessCertificationsProps> = ({
 
 
     useEffect(() => {
-        
+
         const controller = new AbortController();
 
         const fetchCertifications = async () => {
-            
+
             try {
-                
+
                 const res: any = await api.get('/core/certifications/', {
                     signal: controller.signal
                 });
 
-                
+
                 if (res && res.data.certifications) {
                     setCertifications(res.data.certifications);
-                } 
+                }
 
             } catch (err: any) {
-                
+
                 if (err.name !== 'CanceledError') {
-                
+
                 }
             }
         };
@@ -100,7 +100,8 @@ const Certifications: React.FC<BusinessCertificationsProps> = ({
                                     type="checkbox"
                                     checked={selected}
                                     onChange={() => handleToggle(cert)}
-                                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer"
+                                    className="w-4 h-4 text-blue-600 border-gray-300 rounded 
+                                    focus:ring-blue-500 cursor-pointer"
                                     onClick={(e) => e.stopPropagation()}
                                 />
                             </div>

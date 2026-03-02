@@ -8,10 +8,11 @@ interface Country {
     flag: string;
 }
 
-interface Basic{
- business_name: string,
-full_address: string,
-country: Country,
+interface Basic {
+    business_name: string,
+    city: string,
+    full_address: string,
+    country: Country,
 }
 
 
@@ -21,18 +22,16 @@ interface BasicProps {
 }
 
 const Basic: React.FC<BasicProps> = ({ data, setData }) => {
-    
-    const [countries,setCountries] = useState<Country[]>([])
+
+    const [countries, setCountries] = useState<Country[]>([])
     const handleInputChange = (field: keyof Basic, value: string) => {
         setData(prev => ({
             ...prev,
-            
-                [field]: field==='country'?countries.find((c)=>c.id===value):value,
-                
-            
+
+            [field]: field === 'country' ? countries.find((c) => c.id === value) : value,
         }));
     };
-    
+
     useEffect(() => {
         const controller = new AbortController();
 
@@ -55,7 +54,6 @@ const Basic: React.FC<BasicProps> = ({ data, setData }) => {
 
                 }
             }
-
         };
 
         fetchCountries();
@@ -80,8 +78,25 @@ const Basic: React.FC<BasicProps> = ({ data, setData }) => {
                         type="text"
                         value={data.business_name}
                         onChange={(e) => handleInputChange('business_name', e.target.value)}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none 
+                        focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                         placeholder="Tech Solution Inc."
+                    />
+                </div>
+
+                {/* City name */}
+                <div className="flex flex-col">
+                    <label htmlFor="business-city" className="text-sm text-gray-700 mb-2">
+                        City<span className="text-red-500">*</span>
+                    </label>
+                    <input
+                        id="business-city"
+                        type="text"
+                        value={data.city}
+                        onChange={(e) => handleInputChange('city', e.target.value)}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none 
+                        focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+                        placeholder="Dhaka"
                     />
                 </div>
 
@@ -102,11 +117,9 @@ const Basic: React.FC<BasicProps> = ({ data, setData }) => {
                             backgroundSize: '1.5em 1.5em',
                             paddingRight: '2.5rem'
                         }}
-                        
-                        
                     >
-                        {countries.map((country)=><option key={country.id} value={country.id}>{country.name}</option>)}
-                        
+                        {countries.map((country) => <option key={country.id} value={country.id}>{country.name}</option>)}
+
                     </select>
                 </div>
             </div>
