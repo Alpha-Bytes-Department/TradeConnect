@@ -222,7 +222,7 @@ export default function BusinessDetails() {
                                         backgroundColor: contact.is_primary === true ? '#EBF2FE' : '#FFFFFF'
                                     }}>
                                     <p className="font-medium font-poppins">{contact?.full_name}</p>
-                                    <p className="font-poppins text-[#909090]">
+                                    <p className="font-poppins text-[#909090] uppercase">
                                         {contact?.role === "other"
                                             ? contact?.custom_role
                                             : contact?.role
