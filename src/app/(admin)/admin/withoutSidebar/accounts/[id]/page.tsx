@@ -249,15 +249,14 @@ export default function AccountPage({
 
 
     return (
-        <div className="w-full min-h-screen ">
+        <div className="max-w-[1300px] mx-auto p-3">
             <div className="relative w-full min-h-screen">
-                <div className="fc h-[50vw] md:h-[22vw] w-[100%] m-auto overflow-hidden ">
-                    <img
-                        src={`${businesses?.logo}`}
-                        alt="accounts"
-                        className="w-[100%] object-cover object-center"
-                    ></img>
-                </div>
+                {businesses?.logo && (
+                    <div className="relative w-full h-[350px] px-4 flex items-center justify-center">
+                        <Image src={businesses.logo} alt="business-logo" fill
+                            className="object-contain object-center" />
+                    </div>
+                )}
                 <button
                     className="absolute top-[2vw] left-[2vw] fc h-10 p-4 bg-blue-200 border-blue-400 rounded-lg gap-2"
                     onClick={() => {
@@ -455,7 +454,7 @@ export default function AccountPage({
 
                                         </div>
                                         <div>
-                                            <span className="flex flex-row items-center gap-2 text-gray-500 text-md font-medium transition-colors">
+                                            <span className="flex flex-row items-center gap-2 text-gray-500 text-md font-medium transition-colors uppercase">
                                                 {item?.role === "other"
                                                     ? item?.custom_role
                                                     : item?.role
@@ -496,7 +495,7 @@ export default function AccountPage({
 
                                         </div>
                                         <div>
-                                            <span className="flex flex-row items-center gap-2 text-gray-500 text-md font-medium transition-colors">
+                                            <span className="flex flex-row items-center gap-2 text-gray-500 text-md font-medium transition-colors uppercase">
                                                 {item?.role === "other"
                                                     ? item?.custom_role
                                                     : item?.role
