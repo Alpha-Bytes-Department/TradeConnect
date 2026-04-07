@@ -137,6 +137,7 @@ export interface BusinessProfile {
     city: string;
     country_name?: string;
     logo: string | null;
+    is_featured: boolean;
     is_locked: boolean;
     created_at: string;
     updated_at: string;
@@ -250,14 +251,22 @@ export default function AccountPage({
 
     return (
         <div className="max-w-[1300px] mx-auto p-3">
-            <div className="relative w-full min-h-screen">
+            <div className="w-full min-h-screen">
                 {businesses?.logo && (
                     <div className="relative w-full h-[350px] px-4 flex items-center justify-center">
                         <Image src={businesses.logo} alt="business-logo" fill
                             className="object-contain object-center" />
+                        {businesses?.is_featured &&
+                            <div className="absolute top-4 left-4 flex items-center gap-2 shadow-lg bg-black 
+                            rounded-full px-4 py-1 ring-1 ring-yellow-500">
+                                <Star className="h-4 w-4 text-[#EBB800]" />
+                                <p className="rounded-full inline-block  
+                                text-[#EBB800] text-xl">Featured Member</p>
+                            </div>
+                        }
                     </div>
                 )}
-                <button
+                {/* <button
                     className="absolute top-[2vw] left-[2vw] fc h-10 p-4 bg-blue-200 border-blue-400 rounded-lg gap-2"
                     onClick={() => {
                         router.back();
@@ -267,7 +276,7 @@ export default function AccountPage({
                     <p className="text-blue-900 text-md font-semibold">
                         Back
                     </p>
-                </button>
+                </button> */}
 
                 <div className=" flex flex-col top-[calc(50vw-82px)] md:top-[calc(22vw-82px)] max-w-12xl mx-10 py-6 md:py-12">
                     {/* Header Section */}
@@ -325,13 +334,10 @@ export default function AccountPage({
                     <div className="flex flex-col mb-6 md:flex-row gap-6 items-stretch">
                         <div className="flex-1 w-full flex flex-col gap-6">
                             {/* About */}
-                            <div className="flex-1 backdrop-blur-sm rounded-md p-4 md:p-6 s hover:s transition-all duration-300 animate-fade-in-up border border-[#d6d6d6]">
-                                <h2 className="text-lg font-semibold mb-4 text-gray-900">
-                                    About
-                                </h2>
-                                <p className="text-[stone-600] h-23 leading-relaxed overflow-auto ">
-                                    {businesses?.about_business}
-                                </p>
+                            <div className="lg:h-[240px] overflow-y-auto p-4 border rounded-lg bg-[#FFFFFF] shadow-lg">
+                                <h1 className="font-poppins font-semibold 
+                        text-[#121212] text-xl">About</h1>
+                                <p className="font-poppins text-[#3F3F3F] text-sm whitespace-pre-wrap">{businesses?.about_business}</p>
                             </div>
 
                             {/* Services */}
