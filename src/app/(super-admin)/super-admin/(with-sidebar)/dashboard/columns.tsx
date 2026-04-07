@@ -1,7 +1,7 @@
 // Fahim
 "use client"
 import { type ColumnDef } from "@tanstack/react-table"
-import { Eye, SquarePen } from "lucide-react";
+import { Eye, SquarePen, Star } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -45,8 +45,14 @@ export const columns: ColumnDef<dashboardLatestBusiness>[] = [
                             />) : (<div className="w-full h-full bg-gray-200 rounded-full" />)}
                     </div>
                     <p>{businessName}</p>
-                    {isFeatured && <p className="px-3 py-1 rounded-full inline-block text-sm 
-                    bg-[#EBB800] text-[#6A5300]">Featured</p>}
+                    {isFeatured &&
+                        <div className="flex items-center gap-1 bg-black 
+                        rounded-full px-2 py-1 ring-1 ring-yellow-500">
+                            <Star className="h-4 w-4 text-[#EBB800]" />
+                            <p className="rounded-full inline-block text-sm 
+                            text-[#EBB800]">Featured</p>
+                        </div>
+                    }
                 </div>
             );
         },

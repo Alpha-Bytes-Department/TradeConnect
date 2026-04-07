@@ -72,18 +72,17 @@ export default function BusinessDetails() {
     return (
         <div className="max-w-[1300px] mx-auto p-3">
             {/* Added conditional rendering for logo */}
+            {data?.is_featured &&
+                <div className="flex items-center gap-2 shadow-lg bg-black rounded-full px-4 py-1 
+                ring-1 ring-yellow-500 w-fit">
+                    <Star className="h-4 w-4 text-[#EBB800]" />
+                    <p className="rounded-full inline-block text-[#EBB800] text-xl">Featured Member</p>
+                </div>
+            }
             {data?.logo && (
-                <div className="relative w-full h-[350px] px-4 flex items-center justify-center">
+                <div className="relative w-full h-[350px] px-4 flex items-center justify-center mt-8">
                     <Image src={data.logo} alt="business-logo" fill
                         className="object-contain object-center" />
-                    {data?.is_featured &&
-                        <div className="absolute top-4 left-4 flex items-center gap-2 shadow-lg bg-black 
-                        rounded-full px-4 py-1 ring-1 ring-yellow-500">
-                            <Star className="h-4 w-4 text-[#EBB800]" />
-                            <p className="rounded-full inline-block  
-                            text-[#EBB800] text-xl">Featured Member</p>
-                        </div>
-                    }
                 </div>
             )}
 
