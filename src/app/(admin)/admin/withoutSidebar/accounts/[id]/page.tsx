@@ -255,7 +255,7 @@ export default function AccountPage({
                 {businesses?.is_featured &&
                     <div className="flex items-center gap-2 shadow-lg bg-black rounded-full px-4 py-1 
                     ring-1 ring-yellow-500 w-fit">
-                        <Star className="h-4 w-4 text-[#EBB800]" />
+                        <Star className="h-5 w-5 text-[#EBB800]" />
                         <p className="rounded-full inline-block text-[#EBB800] text-xl">Featured Member</p>
                     </div>
                 }
