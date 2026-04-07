@@ -69,6 +69,7 @@ export default function BusinessDetails() {
         );
     }
 
+
     return (
         <div className="max-w-[1300px] mx-auto p-3">
             {/* Added conditional rendering for logo */}
