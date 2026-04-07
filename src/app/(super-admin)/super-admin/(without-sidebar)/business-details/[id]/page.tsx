@@ -2,7 +2,7 @@
 "use client"
 import Modal from "@/components/ui/modal";
 import api from "@/lib/axiosInterceptor";
-import { Globe, Mail, MapPin, Phone } from "lucide-react";
+import { Globe, Mail, MapPin, Phone, Star } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -76,6 +76,14 @@ export default function BusinessDetails() {
                 <div className="relative w-full h-[350px] px-4 flex items-center justify-center">
                     <Image src={data.logo} alt="business-logo" fill
                         className="object-contain object-center" />
+                    {data?.is_featured &&
+                        <div className="absolute top-4 left-4 flex items-center gap-2 shadow-lg bg-black 
+                        rounded-full px-4 py-1 ring-1 ring-yellow-500">
+                            <Star className="h-4 w-4 text-[#EBB800]" />
+                            <p className="rounded-full inline-block  
+                            text-[#EBB800] text-xl">Featured Member</p>
+                        </div>
+                    }
                 </div>
             )}
 
@@ -127,7 +135,7 @@ export default function BusinessDetails() {
                     <div className="lg:h-[240px] overflow-y-auto p-4 border rounded-lg bg-[#FFFFFF] shadow-lg">
                         <h1 className="font-poppins font-semibold 
                         text-[#121212] text-xl">About</h1>
-                        <p className="font-poppins text-[#3F3F3F] text-sm">{data?.about_business}</p>
+                        <p className="font-poppins text-[#3F3F3F] text-sm whitespace-pre-wrap">{data?.about_business}</p>
                     </div>
 
                     {/* Services */}
