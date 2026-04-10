@@ -141,6 +141,7 @@ export interface BusinessProfile {
     is_locked: boolean;
     created_at: string;
     updated_at: string;
+    membership_valid_till: string;
 
     // Nested Data Arrays
     services: ApiService[];
@@ -222,8 +223,6 @@ export default function AccountPage({
                     signal: controller.signal
                 });
 
-
-
                 const data = response.data.business
 
                 setBusinesses(data);
@@ -238,11 +237,7 @@ export default function AccountPage({
             }
         };
 
-
-
-
         fetchBusinesses();
-
 
         return () => controller.abort();
     }, [id]);
@@ -514,16 +509,16 @@ export default function AccountPage({
                                         <div>
                                             <span className="flex flex-row items-center gap-2 text-[#327EF9] hover:text-blue-700  text-md font-semibold transition-colors">
                                                 <PhoneIcon color={"#327EF9"} size={16} />
-                                                {item.phone_number}
+                                                {item?.phone_number}
                                             </span>
                                         </div>
                                         <div>
                                             <a
-                                                href={`mailto:${item.email}`}
+                                                href={`mailto:${item?.email}`}
                                                 className="flex flex-row items-center gap-2 text-[#327EF9] text-md font-semibold hover:text-blue-700 transition-colors"
                                             >
                                                 <MailIcon color={"#327EF9"} size={16} />
-                                                {item.email}
+                                                {item?.email}
                                             </a>
                                         </div>
                                     </div>)
@@ -539,15 +534,24 @@ export default function AccountPage({
                                     Activity
                                 </h2>
                                 <div className="space-y-4">
-                                    <div className="flex flex-col items-start gap-2">
+                                    <div className="flex flex-col items-start gap-5">
                                         <div className="fc flex-row">
                                             <div className="fc h-11 w-11 rounded-sm bg-[#BFD7FD] text-[#2E73E3]">
                                                 <CalendarIcon size={22} />
                                             </div>
                                             <div className="flex flex-col items-left justify-center ml-2">
-                                                <p className="text-sm text-gray-500">Active for</p>
-                                                <p className="text-sm text-[#327EF9]">
-                                                    {getActiveMonths()} Months
+                                                <p className="text-gray-500">Connected Since:</p>
+                                                <p className="text-[#327EF9]">
+                                                    {
+                                                        (() => {
+                                                            const date = businesses?.created_at ? new Date(businesses.created_at) : null;
+                                                            if (!date) return "N/A";
+                                                            const day = String(date.getDate()).padStart(2, '0');
+                                                            const month = String(date.getMonth() + 1).padStart(2, '0');
+                                                            const year = date.getFullYear();
+                                                            return `${day}/${month}/${year}`;
+                                                        })()
+                                                    }
                                                 </p>
                                             </div>
                                         </div>
@@ -556,15 +560,10 @@ export default function AccountPage({
                                                 <Clock10Icon size={22} />
                                             </div>
                                             <div className="flex flex-col items-left justify-center ml-2">
-                                                <p className="text-sm text-gray-500">Last Updated</p>
-                                                <div className="flex flex-row items-left justify-center gap-6">
-                                                    <p className="text-sm text-[#327EF9]">
-                                                        {getLastUpdated().date}
-                                                    </p>
-                                                    <p className="text-sm text-[#327EF9]">
-                                                        {getLastUpdated().time}
-                                                    </p>
-                                                </div>
+                                                <p className="text-gray-500">Membership Valid Till:</p>
+                                                <p className="text-[#327EF9]">
+                                                    {businesses?.membership_valid_till}
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
